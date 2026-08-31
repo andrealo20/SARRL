@@ -13,6 +13,7 @@ from sarrl.envs.planar_reach import DomainRandomization, PlanarReachEnv
 from sarrl.rl import (
     ReplayBuffer,
     SACAgent,
+    SACConfig,
     load_training_checkpoint,
     save_training_checkpoint,
 )
@@ -26,6 +27,9 @@ def main() -> int:
     p.add_argument("--seed", type=int, default=0)
     p.add_argument("--start-steps", type=int, default=5_000)
     p.add_argument("--batch-size", type=int, default=256)
+    p.add_argument("--hidden", type=int, nargs=2, default=(256, 256), metavar=("H1", "H2"))
+    p.add_argument("--update-every", type=int, default=1)
+    p.add_argument("--replay-capacity", type=int, default=200_000)
     p.add_argument("--randomize", action="store_true")
     p.add_argument("--output", default="results/run_seed0")
     p.add_argument("--resume", default=None)
@@ -33,6 +37,8 @@ def main() -> int:
     args = p.parse_args()
     if args.steps <= 0 or args.start_steps < 0 or args.batch_size <= 0:
         raise SystemExit("steps/batch-size must be positive and start-steps non-negative")
+    if any(h <= 0 for h in args.hidden) or args.update_every <= 0 or args.replay_capacity <= 0:
+        raise SystemExit("hidden sizes, update-every and replay-capacity must be positive")
     if args.checkpoint_every < 0:
         raise SystemExit("checkpoint-every must be non-negative")
 
@@ -49,11 +55,16 @@ def main() -> int:
         else DomainRandomization()
     )
     env = PlanarReachEnv(mode=args.mode, randomization=dr)
-    agent = SACAgent(env.observation_space.shape[0], env.action_space.shape[0], seed=args.seed)
+    agent = SACAgent(
+        env.observation_space.shape[0],
+        env.action_space.shape[0],
+        SACConfig(hidden=tuple(args.hidden)),
+        seed=args.seed,
+    )
     replay = ReplayBuffer(
         env.observation_space.shape[0],
         env.action_space.shape[0],
-        500_000,
+        args.replay_capacity,
         args.seed,
     )
     out = Path(args.output)
@@ -82,7 +93,11 @@ def main() -> int:
         obs = next_obs
         ep_reward += reward
 
-        if len(replay) >= args.batch_size and step > args.start_steps:
+        if (
+            len(replay) >= args.batch_size
+            and step > args.start_steps
+            and step % args.update_every == 0
+        ):
             metrics = agent.update(replay.sample(args.batch_size))
         else:
             metrics = {}

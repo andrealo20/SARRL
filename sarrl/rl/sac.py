@@ -65,6 +65,27 @@ class SACAgent:
         self.target_entropy = -float(action_dim)
         self.update_steps = 0
 
+    @classmethod
+    def from_checkpoint(
+        cls, path, seed: int = 0, load_optimizers: bool = False, restore_rng: bool = False
+    ) -> "SACAgent":
+        payload = torch.load(Path(path), map_location="cpu", weights_only=False)
+        if payload.get("checkpoint_version") != cls.CHECKPOINT_VERSION:
+            raise ValueError("unsupported SARRL SAC checkpoint version")
+        cfg_data = dict(payload["config"])
+        if isinstance(cfg_data.get("hidden"), list):
+            cfg_data["hidden"] = tuple(cfg_data["hidden"])
+        agent = cls(
+            int(payload["obs_dim"]),
+            int(payload["action_dim"]),
+            SACConfig(**cfg_data),
+            seed=seed,
+        )
+        agent.load_state_dict(
+            payload, load_optimizers=load_optimizers, restore_rng=restore_rng
+        )
+        return agent
+
     @property
     def alpha(self) -> torch.Tensor:
         return self.log_alpha.exp()

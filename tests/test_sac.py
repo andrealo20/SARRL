@@ -86,3 +86,15 @@ def test_checkpoint_round_trip(tmp_path: Path):
     meta = b.load(path)
     np.testing.assert_allclose(b.act(obs, deterministic=True), expected, atol=0.0)
     assert meta["checkpoint_version"] == 1
+
+
+def test_from_checkpoint_reconstructs_nondefault_architecture(tmp_path: Path):
+    cfg = SACConfig(hidden=(23, 17))
+    a = SACAgent(5, 2, cfg, seed=8)
+    obs = np.linspace(-0.2, 0.2, 5, dtype=np.float32)
+    expected = a.act(obs, deterministic=True)
+    path = tmp_path / "custom.pt"
+    a.save(path)
+    b = SACAgent.from_checkpoint(path, seed=99, load_optimizers=False)
+    assert b.config.hidden == (23, 17)
+    np.testing.assert_array_equal(b.act(obs, deterministic=True), expected)

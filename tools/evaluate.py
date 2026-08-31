@@ -20,8 +20,9 @@ def main() -> int:
     args = p.parse_args()
 
     env = PlanarReachEnv(mode=args.mode)
-    agent = SACAgent(env.observation_space.shape[0], env.action_space.shape[0], seed=0)
-    agent.load(args.checkpoint, load_optimizers=False)
+    agent = SACAgent.from_checkpoint(args.checkpoint, seed=0, load_optimizers=False)
+    if agent.obs_dim != env.observation_space.shape[0] or agent.action_dim != env.action_space.shape[0]:
+        raise SystemExit("checkpoint dimensions do not match evaluation environment")
     success = 0
     rewards = []
     for ep in range(args.episodes):

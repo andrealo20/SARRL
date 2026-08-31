@@ -42,8 +42,9 @@ def main() -> int:
     if args.motor_fault is not None:
         fault = FaultSpec(start_step=80, motor_gain_multiplier=(1.0, args.motor_fault))
     env = PlanarReachEnv(mode="torque", randomization=dr, fault=fault)
-    agent = SACAgent(8, 2, seed=0)
-    agent.load(args.checkpoint, load_optimizers=False)
+    agent = SACAgent.from_checkpoint(args.checkpoint, seed=0, load_optimizers=False)
+    if agent.obs_dim != 8 or agent.action_dim != 2:
+        raise SystemExit("stack evaluator currently expects a base 8-D observation checkpoint")
     nominal = PlanarArm()
     baseline = ComputedTorqueController(nominal)
     safety = HOCBFSafetyFilter(nominal, SafetyConfig()) if args.safety else None
