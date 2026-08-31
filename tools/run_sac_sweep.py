@@ -16,6 +16,7 @@ from sarrl.envs import DomainRandomization, PlanarReachEnv
 from sarrl.evaluation import (
     aggregate,
     evaluate_policy_episodes,
+    repository_commit,
     seed_ranges_overlap,
     write_episode_csv,
     write_run_manifest,
@@ -28,6 +29,72 @@ def _sample_std(values: np.ndarray) -> float | None:
     if values.size < 2:
         return None
     return float(values.std(ddof=1))
+
+
+def _checkpoint_step(path: Path) -> int:
+    """Return the training step encoded by train_stepN.pt."""
+    try:
+        return int(path.stem.removeprefix("train_step"))
+    except ValueError:
+        return -1
+
+
+def _resume_plan(
+    run_dir: Path,
+    requested_steps: int,
+    current_commit: str | None,
+) -> tuple[Path | None, bool]:
+    """Return (resume_checkpoint, already_complete) for an existing run."""
+    final_training = run_dir / "training_final.pt"
+    periodic = [
+        path
+        for path in run_dir.glob("train_step*.pt")
+        if _checkpoint_step(path) >= 0
+    ]
+
+    if not final_training.exists() and not periodic:
+        return None, False
+
+    manifest = run_dir / "run_manifest.json"
+    if not manifest.exists():
+        raise ValueError(
+            f"existing checkpoints in {run_dir} have no run_manifest.json"
+        )
+
+    payload = json.loads(manifest.read_text())
+    previous_commit = payload.get("runtime", {}).get("git_commit")
+
+    if (
+        previous_commit is not None
+        and current_commit is not None
+        and previous_commit != current_commit
+    ):
+        raise ValueError(
+            "refusing to resume training across different git commits: "
+            f"{previous_commit} != {current_commit}"
+        )
+
+    previous_requested = int(payload["config"]["requested_steps"])
+
+    if final_training.exists():
+        if previous_requested == requested_steps:
+            return None, True
+        if previous_requested < requested_steps:
+            return final_training, False
+        raise ValueError(
+            "existing completed run requested more steps than the new campaign"
+        )
+
+    latest = max(periodic, key=_checkpoint_step)
+    latest_step = _checkpoint_step(latest)
+
+    if latest_step > requested_steps:
+        raise ValueError(
+            f"latest checkpoint step {latest_step} exceeds requested "
+            f"{requested_steps}"
+        )
+
+    return latest, False
 
 
 def _randomization(enabled: bool) -> DomainRandomization:
@@ -59,6 +126,11 @@ def main() -> int:
     p.add_argument("--heldout-episodes", type=int, default=100)
     p.add_argument("--heldout-seed", type=int, default=40_000)
     p.add_argument("--output", default="results/sac_sweep")
+    p.add_argument(
+        "--resume-existing",
+        action="store_true",
+        help="Resume interrupted seed runs and reuse completed runs.",
+    )
     args = p.parse_args()
 
     if len(set(args.seeds)) != len(args.seeds) or any(seed < 0 for seed in args.seeds):
@@ -74,6 +146,7 @@ def main() -> int:
         raise SystemExit("validation and held-out seed ranges must not overlap")
 
     root = Path(__file__).resolve().parents[1]
+    current_commit = repository_commit(root)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
     write_run_manifest(
@@ -92,6 +165,7 @@ def main() -> int:
             "validation_seed": args.validation_seed,
             "heldout_episodes": args.heldout_episodes,
             "heldout_seed": args.heldout_seed,
+            "resume_existing": args.resume_existing,
         },
         root=root,
     )
@@ -101,6 +175,19 @@ def main() -> int:
     dr = _randomization(args.randomize)
     for training_seed in args.seeds:
         run_dir = out / f"seed_{training_seed}"
+
+        resume_checkpoint = None
+        training_complete = False
+        if args.resume_existing:
+            try:
+                resume_checkpoint, training_complete = _resume_plan(
+                    run_dir,
+                    args.steps,
+                    current_commit,
+                )
+            except ValueError as exc:
+                raise SystemExit(f"seed {training_seed}: {exc}") from exc
+
         cmd = [
             sys.executable,
             str(root / "tools" / "train_sac.py"),
@@ -132,7 +219,19 @@ def main() -> int:
         ]
         if args.randomize:
             cmd.append("--randomize")
-        subprocess.run(cmd, cwd=root, check=True)
+        if training_complete:
+            print(
+                f"seed={training_seed} training already complete; "
+                "reusing retained checkpoints"
+            )
+        else:
+            if resume_checkpoint is not None:
+                cmd.extend(["--resume", str(resume_checkpoint)])
+                print(
+                    f"seed={training_seed} resuming from "
+                    f"{resume_checkpoint}"
+                )
+            subprocess.run(cmd, cwd=root, check=True)
 
         checkpoint = run_dir / "best.pt"
         if not checkpoint.exists():

@@ -77,8 +77,8 @@ def main() -> int:
         batch_size = int(trainer_cfg.get("batch_size", args.batch_size))
         start_steps = int(trainer_cfg.get("start_steps", args.start_steps))
         update_every = int(trainer_cfg.get("update_every", args.update_every))
-        if step0 >= args.steps:
-            raise SystemExit("resume checkpoint has already reached requested --steps")
+        if step0 > args.steps:
+            raise SystemExit("resume checkpoint exceeds requested --steps")
         print(
             "resuming exact session: "
             f"mode={env.mode} hidden={agent.config.hidden} replay={replay.capacity} "

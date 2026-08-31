@@ -225,6 +225,7 @@ def run_a1(
         str(heldout_seed),
         "--heldout-episodes",
         str(heldout_episodes),
+        "--resume-existing",
         "--output",
         str(out / "A1_direct_sac"),
     ]

@@ -150,6 +150,7 @@ def test_a1_confirmed_command_uses_direct_sac_and_randomization(tmp_path, monkey
     assert "--mode" in cmd
     assert cmd[cmd.index("--mode") + 1] == "torque"
     assert "--randomize" in cmd
+    assert "--resume-existing" in cmd
     assert "--seeds" in cmd
     assert "0" in cmd
     assert "1" in cmd
