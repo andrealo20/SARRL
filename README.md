@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml/badge.svg)](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org/)
-[![tests](https://img.shields.io/badge/tests-72%20passing-brightgreen.svg)](tests/)
 [![version](https://img.shields.io/badge/version-1.1.0-6f42c1.svg)](docs/changelog.md)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 

@@ -5,8 +5,8 @@ planned.
 
 ## Test coverage checklist
 
-The automated suite currently reports **72/72 tests**, with **72 passed** in the verified release audit,
-across Python 3.10, 3.11 and 3.12. The CI pipeline runs `ruff check .`, `python -m compileall -q sarrl tests
+The automated regression suite is executed across Python 3.10, 3.11 and 3.12.
+The exact test count evolves with the codebase; release-specific historical counts are retained below. The CI pipeline runs `ruff check .`, `python -m compileall -q sarrl tests
 tools` and `pytest`. Important regression and numerical tests cover:
 
 - inertia-matrix symmetry and positive definiteness;
