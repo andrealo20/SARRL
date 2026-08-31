@@ -105,3 +105,12 @@ def test_payload_increases_gravity_load_in_expected_direction():
     loaded = PlanarArm(PlanarArmParams(payload_mass=1.0))
     q = np.array([0.0, 0.0])
     assert np.all(loaded.gravity_vector(q) > base.gravity_vector(q))
+
+
+def test_jacobian_dot_times_qd_matches_finite_difference():
+    arm = PlanarArm()
+    q = np.array([0.6, -0.8])
+    qd = np.array([0.9, -0.35])
+    h = 1e-7
+    numeric = ((arm.jacobian(q + h * qd) - arm.jacobian(q - h * qd)) / (2 * h)) @ qd
+    np.testing.assert_allclose(arm.jacobian_dot_times_qd(q, qd), numeric, atol=2e-8)

@@ -185,6 +185,22 @@ class PlanarArm:
             dtype=np.float64,
         )
 
+    def jacobian_dot_times_qd(self, q, qd) -> np.ndarray:
+        """Convective end-effector acceleration term Jdot(q, qd) qd."""
+        q = self._vec2(q, "q")
+        qd = self._vec2(qd, "qd")
+        p = self.params
+        q1, q2 = q
+        qd1, qd2 = qd
+        qd12 = qd1 + qd2
+        return np.array(
+            [
+                -p.l1 * np.cos(q1) * qd1**2 - p.l2 * np.cos(q1 + q2) * qd12**2,
+                -p.l1 * np.sin(q1) * qd1**2 - p.l2 * np.sin(q1 + q2) * qd12**2,
+            ],
+            dtype=np.float64,
+        )
+
     def inverse_kinematics(self, target, elbow_up: bool = False) -> np.ndarray:
         target = self._vec2(target, "target")
         p = self.params
