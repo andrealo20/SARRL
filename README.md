@@ -33,7 +33,7 @@ On the randomized planar held-out benchmark, five independently trained residual
 
 $$
 \boxed{
-56.4\% \pm 7.0\ \text{percentage points}
+56.4\% \pm 7.0 \text{percentage points}
 }
 $$
 
@@ -53,7 +53,7 @@ The mean paired improvement was:
 
 $$
 \boxed{
-+45.4\ \text{percentage points}
++45.4 \text{percentage points}
 }
 $$
 
@@ -237,7 +237,7 @@ The policy objective is
 $$
 J_\pi(\theta)
 =
-\mathbb E_{s\sim\mathcal D,\,
+\mathbb E_{s\sim\mathcal D, 
 a\sim\pi_\theta}
 \left[
 \alpha\log\pi_\theta(a|s)
@@ -306,13 +306,13 @@ $$
 payload
 
 $$
-m_{\mathrm{payload}}\in[0,1]\ \mathrm{kg},
+m_{\mathrm{payload}}\in[0,1] \mathrm{kg},
 $$
 
 and actuator-command delay
 
 $$
-d\in\{0,1,2\}\ \text{steps}.
+d\in\{0,1,2\} \text{steps}.
 $$
 
 Abrupt in-episode motor-gain and payload faults are also supported for controlled fault-recovery experiments.
@@ -329,8 +329,8 @@ $$
 h_t
 =
 \left(
-o_t,\,
-a_t,\,
+o_t, 
+a_t, 
 o_{t+1}-o_t
 \right).
 $$
@@ -451,7 +451,7 @@ $$
 \tau^\star
 =
 \underset{\tau}{\operatorname{argmin}}
-\;
+ 
 \frac{1}{2}
 \left\|
 \tau-\tau_{\mathrm{candidate}}
@@ -581,14 +581,14 @@ s_p
 }
 =
 7.0
-\ \text{percentage points}.
+ \text{percentage points}.
 $$
 
 Therefore the primary multi-seed result is reported as
 
 $$
 \boxed{
-56.4\% \pm 7.0\ \mathrm{pp}
+56.4\% \pm 7.0 \mathrm{pp}
 }
 $$
 
@@ -640,7 +640,7 @@ The mean paired improvement is
 
 $$
 \boxed{
-+45.4\ \mathrm{percentage\ points}
++45.4 \mathrm{percentage points}
 }
 $$
 
@@ -1150,7 +1150,7 @@ For the retained result,
 $$
 \text{Residual SAC}
 =
-56.4\%\pm7.0\ \mathrm{pp},
+56.4\%\pm7.0 \mathrm{pp},
 $$
 
 $$
@@ -1162,7 +1162,7 @@ $$
 $$
 \Delta_{\mathrm{paired}}
 =
-+45.4\ \mathrm{pp}.
++45.4 \mathrm{pp}.
 $$
 
 ---
