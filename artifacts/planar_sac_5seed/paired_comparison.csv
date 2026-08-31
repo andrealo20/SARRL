@@ -1,0 +1,6 @@
+training_seed,sarrl_success_rate,baseline_success_rate,difference_pp,bootstrap_ci95_low_pp,bootstrap_ci95_high_pp
+0,0.61,0.11,50.0,37.0,62.0
+1,0.57,0.11,46.0,35.0,57.0
+2,0.63,0.11,52.0,40.0,63.0
+3,0.56,0.11,45.0,34.0,56.0
+4,0.45,0.11,34.0,22.0,46.0

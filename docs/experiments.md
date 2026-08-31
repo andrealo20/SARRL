@@ -62,6 +62,12 @@ The planar baseline campaign includes:
 
 These scenarios establish the model-mismatch gap before learned compensation is credited with improvement.
 
+## Retained v1.1.0 method-specific campaign
+
+The v1.1.0 release retains a completed five-seed residual-SAC campaign following the seed-separation and
+model-level reporting rules above. It is a controlled method-specific result, not the complete comparative study
+listed below. Raw evaluation evidence and provenance are stored in `artifacts/planar_sac_5seed/`.
+
 ## Required ablations for a learned headline result
 
 A full final study should compare at least:

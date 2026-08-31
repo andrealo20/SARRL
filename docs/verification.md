@@ -2,6 +2,86 @@
 
 This file distinguishes checks that were actually executed from features that are only implemented or planned.
 
+## v1.1.0 five-seed residual-SAC evidence
+
+The first completed learned-policy campaign was run from Git commit
+`9f832614ce8b51c207873ff4861986ab72903115` (the verified v1.0.1 training stack) on Ubuntu 24.04 under WSL2
+with Python 3.12.3 and PyTorch 2.12.0+cu130. The retained run manifests record `cuda_available: true` for all
+five training runs.
+
+### Protocol
+
+- training seeds: `0, 1, 2, 3, 4`;
+- 200,000 environment steps per training run;
+- residual SAC, hidden layers 256×256, replay capacity 200,000 and batch size 256;
+- start steps: 5,000; update cadence: one SAC update per environment step thereafter;
+- domain randomization: ±15% mass, ±30% friction, ±15% motor gain, payload 0–1 kg and action delay 0–2 steps;
+- validation: 30 fixed episodes every 25,000 steps beginning at seed `20000`;
+- checkpoint selection: lexicographic `(success_rate, mean_return)` on validation only;
+- held-out evaluation: seeds `40000..40099`, 100 episodes per selected policy;
+- computed-torque baseline evaluated on the identical 100 held-out seeds;
+- validation and held-out seed populations are disjoint.
+
+Seed 0 was intentionally interrupted and resumed exactly from its 100,000-step training checkpoint; its retained
+manifest records the resume source. The CUDA checkpoint-resume path had already been regression-tested in v1.0.1.
+
+### Held-out results
+
+| Training seed | Selected validation step | Held-out success | 95% Wilson interval | Mean reward | Mean final distance |
+|---:|---:|---:|---:|---:|---:|
+| 0 | 200k | 61/100 | 51.2–70.0% | -72.73 | 0.0863 m |
+| 1 | 200k | 57/100 | 47.2–66.3% | -76.32 | 0.0859 m |
+| 2 | 200k | 63/100 | 53.2–71.8% | -74.20 | 0.0803 m |
+| 3 | 150k | 56/100 | 46.2–65.3% | -79.96 | 0.0986 m |
+| 4 | 200k | 45/100 | 35.6–54.8% | -82.31 | 0.0928 m |
+
+Across the five independently trained policies:
+
+- mean held-out success rate: **56.4%**;
+- sample standard deviation across training seeds: **7.0 percentage points**;
+- observed seed range: **45% to 63%**;
+- total policy successes: **282/500**.
+
+The original generated `aggregate.json` also records a population standard deviation of 6.25 percentage points
+(`ddof=0`). Release prose uses the sample standard deviation across independent training runs instead.
+
+### Paired computed-torque comparison
+
+The computed-torque controller achieved **11/100 = 11.0%** on the same held-out seeds, with Wilson 95% CI
+**6.3–18.6%**.
+
+| Training seed | Policy - baseline | Paired bootstrap 95% CI |
+|---:|---:|---:|
+| 0 | +50 pp | +37 to +62 pp |
+| 1 | +46 pp | +35 to +57 pp |
+| 2 | +52 pp | +40 to +63 pp |
+| 3 | +45 pp | +34 to +56 pp |
+| 4 | +34 pp | +22 to +46 pp |
+
+Mean paired improvement: **+45.4 percentage points**. All five paired bootstrap 95% confidence intervals exclude
+zero. This is a paired episode-seed comparison; it does not turn the 500 held-out policy episodes into 500
+independent training replicates.
+
+### Retained evidence
+
+The release retains under `artifacts/planar_sac_5seed/`:
+
+- raw 500-policy held-out episode records;
+- the matching 100-episode computed-torque baseline;
+- per-seed validation curves and summary metrics;
+- paired-comparison bootstrap intervals;
+- all five run manifests;
+- SHA-256 fingerprints of the evaluated `best.pt` checkpoints;
+- `result.json` with release-level sample-SD reporting;
+- the original generated `aggregate.json`.
+
+The large model checkpoints themselves are not committed. Their fingerprints preserve the identity of the exact
+models used to generate the retained evaluation records.
+
+This evidence supports a learned-policy claim only for residual SAC on the randomized analytical 2-DoF planar
+benchmark. It does not establish the full ablation matrix required by `docs/experiments.md`, nor OOD learned-policy,
+Franka/MuJoCo, hardware or sim-to-real performance.
+
 ## v1.0.1 automated suite
 
 Executed under Ubuntu 24.04 WSL2 with PyTorch 2.12.0+cu130 and an NVIDIA GeForce RTX 4080 Laptop GPU.

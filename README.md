@@ -9,9 +9,9 @@
 
 SARRL is a research-oriented robotics and reinforcement-learning stack for control under model mismatch. It combines a physics controller, from-scratch Soft Actor-Critic, causal dynamics-context estimation, learned residual dynamics with epistemic uncertainty, controlled fault injection and a hard high-order Control Barrier Function safety projection.
 
-The current **v1.0.1 planar release** is deliberately self-contained: its reference plant is an analytical 2-DoF arm, so the mathematics, learning code and safety layer can be tested without MuJoCo, Gymnasium or a black-box dynamics engine. Franka/MuJoCo transfer remains the next major milestone rather than an unverified feature claim.
+The current **v1.1.0 planar release** is deliberately self-contained: its reference plant is an analytical 2-DoF arm, so the mathematics, learning code and safety layer can be tested without MuJoCo, Gymnasium or a black-box dynamics engine. Franka/MuJoCo transfer remains the next major milestone rather than an unverified feature claim.
 
-> **Status:** the complete planar stack is implemented and the current automated suite passes **72/72 tests**. Measured non-learned baselines are retained in `results/`. No multi-seed learned-policy success claim is made yet; the repository includes the validation/held-out protocol and sweep runner required to produce one reproducibly.
+> **Status:** the complete planar stack is implemented and the current automated suite passes **72/72 tests**. The first retained multi-seed residual-SAC campaign achieves **56.4% ± 7.0 percentage points** held-out success (mean ± sample SD across five independent training seeds), compared with **11.0%** for computed torque on the same randomized held-out episode seeds. This is method-specific planar evidence, not a complete ablation study.
 
 ## Core idea
 
@@ -184,6 +184,54 @@ results/v0_9_baselines.json
 
 The large drop from nominal control under mismatch is the experimental motivation for residual learning, context adaptation and uncertainty-aware control.
 
+## Measured residual-SAC result
+
+The v1.1.0 release retains the first completed multi-seed learned-policy campaign under
+[`artifacts/planar_sac_5seed/`](artifacts/planar_sac_5seed/).
+
+Protocol:
+
+- five independent training seeds: `0, 1, 2, 3, 4`;
+- 200,000 environment steps per training run;
+- residual SAC with the documented in-distribution domain randomization;
+- validation every 25,000 steps on 30 fixed episodes beginning at seed `20000`;
+- `best.pt` selected only by validation success rate, then mean return as a tie-break;
+- 100 held-out episodes per trained policy using seeds `40000..40099`;
+- computed torque evaluated on those same 100 held-out episode seeds;
+- held-out episodes never used for checkpoint selection.
+
+Held-out policy success rates were:
+
+| Training seed | Selected step | Success | 95% Wilson interval | Mean final distance |
+|---:|---:|---:|---:|---:|
+| 0 | 200k | 61/100 | 51.2–70.0% | 0.0863 m |
+| 1 | 200k | 57/100 | 47.2–66.3% | 0.0859 m |
+| 2 | 200k | 63/100 | 53.2–71.8% | 0.0803 m |
+| 3 | 150k | 56/100 | 46.2–65.3% | 0.0986 m |
+| 4 | 200k | 45/100 | 35.6–54.8% | 0.0928 m |
+
+Across the five independently trained policies, the success rate was **56.4% ± 7.0 percentage points**
+(mean ± sample standard deviation; observed range **45–63%**). The policies produced **282 successes across
+500 held-out evaluations**.
+
+The computed-torque baseline achieved **11/100 = 11.0%** on the identical held-out episode seeds
+(Wilson 95% CI **6.3–18.6%**). The paired policy-minus-baseline improvements were:
+
+| Training seed | Improvement | Paired bootstrap 95% CI |
+|---:|---:|---:|
+| 0 | +50 pp | +37 to +62 pp |
+| 1 | +46 pp | +35 to +57 pp |
+| 2 | +52 pp | +40 to +63 pp |
+| 3 | +45 pp | +34 to +56 pp |
+| 4 | +34 pp | +22 to +46 pp |
+
+The mean paired improvement was **+45.4 percentage points**, and every per-policy paired bootstrap 95%
+confidence interval excluded zero.
+
+This result supports the retained randomized planar residual-SAC experiment only. The broader ablation study
+listed in [`docs/experiments.md`](docs/experiments.md), OOD learned-policy evaluation, Franka/MuJoCo transfer,
+hardware validation and sim-to-real transfer remain future work.
+
 ## Install
 
 ```bash
@@ -318,7 +366,7 @@ Every training run writes `run_manifest.json` with the Git commit, Python/librar
 | M2 | constrained nonlinear MPC | implemented + tested |
 | M3 | SAC from scratch | implemented + tested |
 | M4 | direct-torque RL path | implemented; full campaign pending |
-| M5 | residual SAC path | implemented; full campaign pending |
+| M5 | residual SAC path | implemented + five-seed planar campaign measured |
 | M6 | domain randomisation + OOD protocol | implemented + baseline measured |
 | M7 | causal GRU dynamics context | implemented + tested |
 | M8 | actuator/payload fault injection | implemented + baseline measured |
@@ -351,8 +399,9 @@ tools/
   train_residual_dynamics.py
   run_planar_baselines.py
 
-tests/            71 automated tests
-results/          retained raw evidence only
+tests/            72 automated tests
+results/          retained historical baselines + local generated outputs
+artifacts/        retained learned-policy evidence and provenance
 docs/             design, mathematics, verification, experiments, changelog
 ```
 
@@ -360,7 +409,7 @@ docs/             design, mathematics, verification, experiments, changelog
 
 - The reference release is planar 2-DoF, not yet a 7-DoF Franka manipulation benchmark.
 - No hardware or sim-to-real claim is made.
-- No learned-policy headline metric is reported until a completed multi-seed campaign is retained in the repository.
+- The retained learned-policy metric covers residual SAC on the randomized planar benchmark only; the full comparative ablation study remains pending.
 - The SciPy/SLSQP MPC is a reference constrained controller, not a hard real-time solver.
 - The HOCBF guarantee is model-relative: uncertainty in the dynamics model remains relevant even when the mathematical projection is exact.
 - The uncertainty gate is heuristic and must not be interpreted as a safety guarantee.

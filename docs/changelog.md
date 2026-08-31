@@ -2,6 +2,16 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v1.1.0 — retained multi-seed residual-SAC evidence
+
+- Completed five independent 200k-step residual-SAC training runs under planar domain randomization.
+- Retained 500 held-out policy episodes and the matching computed-torque baseline evaluation.
+- Measured **56.4% ± 7.0 pp** held-out success across training seeds (mean ± sample SD), versus **11.0%** for computed torque on identical held-out episode seeds.
+- Mean paired success-rate improvement was **+45.4 pp**; all five paired bootstrap 95% confidence intervals excluded zero.
+- Added raw validation curves, held-out episode records, run manifests, checkpoint SHA-256 fingerprints and machine-readable result summaries under `artifacts/planar_sac_5seed/`.
+- Updated release documentation to distinguish retained planar learned-policy evidence from still-unimplemented MuJoCo/Franka transfer.
+- This is retained method-specific planar evidence; the full ablation study and MuJoCo/Franka transfer remain pending.
+
 ## v1.0.1 — CUDA checkpoint restore compatibility
 
 - Fixed CUDA RNG restoration when training checkpoints are loaded onto a CUDA device.

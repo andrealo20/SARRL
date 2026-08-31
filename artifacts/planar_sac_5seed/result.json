@@ -1,0 +1,70 @@
+{
+  "baseline_episodes": 100,
+  "baseline_success_ci95_high": 0.186,
+  "baseline_success_ci95_low": 0.063,
+  "baseline_success_rate": 0.11,
+  "baseline_successes": 11,
+  "benchmark": "planar randomized held-out",
+  "heldout_episodes_per_policy": 100,
+  "heldout_seed_start": 40000,
+  "paired_bootstrap_ci95_pp": [
+    [
+      37.0,
+      62.0
+    ],
+    [
+      35.0,
+      57.0
+    ],
+    [
+      40.0,
+      63.0
+    ],
+    [
+      34.0,
+      56.0
+    ],
+    [
+      22.0,
+      46.0
+    ]
+  ],
+  "paired_improvement_mean_pp": 45.4,
+  "paired_improvement_pp": [
+    50.0,
+    46.0,
+    52.0,
+    45.0,
+    34.0
+  ],
+  "paired_improvement_sample_std_pp": 6.985699678629192,
+  "policy_success_rates": [
+    0.61,
+    0.57,
+    0.63,
+    0.56,
+    0.45
+  ],
+  "selected_validation_steps": [
+    200000,
+    200000,
+    200000,
+    150000,
+    200000
+  ],
+  "source_git_commit": "9f832614ce8b51c207873ff4861986ab72903115",
+  "source_release": "v1.0.1",
+  "success_rate_mean": 0.564,
+  "success_rate_sample_std": 0.06985699678629192,
+  "training_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "training_steps_per_seed": 200000,
+  "validation_episodes": 30,
+  "validation_every_steps": 25000,
+  "validation_seed_start": 20000
+}
