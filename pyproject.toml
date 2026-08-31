@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sarrl"
-version = "0.1.0"
+version = "0.2.0"
 description = "Safe Adaptive Residual Reinforcement Learning for robotic manipulation"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -13,6 +13,7 @@ authors = [{name = "Andrea Loroni"}]
 dependencies = [
   "numpy>=1.24",
   "torch>=2.1",
+  "scipy>=1.10",
 ]
 
 [project.optional-dependencies]
