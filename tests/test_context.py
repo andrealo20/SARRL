@@ -72,3 +72,40 @@ def test_supervised_context_training_reduces_loss_on_synthetic_identifiable_data
     model = DynamicsContextEncoder(cfg)
     stats = train_context_encoder(model, x, y, steps=180, batch_size=48, seed=3, device="cpu")
     assert stats.final_loss < 0.55 * stats.initial_loss
+
+
+def test_adaptive_wrapper_state_round_trip_preserves_next_transition():
+    torch.manual_seed(13)
+    cfg = ContextConfig(latent_dim=4, hidden_dim=12, history=3)
+
+    original = AdaptiveContextEnv(
+        PlanarReachEnv(mode="residual"),
+        DynamicsContextEncoder(cfg),
+        device="cpu",
+    )
+
+    original.reset(seed=17)
+    original.step(np.array([0.20, -0.10], dtype=np.float32))
+    original.step(np.array([-0.15, 0.25], dtype=np.float32))
+
+    restored = AdaptiveContextEnv.from_state_dict(
+        original.state_dict(),
+        device="cpu",
+    )
+
+    np.testing.assert_array_equal(restored.state, original.state)
+    np.testing.assert_array_equal(restored.latent, original.latent)
+    assert restored.constructor_config() == original.constructor_config()
+
+    action = np.array([0.12, -0.18], dtype=np.float32)
+    expected = original.step(action)
+    got = restored.step(action)
+
+    np.testing.assert_array_equal(got[0], expected[0])
+    assert got[1] == expected[1]
+    assert got[2] == expected[2]
+    assert got[3] == expected[3]
+    assert got[4]["success"] == expected[4]["success"]
+    assert got[4]["distance"] == expected[4]["distance"]
+    np.testing.assert_array_equal(restored.state, original.state)
+    np.testing.assert_array_equal(restored.latent, original.latent)

@@ -99,21 +99,75 @@ class DynamicsContextEncoder(nn.Module):
         next_obs = np.asarray(next_obs, dtype=np.float32)
         if obs.ndim != 1 or action.ndim != 1 or next_obs.shape != obs.shape:
             raise ValueError("transition components must be one-dimensional and compatible")
-        if not np.all(np.isfinite(obs)) or not np.all(np.isfinite(action)) or not np.all(
-            np.isfinite(next_obs)
+        if (
+            not np.all(np.isfinite(obs))
+            or not np.all(np.isfinite(action))
+            or not np.all(np.isfinite(next_obs))
         ):
             raise ValueError("transition features must be finite")
         return np.concatenate([obs, action, next_obs - obs]).astype(np.float32)
 
-    def encode_numpy(self, sequence: np.ndarray, device: str | torch.device = "cpu") -> np.ndarray:
+    def encode_numpy(
+        self,
+        sequence: np.ndarray,
+        device: str | torch.device = "cpu",
+    ) -> np.ndarray:
+        """Encode one history with a deterministic CPU GRU inference path.
+
+        Supervised training continues to use ``forward`` and ``nn.GRU``.
+        Runtime inference explicitly evaluates the equivalent single-layer GRU
+        equations so exact checkpoint resume does not depend on fused RNN
+        backend implementation details.
+        """
         seq = np.asarray(sequence, dtype=np.float32)
-        if seq.ndim != 2:
+        if seq.ndim != 2 or seq.shape[1] != self.config.transition_dim:
             raise ValueError("sequence must have shape [time, transition_dim]")
-        self.eval()
+        if seq.shape[0] == 0:
+            raise ValueError("context sequence must contain at least one transition")
+        if not np.all(np.isfinite(seq)):
+            raise ValueError("context sequence must be finite")
+
+        runtime_device = torch.device(device)
+        if runtime_device.type != "cpu":
+            raise ValueError("runtime context inference is CPU-only to preserve exact resume")
+
+        model = self.to(runtime_device).eval()
+
         with torch.no_grad():
-            tensor = torch.as_tensor(seq, dtype=torch.float32, device=device).unsqueeze(0)
-            latent, _ = self.to(device)(tensor)
-        return latent.squeeze(0).cpu().numpy().astype(np.float32)
+            x = torch.as_tensor(
+                seq,
+                dtype=torch.float32,
+                device=runtime_device,
+            )
+
+            weight_ih = model.gru.weight_ih_l0
+            weight_hh = model.gru.weight_hh_l0
+            bias_ih = model.gru.bias_ih_l0
+            bias_hh = model.gru.bias_hh_l0
+
+            hidden = torch.zeros(
+                self.config.hidden_dim,
+                dtype=torch.float32,
+                device=runtime_device,
+            )
+
+            # PyTorch GRU gate order: reset, update, new.
+            for x_t in x:
+                input_gates = torch.mv(weight_ih, x_t) + bias_ih
+                hidden_gates = torch.mv(weight_hh, hidden) + bias_hh
+
+                i_reset, i_update, i_new = input_gates.chunk(3)
+                h_reset, h_update, h_new = hidden_gates.chunk(3)
+
+                reset = torch.sigmoid(i_reset + h_reset)
+                update = torch.sigmoid(i_update + h_update)
+                new = torch.tanh(i_new + reset * h_new)
+
+                hidden = (1.0 - update) * new + update * hidden
+
+            latent = model.latent_head(hidden.unsqueeze(0)).squeeze(0)
+
+        return latent.cpu().numpy().astype(np.float32)
 
     def save(self, path) -> None:
         torch.save(
@@ -207,7 +261,7 @@ class AdaptiveContextEnv:
             raise ValueError("encoder observation dimension does not match environment")
         if env.action_space.shape != (self.config.action_dim,):
             raise ValueError("encoder action dimension does not match environment")
-        self.device = torch.device(device or ("cuda" if torch.cuda.is_available() else "cpu"))
+        self.device = torch.device(device or "cpu")
         self.encoder.to(self.device).eval()
         self.action_space = env.action_space
         self.observation_space = BoxSpace(
@@ -242,6 +296,93 @@ class AdaptiveContextEnv:
         info = dict(info)
         info["context_latent"] = self._latent.copy()
         return self._augmented(next_obs), reward, terminated, truncated, info
+
+    @property
+    def state(self) -> np.ndarray:
+        """Expose the base physical state for evaluation diagnostics."""
+        return self.env.state
+
+    def sample_action(self) -> np.ndarray:
+        return self.env.sample_action()
+
+    def constructor_config(self) -> dict:
+        return {
+            "environment_type": "adaptive_context",
+            "base_environment": self.env.constructor_config(),
+            "context": asdict(self.config),
+        }
+
+    def state_dict(self) -> dict:
+        """Serialize the complete causal context state for exact continuation."""
+        return {
+            "environment_type": "adaptive_context",
+            "constructor_config": self.constructor_config(),
+            "base_environment": self.env.state_dict(),
+            "encoder_state_dict": {
+                key: value.detach().cpu().clone()
+                for key, value in self.encoder.state_dict().items()
+            },
+            "history": [row.copy() for row in self._history],
+            "last_obs": None if self._last_obs is None else self._last_obs.copy(),
+            "latent": self._latent.copy(),
+        }
+
+    @classmethod
+    def from_state_dict(
+        cls,
+        state: dict,
+        device: str | torch.device | None = None,
+    ) -> AdaptiveContextEnv:
+        if state.get("environment_type") != "adaptive_context":
+            raise ValueError("not an adaptive-context environment checkpoint")
+
+        from sarrl.envs import PlanarReachEnv
+
+        stored_cfg = dict(state["constructor_config"])
+        cfg = ContextConfig(**dict(stored_cfg["context"]))
+        encoder = DynamicsContextEncoder(cfg)
+        base_env = PlanarReachEnv.from_state_dict(state["base_environment"])
+        wrapped = cls(base_env, encoder, device=device)
+        wrapped.load_state_dict(state)
+        return wrapped
+
+    def load_state_dict(self, state: dict) -> None:
+        if state.get("environment_type") != "adaptive_context":
+            raise ValueError("not an adaptive-context environment checkpoint")
+
+        stored_cfg = state.get("constructor_config")
+        if stored_cfg != self.constructor_config():
+            raise ValueError("adaptive-context checkpoint constructor configuration does not match")
+
+        self.env.load_state_dict(state["base_environment"])
+        self.encoder.load_state_dict(state["encoder_state_dict"])
+        self.encoder.to(self.device).eval()
+
+        history = [np.asarray(row, dtype=np.float32) for row in state.get("history", [])]
+        if len(history) > self.config.history:
+            raise ValueError("context checkpoint history is too long")
+        if any(
+            row.shape != (self.config.transition_dim,) or not np.all(np.isfinite(row))
+            for row in history
+        ):
+            raise ValueError("invalid context checkpoint history")
+
+        self._history.clear()
+        self._history.extend(row.copy() for row in history)
+
+        last_obs = state.get("last_obs")
+        if last_obs is None:
+            self._last_obs = None
+        else:
+            last_obs = np.asarray(last_obs, dtype=np.float32)
+            if last_obs.shape != (self.config.obs_dim,) or not np.all(np.isfinite(last_obs)):
+                raise ValueError("invalid context checkpoint last observation")
+            self._last_obs = last_obs.copy()
+
+        latent = np.asarray(state["latent"], dtype=np.float32)
+        if latent.shape != (self.config.latent_dim,) or not np.all(np.isfinite(latent)):
+            raise ValueError("invalid context checkpoint latent")
+        self._latent = latent.copy()
 
     @property
     def latent(self) -> np.ndarray:

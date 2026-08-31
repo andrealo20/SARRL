@@ -83,11 +83,21 @@ def load_training_session(path):
             "training checkpoint v1 cannot reconstruct the environment exactly; "
             "use load_training_checkpoint with matching components"
         )
+    replay = ReplayBuffer.from_state_dict(payload["replay"])
+
+    env_state = payload["environment"]
+    if env_state.get("environment_type") == "adaptive_context":
+        from sarrl.adaptation import AdaptiveContextEnv
+
+        env = AdaptiveContextEnv.from_state_dict(env_state)
+    else:
+        env = PlanarReachEnv.from_state_dict(env_state)
+
+    # Reconstruct the environment before restoring the SAC RNG. Neural
+    # wrappers may initialize torch modules while being reconstructed.
     agent = SACAgent.from_state_dict(
         payload["agent"], seed=0, load_optimizers=True, restore_rng=True
     )
-    replay = ReplayBuffer.from_state_dict(payload["replay"])
-    env = PlanarReachEnv.from_state_dict(payload["environment"])
     _restore_global_rng(payload)
     loop = dict(payload["loop_state"])
     loop["checkpoint_version"] = int(payload["checkpoint_version"])
