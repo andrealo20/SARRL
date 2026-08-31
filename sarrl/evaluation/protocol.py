@@ -97,7 +97,11 @@ def paired_success_difference(
 def write_episode_csv(path, results: list[EpisodeResult]) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    fields = list(asdict(results[0]).keys()) if results else list(EpisodeResult.__dataclass_fields__)
+    fields = (
+        list(asdict(results[0]).keys())
+        if results
+        else list(EpisodeResult.__dataclass_fields__)
+    )
     with path.open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=fields)
         writer.writeheader()
@@ -105,7 +109,9 @@ def write_episode_csv(path, results: list[EpisodeResult]) -> None:
             writer.writerow(asdict(row))
 
 
-def write_summary_json(path, grouped: dict[str, AggregateMetrics], metadata: dict | None = None) -> None:
+def write_summary_json(
+    path, grouped: dict[str, AggregateMetrics], metadata: dict | None = None
+) -> None:
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {

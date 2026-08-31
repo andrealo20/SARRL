@@ -57,7 +57,9 @@ def main() -> int:
     args = p.parse_args()
     states, actions, targets = collect(args.samples, args.seed)
     model = ResidualDynamicsEnsemble(seed=args.seed)
-    stats = train_residual_ensemble(model, states, actions, targets, steps=args.steps, seed=args.seed)
+    stats = train_residual_ensemble(
+        model, states, actions, targets, steps=args.steps, seed=args.seed
+    )
     path = Path(args.output)
     path.parent.mkdir(parents=True, exist_ok=True)
     model.save(path)

@@ -10,3 +10,5 @@ dist/
 results/*
 !results/.gitkeep
 !results/v0_1_nominal.csv
+!results/v0_9_baselines.csv
+!results/v0_9_baselines.json

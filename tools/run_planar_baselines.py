@@ -10,7 +10,13 @@ from pathlib import Path
 import numpy as np
 
 from sarrl.envs import DomainRandomization, FaultSpec, PlanarReachEnv
-from sarrl.evaluation import EpisodeResult, aggregate, repository_commit, write_episode_csv, write_summary_json
+from sarrl.evaluation import (
+    EpisodeResult,
+    aggregate,
+    repository_commit,
+    write_episode_csv,
+    write_summary_json,
+)
 
 
 @dataclass(frozen=True)
@@ -93,14 +99,22 @@ def main() -> int:
     p.add_argument("--episodes", type=int, default=100)
     p.add_argument("--seed", type=int, default=1000)
     p.add_argument("--output", default="results/v0_9_baselines")
-    p.add_argument("--scenario", default="all", choices=["all", "nominal", "id_randomized", "ood_dynamics", "motor_fault"])
+    p.add_argument(
+        "--scenario",
+        default="all",
+        choices=["all", "nominal", "id_randomized", "ood_dynamics", "motor_fault"],
+    )
     args = p.parse_args()
     if args.episodes <= 0:
         raise SystemExit("episodes must be positive")
     seeds = range(args.seed, args.seed + args.episodes)
     all_results = []
     summaries = {}
-    selected = scenarios() if args.scenario == "all" else [s for s in scenarios() if s.name == args.scenario]
+    selected = (
+        scenarios()
+        if args.scenario == "all"
+        else [scenario for scenario in scenarios() if scenario.name == args.scenario]
+    )
     for scenario in selected:
         rows = run_scenario(scenario, seeds)
         all_results.extend(rows)
@@ -116,7 +130,11 @@ def main() -> int:
     write_summary_json(
         out.with_suffix(".json"),
         summaries,
-        metadata={"seed_start": args.seed, "episodes_per_scenario": args.episodes, "git_commit": repository_commit()},
+        metadata={
+            "seed_start": args.seed,
+            "episodes_per_scenario": args.episodes,
+            "git_commit": repository_commit(),
+        },
     )
     return 0
 

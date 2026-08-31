@@ -25,7 +25,9 @@ def runtime_metadata(root: str | Path = ".") -> dict:
     }
 
 
-def write_run_manifest(path, config: dict, root: str | Path = ".", extra: dict | None = None) -> None:
+def write_run_manifest(
+    path, config: dict, root: str | Path = ".", extra: dict | None = None
+) -> None:
     payload = {
         "config": dict(config),
         "runtime": runtime_metadata(root),

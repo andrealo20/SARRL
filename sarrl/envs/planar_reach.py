@@ -234,7 +234,7 @@ class PlanarReachEnv:
         }
 
     def dynamics_context(self) -> np.ndarray:
-        """Ground-truth context for diagnostics/auxiliary training, never policy input by default."""
+        """Ground-truth context for diagnostics and auxiliary training only."""
         return np.array(
             [
                 *self.mass_scale,
@@ -301,16 +301,23 @@ class PlanarReachEnv:
             raise ValueError("environment checkpoint configuration does not match")
         if int(state["max_steps"]) != self.max_steps:
             raise ValueError("environment checkpoint max_steps does not match")
-        for name, shape in (("state", (4,)), ("target", (2,)), ("q_des", (2,)),
-                            ("motor_gain", (2,)), ("mass_scale", (2,)),
-                            ("friction_scale", (2,))):
+        for name, shape in (
+            ("state", (4,)),
+            ("target", (2,)),
+            ("q_des", (2,)),
+            ("motor_gain", (2,)),
+            ("mass_scale", (2,)),
+            ("friction_scale", (2,)),
+        ):
             value = np.asarray(state[name], dtype=np.float64)
             if value.shape != shape or not np.all(np.isfinite(value)):
                 raise ValueError(f"invalid environment checkpoint field {name}")
             setattr(self, name, value.copy())
         self.payload_mass = float(state["payload_mass"])
         self.action_delay = int(state["action_delay"])
-        self._command_queue = [np.asarray(x, dtype=np.float64).copy() for x in state["command_queue"]]
+        self._command_queue = [
+            np.asarray(x, dtype=np.float64).copy() for x in state["command_queue"]
+        ]
         if any(x.shape != (2,) for x in self._command_queue):
             raise ValueError("invalid delayed-command queue")
         self._fault_active = bool(state["fault_active"])

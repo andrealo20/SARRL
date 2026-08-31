@@ -22,7 +22,10 @@ def main() -> int:
 
     env = PlanarReachEnv(mode=args.mode)
     agent = SACAgent.from_checkpoint(args.checkpoint, seed=0, load_optimizers=False)
-    if agent.obs_dim != env.observation_space.shape[0] or agent.action_dim != env.action_space.shape[0]:
+    if (
+        agent.obs_dim != env.observation_space.shape[0]
+        or agent.action_dim != env.action_space.shape[0]
+    ):
         raise SystemExit("checkpoint dimensions do not match evaluation environment")
     result = evaluate_policy(agent, env, args.episodes, args.seed)
     print(

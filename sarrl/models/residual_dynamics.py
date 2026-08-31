@@ -23,7 +23,10 @@ class ResidualDynamicsConfig:
     weight_decay: float = 1e-6
 
     def validate(self) -> None:
-        if any(v <= 0 for v in (self.state_dim, self.action_dim, self.output_dim, self.ensemble_size)):
+        if any(
+            v <= 0
+            for v in (self.state_dim, self.action_dim, self.output_dim, self.ensemble_size)
+        ):
             raise ValueError("residual dynamics dimensions and ensemble size must be positive")
         if not self.hidden or any(v <= 0 for v in self.hidden):
             raise ValueError("residual dynamics hidden layers must be positive")
@@ -76,7 +79,9 @@ class ResidualDynamicsEnsemble(nn.Module):
         """Return [ensemble, batch, output_dim] predictions."""
         return torch.stack([model(state, action) for model in self.models], dim=0)
 
-    def predict(self, state, action, device: str | torch.device = "cpu") -> tuple[np.ndarray, np.ndarray]:
+    def predict(
+        self, state, action, device: str | torch.device = "cpu"
+    ) -> tuple[np.ndarray, np.ndarray]:
         state_arr = np.asarray(state, dtype=np.float32)
         action_arr = np.asarray(action, dtype=np.float32)
         single = state_arr.ndim == 1
@@ -112,7 +117,9 @@ class ResidualDynamicsEnsemble(nn.Module):
         if state.shape != (4,) or torque.shape != (2,):
             raise ValueError("state/torque shapes must be (4,) and (2,)")
         nominal = nominal_model.forward_dynamics(state[:2], state[2:], torque)
-        residual, uncertainty = self.predict(state.astype(np.float32), torque.astype(np.float32), device)
+        residual, uncertainty = self.predict(
+            state.astype(np.float32), torque.astype(np.float32), device
+        )
         return nominal + residual.astype(np.float64), uncertainty.astype(np.float64)
 
     def save(self, path) -> None:

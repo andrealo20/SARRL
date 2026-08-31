@@ -71,7 +71,9 @@ class SARRLControlStack:
         if state.shape != (4,) or q_des.shape != (2,):
             raise ValueError("runtime expects state(4) and q_des(2)")
         baseline = self.baseline.command(state[:2], state[2:], q_des)
-        action = np.asarray(self.policy.act(observation, deterministic=deterministic), dtype=np.float64)
+        action = np.asarray(
+            self.policy.act(observation, deterministic=deterministic), dtype=np.float64
+        )
         if action.shape != (2,) or not np.all(np.isfinite(action)):
             raise ValueError("policy must return a finite 2-vector")
         action = np.clip(action, -1.0, 1.0)

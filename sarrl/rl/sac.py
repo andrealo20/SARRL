@@ -194,7 +194,9 @@ class SACAgent:
             "log_alpha": self.log_alpha.detach().cpu(),
             "update_steps": self.update_steps,
             "torch_rng_state": torch.get_rng_state(),
-            "cuda_rng_state_all": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
+            "cuda_rng_state_all": (
+                torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None
+            ),
         }
         if include_optimizers:
             payload.update(

@@ -222,13 +222,17 @@ def main() -> int:
             validate(step)
 
         if args.checkpoint_every and step % args.checkpoint_every == 0:
-            save_training_checkpoint(out / f"train_step{step}.pt", agent, replay, env, loop_state(step))
+            save_training_checkpoint(
+                out / f"train_step{step}.pt", agent, replay, env, loop_state(step)
+            )
 
     if args.validate_every and (not validation_rows or validation_rows[-1][0] != args.steps):
         validate(args.steps)
 
     agent.save(out / "final.pt")
-    save_training_checkpoint(out / "training_final.pt", agent, replay, env, loop_state(args.steps))
+    save_training_checkpoint(
+        out / "training_final.pt", agent, replay, env, loop_state(args.steps)
+    )
     with (out / "episodes.csv").open("w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["episode", "step", "reward", "success", "final_distance"])
