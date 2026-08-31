@@ -31,31 +31,31 @@ The current **v1.1.0** release focuses on a fully reproducible analytical **2-Do
 
 On the randomized planar held-out benchmark, five independently trained residual-SAC policies achieved:
 
-$$
+```math
 \boxed{
 56.4\% \pm 7.0 \text{percentage points}
 }
-$$
+```
 
 where the uncertainty is the **sample standard deviation across five independent training seeds**.
 
 The computed-torque baseline achieved:
 
-$$
+```math
 \boxed{
 11.0\%
 }
-$$
+```
 
 on the **same 100 held-out episode seeds**.
 
 The mean paired improvement was:
 
-$$
+```math
 \boxed{
 +45.4 \text{percentage points}
 }
-$$
+```
 
 and all five per-policy paired bootstrap 95% confidence intervals excluded zero.
 
@@ -111,7 +111,7 @@ The architecture is deliberately modular. The controller, reinforcement-learning
 
 The analytical planar arm follows the standard rigid-body manipulator equation
 
-$$
+```math
 M(q)\ddot{q}
 +
 C(q,\dot{q})\dot{q}
@@ -121,7 +121,7 @@ g(q)
 f(\dot{q})
 =
 \tau
-$$
+```
 
 where:
 
@@ -141,31 +141,31 @@ The implementation includes endpoint payload dynamics, forward and inverse dynam
 
 Instead of asking reinforcement learning to replace the entire controller,
 
-$$
+```math
 \tau = \pi(s),
-$$
+```
 
 SARRL begins from a competent physics-based controller.
 
 The learned policy produces only a bounded residual correction:
 
-$$
+```math
 \tau_{\mathrm{candidate}}
 =
 \tau_{\mathrm{nom}}
 +
 \tau_{\mathrm{res}}.
-$$
+```
 
 With normalized SAC action $a_{\mathrm{RL}}\in[-1,1]^n$,
 
-$$
+```math
 \tau_{\mathrm{res}}
 =
 \tau_{\mathrm{res,max}}
 \odot
 a_{\mathrm{RL}}.
-$$
+```
 
 This decomposition gives the policy a much narrower task: compensate for model mismatch rather than rediscover the complete robot controller from scratch.
 
@@ -175,7 +175,7 @@ This decomposition gives the policy a much narrower task: compensate for model m
 
 The nominal controller uses feedback linearization:
 
-$$
+```math
 \tau_{\mathrm{nom}}
 =
 M(q)
@@ -190,19 +190,19 @@ K_p(q_d-q)
 C(q,\dot q)\dot q
 +
 g(q).
-$$
+```
 
 Under an accurate model, this approximately reduces the tracking error dynamics to
 
-$$
+```math
 \ddot e + K_d\dot e + K_p e = 0,
-$$
+```
 
 with
 
-$$
+```math
 e=q_d-q.
-$$
+```
 
 The same nominal controller is retained as the non-learned comparison baseline.
 
@@ -214,7 +214,7 @@ SARRL implements Soft Actor-Critic directly in PyTorch rather than using SB3 or 
 
 The stochastic actor is a tanh-squashed Gaussian policy:
 
-$$
+```math
 u_\theta(s,\epsilon)
 =
 \mu_\theta(s)
@@ -222,19 +222,19 @@ u_\theta(s,\epsilon)
 \sigma_\theta(s)\odot\epsilon,
 \qquad
 \epsilon\sim\mathcal N(0,I),
-$$
+```
 
 followed by
 
-$$
+```math
 a
 =
 \tanh(u_\theta).
-$$
+```
 
 The policy objective is
 
-$$
+```math
 J_\pi(\theta)
 =
 \mathbb E_{s\sim\mathcal D, 
@@ -245,11 +245,11 @@ a\sim\pi_\theta}
 \min_{i\in\{1,2\}}
 Q_{\phi_i}(s,a)
 \right].
-$$
+```
 
 The critic target is
 
-$$
+```math
 y
 =
 r
@@ -261,7 +261,7 @@ Q_{\bar\phi_i}(s',a')
 -
 \alpha\log\pi_\theta(a'|s')
 \right].
-$$
+```
 
 The implementation includes:
 
@@ -291,29 +291,29 @@ The analytical environment can independently vary:
 
 The retained v1.1.0 training campaign uses:
 
-$$
+```math
 \Delta m = \pm 15\%,
-$$
+```
 
-$$
+```math
 \Delta f = \pm 30\%,
-$$
+```
 
-$$
+```math
 \Delta k_{\mathrm{motor}} = \pm 15\%,
-$$
+```
 
 payload
 
-$$
+```math
 m_{\mathrm{payload}}\in[0,1] \mathrm{kg},
-$$
+```
 
 and actuator-command delay
 
-$$
+```math
 d\in\{0,1,2\} \text{steps}.
-$$
+```
 
 Abrupt in-episode motor-gain and payload faults are also supported for controlled fault-recovery experiments.
 
@@ -325,7 +325,7 @@ The adaptation module uses only transition history available at runtime.
 
 Each history element has the form
 
-$$
+```math
 h_t
 =
 \left(
@@ -333,23 +333,23 @@ o_t,
 a_t, 
 o_{t+1}-o_t
 \right).
-$$
+```
 
 A GRU encoder maps a finite causal history
 
-$$
+```math
 H_t
 =
 (h_{t-L},\ldots,h_{t-1})
-$$
+```
 
 to a latent context
 
-$$
+```math
 z_t
 =
 f_{\mathrm{GRU}}(H_t).
-$$
+```
 
 Ground-truth dynamics parameters can be used as auxiliary supervision during training or diagnostics, but are **not required as runtime policy inputs**.
 
@@ -361,29 +361,29 @@ This prevents privileged physical information from leaking directly into the dep
 
 The nominal rigid-body model predicts acceleration
 
-$$
+```math
 \ddot q_{\mathrm{nom}}
 =
 f_{\mathrm{nom}}(x,\tau_{\mathrm{cmd}}).
-$$
+```
 
 The actual plant acceleration is represented as
 
-$$
+```math
 \ddot q_{\mathrm{real}}
 =
 \ddot q_{\mathrm{nom}}
 +
 \Delta\ddot q.
-$$
+```
 
 Each learned ensemble member approximates
 
-$$
+```math
 \hat r_k(x,\tau_{\mathrm{cmd}})
 \approx
 \Delta\ddot q.
-$$
+```
 
 The commanded torque is intentionally used as model input rather than an already-degraded applied torque, so actuator-gain mismatch remains visible in the residual target.
 
@@ -393,17 +393,17 @@ The commanded torque is intentionally used as model input rather than an already
 
 For an ensemble of $K$ residual models, the mean prediction is
 
-$$
+```math
 \bar r(x,\tau)
 =
 \frac{1}{K}
 \sum_{k=1}^{K}
 \hat r_k(x,\tau).
-$$
+```
 
 A simple disagreement measure is
 
-$$
+```math
 \sigma_r^2(x,\tau)
 =
 \frac{1}{K}
@@ -413,27 +413,27 @@ $$
 -
 \bar r(x,\tau)
 \right\|_2^2.
-$$
+```
 
 The residual-policy authority can then be attenuated using an uncertainty-dependent gate
 
-$$
+```math
 0
 \le
 \lambda(\sigma_r)
 \le
 1,
-$$
+```
 
 giving
 
-$$
+```math
 \tau_{\mathrm{candidate}}
 =
 \tau_{\mathrm{nom}}
 +
 \lambda(\sigma_r)\tau_{\mathrm{res}}.
-$$
+```
 
 The uncertainty gate is a **robustness heuristic**.
 
@@ -447,7 +447,7 @@ The safety layer modifies the candidate command only when required to satisfy ha
 
 The projection has the generic form
 
-$$
+```math
 \tau^\star
 =
 \underset{\tau}{\operatorname{argmin}}
@@ -456,19 +456,19 @@ $$
 \left\|
 \tau-\tau_{\mathrm{candidate}}
 \right\|_2^2
-$$
+```
 
 subject to affine safety constraints
 
-$$
+```math
 A(x)\tau
 \le
 b(x).
-$$
+```
 
 For a relative-degree-two safety function $h(q)$, SARRL uses a high-order Control Barrier Function condition of the form
 
-$$
+```math
 \ddot h
 +
 \alpha_1\dot h
@@ -476,7 +476,7 @@ $$
 \alpha_0 h
 \ge
 0.
-$$
+```
 
 The planar implementation constructs constraints for:
 
@@ -560,18 +560,18 @@ The computed-torque baseline was evaluated on the **same held-out episode seeds*
 
 Across the five independently trained policies,
 
-$$
+```math
 \bar p
 =
 \frac{1}{5}
 \sum_{i=1}^{5}p_i
 =
 56.4\%.
-$$
+```
 
 The sample standard deviation across training seeds is
 
-$$
+```math
 s_p
 =
 \sqrt{
@@ -582,27 +582,27 @@ s_p
 =
 7.0
  \text{percentage points}.
-$$
+```
 
 Therefore the primary multi-seed result is reported as
 
-$$
+```math
 \boxed{
 56.4\% \pm 7.0 \mathrm{pp}
 }
-$$
+```
 
 with an observed seed range of
 
-$$
+```math
 45\% \le p_i \le 63\%.
-$$
+```
 
 The five policies produced
 
-$$
+```math
 282/500
-$$
+```
 
 successful held-out evaluations in total.
 
@@ -614,17 +614,17 @@ The pooled 282/500 value is not treated as 500 independent training replicates; 
 
 The computed-torque baseline achieved
 
-$$
+```math
 11/100 = 11.0\%
-$$
+```
 
 on the same held-out episode seeds.
 
 Its Wilson 95% confidence interval is approximately
 
-$$
+```math
 6.3\% \text{ to } 18.6\%.
-$$
+```
 
 The paired policy-minus-baseline success-rate improvements were:
 
@@ -638,11 +638,11 @@ The paired policy-minus-baseline success-rate improvements were:
 
 The mean paired improvement is
 
-$$
+```math
 \boxed{
 +45.4 \mathrm{percentage points}
 }
-$$
+```
 
 and every per-policy paired bootstrap 95% confidence interval excludes zero.
 
@@ -994,31 +994,31 @@ final reported evaluation only
 
 Formally,
 
-$$
+```math
 \mathcal S_{\mathrm{train}}
 \cap
 \mathcal S_{\mathrm{validation}}
 =
 \varnothing,
-$$
+```
 
-$$
+```math
 \mathcal S_{\mathrm{train}}
 \cap
 \mathcal S_{\mathrm{test}}
 =
 \varnothing,
-$$
+```
 
 and
 
-$$
+```math
 \mathcal S_{\mathrm{validation}}
 \cap
 \mathcal S_{\mathrm{test}}
 =
 \varnothing.
-$$
+```
 
 The held-out population must not influence checkpoint selection.
 
@@ -1147,23 +1147,23 @@ The repository retains:
 
 For the retained result,
 
-$$
+```math
 \text{Residual SAC}
 =
 56.4\%\pm7.0 \mathrm{pp},
-$$
+```
 
-$$
+```math
 \text{Computed torque}
 =
 11.0\%,
-$$
+```
 
-$$
+```math
 \Delta_{\mathrm{paired}}
 =
 +45.4 \mathrm{pp}.
-$$
+```
 
 ---
 
