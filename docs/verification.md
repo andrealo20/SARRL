@@ -1,6 +1,44 @@
 # Verification record
 
-This file distinguishes checks that were actually executed from features that are only implemented or planned.
+This file distinguishes checks that were actually executed from features that are only implemented or
+planned.
+
+## Test coverage checklist
+
+The automated suite currently reports **72/72 tests**, with **72 passed** in the verified release audit,
+across Python 3.10, 3.11 and 3.12. The CI pipeline runs `ruff check .`, `python -m compileall -q sarrl tests
+tools` and `pytest`. Important regression and numerical tests cover:
+
+- inertia-matrix symmetry and positive definiteness;
+- finite-difference verification of rigid-body identities;
+- forward/inverse dynamics round trips;
+- analytical Jacobian vs finite differences;
+- RK4 conservative-energy behavior;
+- computed-torque closed-loop convergence;
+- nonlinear MPC feasibility and objective improvement;
+- deterministic randomization;
+- sensor noise;
+- command delay;
+- injected faults;
+- replay-buffer reproducibility;
+- SAC Bellman targets;
+- target-network updates;
+- tanh log-probability correction;
+- entropy-temperature optimization;
+- deterministic policy evaluation without stochastic RNG consumption;
+- architecture-safe SAC checkpoint loading;
+- exact replay/environment/RNG training continuation;
+- CUDA RNG-state checkpoint restoration;
+- causal context-encoder behavior;
+- residual-dynamics learning and checkpointing;
+- motor-gain mismatch visibility;
+- ensemble uncertainty;
+- exact 2-D safety projection;
+- HOCBF infeasibility semantics;
+- runtime-stack composition;
+- Wilson intervals;
+- paired bootstrap comparisons;
+- validation/held-out seed separation.
 
 ## v1.1.0 five-seed residual-SAC evidence
 
@@ -64,19 +102,34 @@ independent training replicates.
 
 ### Retained evidence
 
-The release retains under `artifacts/planar_sac_5seed/`:
+The release stores the evidence required to reconstruct the reported statistics under `artifacts/planar_sac_5seed/`:
 
-- raw 500-policy held-out episode records;
-- the matching 100-episode computed-torque baseline;
-- per-seed validation curves and summary metrics;
-- paired-comparison bootstrap intervals;
-- all five run manifests;
-- SHA-256 fingerprints of the evaluated `best.pt` checkpoints;
-- `result.json` with release-level sample-SD reporting;
-- the original generated `aggregate.json`.
+```text
+artifacts/planar_sac_5seed/
+├── README.md
+├── aggregate.json
+├── baseline_heldout_40000.csv
+├── checkpoint_sha256.txt
+├── heldout_episodes.csv
+├── paired_comparison.csv
+├── result.json
+├── run_manifest_seed_0.json
+├── run_manifest_seed_1.json
+├── run_manifest_seed_2.json
+├── run_manifest_seed_3.json
+├── run_manifest_seed_4.json
+├── summary.csv
+├── validation_seed_0.csv
+├── validation_seed_1.csv
+├── validation_seed_2.csv
+├── validation_seed_3.csv
+└── validation_seed_4.csv
+```
 
-The large model checkpoints themselves are not committed. Their fingerprints preserve the identity of the exact
-models used to generate the retained evaluation records.
+The large model checkpoints themselves are not committed. Their SHA-256 fingerprints preserve the identity
+of the exact models used to generate the retained evaluation records. The training manifests identify the
+verified v1.0.1 training code commit used to generate the campaign (`9f832614ce8b51c207873ff4861986ab72903115`);
+the v1.1.0 release adds the retained experimental evidence and documentation without rewriting that provenance.
 
 This evidence supports a learned-policy claim only for residual SAC on the randomized analytical 2-DoF planar
 benchmark. It does not establish the full ablation matrix required by `docs/experiments.md`, nor OOD learned-policy,
@@ -115,27 +168,9 @@ git diff --check
 
 Both completed successfully.
 
-The test suite covers:
+## Historical non-learned baselines
 
-- rigid-body dynamics invariants;
-- kinematics and finite-difference Jacobians;
-- numerical integration;
-- computed-torque convergence;
-- nonlinear MPC constraints and optimisation behaviour;
-- deterministic environment randomisation, noise, delay and faults;
-- replay sampling and state restoration;
-- SAC Bellman targets, actor log probabilities, entropy tuning and target networks;
-- deterministic SAC inference without RNG consumption;
-- architecture-safe checkpoint reconstruction;
-- exact training-session continuation including replay/environment/RNG state;
-- GRU context causality, training and checkpointing;
-- exact 2-D polytope projection and HOCBF safety semantics;
-- residual-dynamics targets, learning, checkpointing and uncertainty gating;
-- motor-gain mismatch visibility in residual-model targets;
-- integrated runtime-stack behaviour;
-- Wilson intervals, paired bootstrap and validation/test seed separation.
-
-## Nominal computed-torque baseline
+### Nominal computed-torque baseline
 
 Command used for the original retained baseline:
 
@@ -154,7 +189,7 @@ mean terminal distance: 0.04575 m
 
 The exact per-episode target, success flag, steps, reward and terminal distance are retained in `results/v0_1_nominal.csv`.
 
-## v0.9 robustness baseline campaign
+### v0.9 robustness baseline campaign
 
 `tools/run_planar_baselines.py` was executed on seeds 1000 through 1099. Raw episode records are retained in `results/v0_9_baselines.csv`; aggregate metrics and metadata are in `results/v0_9_baselines.json`.
 
