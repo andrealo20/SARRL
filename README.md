@@ -68,7 +68,7 @@ Later releases add MPC, online dynamics context, CBF/QP projection, MuJoCo/Frank
   - replay buffer,
   - automatic entropy-temperature tuning;
 - deterministic seeding and complete SAC checkpoints;
-- numerical, controller, environment, replay and RL tests;
+- **28 automated tests** covering numerical, controller, environment, replay and RL invariants;
 - GitHub Actions CI.
 
 ## Quick start
