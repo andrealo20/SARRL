@@ -38,9 +38,12 @@ def collect(samples: int, seed: int):
         commanded = rng.uniform(-30.0, 30.0, size=2)
         applied = commanded * env.motor_gain
         actual_qdd = env.arm.forward_dynamics(state[:2], state[2:], applied)
+        # The learned model receives the commanded torque at runtime. Keep
+        # motor-gain error inside the residual target rather than hiding it by
+        # replacing the command with the already-degraded applied torque.
         states.append(state.astype(np.float32))
-        torques.append(applied.astype(np.float32))
-        targets.append(residual_acceleration_target(nominal, state, applied, actual_qdd))
+        torques.append(commanded.astype(np.float32))
+        targets.append(residual_acceleration_target(nominal, state, commanded, actual_qdd))
         env.state = env.arm.step_rk4(state, applied, env.dt)
     return np.asarray(states), np.asarray(torques), np.asarray(targets)
 

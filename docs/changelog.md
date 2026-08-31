@@ -2,6 +2,14 @@
 
 This file records implemented and verified release increments. Performance claims are kept separately in `docs/verification.md` and require retained raw artifacts.
 
+## v0.12.0 — experiment provenance, multi-seed orchestration and residual-model semantics
+
+- Every SAC training run writes a machine-readable manifest with Git commit, runtime/library versions, agent/environment configuration and validation protocol.
+- Added `tools/run_sac_sweep.py` for reproducible multi-seed training plus a disjoint held-out seed set, raw held-out episode CSVs and cross-model aggregate statistics.
+- Added retained per-episode deterministic policy evaluation records and validation/held-out seed-range guards.
+- Fixed residual-dynamics data generation so the model input is the **commanded** torque while the target contains motor-gain degradation; using already-degraded torque had hidden actuator-gain error from the learned residual.
+- Updated the package version source, which had remained stale at `0.1.0`.
+
 ## v0.11.0 — reproducible validation and exact session reconstruction
 
 - Deterministic SAC actions no longer sample internally or advance PyTorch RNG state.

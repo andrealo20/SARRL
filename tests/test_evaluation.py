@@ -6,7 +6,9 @@ from sarrl.evaluation import (
     EpisodeResult,
     aggregate,
     evaluate_policy,
+    evaluate_policy_episodes,
     paired_success_difference,
+    seed_ranges_overlap,
     wilson_interval,
 )
 
@@ -51,3 +53,20 @@ def test_policy_evaluation_is_reproducible_on_fixed_seeds():
     assert a == b
     assert a.episodes == 6 and a.successes == 6
     assert a.selection_key == (a.success_rate, a.reward_mean)
+
+
+def test_policy_episode_records_are_auditable():
+    rows = evaluate_policy_episodes(
+        _ZeroResidualPolicy(), PlanarReachEnv(mode="residual"), 3, 900,
+        scenario="nominal", controller="zero_residual",
+    )
+    assert [row.seed for row in rows] == [900, 901, 902]
+    assert all(row.scenario == "nominal" and row.controller == "zero_residual" for row in rows)
+    assert all(row.max_speed >= 0.0 and row.max_command_torque >= 0.0 for row in rows)
+
+
+def test_seed_ranges_must_be_disjoint_for_validation_and_heldout():
+    assert seed_ranges_overlap(100, 20, 119, 5)
+    assert not seed_ranges_overlap(100, 20, 120, 5)
+    with pytest.raises(ValueError):
+        seed_ranges_overlap(-1, 2, 10, 2)

@@ -1,4 +1,5 @@
-from .policy import PolicyEvaluation, evaluate_policy
+from .provenance import runtime_metadata, seed_ranges_overlap, write_run_manifest
+from .policy import PolicyEvaluation, evaluate_policy, evaluate_policy_episodes
 from .protocol import (
     AggregateMetrics,
     EpisodeResult,
@@ -11,8 +12,12 @@ from .protocol import (
 )
 
 __all__ = [
+    "runtime_metadata",
+    "seed_ranges_overlap",
+    "write_run_manifest",
     "PolicyEvaluation",
     "evaluate_policy",
+    "evaluate_policy_episodes",
     "AggregateMetrics",
     "EpisodeResult",
     "aggregate",

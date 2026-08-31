@@ -70,3 +70,15 @@ def test_uncertainty_gate_is_monotonic_and_has_floor():
     huge = gate.scale(np.array([100.0, 100.0]))
     assert 1.0 >= low > high >= 0.2
     assert huge == 0.2
+
+
+def test_motor_gain_mismatch_is_visible_in_residual_target():
+    nominal = PlanarArm()
+    state = np.array([0.3, -0.4, 0.2, -0.1], dtype=np.float64)
+    commanded = np.array([8.0, -5.0], dtype=np.float64)
+    applied = commanded * np.array([0.55, 1.0])
+    actual_qdd = nominal.forward_dynamics(state[:2], state[2:], applied)
+    target = residual_acceleration_target(nominal, state, commanded, actual_qdd)
+    assert np.linalg.norm(target) > 1e-2
+    hidden = residual_acceleration_target(nominal, state, applied, actual_qdd)
+    np.testing.assert_allclose(hidden, 0.0, atol=1e-6)

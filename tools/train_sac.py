@@ -10,7 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from sarrl.envs.planar_reach import DomainRandomization, PlanarReachEnv
-from sarrl.evaluation import evaluate_policy
+from sarrl.evaluation import evaluate_policy, write_run_manifest
 from sarrl.rl import (
     ReplayBuffer,
     SACAgent,
@@ -127,6 +127,32 @@ def main() -> int:
         "update_every": update_every,
     }
     val_env = _validation_env(env)
+    write_run_manifest(
+        out / "run_manifest.json",
+        {
+            "requested_steps": args.steps,
+            "seed": args.seed,
+            "resume": args.resume,
+            "agent_config": {
+                "gamma": agent.config.gamma,
+                "tau": agent.config.tau,
+                "actor_lr": agent.config.actor_lr,
+                "critic_lr": agent.config.critic_lr,
+                "alpha_lr": agent.config.alpha_lr,
+                "init_alpha": agent.config.init_alpha,
+                "hidden": list(agent.config.hidden),
+            },
+            "environment": env.constructor_config(),
+            "replay_capacity": replay.capacity,
+            "trainer": trainer_config,
+            "validation": {
+                "every": args.validate_every,
+                "episodes": args.validation_episodes,
+                "seed": args.validation_seed,
+            },
+        },
+        root=Path(__file__).resolve().parents[1],
+    )
 
     def loop_state(step: int) -> dict:
         return {
