@@ -23,6 +23,13 @@ from sarrl.evaluation import (
 from sarrl.rl import SACAgent
 
 
+def _sample_std(values: np.ndarray) -> float | None:
+    """Sample standard deviation across independent training runs."""
+    if values.size < 2:
+        return None
+    return float(values.std(ddof=1))
+
+
 def _randomization(enabled: bool) -> DomainRandomization:
     if not enabled:
         return DomainRandomization()
@@ -169,23 +176,27 @@ def main() -> int:
 
     rates = np.asarray([row["success_rate"] for row in summary_rows], dtype=np.float64)
     rewards = np.asarray([row["reward_mean"] for row in summary_rows], dtype=np.float64)
+    rates_std = _sample_std(rates)
+    rewards_std = _sample_std(rewards)
+
     aggregate_payload = {
         "training_seeds": args.seeds,
         "models": len(summary_rows),
         "heldout_episodes_per_model": args.heldout_episodes,
         "success_rate_mean": float(rates.mean()),
-        "success_rate_std": float(rates.std()),
+        "success_rate_std": rates_std,
         "success_rate_min": float(rates.min()),
         "success_rate_max": float(rates.max()),
         "reward_mean_across_models": float(rewards.mean()),
-        "reward_std_across_models": float(rewards.std()),
+        "reward_std_across_models": rewards_std,
     }
     (out / "aggregate.json").write_text(
         json.dumps(aggregate_payload, indent=2, sort_keys=True) + "\n"
     )
+    spread = "n/a" if rates_std is None else f"{100.0 * rates_std:.1f}%"
     print(
         "multi-seed success: "
-        f"{100.0 * rates.mean():.1f}% +/- {100.0 * rates.std():.1f}% "
+        f"{100.0 * rates.mean():.1f}% +/- {spread} "
         f"across {len(rates)} training seeds"
     )
     return 0
