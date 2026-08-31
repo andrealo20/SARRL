@@ -1,6 +1,14 @@
+from pathlib import Path
+
 import pytest
 
-from tools.run_planar_ablations import CONDITIONS, build_protocol
+from tools.run_planar_ablations import (
+    CONDITIONS,
+    build_protocol,
+    register_a2,
+    run_a0,
+    run_a1,
+)
 
 
 def _protocol(**overrides):
@@ -79,3 +87,84 @@ def test_v12_statistics_require_sample_sd_and_paired_comparison():
     assert statistics["multi_seed_spread"] == "sample_sd_ddof_1"
     assert statistics["episode_success_interval"] == "wilson_95"
     assert statistics["paired_comparison"] == "paired_bootstrap_95"
+
+
+
+def test_a0_smoke_writes_auditable_outputs(tmp_path):
+    run_a0(tmp_path, heldout_seed=40_000, heldout_episodes=3)
+
+    condition = tmp_path / "A0_computed_torque"
+    assert (condition / "heldout_episodes.csv").is_file()
+    assert (condition / "summary.json").is_file()
+
+    rows = (condition / "heldout_episodes.csv").read_text().splitlines()
+    assert len(rows) == 4  # header + 3 episodes
+    assert "40000" in rows[1]
+    assert "40001" in rows[2]
+    assert "40002" in rows[3]
+
+
+def test_a1_requires_explicit_training_confirmation(tmp_path, monkeypatch):
+    def forbidden(*args, **kwargs):
+        raise AssertionError("training must not start without explicit confirmation")
+
+    monkeypatch.setattr("tools.run_planar_ablations.subprocess.run", forbidden)
+
+    run_a1(
+        root=Path("."),
+        out=tmp_path,
+        seeds=[0],
+        steps=100,
+        validation_seed=20_000,
+        validation_episodes=2,
+        heldout_seed=40_000,
+        heldout_episodes=3,
+        confirm_training=False,
+    )
+
+
+def test_a1_confirmed_command_uses_direct_sac_and_randomization(tmp_path, monkeypatch):
+    calls = []
+
+    def capture(cmd, cwd, check):
+        calls.append((cmd, cwd, check))
+
+    monkeypatch.setattr("tools.run_planar_ablations.subprocess.run", capture)
+
+    run_a1(
+        root=Path("."),
+        out=tmp_path,
+        seeds=[0, 1],
+        steps=123,
+        validation_seed=20_000,
+        validation_episodes=2,
+        heldout_seed=40_000,
+        heldout_episodes=3,
+        confirm_training=True,
+    )
+
+    assert len(calls) == 1
+    cmd, _, check = calls[0]
+
+    assert check is True
+    assert "--mode" in cmd
+    assert cmd[cmd.index("--mode") + 1] == "torque"
+    assert "--randomize" in cmd
+    assert "--seeds" in cmd
+    assert "0" in cmd
+    assert "1" in cmd
+
+
+def test_a2_registers_retained_v11_evidence(tmp_path):
+    root = Path(".").resolve()
+
+    register_a2(root, tmp_path)
+
+    record = tmp_path / "A2_residual_sac" / "retained_source.json"
+    assert record.is_file()
+
+    text = record.read_text()
+    assert '"condition": "A2"' in text
+    assert '"source_release": "v1.1.0"' in text
+    assert '"reused_without_retraining": true' in text
+    assert "9f832614ce8b51c207873ff4861986ab72903115" in text
