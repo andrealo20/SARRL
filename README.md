@@ -8,7 +8,6 @@
 
 ![SARRL banner](assets/banner.png)
 
-## Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation
 
 **SARRL** is a research-oriented robotics and reinforcement-learning stack for control under model mismatch.
 
