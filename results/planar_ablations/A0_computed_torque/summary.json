@@ -1,0 +1,22 @@
+{
+  "groups": {
+    "A0_computed_torque": {
+      "final_distance_mean": 0.35713945198194813,
+      "max_command_torque_mean": 39.19327964782715,
+      "max_speed_mean": 9.03564608437221,
+      "n": 100,
+      "reward_mean": -152.60753285344782,
+      "reward_std": 68.47642394892677,
+      "success_ci95_high": 0.18631296503080313,
+      "success_ci95_low": 0.06254196357064568,
+      "success_rate": 0.11,
+      "success_steps_mean": 59.09090909090909,
+      "successes": 11
+    }
+  },
+  "metadata": {
+    "condition": "A0",
+    "heldout_episodes": 100,
+    "heldout_seed_start": 40000
+  }
+}

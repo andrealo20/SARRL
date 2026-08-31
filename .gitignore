@@ -12,3 +12,7 @@ results/*
 !results/v0_1_nominal.csv
 !results/v0_9_baselines.csv
 !results/v0_9_baselines.json
+
+# Canonical retained evidence for the v1.2 planar ablation study.
+!results/planar_ablations/
+!results/planar_ablations/**

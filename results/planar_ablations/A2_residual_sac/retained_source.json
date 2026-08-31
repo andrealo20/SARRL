@@ -1,0 +1,6 @@
+{
+  "reused_without_retraining": true,
+  "source": "artifacts/planar_sac_5seed",
+  "source_release": "v1.1.0",
+  "training_commit": "9f832614ce8b51c207873ff4861986ab72903115"
+}

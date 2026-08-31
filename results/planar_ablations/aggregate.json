@@ -1,0 +1,52 @@
+{
+  "comparisons": {
+    "A1_vs_A0": {
+      "all_seed_ci_exclude_zero": false,
+      "mean_delta_pp": -5.0,
+      "sample_sd_delta_pp": 3.674235
+    },
+    "A2_vs_A0": {
+      "all_seed_ci_exclude_zero": true,
+      "mean_delta_pp": 45.4,
+      "sample_sd_delta_pp": 6.9857
+    },
+    "A2_vs_A1": {
+      "all_seed_ci_exclude_zero": true,
+      "mean_delta_pp": 50.4,
+      "sample_sd_delta_pp": 8.961027
+    }
+  },
+  "conditions": {
+    "A0_computed_torque": {
+      "episodes": 100,
+      "final_distance_mean": 0.35713945198194813,
+      "success_rate": 0.11,
+      "successes": 11
+    },
+    "A1_direct_sac": {
+      "success_rate_mean": 0.06,
+      "success_rate_sample_sd": 0.036742,
+      "training_seeds": 5
+    },
+    "A2_residual_sac": {
+      "success_rate_mean": 0.564,
+      "success_rate_sample_sd": 0.069857,
+      "training_seeds": 5
+    }
+  },
+  "protocol": {
+    "bootstrap_samples": 100000,
+    "heldout_episodes_per_policy": 100,
+    "heldout_seed_start": 40000,
+    "steps_per_training_seed": 200000,
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "validation_episodes": 30,
+    "validation_seed_start": 20000
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "A0": {
+    "heldout_episodes": 100,
+    "heldout_seed_start": 40000,
+    "role": "computed-torque held-out baseline",
+    "training_required": false
+  },
+  "A1": {
+    "checkpoint_selection": "validation success, then reward tie-break",
+    "role": "Direct SAC ablation",
+    "steps_per_seed": 200000,
+    "training_commit": "d352a6cbcebf03ce45e81ff21c74744f6858cf99",
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "A2": {
+    "reused_without_retraining": true,
+    "role": "Residual SAC retained evidence",
+    "source": "artifacts/planar_sac_5seed",
+    "source_release": "v1.1.0",
+    "training_commit": "9f832614ce8b51c207873ff4861986ab72903115"
+  },
+  "canonical_evidence_commit_at_generation": "d352a6cbcebf03ce45e81ff21c74744f6858cf99",
+  "repository": "andrealo20/SARRL",
+  "schema_version": 1,
+  "statistics": {
+    "cross_training_seed_spread": "sample SD, ddof=1",
+    "episode_success_interval": "Wilson 95%",
+    "paired_bootstrap_samples": 100000,
+    "paired_comparison": "paired bootstrap 95%"
+  }
+}
