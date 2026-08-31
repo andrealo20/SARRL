@@ -715,7 +715,7 @@ That gap motivates residual learning and adaptive control.
 
 # Verification
 
-The automated test suite contains **72 tests**.
+The automated test suite currently reports **72/72 tests**, with **72 passed** in the verified release audit.
 
 GitHub Actions runs the complete audit on:
 
