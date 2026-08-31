@@ -292,9 +292,25 @@ class PlanarReachEnv:
         self._rng.bit_generator.state = state["rng_state"]
         self._noise_rng.bit_generator.state = state["noise_rng_state"]
 
-    def step(self, action):
+    def step_torque(self, commanded, baseline=None):
+        """Advance the plant with a physical torque command in N m.
+
+        This bypasses the environment's action-to-torque mapping and is the
+        execution entry point for composed controllers such as SARRLControlStack.
+        Actuator delay, faults and motor gain still belong to the plant and are
+        therefore applied here.
+        """
         self._activate_fault_if_due()
-        baseline, commanded = self._candidate_torque(action)
+        commanded = np.asarray(commanded, dtype=np.float64)
+        if commanded.shape != (2,) or not np.all(np.isfinite(commanded)):
+            raise ValueError("commanded torque must be a finite vector of shape (2,)")
+        commanded = np.clip(commanded, -self.torque_limit, self.torque_limit)
+        if baseline is None:
+            baseline = np.zeros(2, dtype=np.float64)
+        baseline = np.asarray(baseline, dtype=np.float64)
+        if baseline.shape != (2,) or not np.all(np.isfinite(baseline)):
+            raise ValueError("baseline torque must be a finite vector of shape (2,)")
+
         delayed = self._delayed_command(commanded)
         applied = delayed * self.motor_gain
         self.state = self.arm.step_rk4(self.state, applied, self.dt)
@@ -322,3 +338,7 @@ class PlanarReachEnv:
             }
         )
         return self._observation(), float(reward), terminated, truncated, info
+
+    def step(self, action):
+        baseline, commanded = self._candidate_torque(action)
+        return self.step_torque(commanded, baseline=baseline)

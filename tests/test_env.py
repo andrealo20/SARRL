@@ -105,3 +105,17 @@ def test_fault_activates_on_requested_step_and_changes_dynamics():
     assert info["fault_active"]
     np.testing.assert_allclose(env.motor_gain, original_gain * np.array([0.5, 0.8]))
     assert np.isclose(env.payload_mass, original_payload + 0.7)
+
+
+def test_step_torque_matches_direct_torque_action_without_plant_disturbances():
+    a = PlanarReachEnv(mode="torque")
+    b = PlanarReachEnv(mode="torque")
+    oa, _ = a.reset(seed=77)
+    ob, _ = b.reset(seed=77)
+    np.testing.assert_array_equal(oa, ob)
+    action = np.array([0.3, -0.4], dtype=np.float32)
+    out_a = a.step(action)
+    out_b = b.step_torque(action * b.torque_limit)
+    np.testing.assert_array_equal(out_a[0], out_b[0])
+    np.testing.assert_allclose(out_a[1], out_b[1], atol=0.0)
+    assert out_a[2:4] == out_b[2:4]
