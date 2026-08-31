@@ -106,7 +106,11 @@ class PlanarReachEnv:
                 self._rng.uniform(-0.05, 0.05, size=2),
             ]
         ).astype(np.float64)
-        self.target = self._sample_target() if target is None else np.asarray(target, dtype=np.float64)
+        self.target = (
+            self._sample_target()
+            if target is None
+            else np.asarray(target, dtype=np.float64)
+        )
         if self.target.shape != (2,) or not np.all(np.isfinite(self.target)):
             raise ValueError("target must be a finite vector of shape (2,)")
         self.q_des = self.nominal_arm.inverse_kinematics(self.target)

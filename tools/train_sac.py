@@ -29,7 +29,12 @@ def main() -> int:
     dr = DomainRandomization(0.15, 0.30, 0.15) if args.randomize else DomainRandomization()
     env = PlanarReachEnv(mode=args.mode, randomization=dr)
     agent = SACAgent(env.observation_space.shape[0], env.action_space.shape[0], seed=args.seed)
-    replay = ReplayBuffer(env.observation_space.shape[0], env.action_space.shape[0], 500_000, args.seed)
+    replay = ReplayBuffer(
+        env.observation_space.shape[0],
+        env.action_space.shape[0],
+        500_000,
+        args.seed,
+    )
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
 

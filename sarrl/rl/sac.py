@@ -190,4 +190,7 @@ class SACAgent:
             self.q2_opt.load_state_dict(payload["q2_opt"])
             self.alpha_opt.load_state_dict(payload["alpha_opt"])
         self.update_steps = int(payload.get("update_steps", 0))
-        return {"checkpoint_version": payload["checkpoint_version"], "update_steps": self.update_steps}
+        return {
+            "checkpoint_version": payload["checkpoint_version"],
+            "update_steps": self.update_steps,
+        }
