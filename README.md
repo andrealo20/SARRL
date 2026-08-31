@@ -6,6 +6,8 @@
 [![version](https://img.shields.io/badge/version-1.1.0-6f42c1.svg)](docs/changelog.md)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
+![SARRL banner](assets/banner.png)
+
 ## Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation
 
 **SARRL** is a research-oriented robotics and reinforcement-learning stack for control under model mismatch.
