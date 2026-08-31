@@ -30,3 +30,15 @@ def test_replay_rejects_oversized_batch():
     b = ReplayBuffer(2, 1, 5)
     with pytest.raises(ValueError):
         b.sample(1)
+
+
+def test_replay_state_round_trip_preserves_next_sample():
+    a = ReplayBuffer(2, 1, 20, seed=13)
+    _fill(a)
+    state = a.state_dict()
+    expected = a.sample(7)
+    b = ReplayBuffer(2, 1, 20, seed=999)
+    b.load_state_dict(state)
+    got = b.sample(7)
+    for key in expected:
+        np.testing.assert_array_equal(got[key], expected[key])

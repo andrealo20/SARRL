@@ -1,0 +1,50 @@
+from pathlib import Path
+
+import numpy as np
+
+from sarrl.envs import PlanarReachEnv
+from sarrl.rl import ReplayBuffer, SACAgent, SACConfig, load_training_checkpoint, save_training_checkpoint
+
+
+def _build(seed):
+    env = PlanarReachEnv(mode="residual", max_steps=40)
+    agent = SACAgent(8, 2, SACConfig(hidden=(16, 16)), seed=seed)
+    replay = ReplayBuffer(8, 2, 100, seed=seed)
+    return env, agent, replay
+
+
+def test_training_checkpoint_restores_environment_replay_and_rng_exactly(tmp_path: Path):
+    env, agent, replay = _build(5)
+    obs, _ = env.reset(seed=5)
+    for _ in range(20):
+        action = agent.act(obs)
+        next_obs, reward, terminated, truncated, _ = env.step(action)
+        replay.add(obs, action, reward, next_obs, terminated)
+        obs = next_obs
+        if terminated or truncated:
+            obs, _ = env.reset()
+
+    path = tmp_path / "training.pt"
+    save_training_checkpoint(path, agent, replay, env, {"step": 20, "obs": obs})
+
+    # Reference continuation after the save.
+    action_ref = agent.act(obs)
+    next_ref = env.step(action_ref)
+    batch_ref = replay.sample(8)
+    metrics_ref = agent.update(batch_ref)
+
+    env2, agent2, replay2 = _build(999)
+    loop = load_training_checkpoint(path, agent2, replay2, env2)
+    obs2 = np.asarray(loop["obs"], dtype=np.float32)
+    action_got = agent2.act(obs2)
+    next_got = env2.step(action_got)
+    batch_got = replay2.sample(8)
+    metrics_got = agent2.update(batch_got)
+
+    np.testing.assert_array_equal(action_got, action_ref)
+    np.testing.assert_array_equal(next_got[0], next_ref[0])
+    assert next_got[1:4] == next_ref[1:4]
+    for key in batch_ref:
+        np.testing.assert_array_equal(batch_got[key], batch_ref[key])
+    for key in metrics_ref:
+        np.testing.assert_allclose(metrics_got[key], metrics_ref[key], rtol=0.0, atol=0.0)

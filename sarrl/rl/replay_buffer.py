@@ -40,5 +40,33 @@ class ReplayBuffer:
             "dones": self.dones[idx],
         }
 
+    def state_dict(self) -> dict:
+        return {
+            "capacity": self.capacity,
+            "obs": self.obs.copy(),
+            "actions": self.actions.copy(),
+            "rewards": self.rewards.copy(),
+            "next_obs": self.next_obs.copy(),
+            "dones": self.dones.copy(),
+            "ptr": self.ptr,
+            "size": self.size,
+            "rng_state": self.rng.bit_generator.state,
+        }
+
+    def load_state_dict(self, state: dict) -> None:
+        if int(state["capacity"]) != self.capacity:
+            raise ValueError("replay checkpoint capacity does not match")
+        for name in ("obs", "actions", "rewards", "next_obs", "dones"):
+            src = np.asarray(state[name], dtype=getattr(self, name).dtype)
+            dst = getattr(self, name)
+            if src.shape != dst.shape:
+                raise ValueError(f"replay checkpoint {name} shape does not match")
+            dst[...] = src
+        ptr, size = int(state["ptr"]), int(state["size"])
+        if not 0 <= ptr < self.capacity or not 0 <= size <= self.capacity:
+            raise ValueError("invalid replay checkpoint indices")
+        self.ptr, self.size = ptr, size
+        self.rng.bit_generator.state = state["rng_state"]
+
     def __len__(self) -> int:
         return self.size

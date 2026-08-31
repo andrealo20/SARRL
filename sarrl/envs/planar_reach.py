@@ -246,6 +246,52 @@ class PlanarReachEnv:
             dtype=np.float32,
         )
 
+    def state_dict(self) -> dict:
+        from dataclasses import asdict
+
+        return {
+            "mode": self.mode,
+            "dt": self.dt,
+            "max_steps": self.max_steps,
+            "state": self.state.copy(),
+            "target": self.target.copy(),
+            "q_des": self.q_des.copy(),
+            "motor_gain": self.motor_gain.copy(),
+            "mass_scale": self.mass_scale.copy(),
+            "friction_scale": self.friction_scale.copy(),
+            "payload_mass": self.payload_mass,
+            "action_delay": self.action_delay,
+            "command_queue": [x.copy() for x in self._command_queue],
+            "fault_active": self._fault_active,
+            "steps": self.steps,
+            "arm_params": asdict(self.arm.params),
+            "rng_state": self._rng.bit_generator.state,
+            "noise_rng_state": self._noise_rng.bit_generator.state,
+        }
+
+    def load_state_dict(self, state: dict) -> None:
+        if state["mode"] != self.mode or float(state["dt"]) != self.dt:
+            raise ValueError("environment checkpoint configuration does not match")
+        if int(state["max_steps"]) != self.max_steps:
+            raise ValueError("environment checkpoint max_steps does not match")
+        for name, shape in (("state", (4,)), ("target", (2,)), ("q_des", (2,)),
+                            ("motor_gain", (2,)), ("mass_scale", (2,)),
+                            ("friction_scale", (2,))):
+            value = np.asarray(state[name], dtype=np.float64)
+            if value.shape != shape or not np.all(np.isfinite(value)):
+                raise ValueError(f"invalid environment checkpoint field {name}")
+            setattr(self, name, value.copy())
+        self.payload_mass = float(state["payload_mass"])
+        self.action_delay = int(state["action_delay"])
+        self._command_queue = [np.asarray(x, dtype=np.float64).copy() for x in state["command_queue"]]
+        if any(x.shape != (2,) for x in self._command_queue):
+            raise ValueError("invalid delayed-command queue")
+        self._fault_active = bool(state["fault_active"])
+        self.steps = int(state["steps"])
+        self.arm = PlanarArm(PlanarArmParams(**state["arm_params"]))
+        self._rng.bit_generator.state = state["rng_state"]
+        self._noise_rng.bit_generator.state = state["noise_rng_state"]
+
     def step(self, action):
         self._activate_fault_if_due()
         baseline, commanded = self._candidate_torque(action)

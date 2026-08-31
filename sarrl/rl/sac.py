@@ -148,7 +148,7 @@ class SACAgent:
                 for tp, sp in zip(target.parameters(), source.parameters(), strict=True):
                     tp.mul_(1.0 - tau).add_(sp, alpha=tau)
 
-    def save(self, path) -> None:
+    def state_dict(self, include_optimizers: bool = True) -> dict:
         payload = {
             "checkpoint_version": self.CHECKPOINT_VERSION,
             "obs_dim": self.obs_dim,
@@ -159,17 +159,25 @@ class SACAgent:
             "q2": self.q2.state_dict(),
             "q1_target": self.q1_target.state_dict(),
             "q2_target": self.q2_target.state_dict(),
-            "actor_opt": self.actor_opt.state_dict(),
-            "q1_opt": self.q1_opt.state_dict(),
-            "q2_opt": self.q2_opt.state_dict(),
             "log_alpha": self.log_alpha.detach().cpu(),
-            "alpha_opt": self.alpha_opt.state_dict(),
             "update_steps": self.update_steps,
+            "torch_rng_state": torch.get_rng_state(),
+            "cuda_rng_state_all": torch.cuda.get_rng_state_all() if torch.cuda.is_available() else None,
         }
-        torch.save(payload, Path(path))
+        if include_optimizers:
+            payload.update(
+                {
+                    "actor_opt": self.actor_opt.state_dict(),
+                    "q1_opt": self.q1_opt.state_dict(),
+                    "q2_opt": self.q2_opt.state_dict(),
+                    "alpha_opt": self.alpha_opt.state_dict(),
+                }
+            )
+        return payload
 
-    def load(self, path, load_optimizers: bool = True) -> dict:
-        payload = torch.load(Path(path), map_location=self.device, weights_only=False)
+    def load_state_dict(
+        self, payload: dict, load_optimizers: bool = True, restore_rng: bool = True
+    ) -> dict:
         if payload.get("checkpoint_version") != self.CHECKPOINT_VERSION:
             raise ValueError("unsupported SARRL SAC checkpoint version")
         if payload["obs_dim"] != self.obs_dim or payload["action_dim"] != self.action_dim:
@@ -185,12 +193,28 @@ class SACAgent:
         with torch.no_grad():
             self.log_alpha.copy_(payload["log_alpha"].to(self.device))
         if load_optimizers:
+            required = ("actor_opt", "q1_opt", "q2_opt", "alpha_opt")
+            if not all(key in payload for key in required):
+                raise ValueError("checkpoint does not contain optimizer state")
             self.actor_opt.load_state_dict(payload["actor_opt"])
             self.q1_opt.load_state_dict(payload["q1_opt"])
             self.q2_opt.load_state_dict(payload["q2_opt"])
             self.alpha_opt.load_state_dict(payload["alpha_opt"])
         self.update_steps = int(payload.get("update_steps", 0))
+        if restore_rng and payload.get("torch_rng_state") is not None:
+            torch.set_rng_state(payload["torch_rng_state"].cpu())
+            if torch.cuda.is_available() and payload.get("cuda_rng_state_all") is not None:
+                torch.cuda.set_rng_state_all(payload["cuda_rng_state_all"])
         return {
             "checkpoint_version": payload["checkpoint_version"],
             "update_steps": self.update_steps,
         }
+
+    def save(self, path) -> None:
+        torch.save(self.state_dict(include_optimizers=True), Path(path))
+
+    def load(self, path, load_optimizers: bool = True, restore_rng: bool = False) -> dict:
+        payload = torch.load(Path(path), map_location=self.device, weights_only=False)
+        return self.load_state_dict(
+            payload, load_optimizers=load_optimizers, restore_rng=restore_rng
+        )
