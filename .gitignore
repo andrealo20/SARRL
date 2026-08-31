@@ -9,3 +9,4 @@ dist/
 *.egg-info/
 results/*
 !results/.gitkeep
+!results/v0_1_nominal.csv

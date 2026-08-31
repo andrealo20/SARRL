@@ -92,6 +92,18 @@ Evaluate a checkpoint deterministically:
 python tools/evaluate.py results/smoke/final.pt --mode residual --episodes 100
 ```
 
+## Verified v0.1 baseline
+
+The zero-residual computed-torque controller was evaluated on 100 fixed random targets (seeds 1000–1099):
+
+```text
+success:                100/100
+mean steps to success:   50.68
+mean terminal distance:   0.04575 m
+```
+
+The raw per-episode data are retained in `results/v0_1_nominal.csv`. This is a controller/plant sanity baseline, **not an RL performance claim**. Learned-policy results will only be reported after controlled multi-seed training.
+
 ## Validation philosophy
 
 The plant is tested using properties that are difficult for the same bug to satisfy accidentally:
@@ -124,4 +136,4 @@ The plant is tested using properties that are difficult for the same bug to sati
 | M11 | learned residual dynamics | planned |
 | M12 | uncertainty ensemble | planned |
 
-See `docs/design.md` and `docs/mathematics.md` for the experimental rules and equations.
+See `docs/design.md`, `docs/mathematics.md` and `docs/verification.md` for the experimental rules, equations and executed checks.
