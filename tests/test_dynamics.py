@@ -82,3 +82,26 @@ def test_rk4_rejects_nonpositive_dt():
     arm = PlanarArm()
     with pytest.raises(ValueError):
         arm.step_rk4(np.zeros(4), np.zeros(2), 0.0)
+
+
+def test_payload_preserves_mass_matrix_and_coriolis_identity():
+    arm = PlanarArm(PlanarArmParams(payload_mass=1.7))
+    q = np.array([0.3, -1.1])
+    qd = np.array([0.8, 0.4])
+    eig = np.linalg.eigvalsh(arm.mass_matrix(q))
+    assert np.all(eig > 0.0)
+    h = 1e-6
+    mdot = np.zeros((2, 2))
+    for k in range(2):
+        dq = np.zeros(2)
+        dq[k] = h
+        mdot += ((arm.mass_matrix(q + dq) - arm.mass_matrix(q - dq)) / (2 * h)) * qd[k]
+    skew = mdot - 2.0 * arm.coriolis_matrix(q, qd)
+    np.testing.assert_allclose(skew + skew.T, np.zeros((2, 2)), atol=3e-8)
+
+
+def test_payload_increases_gravity_load_in_expected_direction():
+    base = PlanarArm()
+    loaded = PlanarArm(PlanarArmParams(payload_mass=1.0))
+    q = np.array([0.0, 0.0])
+    assert np.all(loaded.gravity_vector(q) > base.gravity_vector(q))

@@ -1,3 +1,3 @@
-from .planar_reach import PlanarReachEnv
+from .planar_reach import DomainRandomization, FaultSpec, PlanarReachEnv
 
-__all__ = ["PlanarReachEnv"]
+__all__ = ["DomainRandomization", "FaultSpec", "PlanarReachEnv"]

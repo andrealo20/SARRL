@@ -51,3 +51,57 @@ def test_observation_and_step_contract():
     assert isinstance(terminated, bool)
     assert isinstance(truncated, bool)
     assert np.isfinite(info["distance"])
+
+
+def test_domain_context_and_delay_are_seed_reproducible():
+    cfg = DomainRandomization(
+        mass_fraction=0.2,
+        friction_fraction=0.3,
+        motor_gain_fraction=0.15,
+        payload_range=(0.1, 1.0),
+        sensor_noise_std=0.002,
+        action_delay_max=3,
+    )
+    a = PlanarReachEnv(randomization=cfg)
+    b = PlanarReachEnv(randomization=cfg)
+    oa, _ = a.reset(seed=123)
+    ob, _ = b.reset(seed=123)
+    np.testing.assert_array_equal(oa, ob)
+    np.testing.assert_array_equal(a.dynamics_context(), b.dynamics_context())
+    assert a.action_delay == b.action_delay
+
+
+def test_action_delay_delays_total_command_exactly():
+    env = PlanarReachEnv(mode="torque", randomization=DomainRandomization(action_delay_max=2))
+    # Find a deterministic reset with delay 2 rather than relying on one hard-coded RNG draw.
+    for seed in range(100):
+        env.reset(seed=seed)
+        if env.action_delay == 2:
+            break
+    assert env.action_delay == 2
+    action = np.array([0.5, -0.25])
+    _, _, _, _, info0 = env.step(action)
+    _, _, _, _, info1 = env.step(action)
+    _, _, _, _, info2 = env.step(action)
+    np.testing.assert_array_equal(info0["delayed_torque"], np.zeros(2))
+    np.testing.assert_array_equal(info1["delayed_torque"], np.zeros(2))
+    np.testing.assert_allclose(info2["delayed_torque"], action * env.torque_limit)
+
+
+def test_fault_activates_on_requested_step_and_changes_dynamics():
+    from sarrl.envs import FaultSpec
+
+    env = PlanarReachEnv(
+        mode="torque",
+        fault=FaultSpec(start_step=2, motor_gain_multiplier=(0.5, 0.8), payload_delta=0.7),
+    )
+    env.reset(seed=3)
+    original_gain = env.motor_gain.copy()
+    original_payload = env.payload_mass
+    env.step(np.zeros(2))
+    env.step(np.zeros(2))
+    assert not env._fault_active
+    _, _, _, _, info = env.step(np.zeros(2))
+    assert info["fault_active"]
+    np.testing.assert_allclose(env.motor_gain, original_gain * np.array([0.5, 0.8]))
+    assert np.isclose(env.payload_mass, original_payload + 0.7)

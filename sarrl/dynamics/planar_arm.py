@@ -21,6 +21,7 @@ class PlanarArmParams:
     viscous: tuple[float, float] = (0.05, 0.05)
     coulomb: tuple[float, float] = (0.02, 0.02)
     friction_smoothing: float = 0.02
+    payload_mass: float = 0.0
 
     def validate(self) -> None:
         positive = (self.m1, self.m2, self.l1, self.l2)
@@ -37,11 +38,12 @@ class PlanarArmParams:
             *self.viscous,
             *self.coulomb,
             self.friction_smoothing,
+            self.payload_mass,
         )
         if not all(np.isfinite(v) for v in vals):
             raise ValueError("all parameters must be finite")
-        if any(v < 0.0 for v in (*self.viscous, *self.coulomb)):
-            raise ValueError("friction coefficients must be non-negative")
+        if any(v < 0.0 for v in (*self.viscous, *self.coulomb)) or self.payload_mass < 0.0:
+            raise ValueError("friction coefficients and payload mass must be non-negative")
         if self.friction_smoothing <= 0.0:
             raise ValueError("friction_smoothing must be positive")
 
@@ -72,16 +74,21 @@ class PlanarArm:
             + p.i2
             + p.m1 * p.lc1**2
             + p.m2 * (p.l1**2 + p.lc2**2 + 2.0 * p.l1 * p.lc2 * c2)
+            + p.payload_mass * (p.l1**2 + p.l2**2 + 2.0 * p.l1 * p.l2 * c2)
         )
-        m12 = p.i2 + p.m2 * (p.lc2**2 + p.l1 * p.lc2 * c2)
-        m22 = p.i2 + p.m2 * p.lc2**2
+        m12 = (
+            p.i2
+            + p.m2 * (p.lc2**2 + p.l1 * p.lc2 * c2)
+            + p.payload_mass * (p.l2**2 + p.l1 * p.l2 * c2)
+        )
+        m22 = p.i2 + p.m2 * p.lc2**2 + p.payload_mass * p.l2**2
         return np.array([[m11, m12], [m12, m22]], dtype=np.float64)
 
     def coriolis_matrix(self, q, qd) -> np.ndarray:
         q = self._vec2(q, "q")
         qd = self._vec2(qd, "qd")
         p = self.params
-        h = p.m2 * p.l1 * p.lc2 * np.sin(q[1])
+        h = (p.m2 * p.l1 * p.lc2 + p.payload_mass * p.l1 * p.l2) * np.sin(q[1])
         return np.array(
             [
                 [-h * qd[1], -h * (qd[0] + qd[1])],
@@ -95,10 +102,14 @@ class PlanarArm:
         p = self.params
         q1, q2 = q
         g1 = (
-            (p.m1 * p.lc1 + p.m2 * p.l1) * p.gravity * np.cos(q1)
-            + p.m2 * p.lc2 * p.gravity * np.cos(q1 + q2)
+            (p.m1 * p.lc1 + p.m2 * p.l1 + p.payload_mass * p.l1)
+            * p.gravity
+            * np.cos(q1)
+            + (p.m2 * p.lc2 + p.payload_mass * p.l2)
+            * p.gravity
+            * np.cos(q1 + q2)
         )
-        g2 = p.m2 * p.lc2 * p.gravity * np.cos(q1 + q2)
+        g2 = (p.m2 * p.lc2 + p.payload_mass * p.l2) * p.gravity * np.cos(q1 + q2)
         return np.array([g1, g2], dtype=np.float64)
 
     def friction(self, qd) -> np.ndarray:
@@ -200,5 +211,8 @@ class PlanarArm:
             + p.m2
             * p.gravity
             * (p.l1 * np.sin(q1) + p.lc2 * np.sin(q1 + q2))
+            + p.payload_mass
+            * p.gravity
+            * (p.l1 * np.sin(q1) + p.l2 * np.sin(q1 + q2))
         )
         return kinetic + float(potential)

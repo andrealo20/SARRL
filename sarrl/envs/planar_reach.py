@@ -16,11 +16,39 @@ class DomainRandomization:
     mass_fraction: float = 0.0
     friction_fraction: float = 0.0
     motor_gain_fraction: float = 0.0
+    payload_range: tuple[float, float] = (0.0, 0.0)
+    sensor_noise_std: float = 0.0
+    action_delay_max: int = 0
 
     def validate(self) -> None:
         for value in (self.mass_fraction, self.friction_fraction, self.motor_gain_fraction):
             if not np.isfinite(value) or value < 0.0 or value >= 1.0:
                 raise ValueError("randomization fractions must be in [0, 1)")
+        lo, hi = self.payload_range
+        if not np.isfinite(lo) or not np.isfinite(hi) or lo < 0.0 or hi < lo:
+            raise ValueError("payload_range must be finite, non-negative and ordered")
+        if not np.isfinite(self.sensor_noise_std) or self.sensor_noise_std < 0.0:
+            raise ValueError("sensor_noise_std must be finite and non-negative")
+        if not isinstance(self.action_delay_max, int) or self.action_delay_max < 0:
+            raise ValueError("action_delay_max must be a non-negative integer")
+
+
+@dataclass(frozen=True)
+class FaultSpec:
+    """Abrupt in-episode dynamics change used only for controlled fault studies."""
+
+    start_step: int
+    motor_gain_multiplier: tuple[float, float] = (1.0, 1.0)
+    payload_delta: float = 0.0
+
+    def validate(self) -> None:
+        if self.start_step < 0:
+            raise ValueError("fault start_step must be non-negative")
+        gains = np.asarray(self.motor_gain_multiplier, dtype=np.float64)
+        if gains.shape != (2,) or not np.all(np.isfinite(gains)) or np.any(gains <= 0.0):
+            raise ValueError("fault motor gains must be a positive finite pair")
+        if not np.isfinite(self.payload_delta):
+            raise ValueError("fault payload_delta must be finite")
 
 
 class PlanarReachEnv:
@@ -35,6 +63,7 @@ class PlanarReachEnv:
         residual_limit: float = 8.0,
         success_radius: float = 0.05,
         randomization: DomainRandomization | None = None,
+        fault: FaultSpec | None = None,
     ):
         if mode not in {"torque", "residual"}:
             raise ValueError("mode must be 'torque' or 'residual'")
@@ -48,6 +77,9 @@ class PlanarReachEnv:
         self.success_radius = float(success_radius)
         self.randomization = randomization or DomainRandomization()
         self.randomization.validate()
+        self.fault = fault
+        if self.fault is not None:
+            self.fault.validate()
 
         self.nominal_arm = PlanarArm()
         self.arm = self.nominal_arm
@@ -57,32 +89,49 @@ class PlanarReachEnv:
         self.action_space = BoxSpace(-np.ones(2), np.ones(2))
         self.observation_space = BoxSpace(-np.ones(8), np.ones(8))
         self._rng = np.random.default_rng(0)
+        self._noise_rng = np.random.default_rng(1)
         self.state = np.zeros(4, dtype=np.float64)
         self.target = np.array([1.0, 0.0], dtype=np.float64)
         self.q_des = np.zeros(2, dtype=np.float64)
         self.motor_gain = np.ones(2, dtype=np.float64)
+        self.mass_scale = np.ones(2, dtype=np.float64)
+        self.friction_scale = np.ones(2, dtype=np.float64)
+        self.payload_mass = 0.0
+        self.action_delay = 0
+        self._command_queue: list[np.ndarray] = []
+        self._fault_active = False
         self.steps = 0
 
     def _sample_arm(self) -> PlanarArm:
         r = self.randomization
         p = PlanarArmParams()
-        mf = self._rng.uniform(1.0 - r.mass_fraction, 1.0 + r.mass_fraction, size=2)
-        ff = self._rng.uniform(
+        self.mass_scale = self._rng.uniform(
+            1.0 - r.mass_fraction, 1.0 + r.mass_fraction, size=2
+        )
+        self.friction_scale = self._rng.uniform(
             1.0 - r.friction_fraction, 1.0 + r.friction_fraction, size=2
         )
+        self.payload_mass = float(self._rng.uniform(*r.payload_range))
         params = PlanarArmParams(
-            m1=p.m1 * mf[0],
-            m2=p.m2 * mf[1],
+            m1=p.m1 * self.mass_scale[0],
+            m2=p.m2 * self.mass_scale[1],
             l1=p.l1,
             l2=p.l2,
             lc1=p.lc1,
             lc2=p.lc2,
-            i1=p.i1 * mf[0],
-            i2=p.i2 * mf[1],
+            i1=p.i1 * self.mass_scale[0],
+            i2=p.i2 * self.mass_scale[1],
             gravity=p.gravity,
-            viscous=(p.viscous[0] * ff[0], p.viscous[1] * ff[1]),
-            coulomb=(p.coulomb[0] * ff[0], p.coulomb[1] * ff[1]),
+            viscous=(
+                p.viscous[0] * self.friction_scale[0],
+                p.viscous[1] * self.friction_scale[1],
+            ),
+            coulomb=(
+                p.coulomb[0] * self.friction_scale[0],
+                p.coulomb[1] * self.friction_scale[1],
+            ),
             friction_smoothing=p.friction_smoothing,
+            payload_mass=self.payload_mass,
         )
         return PlanarArm(params)
 
@@ -97,9 +146,11 @@ class PlanarReachEnv:
             if seed < 0:
                 raise ValueError("seed must be non-negative")
             self._rng = np.random.default_rng(seed)
+            self._noise_rng = np.random.default_rng(seed ^ 0xA5A5A5A5)
         self.arm = self._sample_arm()
         gain_frac = self.randomization.motor_gain_fraction
         self.motor_gain = self._rng.uniform(1.0 - gain_frac, 1.0 + gain_frac, size=2)
+        self.action_delay = int(self._rng.integers(0, self.randomization.action_delay_max + 1))
         self.state = np.concatenate(
             [
                 self._rng.uniform(-0.25, 0.25, size=2),
@@ -107,20 +158,27 @@ class PlanarReachEnv:
             ]
         ).astype(np.float64)
         self.target = (
-            self._sample_target()
-            if target is None
-            else np.asarray(target, dtype=np.float64)
+            self._sample_target() if target is None else np.asarray(target, dtype=np.float64)
         )
         if self.target.shape != (2,) or not np.all(np.isfinite(self.target)):
             raise ValueError("target must be a finite vector of shape (2,)")
         self.q_des = self.nominal_arm.inverse_kinematics(self.target)
+        self._command_queue = [np.zeros(2, dtype=np.float64) for _ in range(self.action_delay)]
+        self._fault_active = False
         self.steps = 0
         obs = self._observation()
-        return obs, {"target": self.target.copy()}
+        return obs, self._info_base()
+
+    def _sensed_state(self) -> np.ndarray:
+        if self.randomization.sensor_noise_std == 0.0:
+            return self.state.copy()
+        noise = self._noise_rng.normal(0.0, self.randomization.sensor_noise_std, size=4)
+        return self.state + noise
 
     def _observation(self) -> np.ndarray:
-        q = self.state[:2]
-        qd = self.state[2:]
+        sensed = self._sensed_state()
+        q = sensed[:2]
+        qd = sensed[2:]
         ee = self.arm.forward_kinematics(q)
         error = self.target - ee
         obs = np.concatenate(
@@ -147,9 +205,52 @@ class PlanarReachEnv:
             candidate = baseline + action * self.residual_limit
         return baseline, np.clip(candidate, -self.torque_limit, self.torque_limit)
 
+    def _activate_fault_if_due(self) -> None:
+        if self.fault is None or self._fault_active or self.steps < self.fault.start_step:
+            return
+        self.motor_gain = self.motor_gain * np.asarray(self.fault.motor_gain_multiplier)
+        new_payload = self.arm.params.payload_mass + self.fault.payload_delta
+        if new_payload < 0.0:
+            raise ValueError("fault would make payload mass negative")
+        self.arm = self.arm.with_params(payload_mass=new_payload)
+        self.payload_mass = float(new_payload)
+        self._fault_active = True
+
+    def _delayed_command(self, commanded: np.ndarray) -> np.ndarray:
+        if self.action_delay == 0:
+            return commanded
+        self._command_queue.append(commanded.copy())
+        return self._command_queue.pop(0)
+
+    def _info_base(self) -> dict:
+        return {
+            "target": self.target.copy(),
+            "mass_scale": self.mass_scale.astype(np.float32),
+            "friction_scale": self.friction_scale.astype(np.float32),
+            "motor_gain": self.motor_gain.astype(np.float32),
+            "payload_mass": float(self.payload_mass),
+            "action_delay": int(self.action_delay),
+            "fault_active": bool(self._fault_active),
+        }
+
+    def dynamics_context(self) -> np.ndarray:
+        """Ground-truth context for diagnostics/auxiliary training, never policy input by default."""
+        return np.array(
+            [
+                *self.mass_scale,
+                *self.friction_scale,
+                *self.motor_gain,
+                self.payload_mass,
+                float(self.action_delay),
+            ],
+            dtype=np.float32,
+        )
+
     def step(self, action):
+        self._activate_fault_if_due()
         baseline, commanded = self._candidate_torque(action)
-        applied = commanded * self.motor_gain
+        delayed = self._delayed_command(commanded)
+        applied = delayed * self.motor_gain
         self.state = self.arm.step_rk4(self.state, applied, self.dt)
         self.steps += 1
 
@@ -163,12 +264,15 @@ class PlanarReachEnv:
         if success:
             reward += 10.0
 
-        info = {
-            "distance": distance,
-            "success": success,
-            "baseline_torque": baseline.astype(np.float32),
-            "commanded_torque": commanded.astype(np.float32),
-            "applied_torque": applied.astype(np.float32),
-            "motor_gain": self.motor_gain.astype(np.float32),
-        }
+        info = self._info_base()
+        info.update(
+            {
+                "distance": distance,
+                "success": success,
+                "baseline_torque": baseline.astype(np.float32),
+                "commanded_torque": commanded.astype(np.float32),
+                "delayed_torque": delayed.astype(np.float32),
+                "applied_torque": applied.astype(np.float32),
+            }
+        )
         return self._observation(), float(reward), terminated, truncated, info
