@@ -2,6 +2,14 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v1.0.1 — CUDA checkpoint restore compatibility
+
+- Fixed CUDA RNG restoration when training checkpoints are loaded onto a CUDA device.
+- CUDA RNG states are explicitly converted back to CPU `ByteTensor` objects before calling `torch.cuda.set_rng_state_all()`.
+- Added a regression test for CUDA-remapped RNG checkpoint state that also runs on CPU-only CI.
+- Updated Ruff-clean typing/import formatting for the current development toolchain.
+- Automated suite increased from 71 to 72 tests.
+
 ## v1.0.0 — verified planar research stack
 
 - Promoted the planar stack to the first stable research release.

@@ -21,7 +21,7 @@ class ReplayBuffer:
 
 
     @classmethod
-    def from_state_dict(cls, state: dict) -> "ReplayBuffer":
+    def from_state_dict(cls, state: dict) -> ReplayBuffer:
         obs = np.asarray(state["obs"])
         actions = np.asarray(state["actions"])
         if obs.ndim != 2 or actions.ndim != 2 or obs.shape[0] != actions.shape[0]:

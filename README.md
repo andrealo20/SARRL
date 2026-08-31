@@ -2,16 +2,16 @@
 
 [![CI](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml/badge.svg)](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org/)
-[![tests](https://img.shields.io/badge/tests-71%20passing-brightgreen.svg)](tests/)
+[![tests](https://img.shields.io/badge/tests-72%20passing-brightgreen.svg)](tests/)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 **Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation**
 
 SARRL is a research-oriented robotics and reinforcement-learning stack for control under model mismatch. It combines a physics controller, from-scratch Soft Actor-Critic, causal dynamics-context estimation, learned residual dynamics with epistemic uncertainty, controlled fault injection and a hard high-order Control Barrier Function safety projection.
 
-The current **v1.0 planar release** is deliberately self-contained: its reference plant is an analytical 2-DoF arm, so the mathematics, learning code and safety layer can be tested without MuJoCo, Gymnasium or a black-box dynamics engine. Franka/MuJoCo transfer remains the next major milestone rather than an unverified feature claim.
+The current **v1.0.1 planar release** is deliberately self-contained: its reference plant is an analytical 2-DoF arm, so the mathematics, learning code and safety layer can be tested without MuJoCo, Gymnasium or a black-box dynamics engine. Franka/MuJoCo transfer remains the next major milestone rather than an unverified feature claim.
 
-> **Status:** the complete planar stack is implemented and the current automated suite passes **71/71 tests**. Measured non-learned baselines are retained in `results/`. No multi-seed learned-policy success claim is made yet; the repository includes the validation/held-out protocol and sweep runner required to produce one reproducibly.
+> **Status:** the complete planar stack is implemented and the current automated suite passes **72/72 tests**. Measured non-learned baselines are retained in `results/`. No multi-seed learned-policy success claim is made yet; the repository includes the validation/held-out protocol and sweep runner required to produce one reproducibly.
 
 ## Core idea
 
@@ -137,7 +137,7 @@ The command is projected onto the resulting 2-D polytope by exhaustive active-se
 The current local release passes:
 
 ```text
-71 passed
+72 passed
 ```
 
 The suite includes numerical identities, regression tests and deliberate sabotage tests. Important checks include:

@@ -133,7 +133,7 @@ class ResidualDynamicsEnsemble(nn.Module):
         )
 
     @classmethod
-    def load(cls, path, map_location: str | torch.device = "cpu") -> "ResidualDynamicsEnsemble":
+    def load(cls, path, map_location: str | torch.device = "cpu") -> ResidualDynamicsEnsemble:
         payload = torch.load(Path(path), map_location=map_location, weights_only=False)
         if payload.get("checkpoint_version") != cls.CHECKPOINT_VERSION:
             raise ValueError("unsupported residual dynamics checkpoint version")

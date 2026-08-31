@@ -55,7 +55,7 @@ class PlanarArm:
         self.params = params or PlanarArmParams()
         self.params.validate()
 
-    def with_params(self, **changes: float) -> "PlanarArm":
+    def with_params(self, **changes: float) -> PlanarArm:
         return PlanarArm(replace(self.params, **changes))
 
     @staticmethod

@@ -8,7 +8,6 @@ from pathlib import Path
 import numpy as np
 import torch
 
-
 CHECKPOINT_VERSION = 2
 _SUPPORTED_VERSIONS = {1, 2}
 

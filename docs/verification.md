@@ -2,6 +2,16 @@
 
 This file distinguishes checks that were actually executed from features that are only implemented or planned.
 
+## v1.0.1 automated suite
+
+Executed under Ubuntu 24.04 WSL2 with PyTorch 2.12.0+cu130 and an NVIDIA GeForce RTX 4080 Laptop GPU.
+
+Validation commands: `ruff check .`, `pytest`, and `git diff --check`.
+
+Result: 72 passed and Ruff reported no errors.
+
+The v1.0.1 regression suite additionally verifies that CUDA RNG states restored from a checkpoint are converted to CPU byte tensors before being passed to `torch.cuda.set_rng_state_all()`. This fixes checkpoint continuation on CUDA while preserving the existing CPU behaviour.
+
 ## v1.0 automated suite
 
 Executed locally from the repository root:

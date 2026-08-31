@@ -126,7 +126,7 @@ class DynamicsContextEncoder(nn.Module):
         )
 
     @classmethod
-    def load(cls, path, map_location: str | torch.device = "cpu") -> "DynamicsContextEncoder":
+    def load(cls, path, map_location: str | torch.device = "cpu") -> DynamicsContextEncoder:
         payload = torch.load(Path(path), map_location=map_location, weights_only=False)
         if payload.get("checkpoint_version") != cls.CHECKPOINT_VERSION:
             raise ValueError("unsupported context checkpoint version")

@@ -281,7 +281,7 @@ class PlanarReachEnv:
         }
 
     @classmethod
-    def from_state_dict(cls, state: dict) -> "PlanarReachEnv":
+    def from_state_dict(cls, state: dict) -> PlanarReachEnv:
         cfg = state.get("constructor_config")
         if cfg is None:
             raise ValueError("environment checkpoint lacks constructor configuration")

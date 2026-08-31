@@ -97,3 +97,44 @@ def test_training_session_reconstructs_nondefault_components(tmp_path: Path):
     assert e2.constructor_config() == env.constructor_config()
     assert loop["step"] == 9 and loop["checkpoint_version"] == 2
     np.testing.assert_array_equal(e2.state, env.state)
+
+
+def test_cuda_rng_restore_converts_checkpoint_states_to_cpu(monkeypatch):
+    import torch
+
+    agent = SACAgent(8, 2, SACConfig(hidden=(16, 16)), seed=7)
+    payload = agent.state_dict(include_optimizers=False)
+
+    class MappedCudaRngState:
+        def __init__(self):
+            self.cpu_called = False
+
+        def cpu(self):
+            self.cpu_called = True
+            return torch.tensor([1, 2, 3], dtype=torch.uint8)
+
+    mapped_state = MappedCudaRngState()
+    payload["cuda_rng_state_all"] = [mapped_state]
+
+    captured = {}
+
+    monkeypatch.setattr(torch.cuda, "is_available", lambda: True)
+
+    def capture_rng_states(states):
+        captured["states"] = states
+
+    monkeypatch.setattr(torch.cuda, "set_rng_state_all", capture_rng_states)
+
+    agent.load_state_dict(
+        payload,
+        load_optimizers=False,
+        restore_rng=True,
+    )
+
+    assert mapped_state.cpu_called
+
+    restored = captured["states"]
+    assert len(restored) == 1
+    assert isinstance(restored[0], torch.Tensor)
+    assert restored[0].device.type == "cpu"
+    assert restored[0].dtype == torch.uint8

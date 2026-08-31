@@ -18,5 +18,10 @@ def test_readme_and_verification_report_current_test_count():
         for line in path.read_text().splitlines()
         if line.startswith("def test_")
     )
-    assert count == 71
-    assert "69/69" not in Path("README.md").read_text()
+    readme = Path("README.md").read_text()
+    verification = Path("docs/verification.md").read_text()
+
+    assert f"tests-{count}%20passing" in readme
+    assert f"{count}/{count} tests" in readme
+    assert f"{count} passed" in readme
+    assert f"{count} passed" in verification

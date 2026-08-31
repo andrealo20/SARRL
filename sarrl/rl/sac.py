@@ -69,7 +69,7 @@ class SACAgent:
     def from_state_dict(
         cls, payload: dict, seed: int = 0, load_optimizers: bool = False,
         restore_rng: bool = False,
-    ) -> "SACAgent":
+    ) -> SACAgent:
         if payload.get("checkpoint_version") != cls.CHECKPOINT_VERSION:
             raise ValueError("unsupported SARRL SAC checkpoint version")
         cfg_data = dict(payload["config"])
@@ -89,7 +89,7 @@ class SACAgent:
     @classmethod
     def from_checkpoint(
         cls, path, seed: int = 0, load_optimizers: bool = False, restore_rng: bool = False
-    ) -> "SACAgent":
+    ) -> SACAgent:
         payload = torch.load(Path(path), map_location="cpu", weights_only=False)
         return cls.from_state_dict(
             payload, seed=seed, load_optimizers=load_optimizers, restore_rng=restore_rng
@@ -238,7 +238,9 @@ class SACAgent:
         if restore_rng and payload.get("torch_rng_state") is not None:
             torch.set_rng_state(payload["torch_rng_state"].cpu())
             if torch.cuda.is_available() and payload.get("cuda_rng_state_all") is not None:
-                torch.cuda.set_rng_state_all(payload["cuda_rng_state_all"])
+                torch.cuda.set_rng_state_all(
+                    [state.cpu() for state in payload["cuda_rng_state_all"]]
+                )
         return {
             "checkpoint_version": payload["checkpoint_version"],
             "update_steps": self.update_steps,

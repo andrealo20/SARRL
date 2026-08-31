@@ -11,7 +11,6 @@ from .protocol import (
 )
 from .provenance import runtime_metadata, seed_ranges_overlap, write_run_manifest
 
-
 __all__ = [
     "runtime_metadata",
     "seed_ranges_overlap",
