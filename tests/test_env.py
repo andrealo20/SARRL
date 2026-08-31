@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 
 from sarrl.envs import PlanarReachEnv
 from sarrl.envs.planar_reach import DomainRandomization
@@ -119,3 +120,12 @@ def test_step_torque_matches_direct_torque_action_without_plant_disturbances():
     np.testing.assert_array_equal(out_a[0], out_b[0])
     np.testing.assert_allclose(out_a[1], out_b[1], atol=0.0)
     assert out_a[2:4] == out_b[2:4]
+
+
+def test_environment_checkpoint_rejects_constructor_mismatch():
+    env = PlanarReachEnv(mode="residual", randomization=DomainRandomization(mass_fraction=0.1))
+    env.reset(seed=3)
+    state = env.state_dict()
+    other = PlanarReachEnv(mode="residual", randomization=DomainRandomization(mass_fraction=0.2))
+    with pytest.raises(ValueError, match="constructor configuration"):
+        other.load_state_dict(state)

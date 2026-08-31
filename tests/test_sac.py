@@ -98,3 +98,16 @@ def test_from_checkpoint_reconstructs_nondefault_architecture(tmp_path: Path):
     b = SACAgent.from_checkpoint(path, seed=99, load_optimizers=False)
     assert b.config.hidden == (23, 17)
     np.testing.assert_array_equal(b.act(obs, deterministic=True), expected)
+
+
+def test_deterministic_action_does_not_advance_torch_rng():
+    import torch
+
+    agent = SACAgent(4, 2, SACConfig(hidden=(16, 16)), seed=12)
+    obs = np.zeros(4, dtype=np.float32)
+    before = torch.get_rng_state().clone()
+    a1 = agent.act(obs, deterministic=True)
+    after = torch.get_rng_state().clone()
+    a2 = agent.act(obs, deterministic=True)
+    assert torch.equal(before, after)
+    np.testing.assert_array_equal(a1, a2)

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 import numpy as np
 
@@ -246,10 +246,21 @@ class PlanarReachEnv:
             dtype=np.float32,
         )
 
-    def state_dict(self) -> dict:
-        from dataclasses import asdict
-
+    def constructor_config(self) -> dict:
         return {
+            "mode": self.mode,
+            "dt": self.dt,
+            "max_steps": self.max_steps,
+            "torque_limit": self.torque_limit,
+            "residual_limit": self.residual_limit,
+            "success_radius": self.success_radius,
+            "randomization": asdict(self.randomization),
+            "fault": asdict(self.fault) if self.fault is not None else None,
+        }
+
+    def state_dict(self) -> dict:
+        return {
+            "constructor_config": self.constructor_config(),
             "mode": self.mode,
             "dt": self.dt,
             "max_steps": self.max_steps,
@@ -269,7 +280,23 @@ class PlanarReachEnv:
             "noise_rng_state": self._noise_rng.bit_generator.state,
         }
 
+    @classmethod
+    def from_state_dict(cls, state: dict) -> "PlanarReachEnv":
+        cfg = state.get("constructor_config")
+        if cfg is None:
+            raise ValueError("environment checkpoint lacks constructor configuration")
+        cfg = dict(cfg)
+        randomization = DomainRandomization(**dict(cfg.pop("randomization")))
+        fault_data = cfg.pop("fault")
+        fault = FaultSpec(**dict(fault_data)) if fault_data is not None else None
+        env = cls(randomization=randomization, fault=fault, **cfg)
+        env.load_state_dict(state)
+        return env
+
     def load_state_dict(self, state: dict) -> None:
+        stored_cfg = state.get("constructor_config")
+        if stored_cfg is not None and stored_cfg != self.constructor_config():
+            raise ValueError("environment checkpoint constructor configuration does not match")
         if state["mode"] != self.mode or float(state["dt"]) != self.dt:
             raise ValueError("environment checkpoint configuration does not match")
         if int(state["max_steps"]) != self.max_steps:
@@ -338,6 +365,10 @@ class PlanarReachEnv:
             }
         )
         return self._observation(), float(reward), terminated, truncated, info
+
+    def sample_action(self) -> np.ndarray:
+        """Sample an exploratory action from the environment-owned RNG."""
+        return self.action_space.sample(self._rng)
 
     def step(self, action):
         baseline, commanded = self._candidate_torque(action)

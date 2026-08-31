@@ -1,7 +1,14 @@
 import numpy as np
 import pytest
 
-from sarrl.evaluation import EpisodeResult, aggregate, paired_success_difference, wilson_interval
+from sarrl.envs import PlanarReachEnv
+from sarrl.evaluation import (
+    EpisodeResult,
+    aggregate,
+    evaluate_policy,
+    paired_success_difference,
+    wilson_interval,
+)
 
 
 def _rows(successes):
@@ -31,3 +38,16 @@ def test_paired_success_bootstrap_is_reproducible():
     two = paired_success_difference(a, b, bootstrap=2000, seed=9)
     assert one == two
     assert one[0] > 0.0
+
+
+class _ZeroResidualPolicy:
+    def act(self, obs, deterministic=False):
+        return np.zeros(2, dtype=np.float32)
+
+
+def test_policy_evaluation_is_reproducible_on_fixed_seeds():
+    a = evaluate_policy(_ZeroResidualPolicy(), PlanarReachEnv(mode="residual"), 6, 700)
+    b = evaluate_policy(_ZeroResidualPolicy(), PlanarReachEnv(mode="residual"), 6, 700)
+    assert a == b
+    assert a.episodes == 6 and a.successes == 6
+    assert a.selection_key == (a.success_rate, a.reward_mean)

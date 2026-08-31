@@ -66,10 +66,10 @@ class SACAgent:
         self.update_steps = 0
 
     @classmethod
-    def from_checkpoint(
-        cls, path, seed: int = 0, load_optimizers: bool = False, restore_rng: bool = False
+    def from_state_dict(
+        cls, payload: dict, seed: int = 0, load_optimizers: bool = False,
+        restore_rng: bool = False,
     ) -> "SACAgent":
-        payload = torch.load(Path(path), map_location="cpu", weights_only=False)
         if payload.get("checkpoint_version") != cls.CHECKPOINT_VERSION:
             raise ValueError("unsupported SARRL SAC checkpoint version")
         cfg_data = dict(payload["config"])
@@ -86,6 +86,15 @@ class SACAgent:
         )
         return agent
 
+    @classmethod
+    def from_checkpoint(
+        cls, path, seed: int = 0, load_optimizers: bool = False, restore_rng: bool = False
+    ) -> "SACAgent":
+        payload = torch.load(Path(path), map_location="cpu", weights_only=False)
+        return cls.from_state_dict(
+            payload, seed=seed, load_optimizers=load_optimizers, restore_rng=restore_rng
+        )
+
     @property
     def alpha(self) -> torch.Tensor:
         return self.log_alpha.exp()
@@ -93,8 +102,10 @@ class SACAgent:
     def act(self, obs, deterministic: bool = False) -> np.ndarray:
         x = torch.as_tensor(obs, dtype=torch.float32, device=self.device).unsqueeze(0)
         with torch.no_grad():
-            action, _, det = self.actor.sample(x)
-            chosen = det if deterministic else action
+            if deterministic:
+                chosen = self.actor.deterministic(x)
+            else:
+                chosen, _, _ = self.actor.sample(x)
         return chosen.squeeze(0).cpu().numpy().astype(np.float32)
 
     def compute_bellman_target(

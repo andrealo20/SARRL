@@ -19,6 +19,17 @@ class ReplayBuffer:
         self.size = 0
         self.rng = np.random.default_rng(seed)
 
+
+    @classmethod
+    def from_state_dict(cls, state: dict) -> "ReplayBuffer":
+        obs = np.asarray(state["obs"])
+        actions = np.asarray(state["actions"])
+        if obs.ndim != 2 or actions.ndim != 2 or obs.shape[0] != actions.shape[0]:
+            raise ValueError("invalid replay checkpoint arrays")
+        obj = cls(obs.shape[1], actions.shape[1], int(state["capacity"]), seed=0)
+        obj.load_state_dict(state)
+        return obj
+
     def add(self, obs, action, reward: float, next_obs, done: bool) -> None:
         self.obs[self.ptr] = np.asarray(obs, dtype=np.float32)
         self.actions[self.ptr] = np.asarray(action, dtype=np.float32)

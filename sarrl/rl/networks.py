@@ -60,6 +60,11 @@ class SquashedGaussianActor(nn.Module):
         # log(1 - tanh(x)^2), stable for large |x|.
         return 2.0 * (math.log(2.0) - raw - F.softplus(-2.0 * raw))
 
+    def deterministic(self, obs: torch.Tensor) -> torch.Tensor:
+        """Mean action without sampling or advancing any RNG state."""
+        mean, _ = self.distribution_params(obs)
+        return torch.tanh(mean)
+
     def sample(self, obs: torch.Tensor) -> tuple[torch.Tensor, torch.Tensor, torch.Tensor]:
         mean, log_std = self.distribution_params(obs)
         std = log_std.exp()

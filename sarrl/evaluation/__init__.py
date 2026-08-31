@@ -1,3 +1,4 @@
+from .policy import PolicyEvaluation, evaluate_policy
 from .protocol import (
     AggregateMetrics,
     EpisodeResult,
@@ -10,6 +11,8 @@ from .protocol import (
 )
 
 __all__ = [
+    "PolicyEvaluation",
+    "evaluate_policy",
     "AggregateMetrics",
     "EpisodeResult",
     "aggregate",
