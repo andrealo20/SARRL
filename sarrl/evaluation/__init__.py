@@ -1,3 +1,19 @@
+from .planar_v12 import (
+    V12_CONTEXT_DATA_SEED_BASE,
+    V12_CONTEXT_DATA_SEED_STRIDE,
+    V12_CONTEXT_HISTORY,
+    V12_CONTEXT_SAMPLES,
+    V12_CONTEXT_TRAINING_STEPS,
+    V12_HELDOUT_EPISODES,
+    V12_HELDOUT_SEED,
+    V12_TRAINING_SEEDS,
+    V12_VALIDATION_EPISODES,
+    V12_VALIDATION_SEED,
+    context_data_seed,
+    planar_id_randomization,
+    planar_id_randomization_dict,
+    validate_context_data_range,
+)
 from .policy import PolicyEvaluation, evaluate_policy, evaluate_policy_episodes
 from .protocol import (
     AggregateMetrics,
@@ -12,6 +28,20 @@ from .protocol import (
 from .provenance import runtime_metadata, seed_ranges_overlap, write_run_manifest
 
 __all__ = [
+    "V12_CONTEXT_DATA_SEED_BASE",
+    "V12_CONTEXT_DATA_SEED_STRIDE",
+    "V12_CONTEXT_HISTORY",
+    "V12_CONTEXT_SAMPLES",
+    "V12_CONTEXT_TRAINING_STEPS",
+    "V12_HELDOUT_EPISODES",
+    "V12_HELDOUT_SEED",
+    "V12_TRAINING_SEEDS",
+    "V12_VALIDATION_EPISODES",
+    "V12_VALIDATION_SEED",
+    "context_data_seed",
+    "planar_id_randomization",
+    "planar_id_randomization_dict",
+    "validate_context_data_range",
     "runtime_metadata",
     "seed_ranges_overlap",
     "write_run_manifest",

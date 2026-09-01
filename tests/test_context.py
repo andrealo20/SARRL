@@ -109,3 +109,42 @@ def test_adaptive_wrapper_state_round_trip_preserves_next_transition():
     assert got[4]["distance"] == expected[4]["distance"]
     np.testing.assert_array_equal(restored.state, original.state)
     np.testing.assert_array_equal(restored.latent, original.latent)
+
+
+def test_context_dataset_collection_is_exactly_reproducible():
+    from tools.train_context import collect
+
+    x1, y1 = collect(
+        samples=4,
+        history=3,
+        data_seed=100000,
+    )
+    x2, y2 = collect(
+        samples=4,
+        history=3,
+        data_seed=100000,
+    )
+
+    np.testing.assert_array_equal(x1, x2)
+    np.testing.assert_array_equal(y1, y2)
+
+    assert x1.shape == (4, 3, 18)
+    assert y1.shape == (4, 8)
+
+
+def test_context_dataset_changes_with_data_seed():
+    from tools.train_context import collect
+
+    x1, y1 = collect(
+        samples=3,
+        history=3,
+        data_seed=100000,
+    )
+    x2, y2 = collect(
+        samples=3,
+        history=3,
+        data_seed=110000,
+    )
+
+    assert not np.array_equal(x1, x2)
+    assert not np.array_equal(y1, y2)

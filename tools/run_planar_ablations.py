@@ -14,8 +14,15 @@ import numpy as np
 
 from sarrl.envs import DomainRandomization, PlanarReachEnv
 from sarrl.evaluation import (
+    V12_CONTEXT_DATA_SEED_BASE,
+    V12_CONTEXT_DATA_SEED_STRIDE,
+    V12_CONTEXT_HISTORY,
+    V12_CONTEXT_SAMPLES,
+    V12_CONTEXT_TRAINING_STEPS,
     aggregate,
     evaluate_policy_episodes,
+    planar_id_randomization,
+    planar_id_randomization_dict,
     seed_ranges_overlap,
     write_episode_csv,
     write_run_manifest,
@@ -36,12 +43,8 @@ class AblationCondition:
 
 CONDITIONS = (
     AblationCondition("A0", "Computed torque", "none", False, False, False, "ready"),
-    AblationCondition(
-        "A1", "Direct SAC", "train-direct-sac", False, False, False, "ready"
-    ),
-    AblationCondition(
-        "A2", "Residual SAC", "retained-v1.1.0", False, False, False, "ready"
-    ),
+    AblationCondition("A1", "Direct SAC", "train-direct-sac", False, False, False, "ready"),
+    AblationCondition("A2", "Residual SAC", "retained-v1.1.0", False, False, False, "ready"),
     AblationCondition(
         "A3",
         "Residual SAC + context",
@@ -87,13 +90,7 @@ class _ZeroResidualPolicy:
 
 
 def _randomization() -> DomainRandomization:
-    return DomainRandomization(
-        mass_fraction=0.15,
-        friction_fraction=0.30,
-        motor_gain_fraction=0.15,
-        payload_range=(0.0, 1.0),
-        action_delay_max=2,
-    )
+    return planar_id_randomization()
 
 
 def build_protocol(
@@ -145,12 +142,24 @@ def build_protocol(
             "seed_start": heldout_seed,
             "episodes_per_policy": heldout_episodes,
         },
-        "domain_randomization": {
-            "mass_fraction": 0.15,
-            "friction_fraction": 0.30,
-            "motor_gain_fraction": 0.15,
-            "payload_range": [0.0, 1.0],
-            "action_delay_max": 2,
+        "domain_randomization": planar_id_randomization_dict(),
+        "context_pretraining": {
+            "per_training_seed": True,
+            "samples_per_seed": V12_CONTEXT_SAMPLES,
+            "history": V12_CONTEXT_HISTORY,
+            "optimization_steps": V12_CONTEXT_TRAINING_STEPS,
+            "data_seed_base": V12_CONTEXT_DATA_SEED_BASE,
+            "data_seed_stride": V12_CONTEXT_DATA_SEED_STRIDE,
+            "device": "cpu",
+            "encoder": {
+                "context_dim": 8,
+                "latent_dim": 16,
+                "hidden_dim": 64,
+            },
+            "excitation_action_range": [-0.7, 0.7],
+            "supervision_target": "raw_dynamics_context",
+            "target_normalization": "none",
+            "runtime_ground_truth_access": False,
         },
         "statistics": {
             "multi_seed_spread": "sample_sd_ddof_1",
@@ -189,9 +198,7 @@ def run_a0(out: Path, heldout_seed: int, heldout_episodes: int) -> None:
     )
 
     print(
-        "A0 computed torque: "
-        f"{metrics.successes}/{metrics.n} "
-        f"= {100.0 * metrics.success_rate:.1f}%"
+        f"A0 computed torque: {metrics.successes}/{metrics.n} = {100.0 * metrics.success_rate:.1f}%"
     )
 
 
@@ -254,9 +261,7 @@ def register_a2(root: Path, out: Path) -> None:
 
     missing = [str(path) for path in required if not path.exists()]
     if missing:
-        raise FileNotFoundError(
-            "A2 retained evidence is incomplete: " + ", ".join(missing)
-        )
+        raise FileNotFoundError("A2 retained evidence is incomplete: " + ", ".join(missing))
 
     condition_out = out / "A2_residual_sac"
     condition_out.mkdir(parents=True, exist_ok=True)
@@ -335,10 +340,7 @@ def main() -> int:
         f"validation:     {args.validation_seed}"
         f"..{args.validation_seed + args.validation_episodes - 1}"
     )
-    print(
-        f"held-out:       {args.heldout_seed}"
-        f"..{args.heldout_seed + args.heldout_episodes - 1}"
-    )
+    print(f"held-out:       {args.heldout_seed}..{args.heldout_seed + args.heldout_episodes - 1}")
     print(f"manifest:       {out / 'experiment_manifest.json'}")
 
     if "A0" in args.execute:

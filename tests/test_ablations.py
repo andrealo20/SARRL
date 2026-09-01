@@ -2,6 +2,11 @@ from pathlib import Path
 
 import pytest
 
+from sarrl.evaluation import (
+    context_data_seed,
+    planar_id_randomization_dict,
+    validate_context_data_range,
+)
 from tools.run_planar_ablations import (
     CONDITIONS,
     build_protocol,
@@ -89,7 +94,6 @@ def test_v12_statistics_require_sample_sd_and_paired_comparison():
     assert statistics["paired_comparison"] == "paired_bootstrap_95"
 
 
-
 def test_a0_smoke_writes_auditable_outputs(tmp_path):
     run_a0(tmp_path, heldout_seed=40_000, heldout_episodes=3)
 
@@ -169,3 +173,48 @@ def test_a2_registers_retained_v11_evidence(tmp_path):
     assert '"source_release": "v1.1.0"' in text
     assert '"reused_without_retraining": true' in text
     assert "9f832614ce8b51c207873ff4861986ab72903115" in text
+
+
+def test_v12_context_pretraining_protocol_is_frozen():
+    context = _protocol()["context_pretraining"]
+
+    assert context == {
+        "per_training_seed": True,
+        "samples_per_seed": 2000,
+        "history": 16,
+        "optimization_steps": 1500,
+        "data_seed_base": 100000,
+        "data_seed_stride": 10000,
+        "device": "cpu",
+        "encoder": {
+            "context_dim": 8,
+            "latent_dim": 16,
+            "hidden_dim": 64,
+        },
+        "excitation_action_range": [-0.7, 0.7],
+        "supervision_target": "raw_dynamics_context",
+        "target_normalization": "none",
+        "runtime_ground_truth_access": False,
+    }
+
+
+def test_v12_context_data_seed_ranges_are_independent_and_disjoint_from_evaluation():
+    assert context_data_seed(0) == 100000
+    assert context_data_seed(1) == 110000
+    assert context_data_seed(4) == 140000
+
+    ranges = [validate_context_data_range(seed, 2000) for seed in range(5)]
+
+    for index, (start, end) in enumerate(ranges):
+        assert start == 100000 + 10000 * index
+        assert end == start + 1999
+
+        # Validation is 20000..20029 and held-out is 40000..40099.
+        assert start > 40099
+
+    for left, right in zip(ranges, ranges[1:], strict=False):
+        assert left[1] < right[0]
+
+
+def test_v12_randomization_has_single_canonical_representation():
+    assert _protocol()["domain_randomization"] == planar_id_randomization_dict()
