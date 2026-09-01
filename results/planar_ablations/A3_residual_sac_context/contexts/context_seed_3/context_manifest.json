@@ -1,0 +1,58 @@
+{
+  "config": {
+    "context_config": {
+      "action_dim": 2,
+      "context_dim": 8,
+      "hidden_dim": 64,
+      "history": 16,
+      "latent_dim": 16,
+      "learning_rate": 0.001,
+      "obs_dim": 8
+    },
+    "data_seed_end": 131999,
+    "data_seed_start": 130000,
+    "device": "cpu",
+    "domain_randomization": {
+      "action_delay_max": 2,
+      "friction_fraction": 0.3,
+      "mass_fraction": 0.15,
+      "motor_gain_fraction": 0.15,
+      "payload_range": [
+        0.0,
+        1.0
+      ]
+    },
+    "excitation": {
+      "distribution": "uniform",
+      "high": 0.7,
+      "low": -0.7,
+      "space": "normalized_residual_action"
+    },
+    "history": 16,
+    "optimization_steps": 1500,
+    "purpose": "A3 learned dynamics context pretraining",
+    "samples": 2000,
+    "supervision": {
+      "normalization": "none",
+      "runtime_ground_truth_access": false,
+      "target": "raw_dynamics_context"
+    },
+    "training_seed": 3
+  },
+  "extra": {
+    "checkpoint_sha256": "974c9a6146e5febfedaa11effa1712b0c556b51f314b68f4997c4a35844bf896",
+    "dataset_file": "context.npz",
+    "final_loss": 0.10334619879722595,
+    "initial_loss": 1.0141736268997192
+  },
+  "runtime": {
+    "cuda_available": true,
+    "git_commit": "3068a858ae46d55a43705963ede6e0d72b66492d",
+    "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "torch": "2.12.0+cu130"
+  }
+}
