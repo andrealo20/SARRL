@@ -21,8 +21,11 @@ On the randomized planar held-out benchmark:
 | Direct SAC | 6.0% ± 3.7 pp |
 | Residual SAC | 56.4% ± 7.0 pp |
 | Residual SAC + learned context | **64.2% ± 6.7 pp** |
+| Residual SAC + uncertainty gate | 15.2% ± 1.6 pp |
 
 Residual SAC improved over Direct SAC by **+50.4 percentage points on average**. All five paired bootstrap 95% confidence intervals excluded zero. Direct SAC did not demonstrate an improvement over computed torque.
+
+The frozen uncertainty gate was a negative ablation: it reduced success by 41.2 percentage points versus paired Residual SAC and operated near its minimum authority (mean scale 0.102).
 
 The learned-policy values use five independent training seeds and 100 held-out episodes per policy. The uncertainty shown is the sample standard deviation across training seeds. Evidence is limited to the analytical planar benchmark and does not establish performance for the complete adaptive, uncertainty and safety stack.
 

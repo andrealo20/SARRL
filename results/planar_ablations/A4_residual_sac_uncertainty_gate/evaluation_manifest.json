@@ -1,0 +1,81 @@
+{
+  "config": {
+    "condition": "A4",
+    "domain_randomization": {
+      "action_delay_max": 2,
+      "friction_fraction": 0.3,
+      "mass_fraction": 0.15,
+      "motor_gain_fraction": 0.15,
+      "payload_range": [
+        0.0,
+        1.0
+      ]
+    },
+    "heldout": {
+      "episodes_per_policy": 100,
+      "seed_start": 40000
+    },
+    "inputs": [
+      {
+        "ensemble_checkpoint": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL/results/planar_ablations/A4_residual_sac_uncertainty_gate/ensembles/ensemble_seed_0/ensemble.pt",
+        "ensemble_checkpoint_sha256": "2f7a46cf2c2d390211991b4bd14811f858eaed55278699612909275e6085fc35",
+        "policy_checkpoint": "/home/andrea/projects/SARRL/results/sac_residual_5seed_200k/seed_0/best.pt",
+        "policy_checkpoint_sha256": "511821392c990265c45d31f9abd65f097497bba5e318a9d248a48b13d3ef36ae",
+        "training_seed": 0
+      },
+      {
+        "ensemble_checkpoint": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL/results/planar_ablations/A4_residual_sac_uncertainty_gate/ensembles/ensemble_seed_1/ensemble.pt",
+        "ensemble_checkpoint_sha256": "ebfdb60317ea1a0e9d903666a708d5ebc26392239bbcaba96028455c8916d958",
+        "policy_checkpoint": "/home/andrea/projects/SARRL/results/sac_residual_5seed_200k/seed_1/best.pt",
+        "policy_checkpoint_sha256": "b9a95923c5d09109d2d6f0e8abb741558b1534183239292e2d17fe8cb8ad6bb3",
+        "training_seed": 1
+      },
+      {
+        "ensemble_checkpoint": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL/results/planar_ablations/A4_residual_sac_uncertainty_gate/ensembles/ensemble_seed_2/ensemble.pt",
+        "ensemble_checkpoint_sha256": "e1f9bb52d3e153cb1ae64585d08461227ad96b6635c51e04b5d171ef38275b94",
+        "policy_checkpoint": "/home/andrea/projects/SARRL/results/sac_residual_5seed_200k/seed_2/best.pt",
+        "policy_checkpoint_sha256": "f6ac55b21729137ac2e5d1a070b7bbe132d045df76234c71697af1394b410888",
+        "training_seed": 2
+      },
+      {
+        "ensemble_checkpoint": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL/results/planar_ablations/A4_residual_sac_uncertainty_gate/ensembles/ensemble_seed_3/ensemble.pt",
+        "ensemble_checkpoint_sha256": "2390200f06dd2546bd591e9133aef313ace7d78a2cc130e3c5de7fad4f64ce92",
+        "policy_checkpoint": "/home/andrea/projects/SARRL/results/sac_residual_5seed_200k/seed_3/best.pt",
+        "policy_checkpoint_sha256": "7515df9c52231b40335cc605a7440b84e91f0f5eb8c3db6fa97da4cbbd6d2fef",
+        "training_seed": 3
+      },
+      {
+        "ensemble_checkpoint": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL/results/planar_ablations/A4_residual_sac_uncertainty_gate/ensembles/ensemble_seed_4/ensemble.pt",
+        "ensemble_checkpoint_sha256": "22b7940a258d6777db19a357ee8cea22290ded01da62c7191b5bb6fdd1641429",
+        "policy_checkpoint": "/home/andrea/projects/SARRL/results/sac_residual_5seed_200k/seed_4/best.pt",
+        "policy_checkpoint_sha256": "8f05962d6fc5d90c7337c11ac202e5e860a03296813ddb01b3381988c3e9062c",
+        "training_seed": 4
+      }
+    ],
+    "label": "Residual SAC + uncertainty gate",
+    "policy_source": "retained_A2_residual_SAC",
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "uncertainty_gate": {
+      "gain": 4.0,
+      "min_scale": 0.1,
+      "safety_certificate": false
+    }
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": true,
+    "git_commit": "22fde136682013990157b9a11d42b923d20afa3e",
+    "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "torch": "2.12.0+cu130"
+  }
+}

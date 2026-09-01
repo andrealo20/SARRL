@@ -1,0 +1,22 @@
+{
+  "condition": "A4",
+  "gate_scale_mean_across_models": 0.10207558206732595,
+  "gate_scale_min": 0.1,
+  "heldout_episodes_per_model": 100,
+  "models": 5,
+  "paired_vs_a2_success_difference_mean": -0.41200000000000003,
+  "paired_vs_a2_success_difference_std": 0.08043631020876083,
+  "reward_mean_across_models": -139.05772569970685,
+  "reward_std_across_models": 0.7601027938175497,
+  "success_rate_max": 0.17,
+  "success_rate_mean": 0.15200000000000002,
+  "success_rate_min": 0.13,
+  "success_rate_std": 0.016431676725154984,
+  "training_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ]
+}

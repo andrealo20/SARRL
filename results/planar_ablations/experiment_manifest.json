@@ -1,0 +1,194 @@
+{
+  "config": {
+    "campaign": "planar_ablations",
+    "conditions": [
+      {
+        "context": false,
+        "hocbf": false,
+        "key": "A0",
+        "label": "Computed torque",
+        "policy_source": "none",
+        "status": "ready",
+        "uncertainty_gate": false
+      },
+      {
+        "context": false,
+        "hocbf": false,
+        "key": "A1",
+        "label": "Direct SAC",
+        "policy_source": "train-direct-sac",
+        "status": "ready",
+        "uncertainty_gate": false
+      },
+      {
+        "context": false,
+        "hocbf": false,
+        "key": "A2",
+        "label": "Residual SAC",
+        "policy_source": "retained-v1.1.0",
+        "status": "ready",
+        "uncertainty_gate": false
+      },
+      {
+        "context": true,
+        "hocbf": false,
+        "key": "A3",
+        "label": "Residual SAC + context",
+        "policy_source": "train-context-conditioned-residual-sac",
+        "status": "ready",
+        "uncertainty_gate": false
+      },
+      {
+        "context": false,
+        "hocbf": false,
+        "key": "A4",
+        "label": "Residual SAC + uncertainty gate",
+        "policy_source": "retained-v1.1.0",
+        "status": "ready",
+        "uncertainty_gate": true
+      },
+      {
+        "context": false,
+        "hocbf": true,
+        "key": "A5",
+        "label": "Residual SAC + HOCBF",
+        "policy_source": "retained-v1.1.0",
+        "status": "needs-safety-evaluation-runner",
+        "uncertainty_gate": false
+      },
+      {
+        "context": true,
+        "hocbf": true,
+        "key": "A6",
+        "label": "Full adaptive stack",
+        "policy_source": "context-conditioned-residual-sac",
+        "status": "needs-full-stack-wiring",
+        "uncertainty_gate": true
+      }
+    ],
+    "context_pretraining": {
+      "data_seed_base": 100000,
+      "data_seed_stride": 10000,
+      "device": "cpu",
+      "encoder": {
+        "context_dim": 8,
+        "hidden_dim": 64,
+        "latent_dim": 16
+      },
+      "excitation_action_range": [
+        -0.7,
+        0.7
+      ],
+      "history": 16,
+      "optimization_steps": 1500,
+      "per_training_seed": true,
+      "runtime_ground_truth_access": false,
+      "samples_per_seed": 2000,
+      "supervision_target": "raw_dynamics_context",
+      "target_normalization": "none"
+    },
+    "domain_randomization": {
+      "action_delay_max": 2,
+      "friction_fraction": 0.3,
+      "mass_fraction": 0.15,
+      "motor_gain_fraction": 0.15,
+      "payload_range": [
+        0.0,
+        1.0
+      ]
+    },
+    "ensemble_pretraining": {
+      "batch_size": 128,
+      "data_seed_base": 200000,
+      "data_seed_stride": 20000,
+      "device": "cpu",
+      "domain_randomization": {
+        "action_delay_max": 0,
+        "friction_fraction": 0.4,
+        "mass_fraction": 0.25,
+        "motor_gain_fraction": 0.2,
+        "payload_range": [
+          0.0,
+          1.5
+        ]
+      },
+      "ensemble_config": {
+        "action_dim": 2,
+        "ensemble_size": 5,
+        "hidden": [
+          128,
+          128
+        ],
+        "learning_rate": 0.001,
+        "output_dim": 2,
+        "state_dim": 4,
+        "weight_decay": 1e-06
+      },
+      "excitation": {
+        "distribution": "uniform",
+        "high": 30.0,
+        "low": -30.0,
+        "space": "commanded_torque_nm"
+      },
+      "optimization_steps": 2000,
+      "per_training_seed": true,
+      "samples_per_seed": 10000,
+      "supervision": {
+        "target": "observed_minus_nominal_acceleration",
+        "torque_input": "commanded_torque"
+      }
+    },
+    "heldout": {
+      "episodes_per_policy": 100,
+      "seed_start": 40000
+    },
+    "release_target": "v1.2.0",
+    "statistics": {
+      "episode_success_interval": "wilson_95",
+      "multi_seed_spread": "sample_sd_ddof_1",
+      "paired_comparison": "paired_bootstrap_95"
+    },
+    "training": {
+      "batch_size": 256,
+      "hidden": [
+        256,
+        256
+      ],
+      "replay_capacity": 200000,
+      "seeds": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "start_steps": 5000,
+      "steps_per_seed": 200000,
+      "update_every": 1
+    },
+    "uncertainty_gate": {
+      "ensemble_pairing": "one_per_training_seed",
+      "gain": 4.0,
+      "min_scale": 0.1,
+      "policy_source": "A2_retained_residual_sac",
+      "safety_certificate": false
+    },
+    "validation": {
+      "checkpoint_selection": "success_rate_then_reward",
+      "episodes": 30,
+      "every_steps": 25000,
+      "seed_start": 20000
+    }
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": true,
+    "git_commit": "22fde136682013990157b9a11d42b923d20afa3e",
+    "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "torch": "2.12.0+cu130"
+  }
+}
