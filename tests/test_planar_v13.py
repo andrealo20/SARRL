@@ -1,3 +1,7 @@
+import subprocess
+import sys
+from pathlib import Path
+
 from sarrl.evaluation import (
     V13_CONDITIONS,
     V13_EPISODES,
@@ -7,6 +11,20 @@ from sarrl.evaluation import (
     v13_scenarios,
 )
 from tools.run_planar_v13 import run_campaign, validate_inputs
+
+
+def test_v13_cli_entrypoint_loads_from_repository_root():
+    root = Path(__file__).resolve().parents[1]
+    result = subprocess.run(
+        [sys.executable, str(root / "tools" / "run_planar_v13.py"), "--help"],
+        cwd=root,
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert "OOD and motor-fault campaign" in result.stdout
 
 
 def test_v13_protocol_freezes_disjoint_evaluation_population():

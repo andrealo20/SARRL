@@ -37,12 +37,21 @@ from sarrl.models import ResidualDynamicsEnsemble, UncertaintyGate
 from sarrl.rl import SACAgent
 from sarrl.runtime import ControlStackConfig, SARRLControlStack
 from sarrl.safety import HOCBFSafetyFilter
-from tools.run_planar_ablations import (
-    _retained_a2_checkpoint_hashes,
-    _retained_a3_checkpoint_hashes,
-    _sha256,
-    _validate_a6_input,
-)
+
+if __package__:
+    from tools.run_planar_ablations import (
+        _retained_a2_checkpoint_hashes,
+        _retained_a3_checkpoint_hashes,
+        _sha256,
+        _validate_a6_input,
+    )
+else:
+    from run_planar_ablations import (
+        _retained_a2_checkpoint_hashes,
+        _retained_a3_checkpoint_hashes,
+        _sha256,
+        _validate_a6_input,
+    )
 
 
 class _ZeroResidualPolicy:
