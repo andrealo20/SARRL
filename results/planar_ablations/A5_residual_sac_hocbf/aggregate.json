@@ -1,0 +1,29 @@
+{
+  "condition": "A5",
+  "context_latent_norm_mean_across_models": 0.0,
+  "gate_scale_mean_across_models": 1.0,
+  "heldout_episodes_per_model": 100,
+  "models": 5,
+  "paired_reference": "A2_residual_SAC",
+  "paired_success_difference_mean": -0.072,
+  "paired_success_difference_std": 0.025884358211089573,
+  "reward_mean_across_models": -119.02269945324406,
+  "reward_std_across_models": 3.982774882641392,
+  "safety_certified_fraction_mean": 0.9998104862808436,
+  "safety_constraint_margin_min": -64.97223882494967,
+  "safety_correction_mean_across_models": 3.8932290949657435,
+  "safety_infeasible_episodes": 15,
+  "safety_intervention_fraction_mean": 0.3968720588821953,
+  "success_rate_max": 0.6,
+  "success_rate_mean": 0.492,
+  "success_rate_min": 0.38,
+  "success_rate_std": 0.07854934754662192,
+  "training_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "unsafe_state_fraction_mean": 0.004341975679618681
+}

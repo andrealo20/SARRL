@@ -2,6 +2,16 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v1.2.0 — complete planar ablation matrix
+
+- Completed A0–A6 on the frozen randomized analytical planar benchmark with five training seeds and 100 held-out episodes per learned policy.
+- Added audited A3 causal-context, A4 uncertainty-gate, A5 hard-HOCBF and A6 complete adaptive-stack evaluation paths with checkpoint hashes and source provenance.
+- Measured held-out success of **64.2% ± 6.7 pp** for A3, **15.2% ± 1.6 pp** for A4, **49.2% ± 7.9 pp** for A5 and **17.0% ± 2.3 pp** for A6.
+- Retained negative ablations: the frozen uncertainty gate operated near minimum residual authority, while A5 reported 15 explicit HOCBF-infeasible episodes rather than executing an uncertified fallback.
+- Integrated causal context updates into the composed torque runtime so A6 genuinely combines context, ensemble uncertainty, gated residual authority and required HOCBF projection.
+- Retained raw held-out rows, stack diagnostics, paired bootstrap comparisons, manifests and aggregate summaries under `results/planar_ablations/`.
+- MuJoCo, Franka, OOD learned-policy, hardware and sim-to-real evidence remain future work.
+
 ## v1.1.0 — retained multi-seed residual-SAC evidence
 
 - Completed five independent 200k-step residual-SAC training runs under planar domain randomization.

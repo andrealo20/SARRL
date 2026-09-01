@@ -53,7 +53,7 @@
         "key": "A5",
         "label": "Residual SAC + HOCBF",
         "policy_source": "retained-v1.1.0",
-        "status": "needs-safety-evaluation-runner",
+        "status": "ready",
         "uncertainty_gate": false
       },
       {
@@ -62,7 +62,7 @@
         "key": "A6",
         "label": "Full adaptive stack",
         "policy_source": "context-conditioned-residual-sac",
-        "status": "needs-full-stack-wiring",
+        "status": "ready",
         "uncertainty_gate": true
       }
     ],
@@ -138,9 +138,48 @@
         "torque_input": "commanded_torque"
       }
     },
+    "full_stack": {
+      "context_action": "normalized_raw_policy_residual",
+      "context_source_commit": "3068a858ae46d55a43705963ede6e0d72b66492d",
+      "ensemble_source_commit": "22fde136682013990157b9a11d42b923d20afa3e",
+      "hocbf_required": true,
+      "physical_command": "baseline_plus_gated_residual_then_HOCBF",
+      "policy_source": "A3_context_conditioned_residual_SAC",
+      "uncertainty_gate": {
+        "gain": 4.0,
+        "min_scale": 0.1
+      }
+    },
     "heldout": {
       "episodes_per_policy": 100,
       "seed_start": 40000
+    },
+    "hocbf_safety": {
+      "feasibility_tol": 2e-08,
+      "guarantee_scope": "nominal_model_relative",
+      "infeasible_semantics": "abort_episode_unsuccessful",
+      "intervention_tolerance": 1e-09,
+      "joint_gamma1": 5.0,
+      "joint_gamma2": 5.0,
+      "joint_lower": [
+        -3.05,
+        -3.05
+      ],
+      "joint_upper": [
+        3.05,
+        3.05
+      ],
+      "obstacles": [],
+      "require_safety": true,
+      "torque_limit": [
+        40.0,
+        40.0
+      ],
+      "velocity_dt": 0.02,
+      "velocity_limit": [
+        7.0,
+        7.0
+      ]
     },
     "release_target": "v1.2.0",
     "statistics": {
@@ -183,7 +222,7 @@
   "extra": {},
   "runtime": {
     "cuda_available": true,
-    "git_commit": "22fde136682013990157b9a11d42b923d20afa3e",
+    "git_commit": "c029558a464d4ece02188dd4c5f0486387252762",
     "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
     "numpy": "2.5.2",
     "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",

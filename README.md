@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml/badge.svg)](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org/)
-[![version](https://img.shields.io/badge/version-1.1.0-6f42c1.svg)](docs/changelog.md)
+[![version](https://img.shields.io/badge/version-1.2.0-6f42c1.svg)](docs/changelog.md)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ![SARRL banner](assets/banner.png)
@@ -22,12 +22,14 @@ On the randomized planar held-out benchmark:
 | Residual SAC | 56.4% ± 7.0 pp |
 | Residual SAC + learned context | **64.2% ± 6.7 pp** |
 | Residual SAC + uncertainty gate | 15.2% ± 1.6 pp |
+| Residual SAC + HOCBF | 49.2% ± 7.9 pp |
+| Full adaptive stack | 17.0% ± 2.3 pp |
 
 Residual SAC improved over Direct SAC by **+50.4 percentage points on average**. All five paired bootstrap 95% confidence intervals excluded zero. Direct SAC did not demonstrate an improvement over computed torque.
 
-The frozen uncertainty gate was a negative ablation: it reduced success by 41.2 percentage points versus paired Residual SAC and operated near its minimum authority (mean scale 0.102).
+The frozen uncertainty gate was a negative ablation: it operated near its minimum authority and reduced success in A4 and A6. HOCBF filtering also reduced A5 success by 7.2 points versus paired Residual SAC and reported 15 infeasible episodes.
 
-The learned-policy values use five independent training seeds and 100 held-out episodes per policy. The uncertainty shown is the sample standard deviation across training seeds. Evidence is limited to the analytical planar benchmark and does not establish performance for the complete adaptive, uncertainty and safety stack.
+The learned-policy values use five independent training seeds and 100 held-out episodes per policy. The uncertainty shown is the sample standard deviation across training seeds. Evidence is limited to the analytical planar benchmark.
 
 See [`docs/experiments.md`](docs/experiments.md) and [`docs/verification.md`](docs/verification.md) for the protocol, retained evidence and provenance.
 
@@ -62,7 +64,7 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Limitations
 
-The reference plant is analytical and planar. The full comparative ablation and learned-policy OOD campaigns are ongoing. HOCBF guarantees are model-relative, ensemble disagreement is not calibrated probability, and the uncertainty gate is not a formal safety certificate.
+The v1.2 planar ablation is complete, but learned-policy OOD, MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. HOCBF guarantees are model-relative, ensemble disagreement is not calibrated probability, and the uncertainty gate is not a formal safety certificate.
 
 ## License and citation
 
@@ -73,7 +75,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {1.1.0},
+  version = {1.2.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```

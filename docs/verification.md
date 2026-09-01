@@ -40,6 +40,65 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## v1.2.0 planar ablation evidence
+
+The A0–A6 campaign uses training seeds `0..4`, validation seeds
+`20000..20029` and held-out seeds `40000..40099`. Each learned condition is
+reported from five independently trained policies and 100 held-out episodes
+per policy. Cross-model spreads below are sample standard deviations
+(`ddof=1`).
+
+| Condition | Controller | Held-out success |
+|---|---|---:|
+| A0 | Computed torque | 11.0% |
+| A1 | Direct SAC | 6.0% ± 3.7 pp |
+| A2 | Residual SAC | 56.4% ± 7.0 pp |
+| A3 | Residual SAC + causal context | **64.2% ± 6.7 pp** |
+| A4 | Residual SAC + uncertainty gate | 15.2% ± 1.6 pp |
+| A5 | Residual SAC + hard HOCBF | 49.2% ± 7.9 pp |
+| A6 | Context + uncertainty gate + hard HOCBF | 17.0% ± 2.3 pp |
+
+A3 produced per-seed success rates of 73%, 66%, 57%, 67% and 58%. Its
+policies and independently pretrained context encoders were produced from
+commit `3068a858ae46d55a43705963ede6e0d72b66492d`.
+
+A4 produced 13%, 17%, 14%, 16% and 16%. The uncertainty scale averaged
+`0.102`, close to the frozen lower bound of `0.1`, and success fell by 41.2
+percentage points relative to paired A2 episodes. The five ensemble artifacts
+were produced and evaluated from commit
+`22fde136682013990157b9a11d42b923d20afa3e`.
+
+A5 produced 51%, 49%, 60%, 48% and 38%. Its mean paired difference from A2
+was -7.2 percentage points. The HOCBF changed approximately 39.7% of command
+attempts and explicitly aborted 15/500 episodes when the hard projection was
+infeasible. These failures were counted as unsuccessful; no uncertified
+fallback torque was executed.
+
+A6 produced 18%, 13%, 18%, 19% and 17%. The learned context was active
+(mean latent norm `3.94`), but the gate again operated near its lower bound
+(mean scale `0.102`). Success fell by 47.2 percentage points relative to
+paired A3 episodes. A5 and A6 were evaluated from commit
+`c029558a464d4ece02188dd4c5f0486387252762`.
+
+The A5/A6 audit verified 1,000 episode rows and 1,000 diagnostic rows, exact
+held-out seed coverage, per-seed summaries, all referenced checkpoint hashes
+and evaluation-manifest provenance. The v1.2 automated suite completed with
+123 passing tests and Ruff reported no errors.
+
+The retained evidence is under:
+
+```text
+results/planar_ablations/
+├── A3_residual_sac_context/
+├── A4_residual_sac_uncertainty_gate/
+├── A5_residual_sac_hocbf/
+└── A6_full_adaptive_stack/
+```
+
+These results complete the frozen v1.2 analytical planar matrix. They do not
+establish OOD learned-policy, MuJoCo, Franka, hardware or sim-to-real
+performance. The HOCBF certificate is relative to its nominal model.
+
 ## v1.1.0 five-seed residual-SAC evidence
 
 The first completed learned-policy campaign was run from Git commit

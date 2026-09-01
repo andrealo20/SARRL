@@ -1,0 +1,6 @@
+training_seed,episodes,a6_successes,a3_successes,success_difference,paired_bootstrap_ci95_low,paired_bootstrap_ci95_high,bootstrap_samples,bootstrap_seed
+0,100,18,73,-0.55,-0.67,-0.42,10000,0
+1,100,13,66,-0.53,-0.64,-0.41,10000,1
+2,100,18,57,-0.39,-0.51,-0.27,10000,2
+3,100,19,67,-0.48,-0.61,-0.35,10000,3
+4,100,17,58,-0.41,-0.53,-0.28,10000,4
