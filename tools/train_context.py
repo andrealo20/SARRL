@@ -20,6 +20,7 @@ from sarrl.evaluation import (
     V12_CONTEXT_HISTORY,
     V12_CONTEXT_SAMPLES,
     V12_CONTEXT_TRAINING_STEPS,
+    assert_repository_import_root,
     context_data_seed,
     planar_id_randomization,
     planar_id_randomization_dict,
@@ -135,6 +136,9 @@ def main() -> int:
         default="results/context/context.pt",
     )
     args = p.parse_args()
+
+    root = Path(__file__).resolve().parents[1]
+    assert_repository_import_root(root)
 
     if args.seed < 0:
         raise SystemExit("context training seed must be non-negative")

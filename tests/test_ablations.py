@@ -9,10 +9,12 @@ from sarrl.evaluation import (
 )
 from tools.run_planar_ablations import (
     CONDITIONS,
+    _validate_a3_context_artifact,
     build_protocol,
     register_a2,
     run_a0,
     run_a1,
+    run_a3,
 )
 
 
@@ -41,6 +43,8 @@ def test_v12_ablation_matrix_is_fixed_and_complete():
     ]
     assert CONDITIONS[0].label == "Computed torque"
     assert CONDITIONS[2].label == "Residual SAC"
+    assert CONDITIONS[3].label == "Residual SAC + context"
+    assert CONDITIONS[3].status == "ready"
     assert CONDITIONS[-1].label == "Full adaptive stack"
 
 
@@ -218,3 +222,109 @@ def test_v12_context_data_seed_ranges_are_independent_and_disjoint_from_evaluati
 
 def test_v12_randomization_has_single_canonical_representation():
     assert _protocol()["domain_randomization"] == planar_id_randomization_dict()
+
+
+def test_a3_requires_explicit_training_confirmation(tmp_path, monkeypatch):
+    def forbidden(*args, **kwargs):
+        raise AssertionError("A3 training must not start without explicit confirmation")
+
+    monkeypatch.setattr(
+        "tools.run_planar_ablations.subprocess.run",
+        forbidden,
+    )
+
+    run_a3(
+        root=Path("."),
+        out=tmp_path,
+        seeds=[0],
+        steps=100,
+        validation_seed=20_000,
+        validation_episodes=2,
+        heldout_seed=40_000,
+        heldout_episodes=3,
+        confirm_training=False,
+    )
+
+
+def test_a3_confirmed_sweep_uses_residual_context_pipeline(
+    tmp_path,
+    monkeypatch,
+):
+    calls = []
+
+    context_root = tmp_path / "A3_residual_sac_context" / "contexts"
+
+    def fake_prepare(root, out, seeds):
+        assert seeds == [0, 1]
+        context_root.mkdir(parents=True, exist_ok=True)
+        return context_root
+
+    def capture(cmd, cwd, check):
+        calls.append((cmd, cwd, check))
+
+    monkeypatch.setattr(
+        "tools.run_planar_ablations.prepare_a3_contexts",
+        fake_prepare,
+    )
+    monkeypatch.setattr(
+        "tools.run_planar_ablations.subprocess.run",
+        capture,
+    )
+
+    run_a3(
+        root=Path("."),
+        out=tmp_path,
+        seeds=[0, 1],
+        steps=123,
+        validation_seed=20_000,
+        validation_episodes=2,
+        heldout_seed=40_000,
+        heldout_episodes=3,
+        confirm_training=True,
+    )
+
+    assert len(calls) == 1
+
+    cmd, _, check = calls[0]
+
+    assert check is True
+    assert cmd[cmd.index("--mode") + 1] == "residual"
+    assert "--randomize" in cmd
+    assert "--resume-existing" in cmd
+    assert "--context-root" in cmd
+    assert cmd[cmd.index("--context-root") + 1] == str(context_root)
+
+    assert cmd[cmd.index("--start-steps") + 1] == "5000"
+    assert cmd[cmd.index("--batch-size") + 1] == "256"
+    assert cmd[cmd.index("--replay-capacity") + 1] == "200000"
+    assert cmd[cmd.index("--validate-every") + 1] == "25000"
+
+    seed_index = cmd.index("--seeds")
+    assert cmd[seed_index + 1 : seed_index + 3] == ["0", "1"]
+
+
+def test_a3_context_artifact_rejects_different_git_commit(tmp_path):
+    context_dir = tmp_path / "context_seed_0"
+    context_dir.mkdir()
+
+    (context_dir / "context.pt").write_bytes(b"checkpoint")
+    (context_dir / "context.npz").write_bytes(b"dataset")
+
+    (context_dir / "context_manifest.json").write_text(
+        """{
+  "config": {},
+  "runtime": {"git_commit": "old-commit"},
+  "extra": {}
+}
+"""
+    )
+
+    with pytest.raises(
+        ValueError,
+        match="git commit mismatch",
+    ):
+        _validate_a3_context_artifact(
+            context_dir,
+            training_seed=0,
+            expected_commit="new-commit",
+        )

@@ -14,7 +14,11 @@ import torch
 
 from sarrl.adaptation import AdaptiveContextEnv, DynamicsContextEncoder
 from sarrl.envs.planar_reach import DomainRandomization, PlanarReachEnv
-from sarrl.evaluation import evaluate_policy, write_run_manifest
+from sarrl.evaluation import (
+    assert_repository_import_root,
+    evaluate_policy,
+    write_run_manifest,
+)
 from sarrl.rl import (
     ReplayBuffer,
     SACAgent,
@@ -116,6 +120,9 @@ def main() -> int:
     p.add_argument("--validation-episodes", type=int, default=30)
     p.add_argument("--validation-seed", type=int, default=20_000)
     args = p.parse_args()
+
+    root = Path(__file__).resolve().parents[1]
+    assert_repository_import_root(root)
     if args.steps <= 0 or args.start_steps < 0 or args.batch_size <= 0:
         raise SystemExit("steps/batch-size must be positive and start-steps non-negative")
     if any(h <= 0 for h in args.hidden) or args.update_every <= 0 or args.replay_capacity <= 0:

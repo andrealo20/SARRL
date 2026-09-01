@@ -25,7 +25,16 @@ from .protocol import (
     write_episode_csv,
     write_summary_json,
 )
-from .provenance import runtime_metadata, seed_ranges_overlap, write_run_manifest
+from .provenance import (
+    assert_repository_import_root,
+    assert_source_tree_clean,
+    imported_repository_root,
+    repository_dirty_paths,
+    runtime_metadata,
+    seed_ranges_overlap,
+    source_tree_dirty_paths,
+    write_run_manifest,
+)
 
 __all__ = [
     "V12_CONTEXT_DATA_SEED_BASE",
@@ -42,6 +51,11 @@ __all__ = [
     "planar_id_randomization",
     "planar_id_randomization_dict",
     "validate_context_data_range",
+    "assert_repository_import_root",
+    "assert_source_tree_clean",
+    "imported_repository_root",
+    "repository_dirty_paths",
+    "source_tree_dirty_paths",
     "runtime_metadata",
     "seed_ranges_overlap",
     "write_run_manifest",

@@ -17,6 +17,7 @@ from sarrl.adaptation import AdaptiveContextEnv, DynamicsContextEncoder
 from sarrl.envs import DomainRandomization, PlanarReachEnv
 from sarrl.evaluation import (
     aggregate,
+    assert_repository_import_root,
     evaluate_policy_episodes,
     repository_commit,
     seed_ranges_overlap,
@@ -166,6 +167,9 @@ def main() -> int:
     )
     args = p.parse_args()
 
+    root = Path(__file__).resolve().parents[1]
+    assert_repository_import_root(root)
+
     if len(set(args.seeds)) != len(args.seeds) or any(seed < 0 for seed in args.seeds):
         raise SystemExit("training seeds must be unique and non-negative")
     if args.steps <= 0 or args.heldout_episodes <= 0 or args.validation_episodes <= 0:
@@ -200,7 +204,6 @@ def main() -> int:
                 "sha256": _sha256(checkpoint),
             }
 
-    root = Path(__file__).resolve().parents[1]
     current_commit = repository_commit(root)
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
