@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from sarrl.envs import DomainRandomization
+from sarrl.safety import SafetyConfig
 
 V12_TRAINING_SEEDS = (0, 1, 2, 3, 4)
 
@@ -11,6 +12,10 @@ V12_VALIDATION_EPISODES = 30
 
 V12_HELDOUT_SEED = 40_000
 V12_HELDOUT_EPISODES = 100
+
+V12_A3_TRAINING_COMMIT = "3068a858ae46d55a43705963ede6e0d72b66492d"
+V12_A4_ENSEMBLE_COMMIT = "22fde136682013990157b9a11d42b923d20afa3e"
+V12_SAFETY_INTERVENTION_TOLERANCE = 1e-9
 
 V12_CONTEXT_SAMPLES = 2_000
 V12_CONTEXT_HISTORY = 16
@@ -69,6 +74,30 @@ def planar_ensemble_randomization_dict() -> dict:
         "motor_gain_fraction": 0.20,
         "payload_range": [0.0, 1.5],
         "action_delay_max": 0,
+    }
+
+
+def planar_safety_config() -> SafetyConfig:
+    """Return the frozen model-relative HOCBF configuration for A5/A6."""
+    return SafetyConfig()
+
+
+def planar_safety_config_dict() -> dict:
+    """JSON-friendly representation of the frozen A5/A6 safety protocol."""
+    return {
+        "torque_limit": [40.0, 40.0],
+        "joint_lower": [-3.05, -3.05],
+        "joint_upper": [3.05, 3.05],
+        "velocity_limit": [7.0, 7.0],
+        "joint_gamma1": 5.0,
+        "joint_gamma2": 5.0,
+        "velocity_dt": 0.02,
+        "feasibility_tol": 2e-8,
+        "obstacles": [],
+        "require_safety": True,
+        "infeasible_semantics": "abort_episode_unsuccessful",
+        "intervention_tolerance": V12_SAFETY_INTERVENTION_TOLERANCE,
+        "guarantee_scope": "nominal_model_relative",
     }
 
 

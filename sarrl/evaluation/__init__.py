@@ -1,5 +1,7 @@
 from .gated import GateEpisodeDiagnostics, evaluate_gated_policy_episodes
 from .planar_v12 import (
+    V12_A3_TRAINING_COMMIT,
+    V12_A4_ENSEMBLE_COMMIT,
     V12_CONTEXT_DATA_SEED_BASE,
     V12_CONTEXT_DATA_SEED_STRIDE,
     V12_CONTEXT_HISTORY,
@@ -12,6 +14,7 @@ from .planar_v12 import (
     V12_ENSEMBLE_TRAINING_STEPS,
     V12_HELDOUT_EPISODES,
     V12_HELDOUT_SEED,
+    V12_SAFETY_INTERVENTION_TOLERANCE,
     V12_TRAINING_SEEDS,
     V12_VALIDATION_EPISODES,
     V12_VALIDATION_SEED,
@@ -21,6 +24,8 @@ from .planar_v12 import (
     planar_ensemble_randomization_dict,
     planar_id_randomization,
     planar_id_randomization_dict,
+    planar_safety_config,
+    planar_safety_config_dict,
     validate_context_data_range,
     validate_ensemble_data_range,
 )
@@ -45,10 +50,13 @@ from .provenance import (
     source_tree_dirty_paths,
     write_run_manifest,
 )
+from .stacked import StackEpisodeDiagnostics, evaluate_stack_episodes
 
 __all__ = [
     "GateEpisodeDiagnostics",
     "evaluate_gated_policy_episodes",
+    "V12_A3_TRAINING_COMMIT",
+    "V12_A4_ENSEMBLE_COMMIT",
     "V12_CONTEXT_DATA_SEED_BASE",
     "V12_CONTEXT_DATA_SEED_STRIDE",
     "V12_CONTEXT_HISTORY",
@@ -61,6 +69,7 @@ __all__ = [
     "V12_ENSEMBLE_TRAINING_STEPS",
     "V12_HELDOUT_EPISODES",
     "V12_HELDOUT_SEED",
+    "V12_SAFETY_INTERVENTION_TOLERANCE",
     "V12_TRAINING_SEEDS",
     "V12_VALIDATION_EPISODES",
     "V12_VALIDATION_SEED",
@@ -70,6 +79,8 @@ __all__ = [
     "planar_ensemble_randomization_dict",
     "planar_id_randomization",
     "planar_id_randomization_dict",
+    "planar_safety_config",
+    "planar_safety_config_dict",
     "validate_context_data_range",
     "validate_ensemble_data_range",
     "assert_repository_import_root",
@@ -80,6 +91,8 @@ __all__ = [
     "runtime_metadata",
     "seed_ranges_overlap",
     "write_run_manifest",
+    "StackEpisodeDiagnostics",
+    "evaluate_stack_episodes",
     "PolicyEvaluation",
     "evaluate_policy",
     "evaluate_policy_episodes",

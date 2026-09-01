@@ -282,10 +282,9 @@ class AdaptiveContextEnv:
         self._last_obs = np.asarray(obs, dtype=np.float32).copy()
         return self._augmented(obs), info
 
-    def step(self, action):
+    def _update_context(self, action, next_obs) -> np.ndarray:
         if self._last_obs is None:
             raise RuntimeError("reset must be called before step")
-        next_obs, reward, terminated, truncated, info = self.env.step(action)
         feature = self.encoder.transition_feature(self._last_obs, action, next_obs)
         self._history.append(feature)
         padded = np.zeros((self.config.history, self.config.transition_dim), dtype=np.float32)
@@ -293,14 +292,45 @@ class AdaptiveContextEnv:
         padded[-len(hist) :] = hist
         self._latent = self.encoder.encode_numpy(padded, device=self.device)
         self._last_obs = np.asarray(next_obs, dtype=np.float32).copy()
+        return self._augmented(next_obs)
+
+    def step(self, action):
+        next_obs, reward, terminated, truncated, info = self.env.step(action)
+        augmented = self._update_context(action, next_obs)
         info = dict(info)
         info["context_latent"] = self._latent.copy()
-        return self._augmented(next_obs), reward, terminated, truncated, info
+        return augmented, reward, terminated, truncated, info
+
+    def step_torque(self, commanded, baseline=None, *, context_action):
+        """Advance a composed torque controller and update the causal context.
+
+        ``context_action`` is the normalized residual action proposed by the
+        policy. The physical plant receives ``commanded`` after gate and safety
+        filtering, while the encoder keeps the same action semantics used for
+        A3 training.
+        """
+        action = np.asarray(context_action, dtype=np.float32)
+        if action.shape != (self.config.action_dim,) or not np.all(np.isfinite(action)):
+            raise ValueError("context_action must be a finite action vector")
+        action = np.clip(action, -1.0, 1.0)
+        next_obs, reward, terminated, truncated, info = self.env.step_torque(
+            commanded,
+            baseline=baseline,
+        )
+        augmented = self._update_context(action, next_obs)
+        info = dict(info)
+        info["context_latent"] = self._latent.copy()
+        return augmented, reward, terminated, truncated, info
 
     @property
     def state(self) -> np.ndarray:
         """Expose the base physical state for evaluation diagnostics."""
         return self.env.state
+
+    @property
+    def q_des(self) -> np.ndarray:
+        """Expose the base desired joint target to composed controllers."""
+        return self.env.q_des
 
     def sample_action(self) -> np.ndarray:
         return self.env.sample_action()

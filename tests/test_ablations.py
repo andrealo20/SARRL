@@ -27,6 +27,8 @@ from tools.run_planar_ablations import (
     run_a1,
     run_a3,
     run_a4,
+    run_a5,
+    run_a6,
 )
 
 
@@ -59,7 +61,9 @@ def test_v12_ablation_matrix_is_fixed_and_complete():
     assert CONDITIONS[3].status == "ready"
     assert CONDITIONS[4].label == "Residual SAC + uncertainty gate"
     assert CONDITIONS[4].status == "ready"
+    assert CONDITIONS[5].status == "ready"
     assert CONDITIONS[-1].label == "Full adaptive stack"
+    assert CONDITIONS[-1].status == "ready"
 
 
 def test_v12_protocol_freezes_retained_training_and_evaluation_seeds():
@@ -122,6 +126,33 @@ def test_v12_uncertainty_gate_protocol_is_frozen():
         "policy_source": "A2_retained_residual_sac",
         "ensemble_pairing": "one_per_training_seed",
     }
+
+
+def test_v12_hocbf_and_full_stack_protocols_are_frozen():
+    protocol = _protocol()
+
+    assert protocol["hocbf_safety"] == {
+        "torque_limit": [40.0, 40.0],
+        "joint_lower": [-3.05, -3.05],
+        "joint_upper": [3.05, 3.05],
+        "velocity_limit": [7.0, 7.0],
+        "joint_gamma1": 5.0,
+        "joint_gamma2": 5.0,
+        "velocity_dt": 0.02,
+        "feasibility_tol": 2e-8,
+        "obstacles": [],
+        "require_safety": True,
+        "infeasible_semantics": "abort_episode_unsuccessful",
+        "intervention_tolerance": 1e-9,
+        "guarantee_scope": "nominal_model_relative",
+    }
+    assert protocol["full_stack"]["context_action"] == (
+        "normalized_raw_policy_residual"
+    )
+    assert protocol["full_stack"]["physical_command"] == (
+        "baseline_plus_gated_residual_then_HOCBF"
+    )
+    assert protocol["full_stack"]["hocbf_required"] is True
 
 
 def test_v12_ensemble_pretraining_protocol_is_frozen():
@@ -548,3 +579,46 @@ def test_a4_ensemble_preparation_uses_frozen_protocol(tmp_path, monkeypatch):
         assert cmd[cmd.index("--batch-size") + 1] == "128"
         assert cmd[cmd.index("--seed") + 1] == str(seed)
         assert cmd[cmd.index("--device") + 1] == "cpu"
+
+
+def test_a5_requires_one_retained_policy_per_seed(tmp_path):
+    with pytest.raises(ValueError, match="one policy checkpoint"):
+        run_a5(
+            root=Path("."),
+            out=tmp_path,
+            seeds=[0],
+            heldout_seed=40_000,
+            heldout_episodes=2,
+            policy_checkpoints=[],
+        )
+
+
+def test_a6_requires_all_three_per_seed_artifact_families(tmp_path):
+    common = {
+        "root": Path("."),
+        "out": tmp_path,
+        "seeds": [0],
+        "heldout_seed": 40_000,
+        "heldout_episodes": 2,
+    }
+    with pytest.raises(ValueError, match="one policy checkpoint"):
+        run_a6(
+            **common,
+            policy_checkpoints=[],
+            context_checkpoints=[tmp_path / "context.pt"],
+            ensemble_checkpoints=[tmp_path / "ensemble.pt"],
+        )
+    with pytest.raises(ValueError, match="one context checkpoint"):
+        run_a6(
+            **common,
+            policy_checkpoints=[tmp_path / "best.pt"],
+            context_checkpoints=[],
+            ensemble_checkpoints=[tmp_path / "ensemble.pt"],
+        )
+    with pytest.raises(ValueError, match="one ensemble checkpoint"):
+        run_a6(
+            **common,
+            policy_checkpoints=[tmp_path / "best.pt"],
+            context_checkpoints=[tmp_path / "context.pt"],
+            ensemble_checkpoints=[],
+        )

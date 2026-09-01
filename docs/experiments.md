@@ -232,3 +232,49 @@ summary and cross-model aggregate.
 Alternatively, omit `--a4-ensemble-checkpoints` and add `--confirm-training`.
 The runner then prepares one provenance-checked CPU ensemble per seed using the
 frozen 10,000-sample / 2,000-step protocol before evaluation.
+
+### Evaluate A5: Residual SAC + HOCBF
+
+A5 reuses the five retained A2 policies. The hard HOCBF projection enforces
+the frozen joint, velocity and torque constraints relative to the nominal
+planar model. The reaching benchmark has no obstacle constraints. An
+infeasible projection aborts the episode and counts as unsuccessful; no
+uncertified fallback command is executed.
+
+```bash
+python tools/run_planar_ablations.py \
+  --execute A5 \
+  --a5-policy-checkpoints \
+    /path/to/seed_0/best.pt /path/to/seed_1/best.pt \
+    /path/to/seed_2/best.pt /path/to/seed_3/best.pt \
+    /path/to/seed_4/best.pt
+```
+
+### Evaluate A6: Full adaptive stack
+
+A6 composes the retained A3 context-conditioned policies and context encoders,
+the retained A4 ensembles and uncertainty gate, and the A5 hard HOCBF. The
+context encoder receives the normalized raw residual action proposed by the
+policy, while the plant receives the baseline plus gated residual after HOCBF
+projection. Runtime context inference remains causal and CPU-only.
+
+```bash
+python tools/run_planar_ablations.py \
+  --execute A6 \
+  --a6-policy-checkpoints \
+    /path/to/a3/seed_0/best.pt /path/to/a3/seed_1/best.pt \
+    /path/to/a3/seed_2/best.pt /path/to/a3/seed_3/best.pt \
+    /path/to/a3/seed_4/best.pt \
+  --a6-context-checkpoints \
+    /path/to/context_seed_0/context.pt /path/to/context_seed_1/context.pt \
+    /path/to/context_seed_2/context.pt /path/to/context_seed_3/context.pt \
+    /path/to/context_seed_4/context.pt \
+  --a6-ensemble-checkpoints \
+    /path/to/ensemble_seed_0/ensemble.pt /path/to/ensemble_seed_1/ensemble.pt \
+    /path/to/ensemble_seed_2/ensemble.pt /path/to/ensemble_seed_3/ensemble.pt \
+    /path/to/ensemble_seed_4/ensemble.pt
+```
+
+Both conditions retain raw episode rows, per-episode stack diagnostics, paired
+bootstrap comparisons, per-seed summaries and aggregate metrics. The HOCBF
+certificate is model-relative and is not a hardware guarantee.

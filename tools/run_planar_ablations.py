@@ -14,10 +14,13 @@ from pathlib import Path
 
 import numpy as np
 
+from sarrl.adaptation import AdaptiveContextEnv, ContextConfig, DynamicsContextEncoder
 from sarrl.controllers import ComputedTorqueController
 from sarrl.dynamics import PlanarArm
 from sarrl.envs import DomainRandomization, PlanarReachEnv
 from sarrl.evaluation import (
+    V12_A3_TRAINING_COMMIT,
+    V12_A4_ENSEMBLE_COMMIT,
     V12_CONTEXT_DATA_SEED_BASE,
     V12_CONTEXT_DATA_SEED_STRIDE,
     V12_CONTEXT_HISTORY,
@@ -28,16 +31,20 @@ from sarrl.evaluation import (
     V12_ENSEMBLE_DATA_SEED_STRIDE,
     V12_ENSEMBLE_SAMPLES,
     V12_ENSEMBLE_TRAINING_STEPS,
+    V12_SAFETY_INTERVENTION_TOLERANCE,
     EpisodeResult,
     aggregate,
     assert_repository_import_root,
     assert_source_tree_clean,
     evaluate_gated_policy_episodes,
     evaluate_policy_episodes,
+    evaluate_stack_episodes,
     paired_success_difference,
     planar_ensemble_randomization_dict,
     planar_id_randomization,
     planar_id_randomization_dict,
+    planar_safety_config,
+    planar_safety_config_dict,
     repository_commit,
     seed_ranges_overlap,
     validate_context_data_range,
@@ -49,6 +56,7 @@ from sarrl.evaluation import (
 from sarrl.models import ResidualDynamicsConfig, ResidualDynamicsEnsemble, UncertaintyGate
 from sarrl.rl import SACAgent
 from sarrl.runtime import ControlStackConfig, SARRLControlStack
+from sarrl.safety import HOCBFSafetyFilter
 
 
 @dataclass(frozen=True)
@@ -91,7 +99,7 @@ CONDITIONS = (
         False,
         False,
         True,
-        "needs-safety-evaluation-runner",
+        "ready",
     ),
     AblationCondition(
         "A6",
@@ -100,7 +108,7 @@ CONDITIONS = (
         True,
         True,
         True,
-        "needs-full-stack-wiring",
+        "ready",
     ),
 )
 
@@ -217,6 +225,16 @@ def build_protocol(
                 "target": "observed_minus_nominal_acceleration",
                 "torque_input": "commanded_torque",
             },
+        },
+        "hocbf_safety": planar_safety_config_dict(),
+        "full_stack": {
+            "policy_source": "A3_context_conditioned_residual_SAC",
+            "context_source_commit": V12_A3_TRAINING_COMMIT,
+            "ensemble_source_commit": V12_A4_ENSEMBLE_COMMIT,
+            "context_action": "normalized_raw_policy_residual",
+            "physical_command": "baseline_plus_gated_residual_then_HOCBF",
+            "uncertainty_gate": {"gain": 4.0, "min_scale": 0.1},
+            "hocbf_required": True,
         },
         "statistics": {
             "multi_seed_spread": "sample_sd_ddof_1",
@@ -625,9 +643,47 @@ def _retained_a2_checkpoint_hashes(root: Path) -> dict[int, str]:
     return hashes
 
 
+def _retained_a3_checkpoint_hashes(root: Path) -> dict[int, str]:
+    """Return the audited A3 best-policy hashes keyed by training seed."""
+    record = (
+        root
+        / "results"
+        / "planar_ablations"
+        / "A3_residual_sac_context"
+        / "checkpoint_sha256.txt"
+    )
+    if not record.is_file():
+        raise FileNotFoundError(f"missing retained A3 checkpoint hashes: {record}")
+
+    hashes: dict[int, str] = {}
+    for line in record.read_text().splitlines():
+        fields = line.split(maxsplit=1)
+        if len(fields) != 2:
+            raise ValueError("invalid retained A3 checkpoint hash record")
+        digest, checkpoint = fields
+        seed_dir = Path(checkpoint).parent.name
+        try:
+            seed = int(seed_dir.removeprefix("seed_"))
+        except ValueError as exc:
+            raise ValueError("invalid retained A3 checkpoint seed") from exc
+        if seed in hashes or len(digest) != 64:
+            raise ValueError("invalid retained A3 checkpoint hash record")
+        hashes[seed] = digest
+    return hashes
+
+
 def _write_gate_diagnostics(path: Path, rows) -> None:
     if not rows:
-        raise ValueError("cannot write empty A4 gate diagnostics")
+        raise ValueError("cannot write empty gate diagnostics")
+    with path.open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(asdict(rows[0])))
+        writer.writeheader()
+        writer.writerows(asdict(row) for row in rows)
+
+
+def _write_stack_diagnostics(path: Path, rows) -> None:
+    if not rows:
+        raise ValueError("cannot write empty stack diagnostics")
     with path.open("w", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=list(asdict(rows[0])))
         writer.writeheader()
@@ -1076,6 +1132,520 @@ def run_a4(
     )
 
 
+def _stack_diagnostic_metrics(rows) -> dict[str, float | int]:
+    attempts = sum(row.command_attempts for row in rows)
+    if attempts <= 0:
+        raise ValueError("stack diagnostics contain no command attempts")
+    return {
+        "safety_infeasible_episodes": sum(int(row.safety_infeasible) for row in rows),
+        "safety_certified_fraction": (
+            sum(row.safety_certified_steps for row in rows) / attempts
+        ),
+        "safety_intervention_fraction": (
+            sum(row.safety_intervention_steps for row in rows) / attempts
+        ),
+        "unsafe_state_fraction": sum(row.unsafe_state_steps for row in rows) / attempts,
+        "safety_correction_mean": (
+            sum(row.safety_correction_sum for row in rows) / attempts
+        ),
+        "safety_correction_max": max(row.safety_correction_max for row in rows),
+        "safety_constraint_margin_min": min(
+            row.safety_constraint_margin_min for row in rows
+        ),
+        "gate_scale_mean": (
+            sum(row.uncertainty_scale_mean * row.command_attempts for row in rows)
+            / attempts
+        ),
+        "gate_scale_min": min(row.uncertainty_scale_min for row in rows),
+        "uncertainty_norm_mean": (
+            sum(row.uncertainty_norm_mean * row.command_attempts for row in rows)
+            / attempts
+        ),
+        "context_latent_norm_mean": (
+            sum(row.context_latent_norm_mean * row.command_attempts for row in rows)
+            / attempts
+        ),
+    }
+
+
+def _write_stack_condition_outputs(
+    condition_out: Path,
+    condition: str,
+    seeds: list[int],
+    heldout_episodes: int,
+    all_episode_rows,
+    all_diagnostic_rows,
+    summary_rows: list[dict],
+    paired_rows: list[dict],
+    paired_reference: str,
+) -> None:
+    write_episode_csv(condition_out / "heldout_episodes.csv", all_episode_rows)
+    _write_stack_diagnostics(
+        condition_out / "stack_diagnostics.csv",
+        all_diagnostic_rows,
+    )
+    with (condition_out / "summary.csv").open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(summary_rows[0]))
+        writer.writeheader()
+        writer.writerows(summary_rows)
+    with (condition_out / "paired_comparison.csv").open("w", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=list(paired_rows[0]))
+        writer.writeheader()
+        writer.writerows(paired_rows)
+
+    rates = np.asarray([row["success_rate"] for row in summary_rows], dtype=np.float64)
+    rewards = np.asarray([row["reward_mean"] for row in summary_rows], dtype=np.float64)
+    aggregate_payload = {
+        "condition": condition,
+        "training_seeds": seeds,
+        "models": len(summary_rows),
+        "heldout_episodes_per_model": heldout_episodes,
+        "success_rate_mean": float(rates.mean()),
+        "success_rate_std": float(rates.std(ddof=1)) if rates.size > 1 else None,
+        "success_rate_min": float(rates.min()),
+        "success_rate_max": float(rates.max()),
+        "reward_mean_across_models": float(rewards.mean()),
+        "reward_std_across_models": (
+            float(rewards.std(ddof=1)) if rewards.size > 1 else None
+        ),
+        "safety_infeasible_episodes": sum(
+            row["safety_infeasible_episodes"] for row in summary_rows
+        ),
+        "safety_certified_fraction_mean": float(
+            np.mean([row["safety_certified_fraction"] for row in summary_rows])
+        ),
+        "safety_intervention_fraction_mean": float(
+            np.mean([row["safety_intervention_fraction"] for row in summary_rows])
+        ),
+        "unsafe_state_fraction_mean": float(
+            np.mean([row["unsafe_state_fraction"] for row in summary_rows])
+        ),
+        "safety_correction_mean_across_models": float(
+            np.mean([row["safety_correction_mean"] for row in summary_rows])
+        ),
+        "safety_constraint_margin_min": float(
+            np.min([row["safety_constraint_margin_min"] for row in summary_rows])
+        ),
+        "gate_scale_mean_across_models": float(
+            np.mean([row["gate_scale_mean"] for row in summary_rows])
+        ),
+        "context_latent_norm_mean_across_models": float(
+            np.mean([row["context_latent_norm_mean"] for row in summary_rows])
+        ),
+        "paired_reference": paired_reference,
+        "paired_success_difference_mean": float(
+            np.mean([row["success_difference"] for row in paired_rows])
+        ),
+        "paired_success_difference_std": (
+            float(np.std([row["success_difference"] for row in paired_rows], ddof=1))
+            if len(paired_rows) > 1
+            else None
+        ),
+    }
+    (condition_out / "aggregate.json").write_text(
+        json.dumps(aggregate_payload, indent=2, sort_keys=True) + "\n"
+    )
+
+
+def run_a5(
+    root: Path,
+    out: Path,
+    seeds: list[int],
+    heldout_seed: int,
+    heldout_episodes: int,
+    policy_checkpoints: list[Path],
+) -> None:
+    """Evaluate retained A2 residual policies through the frozen hard HOCBF."""
+    if len(policy_checkpoints) != len(seeds):
+        raise ValueError("A5 requires one policy checkpoint per training seed")
+    retained_hashes = _retained_a2_checkpoint_hashes(root)
+    inputs = []
+    for training_seed, policy_path in zip(seeds, policy_checkpoints, strict=True):
+        policy_path = Path(policy_path).resolve()
+        if not policy_path.is_file():
+            raise FileNotFoundError(f"missing A5 policy checkpoint: {policy_path}")
+        digest = _sha256(policy_path)
+        if digest != retained_hashes.get(training_seed):
+            raise ValueError(
+                "A5 policy checkpoint does not match retained A2 evidence for "
+                f"training seed {training_seed}"
+            )
+        inputs.append(
+            {
+                "training_seed": training_seed,
+                "policy_checkpoint": str(policy_path),
+                "policy_checkpoint_sha256": digest,
+            }
+        )
+
+    condition_out = out / "A5_residual_sac_hocbf"
+    condition_out.mkdir(parents=True, exist_ok=True)
+    write_run_manifest(
+        condition_out / "evaluation_manifest.json",
+        {
+            "condition": "A5",
+            "label": "Residual SAC + HOCBF",
+            "policy_source": "retained_A2_residual_SAC",
+            "training_seeds": seeds,
+            "heldout": {
+                "seed_start": heldout_seed,
+                "episodes_per_policy": heldout_episodes,
+            },
+            "domain_randomization": planar_id_randomization_dict(),
+            "safety": planar_safety_config_dict(),
+            "inputs": inputs,
+        },
+        root=root,
+    )
+
+    retained_rows = _read_episode_csv(
+        root / "artifacts" / "planar_sac_5seed" / "heldout_episodes.csv"
+    )
+    all_episode_rows = []
+    all_diagnostic_rows = []
+    summary_rows = []
+    paired_rows = []
+
+    for record in inputs:
+        training_seed = record["training_seed"]
+        agent = SACAgent.from_checkpoint(
+            record["policy_checkpoint"], seed=0, load_optimizers=False
+        )
+        if agent.obs_dim != 8 or agent.action_dim != 2 or agent.config.hidden != (256, 256):
+            raise ValueError(f"A5 policy architecture mismatch for seed {training_seed}")
+        nominal = PlanarArm()
+        stack = SARRLControlStack(
+            ComputedTorqueController(nominal),
+            agent,
+            ControlStackConfig(require_safety=True),
+            safety_filter=HOCBFSafetyFilter(nominal, planar_safety_config()),
+        )
+        env = PlanarReachEnv(mode="torque", randomization=_randomization())
+        controller = f"A5_train_seed_{training_seed}"
+        rows, diagnostic_rows = evaluate_stack_episodes(
+            stack,
+            env,
+            heldout_episodes,
+            heldout_seed,
+            scenario="id_randomized_heldout",
+            controller=controller,
+            intervention_tolerance=V12_SAFETY_INTERVENTION_TOLERANCE,
+        )
+        metrics = aggregate(rows)
+        safety_metrics = _stack_diagnostic_metrics(diagnostic_rows)
+        paired_reference = [
+            row
+            for row in retained_rows
+            if row.controller == f"sac_train_seed_{training_seed}"
+            and heldout_seed <= row.seed < heldout_seed + heldout_episodes
+        ]
+        if len(paired_reference) != heldout_episodes:
+            raise ValueError(f"A2 paired evidence mismatch for seed {training_seed}")
+        difference, low, high = paired_success_difference(
+            rows, paired_reference, bootstrap=10_000, seed=training_seed
+        )
+        summary_rows.append(
+            {
+                "training_seed": training_seed,
+                "policy_checkpoint": record["policy_checkpoint"],
+                "policy_checkpoint_sha256": record["policy_checkpoint_sha256"],
+                "successes": metrics.successes,
+                "episodes": metrics.n,
+                "success_rate": metrics.success_rate,
+                "success_ci95_low": metrics.success_ci95_low,
+                "success_ci95_high": metrics.success_ci95_high,
+                "reward_mean": metrics.reward_mean,
+                "reward_std": metrics.reward_std,
+                "final_distance_mean": metrics.final_distance_mean,
+                **safety_metrics,
+                "paired_success_difference": difference,
+                "paired_ci95_low": low,
+                "paired_ci95_high": high,
+            }
+        )
+        paired_rows.append(
+            {
+                "training_seed": training_seed,
+                "episodes": heldout_episodes,
+                "a5_successes": metrics.successes,
+                "a2_successes": sum(int(row.success) for row in paired_reference),
+                "success_difference": difference,
+                "paired_bootstrap_ci95_low": low,
+                "paired_bootstrap_ci95_high": high,
+                "bootstrap_samples": 10_000,
+                "bootstrap_seed": training_seed,
+            }
+        )
+        all_episode_rows.extend(rows)
+        all_diagnostic_rows.extend(diagnostic_rows)
+        print(
+            f"A5 seed={training_seed} heldout={metrics.successes}/{metrics.n} "
+            f"({100.0 * metrics.success_rate:.1f}%) "
+            f"infeasible={safety_metrics['safety_infeasible_episodes']}"
+        )
+
+    _write_stack_condition_outputs(
+        condition_out,
+        "A5",
+        seeds,
+        heldout_episodes,
+        all_episode_rows,
+        all_diagnostic_rows,
+        summary_rows,
+        paired_rows,
+        "A2_residual_SAC",
+    )
+
+
+def _validate_a6_input(
+    root: Path,
+    training_seed: int,
+    policy_path: Path,
+    context_path: Path,
+    ensemble_path: Path,
+    retained_policy_hashes: dict[int, str],
+) -> dict:
+    for label, path in (
+        ("policy", policy_path),
+        ("context", context_path),
+        ("ensemble", ensemble_path),
+    ):
+        if not path.is_file():
+            raise FileNotFoundError(f"missing A6 {label} checkpoint: {path}")
+    policy_sha = _sha256(policy_path)
+    if policy_sha != retained_policy_hashes.get(training_seed):
+        raise ValueError(f"A6 policy hash mismatch for training seed {training_seed}")
+    if not _validate_a3_context_artifact(
+        context_path.parent,
+        training_seed,
+        V12_A3_TRAINING_COMMIT,
+    ):
+        raise ValueError(f"missing A6 context artifact for seed {training_seed}")
+    if not _validate_a4_ensemble_artifact(
+        ensemble_path,
+        training_seed,
+        V12_A4_ENSEMBLE_COMMIT,
+    ):
+        raise ValueError(f"missing A6 ensemble artifact for seed {training_seed}")
+
+    run_manifest = (
+        root
+        / "results"
+        / "planar_ablations"
+        / "A3_residual_sac_context"
+        / f"seed_{training_seed}"
+        / "run_manifest.json"
+    )
+    payload = json.loads(run_manifest.read_text())
+    if payload.get("runtime", {}).get("git_commit") != V12_A3_TRAINING_COMMIT:
+        raise ValueError(f"A6 A3 run provenance mismatch for seed {training_seed}")
+    config = payload.get("config", {})
+    if config.get("seed") != training_seed or config.get("requested_steps") != 200_000:
+        raise ValueError(f"A6 A3 run protocol mismatch for seed {training_seed}")
+    context_sha = _sha256(context_path)
+    if config.get("context", {}).get("checkpoint_sha256") != context_sha:
+        raise ValueError(f"A6 context pairing mismatch for seed {training_seed}")
+    return {
+        "training_seed": training_seed,
+        "policy_checkpoint": str(policy_path),
+        "policy_checkpoint_sha256": policy_sha,
+        "policy_training_commit": V12_A3_TRAINING_COMMIT,
+        "context_checkpoint": str(context_path),
+        "context_checkpoint_sha256": context_sha,
+        "ensemble_checkpoint": str(ensemble_path),
+        "ensemble_checkpoint_sha256": _sha256(ensemble_path),
+        "ensemble_training_commit": V12_A4_ENSEMBLE_COMMIT,
+    }
+
+
+def run_a6(
+    root: Path,
+    out: Path,
+    seeds: list[int],
+    heldout_seed: int,
+    heldout_episodes: int,
+    policy_checkpoints: list[Path],
+    context_checkpoints: list[Path],
+    ensemble_checkpoints: list[Path],
+) -> None:
+    """Evaluate the complete context + gate + hard-HOCBF adaptive stack."""
+    if len(policy_checkpoints) != len(seeds):
+        raise ValueError("A6 requires one policy checkpoint per training seed")
+    if len(context_checkpoints) != len(seeds):
+        raise ValueError("A6 requires one context checkpoint per training seed")
+    if len(ensemble_checkpoints) != len(seeds):
+        raise ValueError("A6 requires one ensemble checkpoint per training seed")
+    retained_hashes = _retained_a3_checkpoint_hashes(root)
+    inputs = [
+        _validate_a6_input(
+            root,
+            training_seed,
+            Path(policy_path).resolve(),
+            Path(context_path).resolve(),
+            Path(ensemble_path).resolve(),
+            retained_hashes,
+        )
+        for training_seed, policy_path, context_path, ensemble_path in zip(
+            seeds,
+            policy_checkpoints,
+            context_checkpoints,
+            ensemble_checkpoints,
+            strict=True,
+        )
+    ]
+
+    condition_out = out / "A6_full_adaptive_stack"
+    condition_out.mkdir(parents=True, exist_ok=True)
+    write_run_manifest(
+        condition_out / "evaluation_manifest.json",
+        {
+            "condition": "A6",
+            "label": "Full adaptive stack",
+            "policy_source": "retained_A3_context_conditioned_residual_SAC",
+            "training_seeds": seeds,
+            "heldout": {
+                "seed_start": heldout_seed,
+                "episodes_per_policy": heldout_episodes,
+            },
+            "domain_randomization": planar_id_randomization_dict(),
+            "uncertainty_gate": {"gain": 4.0, "min_scale": 0.1},
+            "safety": planar_safety_config_dict(),
+            "context_runtime": {
+                "device": "cpu",
+                "ground_truth_access": False,
+                "action_semantics": "normalized_raw_policy_residual",
+            },
+            "inputs": inputs,
+        },
+        root=root,
+    )
+
+    retained_rows = _read_episode_csv(
+        root
+        / "results"
+        / "planar_ablations"
+        / "A3_residual_sac_context"
+        / "heldout_episodes.csv"
+    )
+    all_episode_rows = []
+    all_diagnostic_rows = []
+    summary_rows = []
+    paired_rows = []
+
+    for record in inputs:
+        training_seed = record["training_seed"]
+        agent = SACAgent.from_checkpoint(
+            record["policy_checkpoint"], seed=0, load_optimizers=False
+        )
+        if agent.obs_dim != 24 or agent.action_dim != 2 or agent.config.hidden != (256, 256):
+            raise ValueError(f"A6 policy architecture mismatch for seed {training_seed}")
+        encoder = DynamicsContextEncoder.load(
+            record["context_checkpoint"], map_location="cpu"
+        )
+        if encoder.config != ContextConfig():
+            raise ValueError(f"A6 context architecture mismatch for seed {training_seed}")
+        encoder.eval()
+        for parameter in encoder.parameters():
+            parameter.requires_grad_(False)
+        ensemble = ResidualDynamicsEnsemble.load(
+            record["ensemble_checkpoint"], map_location="cpu"
+        )
+        if ensemble.config != ResidualDynamicsConfig():
+            raise ValueError(f"A6 ensemble architecture mismatch for seed {training_seed}")
+        ensemble.eval()
+        for parameter in ensemble.parameters():
+            parameter.requires_grad_(False)
+
+        nominal = PlanarArm()
+        stack = SARRLControlStack(
+            ComputedTorqueController(nominal),
+            agent,
+            ControlStackConfig(require_safety=True),
+            safety_filter=HOCBFSafetyFilter(nominal, planar_safety_config()),
+            dynamics_ensemble=ensemble,
+            uncertainty_gate=UncertaintyGate(gain=4.0, min_scale=0.1),
+            device="cpu",
+        )
+        env = AdaptiveContextEnv(
+            PlanarReachEnv(mode="torque", randomization=_randomization()),
+            encoder,
+            device="cpu",
+        )
+        controller = f"A6_train_seed_{training_seed}"
+        rows, diagnostic_rows = evaluate_stack_episodes(
+            stack,
+            env,
+            heldout_episodes,
+            heldout_seed,
+            scenario="id_randomized_heldout",
+            controller=controller,
+            context_residual_limit=8.0,
+            intervention_tolerance=V12_SAFETY_INTERVENTION_TOLERANCE,
+        )
+        metrics = aggregate(rows)
+        stack_metrics = _stack_diagnostic_metrics(diagnostic_rows)
+        paired_reference = [
+            row
+            for row in retained_rows
+            if row.controller == f"sac_train_seed_{training_seed}"
+            and heldout_seed <= row.seed < heldout_seed + heldout_episodes
+        ]
+        if len(paired_reference) != heldout_episodes:
+            raise ValueError(f"A3 paired evidence mismatch for seed {training_seed}")
+        difference, low, high = paired_success_difference(
+            rows, paired_reference, bootstrap=10_000, seed=training_seed
+        )
+        summary_rows.append(
+            {
+                **record,
+                "successes": metrics.successes,
+                "episodes": metrics.n,
+                "success_rate": metrics.success_rate,
+                "success_ci95_low": metrics.success_ci95_low,
+                "success_ci95_high": metrics.success_ci95_high,
+                "reward_mean": metrics.reward_mean,
+                "reward_std": metrics.reward_std,
+                "final_distance_mean": metrics.final_distance_mean,
+                **stack_metrics,
+                "paired_success_difference": difference,
+                "paired_ci95_low": low,
+                "paired_ci95_high": high,
+            }
+        )
+        paired_rows.append(
+            {
+                "training_seed": training_seed,
+                "episodes": heldout_episodes,
+                "a6_successes": metrics.successes,
+                "a3_successes": sum(int(row.success) for row in paired_reference),
+                "success_difference": difference,
+                "paired_bootstrap_ci95_low": low,
+                "paired_bootstrap_ci95_high": high,
+                "bootstrap_samples": 10_000,
+                "bootstrap_seed": training_seed,
+            }
+        )
+        all_episode_rows.extend(rows)
+        all_diagnostic_rows.extend(diagnostic_rows)
+        print(
+            f"A6 seed={training_seed} heldout={metrics.successes}/{metrics.n} "
+            f"({100.0 * metrics.success_rate:.1f}%) "
+            f"infeasible={stack_metrics['safety_infeasible_episodes']}"
+        )
+
+    _write_stack_condition_outputs(
+        condition_out,
+        "A6",
+        seeds,
+        heldout_episodes,
+        all_episode_rows,
+        all_diagnostic_rows,
+        summary_rows,
+        paired_rows,
+        "A3_residual_SAC_context",
+    )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seeds", type=int, nargs="+", default=[0, 1, 2, 3, 4])
@@ -1088,7 +1658,7 @@ def main() -> int:
     parser.add_argument(
         "--execute",
         nargs="*",
-        choices=["A0", "A1", "A2", "A3", "A4"],
+        choices=["A0", "A1", "A2", "A3", "A4", "A5", "A6"],
         default=[],
         help="Ready conditions to execute/register.",
     )
@@ -1108,6 +1678,34 @@ def main() -> int:
             "One residual-dynamics ensemble checkpoint per --seeds entry. "
             "Omit with --confirm-training to prepare canonical per-seed ensembles."
         ),
+    )
+    parser.add_argument(
+        "--a5-policy-checkpoints",
+        type=Path,
+        nargs="+",
+        default=None,
+        help="One retained A2 best.pt checkpoint per --seeds entry.",
+    )
+    parser.add_argument(
+        "--a6-policy-checkpoints",
+        type=Path,
+        nargs="+",
+        default=None,
+        help="One retained A3 best.pt checkpoint per --seeds entry.",
+    )
+    parser.add_argument(
+        "--a6-context-checkpoints",
+        type=Path,
+        nargs="+",
+        default=None,
+        help="One retained A3 context.pt checkpoint per --seeds entry.",
+    )
+    parser.add_argument(
+        "--a6-ensemble-checkpoints",
+        type=Path,
+        nargs="+",
+        default=None,
+        help="One retained A4 ensemble.pt checkpoint per --seeds entry.",
     )
     parser.add_argument(
         "--confirm-training",
@@ -1133,7 +1731,7 @@ def main() -> int:
 
     if args.confirm_training and any(condition in {"A1", "A3"} for condition in args.execute):
         assert_source_tree_clean(root)
-    if "A4" in args.execute:
+    if any(condition in {"A4", "A5", "A6"} for condition in args.execute):
         assert_source_tree_clean(root)
 
     out = Path(args.output)
@@ -1213,6 +1811,42 @@ def main() -> int:
                 args.heldout_episodes,
                 args.a4_policy_checkpoints,
                 ensemble_checkpoints,
+            )
+        except (FileNotFoundError, ValueError) as exc:
+            raise SystemExit(str(exc)) from exc
+
+    if "A5" in args.execute:
+        if args.a5_policy_checkpoints is None:
+            raise SystemExit("A5 requires --a5-policy-checkpoints")
+        try:
+            run_a5(
+                root,
+                out,
+                args.seeds,
+                args.heldout_seed,
+                args.heldout_episodes,
+                args.a5_policy_checkpoints,
+            )
+        except (FileNotFoundError, ValueError) as exc:
+            raise SystemExit(str(exc)) from exc
+
+    if "A6" in args.execute:
+        if args.a6_policy_checkpoints is None:
+            raise SystemExit("A6 requires --a6-policy-checkpoints")
+        if args.a6_context_checkpoints is None:
+            raise SystemExit("A6 requires --a6-context-checkpoints")
+        if args.a6_ensemble_checkpoints is None:
+            raise SystemExit("A6 requires --a6-ensemble-checkpoints")
+        try:
+            run_a6(
+                root,
+                out,
+                args.seeds,
+                args.heldout_seed,
+                args.heldout_episodes,
+                args.a6_policy_checkpoints,
+                args.a6_context_checkpoints,
+                args.a6_ensemble_checkpoints,
             )
         except (FileNotFoundError, ValueError) as exc:
             raise SystemExit(str(exc)) from exc

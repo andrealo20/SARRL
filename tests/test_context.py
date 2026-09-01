@@ -53,6 +53,24 @@ def test_adaptive_wrapper_is_causal_and_does_not_query_ground_truth_context():
     assert np.all(np.isfinite(next_obs))
 
 
+def test_adaptive_wrapper_supports_filtered_torque_with_residual_context_action():
+    env = PlanarReachEnv(mode="torque")
+    cfg = ContextConfig(latent_dim=4, hidden_dim=12, history=3)
+    wrapped = AdaptiveContextEnv(env, DynamicsContextEncoder(cfg), device="cpu")
+    obs, _ = wrapped.reset(seed=9)
+
+    next_obs, _, _, _, info = wrapped.step_torque(
+        np.array([2.0, -1.0]),
+        baseline=np.array([1.5, -0.5]),
+        context_action=np.array([0.25, -0.125]),
+    )
+
+    assert obs.shape == next_obs.shape == (12,)
+    assert info["context_latent"].shape == (4,)
+    np.testing.assert_array_equal(wrapped.q_des, env.q_des)
+    assert np.linalg.norm(wrapped.latent) > 0.0
+
+
 def test_supervised_context_training_reduces_loss_on_synthetic_identifiable_data():
     rng = np.random.default_rng(8)
     cfg = ContextConfig(
