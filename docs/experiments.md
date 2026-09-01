@@ -183,8 +183,14 @@ python tools/train_context.py \
 python tools/train_residual_dynamics.py \
   --samples 10000 \
   --steps 2000 \
+  --seed 0 \
+  --device cpu \
   --output results/residual_dynamics/ensemble.pt
 ```
+
+The trainer also retains `ensemble.npz` and `ensemble_manifest.json`, including
+the dataset seed range, training configuration, Git commit and checkpoint
+SHA-256 required by the A4 evaluator.
 
 ### Evaluate the composed runtime stack
 
@@ -195,3 +201,34 @@ python tools/evaluate_stack.py \
   --randomize \
   --safety
 ```
+
+### Evaluate A4: Residual SAC + uncertainty gate
+
+A4 reuses the five retained A2 policy checkpoints and pairs each training seed
+with an independently trained residual-dynamics ensemble. The runner verifies
+the A2 checkpoint SHA-256 values before evaluation and retains both outcome and
+gate-diagnostic rows.
+
+```bash
+python tools/run_planar_ablations.py \
+  --execute A4 \
+  --a4-policy-checkpoints \
+    /path/to/seed_0/best.pt /path/to/seed_1/best.pt \
+    /path/to/seed_2/best.pt /path/to/seed_3/best.pt \
+    /path/to/seed_4/best.pt \
+  --a4-ensemble-checkpoints \
+    /path/to/ensemble_seed_0/ensemble.pt /path/to/ensemble_seed_1/ensemble.pt \
+    /path/to/ensemble_seed_2/ensemble.pt /path/to/ensemble_seed_3/ensemble.pt \
+    /path/to/ensemble_seed_4/ensemble.pt
+```
+
+The default gate is `max(0.1, 1 / (1 + 4 ||uncertainty||))`. It is a
+robustness heuristic, not a safety certificate. A4 does not enable context or
+HOCBF filtering. Generated evidence is stored under
+`A4_residual_sac_uncertainty_gate/` as an evaluation manifest, raw held-out
+episodes, gate diagnostics, paired A4-vs-A2 bootstrap comparisons, per-seed
+summary and cross-model aggregate.
+
+Alternatively, omit `--a4-ensemble-checkpoints` and add `--confirm-training`.
+The runner then prepares one provenance-checked CPU ensemble per seed using the
+frozen 10,000-sample / 2,000-step protocol before evaluation.

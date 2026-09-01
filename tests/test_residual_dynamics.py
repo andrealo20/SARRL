@@ -1,3 +1,5 @@
+import json
+import sys
 from pathlib import Path
 
 import numpy as np
@@ -10,6 +12,8 @@ from sarrl.models import (
     residual_acceleration_target,
     train_residual_ensemble,
 )
+from tools.train_residual_dynamics import _sha256 as ensemble_sha256
+from tools.train_residual_dynamics import main as train_ensemble_main
 
 
 def test_residual_target_is_zero_when_nominal_matches_plant():
@@ -82,3 +86,45 @@ def test_motor_gain_mismatch_is_visible_in_residual_target():
     assert np.linalg.norm(target) > 1e-2
     hidden = residual_acceleration_target(nominal, state, applied, actual_qdd)
     np.testing.assert_allclose(hidden, 0.0, atol=1e-6)
+
+
+def test_residual_dynamics_trainer_retains_manifest_and_dataset(tmp_path, monkeypatch):
+    checkpoint = tmp_path / "ensemble.pt"
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "train_residual_dynamics.py",
+            "--samples",
+            "8",
+            "--steps",
+            "1",
+            "--batch-size",
+            "4",
+            "--seed",
+            "2",
+            "--device",
+            "cpu",
+            "--output",
+            str(checkpoint),
+        ],
+    )
+
+    assert train_ensemble_main() == 0
+
+    dataset = checkpoint.with_suffix(".npz")
+    manifest_path = tmp_path / "ensemble_manifest.json"
+    assert checkpoint.is_file()
+    assert dataset.is_file()
+    assert manifest_path.is_file()
+
+    manifest = json.loads(manifest_path.read_text())
+    assert manifest["config"]["training_seed"] == 2
+    assert manifest["config"]["data_seed_start"] == 240_000
+    assert manifest["config"]["data_seed_end"] == 240_007
+    assert manifest["config"]["samples"] == 8
+    assert manifest["config"]["optimization_steps"] == 1
+    assert manifest["config"]["batch_size"] == 4
+    assert manifest["config"]["device"] == "cpu"
+    assert manifest["extra"]["dataset_file"] == "ensemble.npz"
+    assert manifest["extra"]["checkpoint_sha256"] == ensemble_sha256(checkpoint)

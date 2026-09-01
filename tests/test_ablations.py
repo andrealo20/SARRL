@@ -3,18 +3,30 @@ from pathlib import Path
 import pytest
 
 from sarrl.evaluation import (
+    V12_ENSEMBLE_BATCH_SIZE,
+    V12_ENSEMBLE_DATA_SEED_BASE,
+    V12_ENSEMBLE_DATA_SEED_STRIDE,
+    V12_ENSEMBLE_SAMPLES,
+    V12_ENSEMBLE_TRAINING_STEPS,
     context_data_seed,
+    ensemble_data_seed,
+    planar_ensemble_randomization_dict,
     planar_id_randomization_dict,
     validate_context_data_range,
+    validate_ensemble_data_range,
 )
 from tools.run_planar_ablations import (
     CONDITIONS,
+    _sha256,
     _validate_a3_context_artifact,
+    _validate_a4_ensemble_artifact,
     build_protocol,
+    prepare_a4_ensembles,
     register_a2,
     run_a0,
     run_a1,
     run_a3,
+    run_a4,
 )
 
 
@@ -45,6 +57,8 @@ def test_v12_ablation_matrix_is_fixed_and_complete():
     assert CONDITIONS[2].label == "Residual SAC"
     assert CONDITIONS[3].label == "Residual SAC + context"
     assert CONDITIONS[3].status == "ready"
+    assert CONDITIONS[4].label == "Residual SAC + uncertainty gate"
+    assert CONDITIONS[4].status == "ready"
     assert CONDITIONS[-1].label == "Full adaptive stack"
 
 
@@ -96,6 +110,79 @@ def test_v12_statistics_require_sample_sd_and_paired_comparison():
     assert statistics["multi_seed_spread"] == "sample_sd_ddof_1"
     assert statistics["episode_success_interval"] == "wilson_95"
     assert statistics["paired_comparison"] == "paired_bootstrap_95"
+
+
+def test_v12_uncertainty_gate_protocol_is_frozen():
+    gate = _protocol()["uncertainty_gate"]
+
+    assert gate == {
+        "gain": 4.0,
+        "min_scale": 0.1,
+        "safety_certificate": False,
+        "policy_source": "A2_retained_residual_sac",
+        "ensemble_pairing": "one_per_training_seed",
+    }
+
+
+def test_v12_ensemble_pretraining_protocol_is_frozen():
+    ensemble = _protocol()["ensemble_pretraining"]
+
+    assert ensemble == {
+        "per_training_seed": True,
+        "samples_per_seed": 10_000,
+        "optimization_steps": 2_000,
+        "batch_size": 128,
+        "data_seed_base": 200_000,
+        "data_seed_stride": 20_000,
+        "device": "cpu",
+        "ensemble_config": {
+            "state_dim": 4,
+            "action_dim": 2,
+            "output_dim": 2,
+            "hidden": [128, 128],
+            "ensemble_size": 5,
+            "learning_rate": 1e-3,
+            "weight_decay": 1e-6,
+        },
+        "domain_randomization": {
+            "mass_fraction": 0.25,
+            "friction_fraction": 0.4,
+            "motor_gain_fraction": 0.2,
+            "payload_range": [0.0, 1.5],
+            "action_delay_max": 0,
+        },
+        "excitation": {
+            "distribution": "uniform",
+            "low": -30.0,
+            "high": 30.0,
+            "space": "commanded_torque_nm",
+        },
+        "supervision": {
+            "target": "observed_minus_nominal_acceleration",
+            "torque_input": "commanded_torque",
+        },
+    }
+
+    assert V12_ENSEMBLE_SAMPLES == 10_000
+    assert V12_ENSEMBLE_TRAINING_STEPS == 2_000
+    assert V12_ENSEMBLE_BATCH_SIZE == 128
+    assert V12_ENSEMBLE_DATA_SEED_BASE == 200_000
+    assert V12_ENSEMBLE_DATA_SEED_STRIDE == 20_000
+    assert planar_ensemble_randomization_dict() == ensemble["domain_randomization"]
+
+
+def test_v12_ensemble_data_ranges_are_independent_and_disjoint():
+    assert ensemble_data_seed(0) == 200_000
+    assert ensemble_data_seed(4) == 280_000
+
+    ranges = [validate_ensemble_data_range(seed, 10_000) for seed in range(5)]
+    for index, (start, end) in enumerate(ranges):
+        assert start == 200_000 + 20_000 * index
+        assert end == start + 9_999
+        assert start > 40_099
+
+    for left, right in zip(ranges, ranges[1:], strict=False):
+        assert left[1] < right[0]
 
 
 def test_a0_smoke_writes_auditable_outputs(tmp_path):
@@ -328,3 +415,136 @@ def test_a3_context_artifact_rejects_different_git_commit(tmp_path):
             training_seed=0,
             expected_commit="new-commit",
         )
+
+
+def test_a4_requires_one_policy_and_ensemble_per_seed(tmp_path):
+    with pytest.raises(ValueError, match="one policy checkpoint"):
+        run_a4(
+            root=Path("."),
+            out=tmp_path,
+            seeds=[0],
+            heldout_seed=40_000,
+            heldout_episodes=2,
+            policy_checkpoints=[],
+            ensemble_checkpoints=[tmp_path / "ensemble.pt"],
+        )
+
+    with pytest.raises(ValueError, match="one ensemble checkpoint"):
+        run_a4(
+            root=Path("."),
+            out=tmp_path,
+            seeds=[0],
+            heldout_seed=40_000,
+            heldout_episodes=2,
+            policy_checkpoints=[tmp_path / "best.pt"],
+            ensemble_checkpoints=[],
+        )
+
+
+def test_a4_rejects_noncanonical_gate_parameters(tmp_path):
+    with pytest.raises(ValueError, match="parameters are frozen"):
+        run_a4(
+            root=Path("."),
+            out=tmp_path,
+            seeds=[0],
+            heldout_seed=40_000,
+            heldout_episodes=2,
+            policy_checkpoints=[tmp_path / "best.pt"],
+            ensemble_checkpoints=[tmp_path / "ensemble.pt"],
+            gate_gain=3.0,
+        )
+
+
+def test_a4_smoke_writes_auditable_outputs(tmp_path, monkeypatch):
+    from sarrl.models import ResidualDynamicsConfig, ResidualDynamicsEnsemble
+    from sarrl.rl import SACAgent
+
+    policy = tmp_path / "best.pt"
+    ensemble = tmp_path / "ensemble.pt"
+    SACAgent(8, 2, seed=3).save(policy)
+    ResidualDynamicsEnsemble(
+        ResidualDynamicsConfig(hidden=(8,), ensemble_size=2),
+        seed=4,
+    ).save(ensemble)
+
+    monkeypatch.setattr(
+        "tools.run_planar_ablations._retained_a2_checkpoint_hashes",
+        lambda root: {0: _sha256(policy)},
+    )
+    monkeypatch.setattr(
+        "tools.run_planar_ablations._validate_a4_ensemble_artifact",
+        lambda checkpoint, training_seed, expected_commit=None: True,
+    )
+
+    run_a4(
+        root=Path(".").resolve(),
+        out=tmp_path,
+        seeds=[0],
+        heldout_seed=40_000,
+        heldout_episodes=2,
+        policy_checkpoints=[policy],
+        ensemble_checkpoints=[ensemble],
+    )
+
+    condition = tmp_path / "A4_residual_sac_uncertainty_gate"
+    assert (condition / "evaluation_manifest.json").is_file()
+    assert (condition / "heldout_episodes.csv").is_file()
+    assert (condition / "gate_diagnostics.csv").is_file()
+    assert (condition / "summary.csv").is_file()
+    assert (condition / "paired_comparison.csv").is_file()
+    assert (condition / "aggregate.json").is_file()
+
+    assert len((condition / "heldout_episodes.csv").read_text().splitlines()) == 3
+    assert len((condition / "gate_diagnostics.csv").read_text().splitlines()) == 3
+    assert '"condition": "A4"' in (condition / "aggregate.json").read_text()
+
+
+def test_a4_ensemble_artifact_rejects_partial_outputs(tmp_path):
+    checkpoint = tmp_path / "ensemble.pt"
+    checkpoint.write_bytes(b"checkpoint")
+
+    with pytest.raises(ValueError, match="partial A4 ensemble artifact"):
+        _validate_a4_ensemble_artifact(
+            checkpoint,
+            training_seed=0,
+            expected_commit="commit",
+        )
+
+
+def test_a4_ensemble_preparation_uses_frozen_protocol(tmp_path, monkeypatch):
+    calls = []
+    validation_calls = {}
+
+    def fake_validate(checkpoint, training_seed, expected_commit=None):
+        key = str(checkpoint)
+        validation_calls[key] = validation_calls.get(key, 0) + 1
+        return validation_calls[key] > 1
+
+    def capture(cmd, cwd, check):
+        calls.append((cmd, cwd, check))
+
+    monkeypatch.setattr(
+        "tools.run_planar_ablations._validate_a4_ensemble_artifact",
+        fake_validate,
+    )
+    monkeypatch.setattr("tools.run_planar_ablations.subprocess.run", capture)
+    monkeypatch.setattr(
+        "tools.run_planar_ablations.repository_commit",
+        lambda root: "frozen-commit",
+    )
+
+    checkpoints = prepare_a4_ensembles(
+        root=Path(".").resolve(),
+        out=tmp_path,
+        seeds=[0, 1],
+    )
+
+    assert len(checkpoints) == 2
+    assert len(calls) == 2
+    for seed, (cmd, _, check) in enumerate(calls):
+        assert check is True
+        assert cmd[cmd.index("--samples") + 1] == "10000"
+        assert cmd[cmd.index("--steps") + 1] == "2000"
+        assert cmd[cmd.index("--batch-size") + 1] == "128"
+        assert cmd[cmd.index("--seed") + 1] == str(seed)
+        assert cmd[cmd.index("--device") + 1] == "cpu"
