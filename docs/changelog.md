@@ -2,6 +2,16 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v1.3.0 — OOD and fault robustness
+
+- Reused the frozen v1.2 A2–A6 policies without retraining and evaluated A0 plus 25 learned policies on 7,800 new paired episodes.
+- Added compound OOD dynamics and abrupt joint-2 motor-loss scenarios alongside an in-distribution reference, using disjoint seeds `50000..50099`.
+- Measured the strongest learned result with A3 context: 62.4% ± 12.9 pp ID, 11.6% ± 3.8 pp OOD and 32.6% ± 6.4 pp under motor loss.
+- Retained the negative result that every learned family degraded sharply outside its training distribution; A4 and A6 reached 0% success under compound OOD dynamics.
+- Recorded 86 explicit HOCBF-infeasible episodes across 3,000 A5/A6 evaluations; no uncertified fallback command was executed.
+- Audited all episode, gate and stack rows, exact seed coverage, fault exposure, aggregate statistics and all 20 referenced checkpoint hashes.
+- Retained the complete manifest, raw rows, diagnostics, paired bootstrap deltas and aggregate results under `results/ood_fault_robustness/`.
+
 ## v1.2.0 — complete planar ablation matrix
 
 - Completed A0–A6 on the frozen randomized analytical planar benchmark with five training seeds and 100 held-out episodes per learned policy.

@@ -40,6 +40,51 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## v1.3.0 OOD and fault robustness evidence
+
+The v1.3 campaign reuses the frozen v1.2 A2–A6 artifacts without retraining.
+A0 and 25 learned policies were evaluated on seeds `50000..50099`, disjoint
+from the v1.2 held-out set, in three paired scenarios: the v1.2
+in-distribution randomization, compound OOD dynamics and abrupt joint-2 motor
+authority loss to 55% from step 20. A1 is excluded because its selected policy
+checkpoints were not retained.
+
+| Condition | ID reference | Compound OOD | Motor fault |
+|---|---:|---:|---:|
+| A0 | 8.0% | 0.0% | 3.0% |
+| A2 | 52.2% ± 7.7 pp | 6.0% ± 2.3 pp | 23.6% ± 1.9 pp |
+| A3 | **62.4% ± 12.9 pp** | **11.6% ± 3.8 pp** | **32.6% ± 6.4 pp** |
+| A4 | 14.4% ± 1.3 pp | 0.0% ± 0.0 pp | 3.2% ± 0.8 pp |
+| A5 | 47.6% ± 7.3 pp | 3.0% ± 0.7 pp | 16.4% ± 1.1 pp |
+| A6 | 12.8% ± 0.8 pp | 0.0% ± 0.0 pp | 2.8% ± 0.4 pp |
+
+Values for learned conditions are means ± sample SD across five policies.
+Relative to their paired ID references, mean OOD success fell by 46.2 pp for
+A2, 50.8 pp for A3, 14.4 pp for A4, 44.6 pp for A5 and 12.8 pp for A6. Motor
+loss reduced the same conditions by 28.6, 29.8, 11.2, 31.2 and 10.0 pp. A3
+remained the strongest learned condition, but none of the frozen policies
+demonstrated robust OOD performance.
+
+The hard-HOCBF runtime rejected 41/1,500 A5 episodes and 45/1,500 A6 episodes
+as infeasible. The final infeasible command was not executed and the episode
+was counted as unsuccessful. Infeasibility increased from 16/1,000 ID
+episodes to 37/1,000 OOD and 33/1,000 motor-fault episodes. These results do
+not contradict the projection solver: its certificate is relative to the
+nominal model and does not guarantee safety under unmodelled plant changes.
+
+The audit verified exactly 7,800 episode rows, 1,500 gate rows, 3,000 stack
+rows, 78 per-model summaries and 52 paired robustness comparisons. Every
+condition/scenario group contains 100 unique seeds, all 2,600 motor-fault
+episodes reached the injected fault, and independent recomputation matched
+the stored success rates, deltas and sample standard deviations. All 20
+checkpoint hashes matched the manifest. The evaluation ran from commit
+`571ea22d858322815c43928bfeed87a784af78f3`; causal GRU, ensemble and HOCBF
+inference used the frozen deterministic CPU paths.
+
+Retained evidence is under `results/ood_fault_robustness/`. The campaign is
+analytical-planar evidence only and does not establish calibrated uncertainty,
+formal safety under OOD dynamics, MuJoCo/Franka transfer or hardware behavior.
+
 ## v1.2.0 planar ablation evidence
 
 The A0–A6 campaign uses training seeds `0..4`, validation seeds

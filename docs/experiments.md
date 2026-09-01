@@ -300,3 +300,20 @@ the sample standard deviation across the five training seeds.
 The campaign runner is `tools/run_planar_v13.py`. It verifies all A2/A3 policy,
 context and ensemble hashes before writing raw episodes, gate/stack diagnostics,
 per-model summaries, paired robustness deltas and aggregate results.
+
+The completed evidence is retained under `results/ood_fault_robustness/`:
+
+```text
+evaluation_manifest.json
+heldout_episodes.csv
+gate_diagnostics.csv
+stack_diagnostics.csv
+summary.csv
+robustness_deltas.csv
+aggregate.json
+```
+
+The campaign completed 7,800/7,800 episodes. A3 produced the strongest OOD
+and fault results, but every learned condition degraded relative to its paired
+ID reference. Full audited metrics and limitations are in
+`docs/verification.md`.

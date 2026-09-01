@@ -1,0 +1,143 @@
+{
+  "conditions": {
+    "A0": {
+      "id_reference": {
+        "models": 1,
+        "success_rate_max": 0.08,
+        "success_rate_mean": 0.08,
+        "success_rate_min": 0.08,
+        "success_rate_std": null
+      },
+      "motor_fault": {
+        "models": 1,
+        "success_rate_max": 0.03,
+        "success_rate_mean": 0.03,
+        "success_rate_min": 0.03,
+        "success_rate_std": null
+      },
+      "ood_compound": {
+        "models": 1,
+        "success_rate_max": 0.0,
+        "success_rate_mean": 0.0,
+        "success_rate_min": 0.0,
+        "success_rate_std": null
+      }
+    },
+    "A2": {
+      "id_reference": {
+        "models": 5,
+        "success_rate_max": 0.58,
+        "success_rate_mean": 0.522,
+        "success_rate_min": 0.39,
+        "success_rate_std": 0.07661592523751179
+      },
+      "motor_fault": {
+        "models": 5,
+        "success_rate_max": 0.26,
+        "success_rate_mean": 0.236,
+        "success_rate_min": 0.21,
+        "success_rate_std": 0.01949358868961793
+      },
+      "ood_compound": {
+        "models": 5,
+        "success_rate_max": 0.08,
+        "success_rate_mean": 0.06,
+        "success_rate_min": 0.03,
+        "success_rate_std": 0.023452078799117152
+      }
+    },
+    "A3": {
+      "id_reference": {
+        "models": 5,
+        "success_rate_max": 0.71,
+        "success_rate_mean": 0.6239999999999999,
+        "success_rate_min": 0.4,
+        "success_rate_std": 0.12895735729302146
+      },
+      "motor_fault": {
+        "models": 5,
+        "success_rate_max": 0.42,
+        "success_rate_mean": 0.326,
+        "success_rate_min": 0.24,
+        "success_rate_std": 0.0642650760522385
+      },
+      "ood_compound": {
+        "models": 5,
+        "success_rate_max": 0.16,
+        "success_rate_mean": 0.11600000000000002,
+        "success_rate_min": 0.06,
+        "success_rate_std": 0.03781534080237808
+      }
+    },
+    "A4": {
+      "id_reference": {
+        "models": 5,
+        "success_rate_max": 0.16,
+        "success_rate_mean": 0.144,
+        "success_rate_min": 0.13,
+        "success_rate_std": 0.013416407864998736
+      },
+      "motor_fault": {
+        "models": 5,
+        "success_rate_max": 0.04,
+        "success_rate_mean": 0.032,
+        "success_rate_min": 0.02,
+        "success_rate_std": 0.008366600265340756
+      },
+      "ood_compound": {
+        "models": 5,
+        "success_rate_max": 0.0,
+        "success_rate_mean": 0.0,
+        "success_rate_min": 0.0,
+        "success_rate_std": 0.0
+      }
+    },
+    "A5": {
+      "id_reference": {
+        "models": 5,
+        "success_rate_max": 0.53,
+        "success_rate_mean": 0.476,
+        "success_rate_min": 0.36,
+        "success_rate_std": 0.07266360849833982
+      },
+      "motor_fault": {
+        "models": 5,
+        "success_rate_max": 0.18,
+        "success_rate_mean": 0.16399999999999998,
+        "success_rate_min": 0.15,
+        "success_rate_std": 0.01140175425099138
+      },
+      "ood_compound": {
+        "models": 5,
+        "success_rate_max": 0.04,
+        "success_rate_mean": 0.03,
+        "success_rate_min": 0.02,
+        "success_rate_std": 0.007071067811865475
+      }
+    },
+    "A6": {
+      "id_reference": {
+        "models": 5,
+        "success_rate_max": 0.14,
+        "success_rate_mean": 0.128,
+        "success_rate_min": 0.12,
+        "success_rate_std": 0.008366600265340763
+      },
+      "motor_fault": {
+        "models": 5,
+        "success_rate_max": 0.03,
+        "success_rate_mean": 0.028000000000000004,
+        "success_rate_min": 0.02,
+        "success_rate_std": 0.004472135954999578
+      },
+      "ood_compound": {
+        "models": 5,
+        "success_rate_max": 0.0,
+        "success_rate_mean": 0.0,
+        "success_rate_min": 0.0,
+        "success_rate_std": 0.0
+      }
+    }
+  },
+  "evaluation_seed": 50000
+}
