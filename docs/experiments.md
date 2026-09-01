@@ -278,3 +278,25 @@ python tools/run_planar_ablations.py \
 Both conditions retain raw episode rows, per-episode stack diagnostics, paired
 bootstrap comparisons, per-seed summaries and aggregate metrics. The HOCBF
 certificate is model-relative and is not a hardware guarantee.
+
+## v1.3 OOD and fault robustness
+
+v1.3 reuses the frozen v1.2 A2–A6 artifacts without retraining. A0 and each
+retained learned-policy family are evaluated on the same new episode seeds
+`50000..50099` in three paired scenarios:
+
+- the v1.2 in-distribution randomization as reference;
+- compound OOD dynamics with mass ±30%, friction ±50%, motor gain ±25%,
+  payload 1.25–1.75 kg and delay up to three steps;
+- the ID distribution with abrupt joint-2 motor authority reduced to 55% at
+  step 20.
+
+The OOD payload is always outside the 0–1 kg training range. A1 is excluded
+because its selected policy checkpoints were not retained; evaluation CSVs
+alone cannot reconstruct its policy. Scenario differences use paired episode
+seeds and 10,000-draw paired bootstrap intervals. Cross-policy spread remains
+the sample standard deviation across the five training seeds.
+
+The campaign runner is `tools/run_planar_v13.py`. It verifies all A2/A3 policy,
+context and ensemble hashes before writing raw episodes, gate/stack diagnostics,
+per-model summaries, paired robustness deltas and aggregate results.

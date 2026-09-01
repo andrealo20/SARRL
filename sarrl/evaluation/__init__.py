@@ -29,6 +29,15 @@ from .planar_v12 import (
     validate_context_data_range,
     validate_ensemble_data_range,
 )
+from .planar_v13 import (
+    V13_CONDITIONS,
+    V13_EPISODES,
+    V13_EVALUATION_SEED,
+    V13_TRAINING_SEEDS,
+    RobustnessScenario,
+    v13_protocol_dict,
+    v13_scenarios,
+)
 from .policy import PolicyEvaluation, evaluate_policy, evaluate_policy_episodes
 from .protocol import (
     AggregateMetrics,
@@ -96,6 +105,13 @@ __all__ = [
     "PolicyEvaluation",
     "evaluate_policy",
     "evaluate_policy_episodes",
+    "V13_CONDITIONS",
+    "V13_EPISODES",
+    "V13_EVALUATION_SEED",
+    "V13_TRAINING_SEEDS",
+    "RobustnessScenario",
+    "v13_protocol_dict",
+    "v13_scenarios",
     "AggregateMetrics",
     "EpisodeResult",
     "aggregate",
