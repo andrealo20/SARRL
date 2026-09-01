@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import hashlib
 import json
 import subprocess
 import sys
@@ -12,6 +13,7 @@ from pathlib import Path
 
 import numpy as np
 
+from sarrl.adaptation import AdaptiveContextEnv, DynamicsContextEncoder
 from sarrl.envs import DomainRandomization, PlanarReachEnv
 from sarrl.evaluation import (
     aggregate,
@@ -22,6 +24,28 @@ from sarrl.evaluation import (
     write_run_manifest,
 )
 from sarrl.rl import SACAgent
+
+
+def _sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _context_checkpoint_for_seed(
+    context_root: Path,
+    training_seed: int,
+) -> Path:
+    checkpoint = context_root / f"context_seed_{training_seed}" / "context.pt"
+
+    if not checkpoint.is_file():
+        raise FileNotFoundError(
+            f"missing context checkpoint for training seed {training_seed}: {checkpoint}"
+        )
+
+    return checkpoint.resolve()
 
 
 def _sample_std(values: np.ndarray) -> float | None:
@@ -43,23 +67,18 @@ def _resume_plan(
     run_dir: Path,
     requested_steps: int,
     current_commit: str | None,
+    expected_context_sha256: str | None = None,
 ) -> tuple[Path | None, bool]:
     """Return (resume_checkpoint, already_complete) for an existing run."""
     final_training = run_dir / "training_final.pt"
-    periodic = [
-        path
-        for path in run_dir.glob("train_step*.pt")
-        if _checkpoint_step(path) >= 0
-    ]
+    periodic = [path for path in run_dir.glob("train_step*.pt") if _checkpoint_step(path) >= 0]
 
     if not final_training.exists() and not periodic:
         return None, False
 
     manifest = run_dir / "run_manifest.json"
     if not manifest.exists():
-        raise ValueError(
-            f"existing checkpoints in {run_dir} have no run_manifest.json"
-        )
+        raise ValueError(f"existing checkpoints in {run_dir} have no run_manifest.json")
 
     payload = json.loads(manifest.read_text())
     previous_commit = payload.get("runtime", {}).get("git_commit")
@@ -74,6 +93,15 @@ def _resume_plan(
             f"{previous_commit} != {current_commit}"
         )
 
+    previous_context = payload.get("config", {}).get("context", {}).get("checkpoint_sha256")
+
+    if previous_context != expected_context_sha256:
+        raise ValueError(
+            "refusing to resume or reuse training with a different "
+            "context checkpoint: "
+            f"{previous_context} != {expected_context_sha256}"
+        )
+
     previous_requested = int(payload["config"]["requested_steps"])
 
     if final_training.exists():
@@ -81,17 +109,14 @@ def _resume_plan(
             return None, True
         if previous_requested < requested_steps:
             return final_training, False
-        raise ValueError(
-            "existing completed run requested more steps than the new campaign"
-        )
+        raise ValueError("existing completed run requested more steps than the new campaign")
 
     latest = max(periodic, key=_checkpoint_step)
     latest_step = _checkpoint_step(latest)
 
     if latest_step > requested_steps:
         raise ValueError(
-            f"latest checkpoint step {latest_step} exceeds requested "
-            f"{requested_steps}"
+            f"latest checkpoint step {latest_step} exceeds requested {requested_steps}"
         )
 
     return latest, False
@@ -127,6 +152,14 @@ def main() -> int:
     p.add_argument("--heldout-seed", type=int, default=40_000)
     p.add_argument("--output", default="results/sac_sweep")
     p.add_argument(
+        "--context-root",
+        default=None,
+        help=(
+            "Directory containing per-training-seed context checkpoints "
+            "as context_seed_<seed>/context.pt."
+        ),
+    )
+    p.add_argument(
         "--resume-existing",
         action="store_true",
         help="Resume interrupted seed runs and reuse completed runs.",
@@ -144,6 +177,28 @@ def main() -> int:
         args.heldout_episodes,
     ):
         raise SystemExit("validation and held-out seed ranges must not overlap")
+
+    if args.context_root is not None and args.mode != "residual":
+        raise SystemExit("--context-root requires --mode residual")
+
+    context_records = {}
+
+    if args.context_root is not None:
+        context_root = Path(args.context_root).resolve()
+
+        for training_seed in args.seeds:
+            try:
+                checkpoint = _context_checkpoint_for_seed(
+                    context_root,
+                    training_seed,
+                )
+            except FileNotFoundError as exc:
+                raise SystemExit(str(exc)) from exc
+
+            context_records[training_seed] = {
+                "checkpoint": checkpoint,
+                "sha256": _sha256(checkpoint),
+            }
 
     root = Path(__file__).resolve().parents[1]
     current_commit = repository_commit(root)
@@ -166,6 +221,19 @@ def main() -> int:
             "heldout_episodes": args.heldout_episodes,
             "heldout_seed": args.heldout_seed,
             "resume_existing": args.resume_existing,
+            "context": {
+                "enabled": args.context_root is not None,
+                "root": (
+                    None if args.context_root is None else str(Path(args.context_root).resolve())
+                ),
+                "per_training_seed": {
+                    str(seed): {
+                        "checkpoint": str(record["checkpoint"]),
+                        "checkpoint_sha256": record["sha256"],
+                    }
+                    for seed, record in context_records.items()
+                },
+            },
         },
         root=root,
     )
@@ -176,6 +244,9 @@ def main() -> int:
     for training_seed in args.seeds:
         run_dir = out / f"seed_{training_seed}"
 
+        context_record = context_records.get(training_seed)
+        expected_context_sha256 = None if context_record is None else context_record["sha256"]
+
         resume_checkpoint = None
         training_complete = False
         if args.resume_existing:
@@ -184,6 +255,7 @@ def main() -> int:
                     run_dir,
                     args.steps,
                     current_commit,
+                    expected_context_sha256,
                 )
             except ValueError as exc:
                 raise SystemExit(f"seed {training_seed}: {exc}") from exc
@@ -219,25 +291,72 @@ def main() -> int:
         ]
         if args.randomize:
             cmd.append("--randomize")
-        if training_complete:
-            print(
-                f"seed={training_seed} training already complete; "
-                "reusing retained checkpoints"
+
+        if context_record is not None:
+            cmd.extend(
+                [
+                    "--context-checkpoint",
+                    str(context_record["checkpoint"]),
+                ]
             )
+
+        if training_complete:
+            print(f"seed={training_seed} training already complete; reusing retained checkpoints")
         else:
             if resume_checkpoint is not None:
                 cmd.extend(["--resume", str(resume_checkpoint)])
-                print(
-                    f"seed={training_seed} resuming from "
-                    f"{resume_checkpoint}"
-                )
+                print(f"seed={training_seed} resuming from {resume_checkpoint}")
             subprocess.run(cmd, cwd=root, check=True)
+
+        run_manifest_path = run_dir / "run_manifest.json"
+
+        if not run_manifest_path.is_file():
+            raise SystemExit(f"seed {training_seed}: missing run_manifest.json")
+
+        run_manifest = json.loads(run_manifest_path.read_text())
+
+        recorded_context_sha256 = (
+            run_manifest.get("config", {}).get("context", {}).get("checkpoint_sha256")
+        )
+
+        if recorded_context_sha256 != expected_context_sha256:
+            raise SystemExit(
+                f"seed {training_seed}: training manifest context SHA "
+                "does not match the requested context checkpoint"
+            )
 
         checkpoint = run_dir / "best.pt"
         if not checkpoint.exists():
             checkpoint = run_dir / "final.pt"
-        agent = SACAgent.from_checkpoint(checkpoint, seed=0, load_optimizers=False)
-        env = PlanarReachEnv(mode=args.mode, randomization=dr)
+
+        agent = SACAgent.from_checkpoint(
+            checkpoint,
+            seed=0,
+            load_optimizers=False,
+        )
+
+        base_env = PlanarReachEnv(
+            mode=args.mode,
+            randomization=dr,
+        )
+
+        if context_record is None:
+            env = base_env
+        else:
+            encoder = DynamicsContextEncoder.load(
+                context_record["checkpoint"],
+                map_location="cpu",
+            )
+
+            encoder.eval()
+            for parameter in encoder.parameters():
+                parameter.requires_grad_(False)
+
+            env = AdaptiveContextEnv(
+                base_env,
+                encoder,
+                device="cpu",
+            )
         rows = evaluate_policy_episodes(
             agent,
             env,
@@ -252,6 +371,7 @@ def main() -> int:
             {
                 "training_seed": training_seed,
                 "checkpoint": str(checkpoint),
+                "context_checkpoint_sha256": expected_context_sha256,
                 "successes": metrics.successes,
                 "episodes": metrics.n,
                 "success_rate": metrics.success_rate,
