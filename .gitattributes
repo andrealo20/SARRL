@@ -1,0 +1,11 @@
+# The repository is developed from both Windows Git and WSL Git against the
+# same working tree. Without a fixed line ending the two disagree on every
+# text file: the provenance guards then report a dirty source tree, and
+# staging that "fix" would commit CRLF blobs. Normalize to LF in the index
+# and in the working tree on every platform.
+* text=auto eol=lf
+
+# Retained evidence and assets must never be line-ending converted.
+*.png binary
+*.pt binary
+*.npz binary
