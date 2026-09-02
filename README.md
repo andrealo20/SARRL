@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml/badge.svg)](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org/)
-[![version](https://img.shields.io/badge/version-1.3.0-6f42c1.svg)](docs/changelog.md)
+[![version](https://img.shields.io/badge/version-1.4.0-6f42c1.svg)](docs/changelog.md)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ![SARRL banner](assets/banner.png)
@@ -12,6 +12,8 @@
 The current reference platform is a reproducible analytical **2-DoF planar arm**. MuJoCo, Franka Panda, hardware and sim-to-real results are not currently claimed.
 
 ## Results
+
+### Task success
 
 On the randomized planar held-out benchmark:
 
@@ -28,6 +30,21 @@ On the randomized planar held-out benchmark:
 The v1.2 campaign established the benefit of residual learning over Direct SAC. The v1.3 campaign reused the frozen policies on new paired seeds: every learned controller degraded sharply under compound OOD dynamics and abrupt motor loss. Learned context retained the highest success, but did not solve robustness. The gate stayed near minimum authority, and hard-HOCBF stacks explicitly rejected 86/3,000 episodes when projection became infeasible.
 
 Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. Evidence remains limited to the analytical planar benchmark.
+
+### Safety
+
+Task success alone cannot separate a controller that reaches the target through the safe set from one that reaches it by traversing constraint violations. The v1.4 campaign re-evaluated the same frozen policies on the same seeds and measured the safety envelope directly, isolating the effect of the hard-HOCBF filter:
+
+| Condition | Unsafe episodes, ID | Compound OOD | Motor fault | Success, ID |
+|---|---:|---:|---:|---:|
+| Residual SAC, unfiltered | 72.6% ± 3.6 pp | 67.8% ± 1.9 pp | 75.6% ± 3.3 pp | 52.2% ± 7.7 pp |
+| **+ hard HOCBF** | **4.0% ± 1.6 pp** | **19.6% ± 2.6 pp** | **21.6% ± 1.3 pp** | 47.6% ± 7.3 pp |
+| Full adaptive stack, pre-filter | 64.2% ± 0.4 pp | 74.6% ± 1.1 pp | 71.6% ± 0.9 pp | 14.6% ± 1.3 pp |
+| **+ hard HOCBF** | **8.2% ± 0.4 pp** | **27.4% ± 0.5 pp** | **27.4% ± 1.1 pp** | 12.8% ± 0.8 pp |
+
+Measured as a paired difference per trained model on identical episode seeds, the filter removed 68.6 pp of unsafe episodes on the ID reference for the plain residual policy and 56.0 pp for the full stack. All 15 per-model paired bootstrap intervals excluded zero in every scenario for both pairings, while the paired success cost — -4.6 pp and -1.8 pp — excluded zero in only 4/15 and 0/15 comparisons.
+
+The unfiltered conditions were never trained against the safety envelope, so their violation rates characterize the baseline rather than a defect introduced by residual learning; the claim this campaign supports is the paired filter effect. Filtering reduces violations without eliminating them, because the HOCBF certificate covers the nominal instantaneous command model only.
 
 See [`docs/experiments.md`](docs/experiments.md) and [`docs/verification.md`](docs/verification.md) for the protocol, retained evidence and provenance.
 
@@ -62,7 +79,7 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Limitations
 
-The v1.3 OOD/fault campaign is complete, but quantified-safety, MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. HOCBF guarantees are model-relative, ensemble disagreement is not calibrated probability, and the uncertainty gate is not a formal safety certificate.
+The v1.3 OOD/fault and v1.4 quantified-safety campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. HOCBF guarantees are model-relative: v1.4 measured residual physical violations under randomized dynamics, actuator delay and injected faults even though the executed-command margin stayed non-negative. Ensemble disagreement is not calibrated probability, and the uncertainty gate is not a formal safety certificate.
 
 ## License and citation
 
@@ -73,7 +90,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {1.3.0},
+  version = {1.4.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```

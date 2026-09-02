@@ -40,6 +40,125 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## v1.4.0 quantified safety evidence
+
+The v1.4 campaign reuses the frozen v1.2 checkpoints together with the v1.3
+evaluation seeds `50000..50099` and scenarios. No policy, context encoder or
+ensemble was retrained. This is a paired safety audit of the retained
+controllers, not a new model-selection or generalization claim. Four
+conditions were evaluated over five training seeds, three scenarios and 100
+episodes per scenario, for 6,000 episodes.
+
+The campaign isolates two filter effects on identical episode seeds:
+
+- `A2_unfiltered` versus `A5_hocbf` — the same residual policy without and
+  with required hard-HOCBF projection;
+- `A6_prefilter` versus `A6_hocbf` — the same context-plus-gate stack
+  immediately before and after required hard-HOCBF projection.
+
+Earlier campaigns reported task success only. Success alone cannot separate a
+controller that reaches the target through the safe set from one that reaches
+it by traversing constraint violations, so v1.2 and v1.3 could not evaluate
+the component whose only purpose is to prevent the second case.
+
+### Measured safety and task outcomes
+
+Values are means ± sample SD across five independently trained policies.
+
+| Condition | Scenario | Unsafe episodes | Unsafe states | Success |
+|---|---|---:|---:|---:|
+| A2 unfiltered | ID reference | 72.6% ± 3.6 pp | 18.0% ± 2.6 pp | 52.2% ± 7.7 pp |
+| A5 + HOCBF | ID reference | **4.0% ± 1.6 pp** | **0.6% ± 0.7 pp** | 47.6% ± 7.3 pp |
+| A6 pre-filter | ID reference | 64.2% ± 0.4 pp | 16.6% ± 0.4 pp | 14.6% ± 1.3 pp |
+| A6 + HOCBF | ID reference | **8.2% ± 0.4 pp** | **0.5% ± 0.0 pp** | 12.8% ± 0.8 pp |
+| A2 unfiltered | Compound OOD | 67.8% ± 1.9 pp | 14.2% ± 1.4 pp | 6.0% ± 2.3 pp |
+| A5 + HOCBF | Compound OOD | **19.6% ± 2.6 pp** | **1.1% ± 0.4 pp** | 3.0% ± 0.7 pp |
+| A6 pre-filter | Compound OOD | 74.6% ± 1.1 pp | 20.7% ± 0.1 pp | 0.0% ± 0.0 pp |
+| A6 + HOCBF | Compound OOD | **27.4% ± 0.5 pp** | **3.0% ± 0.0 pp** | 0.0% ± 0.0 pp |
+| A2 unfiltered | Motor fault | 75.6% ± 3.3 pp | 17.3% ± 1.7 pp | 23.6% ± 1.9 pp |
+| A5 + HOCBF | Motor fault | **21.6% ± 1.3 pp** | **4.5% ± 1.5 pp** | 16.4% ± 1.1 pp |
+| A6 pre-filter | Motor fault | 71.6% ± 0.9 pp | 24.1% ± 0.6 pp | 3.6% ± 0.5 pp |
+| A6 + HOCBF | Motor fault | **27.4% ± 1.1 pp** | **6.1% ± 0.2 pp** | 2.8% ± 0.4 pp |
+
+### Paired filter effects
+
+Differences are computed per trained model on identical episode seeds; the
+spread is the sample SD across the five models.
+
+| Pairing | Scenario | Unsafe episodes | Unsafe states | Violation integral | Success |
+|---|---|---:|---:|---:|---:|
+| A2 → A5 | ID reference | -68.6 ± 3.4 pp | -17.5 ± 1.6 pp | -0.126 ± 0.038 | -4.6 ± 2.7 pp |
+| A2 → A5 | Compound OOD | -48.2 ± 2.2 pp | -12.9 ± 1.2 pp | -0.204 ± 0.040 | -3.0 ± 2.6 pp |
+| A2 → A5 | Motor fault | -54.0 ± 4.0 pp | -12.7 ± 2.0 pp | -0.141 ± 0.012 | -7.2 ± 2.8 pp |
+| A6 pre → A6 | ID reference | -56.0 ± 0.0 pp | -16.2 ± 0.3 pp | -0.187 ± 0.005 | -1.8 ± 0.8 pp |
+| A6 pre → A6 | Compound OOD | -47.2 ± 1.3 pp | -17.6 ± 0.1 pp | -0.311 ± 0.013 | +0.0 ± 0.0 pp |
+| A6 pre → A6 | Motor fault | -44.2 ± 0.4 pp | -18.3 ± 0.9 pp | -0.272 ± 0.037 | -0.8 ± 0.4 pp |
+
+Across the 15 per-model paired bootstrap intervals of each pairing (5 seeds ×
+3 scenarios, 10,000 draws each), the reduction in unsafe-episode rate and in
+unsafe-state fraction excluded zero in **15/15** intervals for both pairings.
+The paired success difference excluded zero in only 4/15 intervals for
+A2 → A5 and in 0/15 for A6 pre → A6. The filter therefore removed the
+majority of unsafe episodes at a task-success cost that was, for most trained
+models, not distinguishable from zero.
+
+Maximum joint-position excess fell by 0.161–0.398 rad and maximum
+joint-velocity excess by 2.49–3.50 rad/s depending on pairing and scenario, so
+the effect is a reduction in violation severity and not only in violation
+count.
+
+### Filter activity and residual violations
+
+The hard-HOCBF runtime modified 39.8% (A5) and 18.6% (A6) of ID command
+attempts, rising to 79.4% and 61.0% under compound OOD. It rejected 41/1,500
+A5 episodes and 45/1,500 A6 episodes as infeasible; the infeasible command was
+not executed and the episode was counted as unsuccessful. These counts match
+the v1.3 campaign exactly, as required by the reuse of identical seeds and
+frozen checkpoints.
+
+Filtering did not eliminate physical violations: 226/1,500 A5 and 315/1,500
+A6 episodes still entered unsafe states, against 1,080/1,500 and 1,052/1,500
+unfiltered. The executed-command margin was non-negative throughout, so the
+residual violations are not solver failures. They are the expected consequence
+of a certificate defined on the nominal instantaneous command model while the
+evaluated plant carries randomized parameters, actuator delay, injected faults
+and discretization.
+
+The A6 pre-filter stack was **less** safe than the plain residual policy under
+compound OOD (74.6% versus 67.8% unsafe episodes, 20.7% versus 14.2% unsafe
+states) while producing 0.0% success. The frozen uncertainty gate again
+operated near minimum residual authority. This negative result is retained.
+
+### Audit
+
+The audit verified 6,000 episode rows, 6,000 diagnostic rows, 60 per-model
+summaries and 180 paired comparisons; complete coverage of 60 condition ×
+seed × scenario cells at exactly 100 episodes each; the full seed population
+`50000..50099`; the state-observation invariant
+(`state_observations == steps + 1`) and the command-attempt invariant on every
+row; and finite values for all core diagnostics. All 20 referenced checkpoint
+hashes were revalidated against the audited v1.3 evaluation manifest before
+the first episode.
+
+The 4,500 A2, A5 and A6 episodes that also exist in the v1.3 campaign
+reproduced their retained v1.3 outcomes exactly — identical success and step
+counts, with rewards matching to within 1e-12 and zero discrepancies. This
+confirms that the frozen artifacts were reused without retraining and that the
+filter comparison is genuinely paired.
+
+The evaluation ran from commit
+`29fa933717c921cab57fbe4023dd03b53267953a` on Ubuntu 24.04 under WSL2 with
+Python 3.12.3, NumPy 2.5.2, SciPy 1.18.1 and PyTorch 2.12.0+cu130. The
+automated suite completed with 138 passing tests and Ruff reported no errors.
+
+Retained evidence is under `results/quantified_safety/`. The campaign
+quantifies the safety effect of the hard-HOCBF filter on the analytical planar
+benchmark. It does not establish calibrated uncertainty, formal safety under
+unmodelled dynamics, MuJoCo/Franka transfer or hardware behavior, and the
+unfiltered conditions were never trained against the safety envelope, so their
+violation rates characterize the baseline rather than demonstrating a defect
+introduced by residual learning.
+
 ## v1.3.0 OOD and fault robustness evidence
 
 The v1.3 campaign reuses the frozen v1.2 A2–A6 artifacts without retraining.

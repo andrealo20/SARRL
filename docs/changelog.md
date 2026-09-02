@@ -2,6 +2,18 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v1.4.0 — quantified safety
+
+- Reused the frozen v1.2 checkpoints and the v1.3 seeds `50000..50099` and scenarios to run a 6,000-episode paired safety audit with no retraining.
+- Added a safety-audit evaluator measuring unsafe-episode rate, unsafe-state fraction, boundary entries, violation severity and integral, command margins, intervention rate and HOCBF infeasibility alongside task success.
+- Isolated two filter effects on identical episode seeds: `A2_unfiltered` versus `A5_hocbf`, and `A6_prefilter` versus `A6_hocbf`.
+- Measured a reduction in unsafe episodes of **-68.6 pp** (A2 → A5) and **-56.0 pp** (A6 pre → A6) on the ID reference, with all 15 per-model paired bootstrap intervals excluding zero for both pairings in every scenario.
+- Measured the paired task-success cost as -4.6 pp (A2 → A5) and -1.8 pp (A6 pre → A6) on the ID reference, with intervals excluding zero in only 4/15 and 0/15 per-model comparisons respectively.
+- Retained the negative result that the frozen uncertainty gate leaves the A6 pre-filter stack less safe than the plain residual policy under compound OOD while producing 0.0% success.
+- Retained that filtering reduces but does not eliminate physical violations, because the HOCBF certificate covers the nominal instantaneous command model only.
+- Audited 6,000 episode and diagnostic rows, 60 summaries, 180 paired comparisons, complete seed coverage, all invariants and all 20 checkpoint hashes; the 4,500 episodes shared with v1.3 reproduced their retained outcomes exactly.
+- Retained the manifest, raw rows, diagnostics, paired comparisons and aggregates under `results/quantified_safety/`.
+
 ## v1.3.0 — OOD and fault robustness
 
 - Reused the frozen v1.2 A2–A6 policies without retraining and evaluated A0 plus 25 learned policies on 7,800 new paired episodes.
