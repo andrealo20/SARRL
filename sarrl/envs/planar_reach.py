@@ -347,6 +347,10 @@ class PlanarReachEnv:
 
         delayed = self._delayed_command(commanded)
         applied = delayed * self.motor_gain
+        pre_step_state = self.state.copy()
+        pre_step_acceleration = self.arm.forward_dynamics(
+            pre_step_state[:2], pre_step_state[2:], applied
+        )
         self.state = self.arm.step_rk4(self.state, applied, self.dt)
         self.steps += 1
 
@@ -369,6 +373,15 @@ class PlanarReachEnv:
                 "commanded_torque": commanded.astype(np.float32),
                 "delayed_torque": delayed.astype(np.float32),
                 "applied_torque": applied.astype(np.float32),
+                # Exact float64 audit fields.  The legacy float32 keys above
+                # remain unchanged so retained v1.2-v1.4 evidence keeps its
+                # historical interface and numerical representation.
+                "commanded_torque_exact": commanded.copy(),
+                "delayed_torque_exact": delayed.copy(),
+                "actuator_scaled_torque": applied.copy(),
+                "plant_input_torque": applied.copy(),
+                "pre_step_state": pre_step_state,
+                "pre_step_acceleration": pre_step_acceleration,
             }
         )
         return self._observation(), float(reward), terminated, truncated, info

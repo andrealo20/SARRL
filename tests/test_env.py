@@ -122,6 +122,31 @@ def test_step_torque_matches_direct_torque_action_without_plant_disturbances():
     assert out_a[2:4] == out_b[2:4]
 
 
+def test_step_torque_exposes_exact_preintegration_dynamics_invariant():
+    env = PlanarReachEnv(
+        mode="torque",
+        randomization=DomainRandomization(
+            mass_fraction=0.15,
+            friction_fraction=0.30,
+            motor_gain_fraction=0.15,
+            payload_range=(0.0, 1.0),
+            action_delay_max=2,
+        ),
+    )
+    env.reset(seed=60_007)
+    _, _, _, _, info = env.step_torque(np.array([17.123456789, -11.987654321]))
+
+    recomputed = env.arm.forward_dynamics(
+        info["pre_step_state"][:2],
+        info["pre_step_state"][2:],
+        info["plant_input_torque"],
+    )
+    np.testing.assert_allclose(info["pre_step_acceleration"], recomputed, rtol=0.0, atol=1e-12)
+    np.testing.assert_array_equal(
+        info["actuator_scaled_torque"], info["plant_input_torque"]
+    )
+
+
 def test_environment_checkpoint_rejects_constructor_mismatch():
     env = PlanarReachEnv(mode="residual", randomization=DomainRandomization(mass_fraction=0.1))
     env.reset(seed=3)

@@ -148,6 +148,8 @@ def residual_acceleration_target(
     state,
     applied_torque,
     observed_acceleration,
+    *,
+    dtype=np.float32,
 ) -> np.ndarray:
     state = np.asarray(state, dtype=np.float64)
     torque = np.asarray(applied_torque, dtype=np.float64)
@@ -155,7 +157,10 @@ def residual_acceleration_target(
     if state.shape != (4,) or torque.shape != (2,) or observed.shape != (2,):
         raise ValueError("residual target expects state(4), torque(2), acceleration(2)")
     nominal = nominal_model.forward_dynamics(state[:2], state[2:], torque)
-    return (observed - nominal).astype(np.float32)
+    output_dtype = np.dtype(dtype)
+    if output_dtype.kind != "f":
+        raise ValueError("residual target dtype must be floating point")
+    return (observed - nominal).astype(output_dtype)
 
 
 def train_residual_ensemble(

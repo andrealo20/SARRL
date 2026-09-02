@@ -1,3 +1,10 @@
+from .gate_calibration import (
+    PhaseAEpisode,
+    analyze_phase_a,
+    spearman_or_zero,
+    summarize_episode,
+    write_dataclass_csv,
+)
 from .gated import GateEpisodeDiagnostics, evaluate_gated_policy_episodes
 from .planar_v12 import (
     V12_A3_TRAINING_COMMIT,
@@ -45,6 +52,18 @@ from .planar_v14 import (
     V14_PAIRINGS,
     V14_TRAINING_SEEDS,
     v14_protocol_dict,
+)
+from .planar_v15 import (
+    V15_PHASE_A_BOOTSTRAP_SAMPLES,
+    V15_PHASE_A_BOOTSTRAP_SEED,
+    V15_PHASE_A_EPISODES,
+    V15_PHASE_A_EVALUATION_SEED,
+    V15_PHASE_A_MIN_COMMON_EPISODES,
+    V15_PHASE_A_MIN_FINITE_PAIRS,
+    V15_PHASE_A_POLICIES,
+    V15_PHASE_A_SCREENING_THRESHOLD,
+    V15_PHASE_A_TRAINING_SEEDS,
+    v15_phase_a_protocol_dict,
 )
 from .policy import PolicyEvaluation, evaluate_policy, evaluate_policy_episodes
 from .protocol import (
@@ -132,6 +151,21 @@ __all__ = [
     "V14_PAIRINGS",
     "V14_TRAINING_SEEDS",
     "v14_protocol_dict",
+    "V15_PHASE_A_BOOTSTRAP_SAMPLES",
+    "V15_PHASE_A_BOOTSTRAP_SEED",
+    "V15_PHASE_A_EPISODES",
+    "V15_PHASE_A_EVALUATION_SEED",
+    "V15_PHASE_A_MIN_COMMON_EPISODES",
+    "V15_PHASE_A_MIN_FINITE_PAIRS",
+    "V15_PHASE_A_POLICIES",
+    "V15_PHASE_A_SCREENING_THRESHOLD",
+    "V15_PHASE_A_TRAINING_SEEDS",
+    "v15_phase_a_protocol_dict",
+    "PhaseAEpisode",
+    "analyze_phase_a",
+    "spearman_or_zero",
+    "summarize_episode",
+    "write_dataclass_csv",
     "SafetyEpisodeDiagnostics",
     "evaluate_safety_episodes",
     "paired_diagnostic_difference",

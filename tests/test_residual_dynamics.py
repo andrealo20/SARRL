@@ -35,6 +35,20 @@ def test_residual_target_detects_payload_model_error():
     assert np.linalg.norm(target) > 0.1
 
 
+def test_residual_target_supports_float64_calibration_measurements():
+    nominal = PlanarArm()
+    actual = PlanarArm(PlanarArmParams(payload_mass=0.7))
+    state = np.array([0.2, -0.1, 0.3, -0.2], dtype=np.float64)
+    torque = np.array([5.0, -2.0], dtype=np.float64)
+    observed = actual.forward_dynamics(state[:2], state[2:], torque)
+    target = residual_acceleration_target(
+        nominal, state, torque, observed, dtype=np.float64
+    )
+    assert target.dtype == np.float64
+    expected = observed - nominal.forward_dynamics(state[:2], state[2:], torque)
+    np.testing.assert_array_equal(target, expected)
+
+
 def test_ensemble_training_reduces_synthetic_residual_loss():
     rng = np.random.default_rng(2)
     cfg = ResidualDynamicsConfig(hidden=(24, 24), ensemble_size=3, learning_rate=3e-3)
