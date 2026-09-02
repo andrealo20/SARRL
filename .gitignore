@@ -2,6 +2,10 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .ruff_cache/
+PLAN.md
+PLAN-REVIEW-LOG.md
+CLAUDE.md
+AGENTS.md
 .venv/
 venv/
 build/
