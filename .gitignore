@@ -29,6 +29,19 @@ results/*
 !results/quantified_safety/
 !results/quantified_safety/**
 
+# Canonical retained evidence for v1.5 uncertainty-gate calibration. The
+# uncompressed 100+ MiB transition table and resumable shards remain local;
+# the deterministic gzip payload carries the same canonical CSV bytes.
+!results/uncertainty_gate_calibration/
+results/uncertainty_gate_calibration/*
+!results/uncertainty_gate_calibration/phase_a/
+results/uncertainty_gate_calibration/phase_a/*
+!results/uncertainty_gate_calibration/phase_a/cells.csv
+!results/uncertainty_gate_calibration/phase_a/decision.json
+!results/uncertainty_gate_calibration/phase_a/episodes.csv
+!results/uncertainty_gate_calibration/phase_a/evaluation_manifest.json
+!results/uncertainty_gate_calibration/phase_a/transitions.csv.gz
+
 # Model checkpoints and context tensors are never committed. Their SHA-256
 # fingerprints in the retained manifests preserve the identity of the exact
 # models used to produce the evaluation records.

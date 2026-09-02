@@ -5,9 +5,11 @@ from __future__ import annotations
 
 import argparse
 import csv
+import gzip
 import hashlib
 import json
 import math
+import shutil
 from pathlib import Path
 
 import numpy as np
@@ -374,6 +376,7 @@ def _read_episode_rows(path: Path) -> list[PhaseAEpisode]:
 
 
 def aggregate_shards(root: Path, out: Path) -> None:
+    out = out.resolve()
     episodes = []
     shard_hashes = []
     for seed in V15_PHASE_A_TRAINING_SEEDS:
@@ -412,6 +415,10 @@ def aggregate_shards(root: Path, out: Path) -> None:
                         raise ValueError(f"transition schema mismatch: {source_path}")
                     for line in source:
                         destination.write(line)
+    compressed_transition_path = out / "transitions.csv.gz"
+    with transition_path.open("rb") as source, compressed_transition_path.open("wb") as raw:
+        with gzip.GzipFile(filename="", mode="wb", fileobj=raw, mtime=0) as destination:
+            shutil.copyfileobj(source, destination)
 
     episodes.sort(key=lambda row: (_cell_key_for_sort(row), row.episode_seed))
     write_dataclass_csv(out / "episodes.csv", episodes)
@@ -427,7 +434,13 @@ def aggregate_shards(root: Path, out: Path) -> None:
     manifest["shard_hashes"] = shard_hashes
     manifest["outputs"] = {
         name: _sha256(out / name)
-        for name in ("transitions.csv", "episodes.csv", "cells.csv", "decision.json")
+        for name in (
+            "transitions.csv",
+            "transitions.csv.gz",
+            "episodes.csv",
+            "cells.csv",
+            "decision.json",
+        )
     }
     write_run_manifest(out / "evaluation_manifest.json", manifest, root=root)
     print(
