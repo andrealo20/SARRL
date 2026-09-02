@@ -1,0 +1,12 @@
+{
+  "A4c": {
+    "all_noninferiority_bounds_pass": false,
+    "ood_success_strict_benefit_pass": false,
+    "useful_calibrated_gate": false
+  },
+  "A6c": {
+    "all_noninferiority_bounds_pass": false,
+    "ood_success_strict_benefit_pass": false,
+    "useful_calibrated_gate": false
+  }
+}

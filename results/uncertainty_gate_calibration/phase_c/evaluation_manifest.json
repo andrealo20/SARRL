@@ -1,0 +1,169 @@
+{
+  "config": {
+    "calibration_path": "results/uncertainty_gate_calibration/calibration.json",
+    "calibration_sha256": "3d9e375ab23722a3304c5925f58a94ebef478632f960cd5aede46f9a07e29794",
+    "campaign": "calibrated_gate_evaluation_phase_c",
+    "new_episodes": 7000,
+    "outputs": {
+      "decision.json": "8394d23d5c58edb54cf728212ae7f11aec0f677df0ac348fa7141bb66f86bc4b",
+      "distribution_shift.csv": "e88b8d0002e2338deb40e19d6c335eab8af5ecf630d10a93bd876ad6bd5ffba8",
+      "episodes.csv": "386ba8b9defb1bb0ac11934e279ae1c52900dd38e8c59eb0428ad5cb219e9cbf",
+      "gate_episodes.csv": "b0d46940eaf17293faa25122d60207f838e88326b14c84fe8be7cd4e7ee0febf",
+      "heldout_comparisons.csv": "04aec2de7491566bfb7f221f7fe278f4ad763fc2feb6e1879fbd04ffa37aaff1",
+      "paired_comparisons.csv": "f3c37a5031253f0421cde669acb43473e478c74b5c18fff646d26e722107c9b3",
+      "safety_diagnostics.csv": "43620d13b0945e0b5764c81cac9e65f1bc1dc9a080a33515088264f8145b529e",
+      "summary.csv": "bf608ecfb8894c7596a0e1aef4f0414c3e97689d0b1eeefd6b121ef7b25f1af3",
+      "transitions.csv.gz": "fb8257f1759d1a47ccf0172d68eca6b5e8adf42dd43cf65e212263695523e90d"
+    },
+    "raw_transition_retention": {
+      "release_asset": "transitions.csv.gz",
+      "repository": "omitted_single_file_exceeds_github_100_mb_limit"
+    },
+    "release_target": "v1.5.0",
+    "shard_hashes": [
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_0/episodes.csv",
+        "sha256": "275f29c93c1455125898f60c892555f5bf6ca4c32ae070433cfdfd479f562f08",
+        "training_seed": 0
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_0/evaluation_manifest.json",
+        "sha256": "193463daacd5f1b91d426d269e16df37c432e2e09cd9f469a0d8aa7cdbce1791",
+        "training_seed": 0
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_0/gate_episodes.csv",
+        "sha256": "e46d294515d4b4316aa2cb18c35c7ef100504bbf345e2783f2886dad8e942637",
+        "training_seed": 0
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_0/safety_diagnostics.csv",
+        "sha256": "3503e0cb64160e6d740dcaf423a022e985e60f108396bf929256381a34d09f9c",
+        "training_seed": 0
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_0/transitions.csv.gz",
+        "sha256": "716103f9ca39c5a816796688c6258c9113a60488ce03dc1c3944443d4d38a88b",
+        "training_seed": 0
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_1/episodes.csv",
+        "sha256": "3073903f7467a87e06ed1ae561e864039f24cf044cbd565b7d02dabf5b3d9104",
+        "training_seed": 1
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_1/evaluation_manifest.json",
+        "sha256": "db0d05bc7deb0ece5c9210db21b379707837ea5d9747572d39c3e0807178ec42",
+        "training_seed": 1
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_1/gate_episodes.csv",
+        "sha256": "6c83e7b7cc7ff167b54b3ca2d2b25bd3bc09e6dd70953086217425992614ae86",
+        "training_seed": 1
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_1/safety_diagnostics.csv",
+        "sha256": "33d406a74d00056e0d2d1f8c3520fc8fc7fef750b93b8443bedcefdcc8b7112c",
+        "training_seed": 1
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_1/transitions.csv.gz",
+        "sha256": "bfaac6f72a0bdd7117c766a64f0c7a50d15cd70970e08733d41a1492fb7df982",
+        "training_seed": 1
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_2/episodes.csv",
+        "sha256": "910a52c162c05820f3dffb0808055416ab79e14d515c9d2eda63e825ac52730d",
+        "training_seed": 2
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_2/evaluation_manifest.json",
+        "sha256": "b4ca2e7e848b50d789500a2b168e34ce17cfbcd7dad9f5a9e1588b6335e37d44",
+        "training_seed": 2
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_2/gate_episodes.csv",
+        "sha256": "b232ecebd9837c4f331763e59cab0efb0eac577978ffd4dbd8cf5885db9700c2",
+        "training_seed": 2
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_2/safety_diagnostics.csv",
+        "sha256": "4e4ac0a38895ada229c5466c5f44214fdfba24e23268f991b92eadbbf15ea16a",
+        "training_seed": 2
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_2/transitions.csv.gz",
+        "sha256": "8ceb878ee42c5a469cffe494bf5806cccf4e8feea45ef538890acc6f18d53b0c",
+        "training_seed": 2
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_3/episodes.csv",
+        "sha256": "b2f7b1de6c5ca1198c1752d55663fc09de511118009d0e94bfae3a30d714db1e",
+        "training_seed": 3
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_3/evaluation_manifest.json",
+        "sha256": "d3f8062efb93b20966d9f973a7584a6f7700268fb6cef358c5aeedb757c9edec",
+        "training_seed": 3
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_3/gate_episodes.csv",
+        "sha256": "e75171b6682f89d8731fc0631b74ca82dd86f6bdfa342e135703c738964c90fe",
+        "training_seed": 3
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_3/safety_diagnostics.csv",
+        "sha256": "cdc78518ce33eb4837b90f3368e5278aec34be930cb60a9e38356a2cfbc4b4fe",
+        "training_seed": 3
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_3/transitions.csv.gz",
+        "sha256": "b0627eca2651f9ab394f2b92ffaa265f02d9755c189b1d3849f93f1df464b432",
+        "training_seed": 3
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_4/episodes.csv",
+        "sha256": "fc579df8d70266cc6a577d31855c66afc5436da6326015fee7060907a153481c",
+        "training_seed": 4
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_4/evaluation_manifest.json",
+        "sha256": "1d92c3a414cb5c72903ea1fce6a448b9906b7ce9b33489876e3b522c1573bbac",
+        "training_seed": 4
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_4/gate_episodes.csv",
+        "sha256": "c2c956c280d217356fa150cc89838287491a7fcd8ddf9c28fe415b05647aea84",
+        "training_seed": 4
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_4/safety_diagnostics.csv",
+        "sha256": "d366ba5397d525ee8d5d437314c7e80458b9f04becf13bffdbf1ab9dab944028",
+        "training_seed": 4
+      },
+      {
+        "path": "results/uncertainty_gate_calibration/phase_c/shards/training_seed_4/transitions.csv.gz",
+        "sha256": "42a47af588807377815abf51e46111adae7ab09f6a0f63e44fc8862abbac268a",
+        "training_seed": 4
+      }
+    ],
+    "training_seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": true,
+    "git_commit": "724566eed0ca689b1ece6f1e6d55a406534d0561",
+    "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "torch": "2.12.0+cu130"
+  }
+}
