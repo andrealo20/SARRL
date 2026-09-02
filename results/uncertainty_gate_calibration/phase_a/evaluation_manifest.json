@@ -4,50 +4,55 @@
     "collection_runtimes": [
       {
         "cuda_available": true,
-        "git_commit": "637ea705bc631031c37149580b3156cc923c0e6e",
+        "git_commit": "e71fa2683eb8df565de38d234932f4875c56fb7a",
         "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
         "numpy": "2.5.2",
         "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "provenance_note": "source-equivalent public commit after removal of private non-scientific planning files",
         "python": "3.12.3",
         "scipy": "1.18.1",
         "torch": "2.12.0+cu130"
       },
       {
         "cuda_available": true,
-        "git_commit": "637ea705bc631031c37149580b3156cc923c0e6e",
+        "git_commit": "e71fa2683eb8df565de38d234932f4875c56fb7a",
         "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
         "numpy": "2.5.2",
         "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "provenance_note": "source-equivalent public commit after removal of private non-scientific planning files",
         "python": "3.12.3",
         "scipy": "1.18.1",
         "torch": "2.12.0+cu130"
       },
       {
         "cuda_available": true,
-        "git_commit": "637ea705bc631031c37149580b3156cc923c0e6e",
+        "git_commit": "e71fa2683eb8df565de38d234932f4875c56fb7a",
         "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
         "numpy": "2.5.2",
         "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "provenance_note": "source-equivalent public commit after removal of private non-scientific planning files",
         "python": "3.12.3",
         "scipy": "1.18.1",
         "torch": "2.12.0+cu130"
       },
       {
         "cuda_available": true,
-        "git_commit": "637ea705bc631031c37149580b3156cc923c0e6e",
+        "git_commit": "e71fa2683eb8df565de38d234932f4875c56fb7a",
         "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
         "numpy": "2.5.2",
         "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "provenance_note": "source-equivalent public commit after removal of private non-scientific planning files",
         "python": "3.12.3",
         "scipy": "1.18.1",
         "torch": "2.12.0+cu130"
       },
       {
         "cuda_available": true,
-        "git_commit": "637ea705bc631031c37149580b3156cc923c0e6e",
+        "git_commit": "e71fa2683eb8df565de38d234932f4875c56fb7a",
         "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
         "numpy": "2.5.2",
         "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+        "provenance_note": "source-equivalent public commit after removal of private non-scientific planning files",
         "python": "3.12.3",
         "scipy": "1.18.1",
         "torch": "2.12.0+cu130"
@@ -285,7 +290,7 @@
   "extra": {},
   "runtime": {
     "cuda_available": true,
-    "git_commit": "d4f19a9e4b23ea95a4bd48f42a22ce4d979af544",
+    "git_commit": "82b8ae38aa5a70148ebd8ea57f7b0cfd439ccd7a",
     "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
     "numpy": "2.5.2",
     "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",

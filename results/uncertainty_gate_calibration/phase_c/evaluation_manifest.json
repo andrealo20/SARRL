@@ -1,7 +1,7 @@
 {
   "config": {
     "calibration_path": "results/uncertainty_gate_calibration/calibration.json",
-    "calibration_sha256": "3d9e375ab23722a3304c5925f58a94ebef478632f960cd5aede46f9a07e29794",
+    "calibration_sha256": "8f65ff432f7432c8e4aa94ef0d8406736428aabd0598f4e3f0c90354a019155f",
     "campaign": "calibrated_gate_evaluation_phase_c",
     "new_episodes": 7000,
     "outputs": {
@@ -16,8 +16,9 @@
       "transitions.csv.gz": "fb8257f1759d1a47ccf0172d68eca6b5e8adf42dd43cf65e212263695523e90d"
     },
     "raw_transition_retention": {
-      "release_asset": "transitions.csv.gz",
-      "repository": "omitted_single_file_exceeds_github_100_mb_limit"
+      "availability": "local_only_not_published",
+      "repository": "omitted_single_file_exceeds_github_100_mb_limit",
+      "verification": "compact evidence is independently verifiable without raw rows"
     },
     "release_target": "v1.5.0",
     "shard_hashes": [
@@ -158,7 +159,7 @@
   "extra": {},
   "runtime": {
     "cuda_available": true,
-    "git_commit": "724566eed0ca689b1ece6f1e6d55a406534d0561",
+    "git_commit": "82b8ae38aa5a70148ebd8ea57f7b0cfd439ccd7a",
     "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
     "numpy": "2.5.2",
     "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
