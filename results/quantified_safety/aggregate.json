@@ -1,0 +1,390 @@
+{
+  "conditions": {
+    "A2_unfiltered": {
+      "id_reference": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.12670794901318214,
+        "normalized_violation_integral_mean_std": 0.03839094454515926,
+        "safety_infeasible_rate_mean": 0.0,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.0,
+        "safety_intervention_fraction_std": 0.0,
+        "success_rate_mean": 0.522,
+        "success_rate_std": 0.07661592523751179,
+        "unsafe_episode_rate_mean": 0.7260000000000001,
+        "unsafe_episode_rate_std": 0.03577708763999663,
+        "unsafe_state_fraction_mean": 0.1797167518027424,
+        "unsafe_state_fraction_std": 0.025949724300825434
+      },
+      "motor_fault": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.15898994793967142,
+        "normalized_violation_integral_mean_std": 0.01011711342793817,
+        "safety_infeasible_rate_mean": 0.0,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.0,
+        "safety_intervention_fraction_std": 0.0,
+        "success_rate_mean": 0.236,
+        "success_rate_std": 0.01949358868961793,
+        "unsafe_episode_rate_mean": 0.756,
+        "unsafe_episode_rate_std": 0.032863353450309996,
+        "unsafe_state_fraction_mean": 0.17322415668160615,
+        "unsafe_state_fraction_std": 0.01721880268630354
+      },
+      "ood_compound": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.20882346732389218,
+        "normalized_violation_integral_mean_std": 0.038997921860631155,
+        "safety_infeasible_rate_mean": 0.0,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.0,
+        "safety_intervention_fraction_std": 0.0,
+        "success_rate_mean": 0.06,
+        "success_rate_std": 0.023452078799117152,
+        "unsafe_episode_rate_mean": 0.6779999999999999,
+        "unsafe_episode_rate_std": 0.019235384061671315,
+        "unsafe_state_fraction_mean": 0.14228062359216573,
+        "unsafe_state_fraction_std": 0.014432430230335712
+      }
+    },
+    "A5_hocbf": {
+      "id_reference": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.0005885597078845564,
+        "normalized_violation_integral_mean_std": 0.0005553796746850091,
+        "safety_infeasible_rate_mean": 0.012,
+        "safety_infeasible_rate_std": 0.00447213595499958,
+        "safety_intervention_fraction_mean": 0.39769103288151453,
+        "safety_intervention_fraction_std": 0.01703375667546675,
+        "success_rate_mean": 0.476,
+        "success_rate_std": 0.07266360849833982,
+        "unsafe_episode_rate_mean": 0.04,
+        "unsafe_episode_rate_std": 0.015811388300841896,
+        "unsafe_state_fraction_mean": 0.006268349916341624,
+        "unsafe_state_fraction_std": 0.006666835176734248
+      },
+      "motor_fault": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.017613058421903194,
+        "normalized_violation_integral_mean_std": 0.005328508967375244,
+        "safety_infeasible_rate_mean": 0.036,
+        "safety_infeasible_rate_std": 0.005477225575051662,
+        "safety_intervention_fraction_mean": 0.5481150807949048,
+        "safety_intervention_fraction_std": 0.029950136197538394,
+        "success_rate_mean": 0.16399999999999998,
+        "success_rate_std": 0.01140175425099138,
+        "unsafe_episode_rate_mean": 0.21600000000000003,
+        "unsafe_episode_rate_std": 0.013416407864998743,
+        "unsafe_state_fraction_mean": 0.04489615286482111,
+        "unsafe_state_fraction_std": 0.015029250751527744
+      },
+      "ood_compound": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.004871014445681327,
+        "normalized_violation_integral_mean_std": 0.001980886675600814,
+        "safety_infeasible_rate_mean": 0.034,
+        "safety_infeasible_rate_std": 0.005477225575051662,
+        "safety_intervention_fraction_mean": 0.7943854340342065,
+        "safety_intervention_fraction_std": 0.01778000177376915,
+        "success_rate_mean": 0.03,
+        "success_rate_std": 0.007071067811865475,
+        "unsafe_episode_rate_mean": 0.196,
+        "unsafe_episode_rate_std": 0.026076809620810593,
+        "unsafe_state_fraction_mean": 0.011100316269691745,
+        "unsafe_state_fraction_std": 0.0036344326862086255
+      }
+    },
+    "A6_hocbf": {
+      "id_reference": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.0010194170662248575,
+        "normalized_violation_integral_mean_std": 7.400555928976089e-05,
+        "safety_infeasible_rate_mean": 0.02,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.18636352573447174,
+        "safety_intervention_fraction_std": 0.004253788110009443,
+        "success_rate_mean": 0.128,
+        "success_rate_std": 0.008366600265340763,
+        "unsafe_episode_rate_mean": 0.08199999999999999,
+        "unsafe_episode_rate_std": 0.004472135954999577,
+        "unsafe_state_fraction_mean": 0.005400111873217294,
+        "unsafe_state_fraction_std": 0.00043025825018893894
+      },
+      "motor_fault": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.02907604803972439,
+        "normalized_violation_integral_mean_std": 0.00023706749454070018,
+        "safety_infeasible_rate_mean": 0.03,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.3702531391279371,
+        "safety_intervention_fraction_std": 0.01081817131544116,
+        "success_rate_mean": 0.028000000000000004,
+        "success_rate_std": 0.004472135954999578,
+        "unsafe_episode_rate_mean": 0.274,
+        "unsafe_episode_rate_std": 0.01140175425099137,
+        "unsafe_state_fraction_mean": 0.06061092063172071,
+        "unsafe_state_fraction_std": 0.0018663490214421076
+      },
+      "ood_compound": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.014192745988160638,
+        "normalized_violation_integral_mean_std": 0.00024336466273442293,
+        "safety_infeasible_rate_mean": 0.04,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.6098462791512814,
+        "safety_intervention_fraction_std": 0.010843588599688439,
+        "success_rate_mean": 0.0,
+        "success_rate_std": 0.0,
+        "unsafe_episode_rate_mean": 0.274,
+        "unsafe_episode_rate_std": 0.005477225575051666,
+        "unsafe_state_fraction_mean": 0.02992617251095195,
+        "unsafe_state_fraction_std": 0.00022805990146587866
+      }
+    },
+    "A6_prefilter": {
+      "id_reference": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.18823811587082268,
+        "normalized_violation_integral_mean_std": 0.005449864121185479,
+        "safety_infeasible_rate_mean": 0.0,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.0,
+        "safety_intervention_fraction_std": 0.0,
+        "success_rate_mean": 0.14600000000000002,
+        "success_rate_std": 0.013416407864998738,
+        "unsafe_episode_rate_mean": 0.642,
+        "unsafe_episode_rate_std": 0.004472135954999583,
+        "unsafe_state_fraction_mean": 0.16556533974665372,
+        "unsafe_state_fraction_std": 0.003633442524558162
+      },
+      "motor_fault": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.3011517766513889,
+        "normalized_violation_integral_mean_std": 0.03711246634904545,
+        "safety_infeasible_rate_mean": 0.0,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.0,
+        "safety_intervention_fraction_std": 0.0,
+        "success_rate_mean": 0.036000000000000004,
+        "success_rate_std": 0.005477225575051662,
+        "unsafe_episode_rate_mean": 0.716,
+        "unsafe_episode_rate_std": 0.008944271909999166,
+        "unsafe_state_fraction_mean": 0.24072979743911405,
+        "unsafe_state_fraction_std": 0.006279802903064741
+      },
+      "ood_compound": {
+        "models": 5,
+        "normalized_violation_integral_mean_mean": 0.32537860507277905,
+        "normalized_violation_integral_mean_std": 0.013483503409743225,
+        "safety_infeasible_rate_mean": 0.0,
+        "safety_infeasible_rate_std": 0.0,
+        "safety_intervention_fraction_mean": 0.0,
+        "safety_intervention_fraction_std": 0.0,
+        "success_rate_mean": 0.0,
+        "success_rate_std": 0.0,
+        "unsafe_episode_rate_mean": 0.7459999999999999,
+        "unsafe_episode_rate_std": 0.01140175425099139,
+        "unsafe_state_fraction_mean": 0.20717131474103584,
+        "unsafe_state_fraction_std": 0.0012090829406767743
+      }
+    }
+  },
+  "paired_effects": {
+    "A2_to_A5_hocbf": {
+      "id_reference": {
+        "joint_position_violation_max_rad": {
+          "difference_mean": -0.1611963045781856,
+          "difference_std": 0.0259095030864937,
+          "models": 5
+        },
+        "joint_velocity_violation_max_rad_s": {
+          "difference_mean": -3.0409782526363824,
+          "difference_std": 0.27646312482199037,
+          "models": 5
+        },
+        "normalized_violation_integral": {
+          "difference_mean": -0.1261193893052976,
+          "difference_std": 0.038031734279631337,
+          "models": 5
+        },
+        "success_rate": {
+          "difference_mean": -0.046,
+          "difference_std": 0.027018512172212593,
+          "models": 5
+        },
+        "unsafe_episode_rate": {
+          "difference_mean": -0.6859999999999999,
+          "difference_std": 0.03435112807463531,
+          "models": 5
+        },
+        "unsafe_state_fraction": {
+          "difference_mean": -0.17546415061582588,
+          "difference_std": 0.0163587415293604,
+          "models": 5
+        }
+      },
+      "motor_fault": {
+        "joint_position_violation_max_rad": {
+          "difference_mean": -0.17686946530303022,
+          "difference_std": 0.02655077826756131,
+          "models": 5
+        },
+        "joint_velocity_violation_max_rad_s": {
+          "difference_mean": -3.0378243793195394,
+          "difference_std": 0.25338904473671714,
+          "models": 5
+        },
+        "normalized_violation_integral": {
+          "difference_mean": -0.14137688951776822,
+          "difference_std": 0.012440417884621672,
+          "models": 5
+        },
+        "success_rate": {
+          "difference_mean": -0.07200000000000001,
+          "difference_std": 0.027748873851023217,
+          "models": 5
+        },
+        "unsafe_episode_rate": {
+          "difference_mean": -0.54,
+          "difference_std": 0.039999999999999994,
+          "models": 5
+        },
+        "unsafe_state_fraction": {
+          "difference_mean": -0.1270364453848482,
+          "difference_std": 0.020219798625495555,
+          "models": 5
+        }
+      },
+      "ood_compound": {
+        "joint_position_violation_max_rad": {
+          "difference_mean": -0.3980939695055343,
+          "difference_std": 0.07520047106780851,
+          "models": 5
+        },
+        "joint_velocity_violation_max_rad_s": {
+          "difference_mean": -2.486545004985269,
+          "difference_std": 0.39973119218877734,
+          "models": 5
+        },
+        "normalized_violation_integral": {
+          "difference_mean": -0.20395245287821084,
+          "difference_std": 0.03976870095619478,
+          "models": 5
+        },
+        "success_rate": {
+          "difference_mean": -0.03,
+          "difference_std": 0.025495097567963924,
+          "models": 5
+        },
+        "unsafe_episode_rate": {
+          "difference_mean": -0.48200000000000004,
+          "difference_std": 0.021679483388678818,
+          "models": 5
+        },
+        "unsafe_state_fraction": {
+          "difference_mean": -0.1292812286505555,
+          "difference_std": 0.012425635891726494,
+          "models": 5
+        }
+      }
+    },
+    "A6_hocbf_effect": {
+      "id_reference": {
+        "joint_position_violation_max_rad": {
+          "difference_mean": -0.25966663217827246,
+          "difference_std": 0.0024748914139361964,
+          "models": 5
+        },
+        "joint_velocity_violation_max_rad_s": {
+          "difference_mean": -3.379213426641056,
+          "difference_std": 0.04895939938917718,
+          "models": 5
+        },
+        "normalized_violation_integral": {
+          "difference_mean": -0.18721869880459785,
+          "difference_std": 0.005485133679100984,
+          "models": 5
+        },
+        "success_rate": {
+          "difference_mean": -0.018,
+          "difference_std": 0.008366600265340755,
+          "models": 5
+        },
+        "unsafe_episode_rate": {
+          "difference_mean": -0.56,
+          "difference_std": 0.0,
+          "models": 5
+        },
+        "unsafe_state_fraction": {
+          "difference_mean": -0.1618368738333727,
+          "difference_std": 0.002604749179884041,
+          "models": 5
+        }
+      },
+      "motor_fault": {
+        "joint_position_violation_max_rad": {
+          "difference_mean": -0.3565907925545279,
+          "difference_std": 0.02236436512078075,
+          "models": 5
+        },
+        "joint_velocity_violation_max_rad_s": {
+          "difference_mean": -3.4997410934279287,
+          "difference_std": 0.06943243438534565,
+          "models": 5
+        },
+        "normalized_violation_integral": {
+          "difference_mean": -0.27207572861166457,
+          "difference_std": 0.0372712183143639,
+          "models": 5
+        },
+        "success_rate": {
+          "difference_mean": -0.008,
+          "difference_std": 0.004472135954999579,
+          "models": 5
+        },
+        "unsafe_episode_rate": {
+          "difference_mean": -0.442,
+          "difference_std": 0.004472135954999583,
+          "models": 5
+        },
+        "unsafe_state_fraction": {
+          "difference_mean": -0.18305908472095006,
+          "difference_std": 0.008733270035812668,
+          "models": 5
+        }
+      },
+      "ood_compound": {
+        "joint_position_violation_max_rad": {
+          "difference_mean": -0.7170030228524402,
+          "difference_std": 0.02651628604179452,
+          "models": 5
+        },
+        "joint_velocity_violation_max_rad_s": {
+          "difference_mean": -2.9797560217750094,
+          "difference_std": 0.04960181447977325,
+          "models": 5
+        },
+        "normalized_violation_integral": {
+          "difference_mean": -0.3111858590846183,
+          "difference_std": 0.01330462171023751,
+          "models": 5
+        },
+        "success_rate": {
+          "difference_mean": 0.0,
+          "difference_std": 0.0,
+          "models": 5
+        },
+        "unsafe_episode_rate": {
+          "difference_mean": -0.472,
+          "difference_std": 0.013038404810405283,
+          "models": 5
+        },
+        "unsafe_state_fraction": {
+          "difference_mean": -0.1760509292376467,
+          "difference_std": 0.001311235930945435,
+          "models": 5
+        }
+      }
+    }
+  }
+}

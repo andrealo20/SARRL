@@ -16,3 +16,17 @@ results/*
 # Canonical retained evidence for the v1.2 planar ablation study.
 !results/planar_ablations/
 !results/planar_ablations/**
+
+# Canonical retained evidence for the v1.3 OOD and fault campaign.
+!results/ood_fault_robustness/
+!results/ood_fault_robustness/**
+
+# Canonical retained evidence for the v1.4 quantified-safety campaign.
+!results/quantified_safety/
+!results/quantified_safety/**
+
+# Model checkpoints and context tensors are never committed. Their SHA-256
+# fingerprints in the retained manifests preserve the identity of the exact
+# models used to produce the evaluation records.
+results/**/*.pt
+results/**/*.npz
