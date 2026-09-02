@@ -285,7 +285,7 @@
   "extra": {},
   "runtime": {
     "cuda_available": true,
-    "git_commit": "ba7d56a955c5548f822818238cdff9fe4ac39325",
+    "git_commit": "d4f19a9e4b23ea95a4bd48f42a22ce4d979af544",
     "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
     "numpy": "2.5.2",
     "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
