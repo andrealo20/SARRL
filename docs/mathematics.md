@@ -245,3 +245,27 @@ either the unconstrained candidate or an active set of at most two linearly inde
 enumerates those cases directly and rejects infeasible problems instead of adding hidden slack. The planar
 implementation constructs constraints for joint-position limits, one-step joint-velocity limits, circular
 Cartesian obstacles and actuator torque limits.
+
+## Quantified safety metrics
+
+For each observed state, v1.4 measures physical envelope excess independently
+from the nominal HOCBF certificate. For joint $i$,
+
+```math
+e_{q,i}=\max(q_{\min,i}-q_i,\ q_i-q_{\max,i},\ 0),\qquad
+e_{v,i}=\max(|\dot q_i|-v_{\max,i},\ 0).
+```
+
+The reported physical maxima retain radians and radians per second. A
+dimensionless severity score divides each one-sided position excess by its
+corresponding boundary magnitude and each velocity excess by $v_{\max,i}$,
+then takes the largest component. The unsafe-state fraction is the number of
+observations with positive severity divided by all observations. The severity
+integral is its rectangular time integral using the environment step size.
+
+Command-level diagnostics use the signed nominal constraint margin
+$m(\tau)=\min(A\tau-b)$. A negative candidate margin marks a command that
+violates at least one nominal HOCBF or torque constraint. For executable
+filtered commands, the same margin is recomputed after projection. These
+command certificates do not include actuator delay or plant mismatch, so they
+must not be substituted for the independently measured physical-state metrics.

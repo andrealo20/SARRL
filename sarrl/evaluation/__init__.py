@@ -38,6 +38,14 @@ from .planar_v13 import (
     v13_protocol_dict,
     v13_scenarios,
 )
+from .planar_v14 import (
+    V14_CONDITIONS,
+    V14_EPISODES,
+    V14_EVALUATION_SEED,
+    V14_PAIRINGS,
+    V14_TRAINING_SEEDS,
+    v14_protocol_dict,
+)
 from .policy import PolicyEvaluation, evaluate_policy, evaluate_policy_episodes
 from .protocol import (
     AggregateMetrics,
@@ -58,6 +66,12 @@ from .provenance import (
     seed_ranges_overlap,
     source_tree_dirty_paths,
     write_run_manifest,
+)
+from .safety_audit import (
+    SafetyEpisodeDiagnostics,
+    evaluate_safety_episodes,
+    paired_diagnostic_difference,
+    safety_envelope_violation,
 )
 from .stacked import StackEpisodeDiagnostics, evaluate_stack_episodes
 
@@ -112,6 +126,16 @@ __all__ = [
     "RobustnessScenario",
     "v13_protocol_dict",
     "v13_scenarios",
+    "V14_CONDITIONS",
+    "V14_EPISODES",
+    "V14_EVALUATION_SEED",
+    "V14_PAIRINGS",
+    "V14_TRAINING_SEEDS",
+    "v14_protocol_dict",
+    "SafetyEpisodeDiagnostics",
+    "evaluate_safety_episodes",
+    "paired_diagnostic_difference",
+    "safety_envelope_violation",
     "AggregateMetrics",
     "EpisodeResult",
     "aggregate",

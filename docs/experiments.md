@@ -317,3 +317,36 @@ The campaign completed 7,800/7,800 episodes. A3 produced the strongest OOD
 and fault results, but every learned condition degraded relative to its paired
 ID reference. Full audited metrics and limitations are in
 `docs/verification.md`.
+
+## v1.4 quantified safety
+
+v1.4 reuses the frozen v1.2 checkpoints and the v1.3 evaluation seeds and
+scenarios. Reusing seeds `50000..50099` is deliberate: this is a paired safety
+audit of the retained controllers, not a new model-selection or generalization
+claim. No policy, context encoder or ensemble is retrained.
+
+The campaign isolates two filter effects:
+
+- `A2_unfiltered` versus `A5_hocbf`: the same residual policy without and with
+  required hard-HOCBF projection;
+- `A6_prefilter` versus `A6_hocbf`: the same context-plus-gate stack immediately
+  before and after required hard-HOCBF projection.
+
+Each of the four conditions uses five training seeds, three scenarios and 100
+episodes per scenario, for 6,000 episodes. Every trajectory records the initial
+state and every executed transition. Metrics include unsafe-episode rate,
+unsafe-state fraction, boundary-entry count, maximum joint-position and
+joint-velocity excess, normalized violation mean/maximum/integral, candidate
+constraint violations, executed-command margin, intervention rate/magnitude,
+HOCBF infeasibility and task success.
+
+Filter effects are computed per trained model from identical episode seeds with
+10,000-draw paired bootstrap intervals. Cross-model spread is the sample
+standard deviation over the five training seeds. The runner is
+`tools/run_planar_v14.py`; official output is written to
+`results/quantified_safety/`.
+
+The HOCBF certificate covers the nominal instantaneous command model only.
+Randomized plant parameters, actuator delay, injected faults, discretization
+and hardware are outside that guarantee. Physical state violations are
+therefore measured independently from command-level certificate margins.
