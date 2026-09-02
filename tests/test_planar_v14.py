@@ -10,6 +10,7 @@ from sarrl.evaluation import (
     V14_TRAINING_SEEDS,
     v14_protocol_dict,
 )
+from tools.run_planar_v14 import inputs_from_v13_manifest
 
 
 def test_v14_cli_entrypoint_loads_from_repository_root():
@@ -58,3 +59,15 @@ def test_v14_protocol_quantifies_frequency_severity_and_task_tradeoff():
     assert scope["certificate"] == "nominal_instantaneous_command_model_only"
     assert "actuator_delay" in scope["excluded"]
     assert "injected_faults" in scope["excluded"]
+
+
+def test_v14_manifest_loader_rejects_non_v13_campaign(tmp_path):
+    manifest = tmp_path / "manifest.json"
+    manifest.write_text('{"config": {"campaign": "wrong", "inputs": []}}')
+
+    try:
+        inputs_from_v13_manifest(tmp_path, manifest)
+    except ValueError as exc:
+        assert "not the v1.3 robustness campaign" in str(exc)
+    else:
+        raise AssertionError("wrong campaign manifest must be rejected")

@@ -57,6 +57,28 @@ def _write_dict_csv(path: Path, rows: list[dict]) -> None:
         writer.writerows(rows)
 
 
+def inputs_from_v13_manifest(root: Path, path: Path) -> list[dict]:
+    """Load the retained v1.3 inventory and revalidate every referenced artifact."""
+    if not path.is_file():
+        raise FileNotFoundError(f"missing v1.3 evaluation manifest: {path}")
+    payload = json.loads(path.read_text())
+    config = payload.get("config", {})
+    if config.get("campaign") != "planar_ood_fault_robustness":
+        raise ValueError("input manifest is not the v1.3 robustness campaign")
+    records = config.get("inputs", [])
+    seeds = [record.get("training_seed") for record in records]
+    if seeds != list(V14_TRAINING_SEEDS):
+        raise ValueError("v1.3 manifest does not contain the frozen training seeds in order")
+    return validate_inputs(
+        root,
+        list(V14_TRAINING_SEEDS),
+        [Path(record["a2_policy_checkpoint"]) for record in records],
+        [Path(record["policy_checkpoint"]) for record in records],
+        [Path(record["context_checkpoint"]) for record in records],
+        [Path(record["ensemble_checkpoint"]) for record in records],
+    )
+
+
 def _finite_min(values) -> float | None:
     finite = [float(value) for value in values if math.isfinite(float(value))]
     return min(finite) if finite else None
@@ -369,10 +391,11 @@ def main() -> int:
     parser.add_argument("--evaluation-seed", type=int, default=V14_EVALUATION_SEED)
     parser.add_argument("--episodes", type=int, default=V14_EPISODES)
     parser.add_argument("--output", type=Path, default=Path("results/quantified_safety"))
-    parser.add_argument("--a2-policy-checkpoints", type=Path, nargs="+", required=True)
-    parser.add_argument("--a3-policy-checkpoints", type=Path, nargs="+", required=True)
-    parser.add_argument("--context-checkpoints", type=Path, nargs="+", required=True)
-    parser.add_argument("--ensemble-checkpoints", type=Path, nargs="+", required=True)
+    parser.add_argument(
+        "--input-manifest",
+        type=Path,
+        default=Path("results/ood_fault_robustness/evaluation_manifest.json"),
+    )
     args = parser.parse_args()
 
     if args.episodes <= 0 or args.evaluation_seed < 0:
@@ -381,14 +404,7 @@ def main() -> int:
     assert_repository_import_root(root)
     assert_source_tree_clean(root)
     try:
-        inputs = validate_inputs(
-            root,
-            list(V14_TRAINING_SEEDS),
-            args.a2_policy_checkpoints,
-            args.a3_policy_checkpoints,
-            args.context_checkpoints,
-            args.ensemble_checkpoints,
-        )
+        inputs = inputs_from_v13_manifest(root, args.input_manifest)
         run_campaign(
             root,
             args.output,

@@ -344,7 +344,9 @@ Filter effects are computed per trained model from identical episode seeds with
 10,000-draw paired bootstrap intervals. Cross-model spread is the sample
 standard deviation over the five training seeds. The runner is
 `tools/run_planar_v14.py`; official output is written to
-`results/quantified_safety/`.
+`results/quantified_safety/`. By default the runner reads the audited v1.3
+evaluation manifest as its checkpoint inventory and revalidates every artifact
+hash before evaluation.
 
 The HOCBF certificate covers the nominal instantaneous command model only.
 Randomized plant parameters, actuator delay, injected faults, discretization
