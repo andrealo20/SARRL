@@ -73,7 +73,12 @@ def verify(root: Path, out: Path) -> dict:
         for row in json.loads(calibration.read_text(encoding="utf-8"))["u_ref"]
     }
     for name, expected in config["outputs"].items():
-        if _sha256(out / name) != expected:
+        path = out / name
+        if name == "transitions.csv.gz" and not path.is_file():
+            continue
+        if not path.is_file():
+            raise FileNotFoundError(f"missing retained Phase-C output: {name}")
+        if _sha256(path) != expected:
             raise ValueError(f"aggregate output hash mismatch: {name}")
     verified_shard_files = 0
     for item in config["shard_hashes"]:
@@ -125,6 +130,20 @@ def verify(root: Path, out: Path) -> dict:
         if not (0.1 <= scale_min <= scale_mean <= 1.0):
             raise ValueError(f"invalid gate scale summary: {key}")
 
+    raw_path = out / "transitions.csv.gz"
+    if not raw_path.is_file():
+        decision = json.loads((out / "decision.json").read_text(encoding="utf-8"))
+        if set(decision) != {"A4c", "A6c"}:
+            raise ValueError("unexpected Phase-C decision schema")
+        return {
+            "episodes": len(episodes),
+            "gate_episodes": len(gates),
+            "transitions": None,
+            "raw_transitions_verified": False,
+            "decision": decision,
+            "verified_shard_files": verified_shard_files,
+        }
+
     transition_count = 0
     raw_values: dict[tuple, tuple[list[float], list[float], list[float]]] = {}
     non_numeric_fields = {
@@ -136,7 +155,7 @@ def verify(root: Path, out: Path) -> dict:
         "terminated",
         "truncated",
     }
-    with gzip.open(out / "transitions.csv.gz", mode="rt", encoding="utf-8", newline="") as handle:
+    with gzip.open(raw_path, mode="rt", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
         if tuple(reader.fieldnames or ()) != RAW_FIELDS:
             raise ValueError("Phase-C transition schema mismatch")
@@ -226,6 +245,7 @@ def verify(root: Path, out: Path) -> dict:
         "episodes": len(episodes),
         "gate_episodes": len(gates),
         "transitions": transition_count,
+        "raw_transitions_verified": True,
         "decision": decision,
         "verified_shard_files": verified_shard_files,
     }

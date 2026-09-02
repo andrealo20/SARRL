@@ -808,7 +808,8 @@ def aggregate(root: Path, out: Path, calibration: Path) -> None:
         "new_episodes": len(episodes),
         "raw_transition_retention": {
             "repository": "omitted_single_file_exceeds_github_100_mb_limit",
-            "release_asset": "transitions.csv.gz",
+            "availability": "local_only_not_published",
+            "verification": "compact evidence is independently verifiable without raw rows",
         },
         "shard_hashes": shard_hashes,
         "outputs": {

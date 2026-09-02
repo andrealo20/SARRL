@@ -2,6 +2,14 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v1.5.1 — provenance and packaging correction
+
+- Normalized the five Phase-A collection-runtime references to the surviving source-equivalent public commit after private, non-scientific planning files were removed from history.
+- Rebuilt the hash-bound calibration and Phase-C aggregate manifest without changing any numerical calibration value, episode result or acceptance decision.
+- Made the Phase-C verifier portable: a fresh clone now verifies all compact retained evidence and explicitly reports that raw-transition verification was skipped when the local 106 MiB file is absent.
+- Corrected the documentation and manifest to state that the oversized raw Phase-C transition table is local-only and was not published as a release asset.
+- Kept the repository-wide ignore rules that prevent internal planning and agent files from being committed again.
+
 ## v1.5.0 — uncertainty-gate calibration
 
 - Reused the five frozen v1.2 A2/A3 policies, context encoders and dynamics ensembles without retraining.
@@ -11,7 +19,7 @@ This file records implemented release increments. Performance evidence is kept s
 - Measured A4c success differences versus A2 of **-13.0 pp** ID, **-5.0 pp** OOD and **-10.6 pp** under motor fault; every paired 95% interval excluded zero on the negative side.
 - Measured A6c success differences versus gate-off of **-12.2 pp** ID, **-2.0 pp** OOD and **-10.2 pp** under motor fault; every paired 95% interval excluded zero on the negative side.
 - Both preregistered non-inferiority and strict OOD-benefit decisions failed. The calibrated gate is therefore retained as a negative result, not promoted as a robustness improvement.
-- Audited 7,000 outcome and safety rows, 5,500 gate summaries, 609,865 raw transitions and 25 shard files. Compact evidence is retained in Git; the 106 MiB raw transition table is attached to the release.
+- Audited 7,000 outcome and safety rows, 5,500 gate summaries, 609,865 raw transitions and 25 shard files. Compact evidence is retained in Git; the 106 MiB raw transition table remains local and is not part of the public release.
 
 ## v1.4.0 — quantified safety
 

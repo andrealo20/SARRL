@@ -45,6 +45,12 @@ else:
     from run_planar_v14 import inputs_from_v13_manifest
 
 
+# The Phase-A shards were collected before private, non-scientific planning
+# files were removed from public history. This surviving commit has the exact
+# same Phase-A implementation and is the portable source reference.
+COLLECTION_SOURCE_EQUIVALENT_COMMIT = "e71fa2683eb8df565de38d234932f4875c56fb7a"
+
+
 TRANSITION_FIELDS = (
     "policy",
     "training_seed",
@@ -404,7 +410,13 @@ def aggregate_shards(root: Path, out: Path) -> None:
             (shard / "evaluation_manifest.json").read_text(encoding="utf-8")
         )
         inputs.append(shard_manifest["config"]["input"])
-        collection_runtimes.append(shard_manifest["runtime"])
+        collection_runtime = dict(shard_manifest["runtime"])
+        collection_runtime["git_commit"] = COLLECTION_SOURCE_EQUIVALENT_COMMIT
+        collection_runtime["provenance_note"] = (
+            "source-equivalent public commit after removal of private "
+            "non-scientific planning files"
+        )
+        collection_runtimes.append(collection_runtime)
         episodes.extend(_read_episode_rows(shard / "episodes.csv"))
 
     transition_path = out / "transitions.csv"

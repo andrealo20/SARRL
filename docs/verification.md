@@ -76,8 +76,12 @@ The independent verifier checked 7,000 outcome and safety rows, 5,500 gate
 summaries, 609,865 raw transitions and 25 shard files. It recomputed gate
 normalization, scale, residual, query-torque and candidate-torque identities,
 and validated all retained hashes. The compact evidence is under
-`results/uncertainty_gate_calibration/phase_c/`; the deterministic 106 MiB
-raw gzip is distributed as the `transitions.csv.gz` v1.5.0 release asset.
+`results/uncertainty_gate_calibration/phase_c/`. The deterministic 106 MiB
+raw gzip remains local because it exceeds GitHub's per-file Git limit and was
+not authorized for separate public distribution. On a fresh clone, the Phase-C
+verifier audits the complete compact record and reports
+`raw_transitions_verified: false`; placing the original local gzip back in the
+Phase-C directory enables the full 609,865-transition invariant audit.
 
 ## v1.4.0 quantified safety evidence
 
