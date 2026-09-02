@@ -16,6 +16,7 @@ class ControlStackConfig:
     residual_limit: tuple[float, float] = (8.0, 8.0)
     torque_limit: tuple[float, float] = (40.0, 40.0)
     require_safety: bool = False
+    clip_ensemble_query: bool = False
 
     def validate(self) -> None:
         r = np.asarray(self.residual_limit, dtype=np.float64)
@@ -37,6 +38,8 @@ class ControlStackResult:
     safety_correction: float
     safety_certified: bool
     executable: bool
+    ensemble_mean: np.ndarray
+    ensemble_query_torque: np.ndarray
 
 
 class SARRLControlStack:
@@ -80,11 +83,15 @@ class SARRLControlStack:
         raw_residual = action * np.asarray(self.config.residual_limit)
 
         uncertainty = np.zeros(2, dtype=np.float64)
+        ensemble_mean = np.zeros(2, dtype=np.float64)
+        probe_torque = baseline + raw_residual
         scale = 1.0
         gated_residual = raw_residual.copy()
         if self.dynamics_ensemble is not None:
-            probe_torque = baseline + raw_residual
-            _, uncertainty = self.dynamics_ensemble.predict(
+            if self.config.clip_ensemble_query:
+                limit = np.asarray(self.config.torque_limit)
+                probe_torque = np.clip(probe_torque, -limit, limit)
+            ensemble_mean, uncertainty = self.dynamics_ensemble.predict(
                 state.astype(np.float32), probe_torque.astype(np.float32), device=self.device
             )
             gated_residual, scale = self.uncertainty_gate.apply(raw_residual, uncertainty)
@@ -103,6 +110,8 @@ class SARRLControlStack:
                 safety_correction=0.0,
                 safety_certified=False,
                 executable=True,
+                ensemble_mean=np.asarray(ensemble_mean, dtype=np.float64),
+                ensemble_query_torque=np.asarray(probe_torque, dtype=np.float64),
             )
 
         safety = self.safety_filter.filter(state, candidate, obstacles)
@@ -120,6 +129,8 @@ class SARRLControlStack:
                 safety_correction=safety.correction_norm,
                 safety_certified=False,
                 executable=not self.config.require_safety,
+                ensemble_mean=np.asarray(ensemble_mean, dtype=np.float64),
+                ensemble_query_torque=np.asarray(probe_torque, dtype=np.float64),
             )
         return ControlStackResult(
             torque=safety.torque,
@@ -131,4 +142,6 @@ class SARRLControlStack:
             safety_correction=safety.correction_norm,
             safety_certified=True,
             executable=True,
+            ensemble_mean=np.asarray(ensemble_mean, dtype=np.float64),
+            ensemble_query_torque=np.asarray(probe_torque, dtype=np.float64),
         )

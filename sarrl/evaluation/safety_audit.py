@@ -143,6 +143,7 @@ def evaluate_safety_episodes(
     *,
     context_residual_limit: float | None = None,
     intervention_tolerance: float = 1e-9,
+    transition_callback=None,
 ) -> tuple[list[EpisodeResult], list[SafetyEpisodeDiagnostics]]:
     """Evaluate filtered or unfiltered stacks against one fixed safety envelope."""
     if episodes <= 0 or seed < 0:
@@ -202,6 +203,19 @@ def evaluate_safety_episodes(
             certified_steps += int(command.safety_certified)
 
             if not command.executable:
+                if transition_callback is not None:
+                    transition_callback(
+                        {
+                            "controller": controller,
+                            "episode_seed": episode_seed,
+                            "step": attempts - 1,
+                            "state": state.copy(),
+                            "command": command,
+                            "info": None,
+                            "terminated": False,
+                            "truncated": False,
+                        }
+                    )
                 infeasible = True
                 break
 
@@ -221,6 +235,19 @@ def evaluate_safety_episodes(
                     command.torque,
                     baseline=command.baseline_torque,
                     context_action=context_action,
+                )
+            if transition_callback is not None:
+                transition_callback(
+                    {
+                        "controller": controller,
+                        "episode_seed": episode_seed,
+                        "step": attempts - 1,
+                        "state": state.copy(),
+                        "command": command,
+                        "info": info,
+                        "terminated": terminated,
+                        "truncated": truncated,
+                    }
                 )
             steps += 1
             total_reward += float(reward)

@@ -75,3 +75,25 @@ def test_uncertainty_gate_reduces_residual_authority_inside_stack():
     result = stack.command(np.zeros(8), state, target)
     assert result.uncertainty_scale < 1.0
     assert np.linalg.norm(result.gated_residual) < np.linalg.norm(result.raw_residual)
+
+
+def test_v15_stack_clips_ensemble_query_without_changing_legacy_default():
+    arm = PlanarArm()
+    ensemble = FixedUncertaintyEnsemble([1.0, 1.0])
+    state, target = _state_target()
+    legacy = SARRLControlStack(
+        ComputedTorqueController(arm),
+        FullPolicy(),
+        dynamics_ensemble=ensemble,
+        uncertainty_gate=UncertaintyGate(),
+    ).command(np.zeros(8), state, target)
+    calibrated = SARRLControlStack(
+        ComputedTorqueController(arm),
+        FullPolicy(),
+        ControlStackConfig(torque_limit=(1.0, 1.0), clip_ensemble_query=True),
+        dynamics_ensemble=ensemble,
+        uncertainty_gate=UncertaintyGate(),
+    ).command(np.zeros(8), state, target)
+    assert np.max(np.abs(legacy.ensemble_query_torque)) > 1.0
+    assert np.max(np.abs(calibrated.ensemble_query_torque)) <= 1.0
+    np.testing.assert_array_equal(calibrated.ensemble_mean, np.zeros(2))

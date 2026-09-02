@@ -46,11 +46,21 @@ def test_safety_envelope_violation_reports_physical_units_and_normalized_excess(
 def test_safety_audit_observes_initial_and_every_transition():
     env = PlanarReachEnv(mode="torque")
     observer = HOCBFSafetyFilter(PlanarArm())
+    captured = []
     rows, diagnostics = evaluate_safety_episodes(
-        _stack(), observer, env, episodes=2, seed=50_000
+        _stack(),
+        observer,
+        env,
+        episodes=2,
+        seed=50_000,
+        transition_callback=captured.append,
     )
 
     assert len(rows) == len(diagnostics) == 2
+    assert len(captured) == sum(row.command_attempts for row in diagnostics)
+    assert all(item["state"].shape == (4,) for item in captured)
+    assert all(item["info"] is not None for item in captured)
+    assert captured[-1]["terminated"] or captured[-1]["truncated"]
     assert all(row.state_observations == row.steps + 1 for row in diagnostics)
     assert all(row.command_attempts == row.steps for row in diagnostics)
     assert all(not row.safety_enabled for row in diagnostics)
@@ -59,6 +69,7 @@ def test_safety_audit_observes_initial_and_every_transition():
 
 def test_safety_audit_retains_rejected_required_safety_attempt(monkeypatch):
     stack = _stack(safety=True)
+    captured = []
 
     def infeasible(state, candidate, obstacles=()):
         del state, obstacles
@@ -78,6 +89,7 @@ def test_safety_audit_retains_rejected_required_safety_attempt(monkeypatch):
         PlanarReachEnv(mode="torque"),
         episodes=1,
         seed=50_000,
+        transition_callback=captured.append,
     )
 
     assert rows[0].steps == 0
@@ -86,6 +98,9 @@ def test_safety_audit_retains_rejected_required_safety_attempt(monkeypatch):
     assert diagnostics[0].command_attempts == 1
     assert diagnostics[0].safety_infeasible
     assert np.isnan(diagnostics[0].executed_constraint_margin_min)
+    assert len(captured) == 1
+    assert captured[0]["info"] is None
+    assert not captured[0]["command"].executable
 
 
 def test_paired_diagnostic_difference_requires_unique_matching_seeds():

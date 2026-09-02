@@ -352,3 +352,46 @@ The HOCBF certificate covers the nominal instantaneous command model only.
 Randomized plant parameters, actuator delay, injected faults, discretization
 and hardware are outside that guarantee. Physical state violations are
 therefore measured independently from command-level certificate margins.
+
+## v1.5 uncertainty-gate calibration
+
+v1.5 reuses the five frozen v1.2 A2/A3 policy, context and ensemble artifact
+pairs without retraining. Phase A tests whether ensemble disagreement is an
+informative signal on a disjoint ID-reference population (`60000..60099`). It
+runs A2 and A3 for each matched training/ensemble seed, for 10 cells and 1,000
+episodes. At every transition it records ensemble disagreement and the exact
+pre-RK4 residual-acceleration prediction error, keeping commanded, delayed,
+actuator-scaled and plant-input torque distinct.
+
+The primary statistic is the median across the 10 cells of their median
+within-episode Spearman correlations. Episodes require at least 10 finite
+pairs; constant variables are retained with rho zero. The analysis uses one
+global common qualifying seed set (minimum 90) and a 10,000-draw paired
+episode-seed percentile bootstrap with seed `150000`, conditional on the five
+frozen artifact pairs. Phase B proceeds only when the 95% lower bound is at
+least `0.2`; the gate is retired only when the upper bound is below `0.2`.
+
+Phase A retained 143,732 transitions from 1,000/1,000 qualifying episodes with
+no non-finite exclusions. The target median rho was `0.2976`, with 95%
+interval `[0.2283, 0.3557]`, so the frozen rule returned `proceed_phase_b`.
+
+Phase B defines the dimensionless gate
+`max(0.1, 1 / (1 + ||u|| / u_ref))`. For each ensemble, `u_ref` is the median
+of 200 equally weighted episode-median disagreement values: 100 A2 and 100 A3,
+each independently required to have at least 10 finite disagreement values.
+The five frozen values are `4.1971`, `4.4015`, `5.7418`, `4.0800` and `5.2842`
+rad/s^2. The canonical calibration artifact records all source and output
+hashes; legacy v1.2-v1.4 runners retain their original dimensional gate.
+
+Phase C evaluates new A4c and A6c conditions on held-out seeds
+`40000..40099` and the v1.4 ID/OOD/fault safety protocol on
+`50000..50099`. It also evaluates `A6c_gate_off_control`, which performs the
+same ensemble inference and HOCBF projection but forces residual scale one,
+plus an explicit A3 safety comparator. For A4c versus A2 and A6c versus its
+gate-off control, a fixed-model paired bootstrap (10,000 draws, seed `150001`)
+requires in every scenario a success lower bound of at least `-0.05` and an
+unsafe-episode upper bound of at most `+0.05`. The preregistered strict-benefit
+endpoint additionally requires the compound-OOD success lower bound above
+zero. A6c versus A3 is reported separately as a total effect. Distribution
+shift is described with per-cell two-sample KS distances on episode-median
+normalized disagreement, without a binary KS threshold.
