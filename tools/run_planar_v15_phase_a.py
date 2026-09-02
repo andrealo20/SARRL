@@ -379,6 +379,8 @@ def aggregate_shards(root: Path, out: Path) -> None:
     out = out.resolve()
     episodes = []
     shard_hashes = []
+    inputs = []
+    collection_runtimes = []
     for seed in V15_PHASE_A_TRAINING_SEEDS:
         shard = out / "shards" / f"training_seed_{seed}"
         complete_path = shard / "complete.json"
@@ -398,6 +400,11 @@ def aggregate_shards(root: Path, out: Path) -> None:
                     "sha256": actual,
                 }
             )
+        shard_manifest = json.loads(
+            (shard / "evaluation_manifest.json").read_text(encoding="utf-8")
+        )
+        inputs.append(shard_manifest["config"]["input"])
+        collection_runtimes.append(shard_manifest["runtime"])
         episodes.extend(_read_episode_rows(shard / "episodes.csv"))
 
     transition_path = out / "transitions.csv"
@@ -431,6 +438,8 @@ def aggregate_shards(root: Path, out: Path) -> None:
         json.dumps(analysis, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
     manifest = v15_phase_a_protocol_dict()
+    manifest["inputs"] = inputs
+    manifest["collection_runtimes"] = collection_runtimes
     manifest["shard_hashes"] = shard_hashes
     manifest["outputs"] = {
         name: _sha256(out / name)

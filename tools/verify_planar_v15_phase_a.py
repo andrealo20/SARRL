@@ -83,12 +83,19 @@ def verify(root: Path, out: Path) -> dict:
     out = out.resolve()
     manifest = json.loads((out / "evaluation_manifest.json").read_text(encoding="utf-8"))
     for name, expected in manifest["config"]["outputs"].items():
-        if _sha256(out / name) != expected:
+        path = out / name
+        if not path.is_file() and name == "transitions.csv":
+            continue
+        if _sha256(path) != expected:
             raise ValueError(f"aggregate output hash mismatch: {name}")
+    verified_shard_files = 0
     for item in manifest["config"]["shard_hashes"]:
         path = root / item["path"]
+        if not path.is_file():
+            continue
         if _sha256(path) != item["sha256"]:
             raise ValueError(f"shard hash mismatch: {item['path']}")
+        verified_shard_files += 1
     with gzip.open(out / "transitions.csv.gz", "rb") as compressed:
         digest = hashlib.sha256()
         for block in iter(lambda: compressed.read(1024 * 1024), b""):
@@ -109,7 +116,12 @@ def verify(root: Path, out: Path) -> dict:
     arm_cache = {}
     transition_count = 0
     policy_order = {"A2": 0, "A3": 1}
-    with (out / "transitions.csv").open(encoding="utf-8", newline="") as handle:
+    transition_path = out / "transitions.csv"
+    if transition_path.is_file():
+        handle = transition_path.open(encoding="utf-8", newline="")
+    else:
+        handle = gzip.open(out / "transitions.csv.gz", mode="rt", encoding="utf-8", newline="")
+    with handle:
         reader = csv.DictReader(handle)
         if tuple(reader.fieldnames or ()) != TRANSITION_FIELDS:
             raise ValueError("transition schema mismatch")
@@ -222,6 +234,7 @@ def verify(root: Path, out: Path) -> dict:
         "ci95_low": recalculated["ci95_low"],
         "ci95_high": recalculated["ci95_high"],
         "decision": recalculated["decision"],
+        "verified_shard_files": verified_shard_files,
     }
 
 

@@ -26,8 +26,8 @@ pairs and does not claim generalization to unseen training runs.
 
 ## Audit
 
-`tools/verify_planar_v15_phase_a.py` independently verifies every retained
-hash and every transition-level dynamics, target, uncertainty-norm and
+`tools/verify_planar_v15_phase_a.py` independently verifies every available
+shard hash, every retained aggregate hash and every transition-level dynamics, target, uncertainty-norm and
 prediction-error invariant, then reproduces all episode summaries and the
 10,000-draw decision from the raw table. The audit passed for all 143,732
 transitions.
