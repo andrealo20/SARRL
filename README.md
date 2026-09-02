@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml/badge.svg)](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org/)
-[![version](https://img.shields.io/badge/version-1.4.0-6f42c1.svg)](docs/changelog.md)
+[![version](https://img.shields.io/badge/version-1.5.0-6f42c1.svg)](docs/changelog.md)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ![SARRL banner](assets/banner.png)
@@ -28,6 +28,14 @@ On the randomized planar held-out benchmark:
 | Full adaptive stack | 17.0% ± 2.3 pp | 0.0% | 2.8% ± 0.4 pp |
 
 The v1.2 campaign established the benefit of residual learning over Direct SAC. The v1.3 campaign reused the frozen policies on new paired seeds: every learned controller degraded sharply under compound OOD dynamics and abrupt motor loss. Learned context retained the highest success, but did not solve robustness. The gate stayed near minimum authority, and hard-HOCBF stacks explicitly rejected 86/3,000 episodes when projection became infeasible.
+
+v1.5 tested whether calibrating that gate fixes the problem. Ensemble
+disagreement correlated with prediction error (median Spearman rho `0.298`,
+95% CI `[0.228, 0.356]`), but the calibrated gate still reduced success. A4c
+lost 13.0 pp versus A2 on ID; A6c lost 12.2 pp versus an otherwise identical
+gate-off control. Both preregistered acceptance decisions failed. This is a
+retained negative result: disagreement is informative, but direct residual
+attenuation is not useful in this benchmark.
 
 Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. Evidence remains limited to the analytical planar benchmark.
 
@@ -79,7 +87,7 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Limitations
 
-The v1.3 OOD/fault and v1.4 quantified-safety campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. HOCBF guarantees are model-relative: v1.4 measured residual physical violations under randomized dynamics, actuator delay and injected faults even though the executed-command margin stayed non-negative. Ensemble disagreement is not calibrated probability, and the uncertainty gate is not a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety and v1.5 gate-calibration campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 
@@ -90,7 +98,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {1.4.0},
+  version = {1.5.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```

@@ -64,6 +64,8 @@ def verify(root: Path, out: Path) -> dict:
     manifest = json.loads((out / "evaluation_manifest.json").read_text(encoding="utf-8"))
     config = manifest["config"]
     calibration = Path(config["calibration_path"])
+    if not calibration.is_absolute():
+        calibration = root / calibration
     if _sha256(calibration) != config["calibration_sha256"]:
         raise ValueError("calibration hash mismatch")
     references = {
@@ -73,10 +75,14 @@ def verify(root: Path, out: Path) -> dict:
     for name, expected in config["outputs"].items():
         if _sha256(out / name) != expected:
             raise ValueError(f"aggregate output hash mismatch: {name}")
+    verified_shard_files = 0
     for item in config["shard_hashes"]:
         path = root / item["path"]
+        if not path.is_file():
+            continue
         if _sha256(path) != item["sha256"]:
             raise ValueError(f"shard hash mismatch: {item['path']}")
+        verified_shard_files += 1
 
     episodes = _read(out / "episodes.csv")
     safety = _read(out / "safety_diagnostics.csv")
@@ -121,6 +127,15 @@ def verify(root: Path, out: Path) -> dict:
 
     transition_count = 0
     raw_values: dict[tuple, tuple[list[float], list[float], list[float]]] = {}
+    non_numeric_fields = {
+        "population",
+        "condition",
+        "scenario",
+        "executable",
+        "safety_certified",
+        "terminated",
+        "truncated",
+    }
     with gzip.open(out / "transitions.csv.gz", mode="rt", encoding="utf-8", newline="") as handle:
         reader = csv.DictReader(handle)
         if tuple(reader.fieldnames or ()) != RAW_FIELDS:
@@ -130,7 +145,7 @@ def verify(root: Path, out: Path) -> dict:
             numeric = [
                 float(value)
                 for name, value in row.items()
-                if value and name not in {"population", "condition", "scenario"}
+                if value and name not in non_numeric_fields
             ]
             if not all(math.isfinite(value) for value in numeric):
                 raise ValueError("non-finite Phase-C transition value")
@@ -212,7 +227,7 @@ def verify(root: Path, out: Path) -> dict:
         "gate_episodes": len(gates),
         "transitions": transition_count,
         "decision": decision,
-        "verified_shard_files": len(config["shard_hashes"]),
+        "verified_shard_files": verified_shard_files,
     }
 
 

@@ -2,6 +2,17 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v1.5.0 — uncertainty-gate calibration
+
+- Reused the five frozen v1.2 A2/A3 policies, context encoders and dynamics ensembles without retraining.
+- Retained 143,732 Phase-A transitions over 1,000 episodes; ensemble disagreement correlated with exact residual-prediction error at median within-episode Spearman rho **0.298**, with paired-bootstrap 95% interval **[0.228, 0.356]**.
+- Replaced the dimensional gate with a frozen per-ensemble reference scale derived from 200 episode medians; all source artifacts and calibration outputs are hash-bound.
+- Evaluated 7,000 new Phase-C episodes across held-out, ID, compound-OOD and motor-fault populations, including an otherwise identical gate-off control.
+- Measured A4c success differences versus A2 of **-13.0 pp** ID, **-5.0 pp** OOD and **-10.6 pp** under motor fault; every paired 95% interval excluded zero on the negative side.
+- Measured A6c success differences versus gate-off of **-12.2 pp** ID, **-2.0 pp** OOD and **-10.2 pp** under motor fault; every paired 95% interval excluded zero on the negative side.
+- Both preregistered non-inferiority and strict OOD-benefit decisions failed. The calibrated gate is therefore retained as a negative result, not promoted as a robustness improvement.
+- Audited 7,000 outcome and safety rows, 5,500 gate summaries, 609,865 raw transitions and 25 shard files. Compact evidence is retained in Git; the 106 MiB raw transition table is attached to the release.
+
 ## v1.4.0 — quantified safety
 
 - Reused the frozen v1.2 checkpoints and the v1.3 seeds `50000..50099` and scenarios to run a 6,000-episode paired safety audit with no retraining.

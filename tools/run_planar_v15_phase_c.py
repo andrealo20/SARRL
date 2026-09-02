@@ -802,10 +802,14 @@ def aggregate(root: Path, out: Path, calibration: Path) -> None:
     manifest = {
         "release_target": "v1.5.0",
         "campaign": "calibrated_gate_evaluation_phase_c",
-        "calibration_path": str(calibration.resolve()),
+        "calibration_path": str(calibration.resolve().relative_to(root)),
         "calibration_sha256": _sha256(calibration),
         "training_seeds": list(V15_PHASE_A_TRAINING_SEEDS),
         "new_episodes": len(episodes),
+        "raw_transition_retention": {
+            "repository": "omitted_single_file_exceeds_github_100_mb_limit",
+            "release_asset": "transitions.csv.gz",
+        },
         "shard_hashes": shard_hashes,
         "outputs": {
             name: _sha256(out / name)

@@ -395,3 +395,11 @@ endpoint additionally requires the compound-OOD success lower bound above
 zero. A6c versus A3 is reported separately as a total effect. Distribution
 shift is described with per-cell two-sample KS distances on episode-median
 normalized disagreement, without a binary KS threshold.
+
+Phase C completed all 7,000 episodes. A4c lost `13.0`, `5.0` and `10.6`
+percentage points of success versus A2 on ID, compound OOD and motor fault;
+the respective 95% intervals were `[-19.4, -6.4]`, `[-7.6, -2.8]` and
+`[-14.8, -6.8]`. A6c lost `12.2`, `2.0` and `10.2` points versus its gate-off
+control, with intervals `[-20.0, -4.8]`, `[-4.0, -0.4]` and
+`[-16.2, -4.6]`. Neither stack passed non-inferiority or the strict OOD
+benefit endpoint. The calibrated gate is retained as a negative result.

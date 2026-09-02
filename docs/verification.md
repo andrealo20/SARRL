@@ -40,6 +40,45 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## v1.5.0 uncertainty-gate calibration evidence
+
+v1.5 reused the five frozen v1.2 artifact pairs without retraining. Phase A
+recorded 143,732 transitions from 1,000 episodes on disjoint seeds
+`60000..60099`. All episodes qualified, no non-finite pair was excluded, and
+the median within-episode Spearman correlation between ensemble disagreement
+and exact residual-prediction error was **0.298**, with paired-bootstrap 95%
+interval **[0.228, 0.356]**. This passed the frozen screening threshold of
+`0.2` and authorized calibration.
+
+Phase C ran 7,000 new episodes. The table reports pooled rates across five
+frozen policies (500 episodes per cell):
+
+| Condition | Scenario | Success | Unsafe episodes |
+|---|---|---:|---:|
+| A4c | ID reference | 39.2% | 68.0% |
+| A4c | Compound OOD | 1.0% | 68.6% |
+| A4c | Motor fault | 13.0% | 73.4% |
+| A6c | ID reference | 45.2% | 6.2% |
+| A6c | Compound OOD | 1.2% | 21.8% |
+| A6c | Motor fault | 13.0% | 26.4% |
+| A6c gate-off control | ID reference | 57.4% | 3.6% |
+| A6c gate-off control | Compound OOD | 3.2% | 18.4% |
+| A6c gate-off control | Motor fault | 23.2% | 24.0% |
+
+Against A2, A4c success changed by -13.0 pp ID (95% CI
+`[-19.4, -6.4]`), -5.0 pp OOD (`[-7.6, -2.8]`) and -10.6 pp under motor
+fault (`[-14.8, -6.8]`). Against its otherwise identical gate-off control,
+A6c changed by -12.2 pp ID (`[-20.0, -4.8]`), -2.0 pp OOD
+(`[-4.0, -0.4]`) and -10.2 pp under motor fault (`[-16.2, -4.6]`). Both
+preregistered acceptance decisions failed.
+
+The independent verifier checked 7,000 outcome and safety rows, 5,500 gate
+summaries, 609,865 raw transitions and 25 shard files. It recomputed gate
+normalization, scale, residual, query-torque and candidate-torque identities,
+and validated all retained hashes. The compact evidence is under
+`results/uncertainty_gate_calibration/phase_c/`; the deterministic 106 MiB
+raw gzip is distributed as the `transitions.csv.gz` v1.5.0 release asset.
+
 ## v1.4.0 quantified safety evidence
 
 The v1.4 campaign reuses the frozen v1.2 checkpoints together with the v1.3
