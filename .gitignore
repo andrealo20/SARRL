@@ -41,6 +41,9 @@ results/uncertainty_gate_calibration/phase_a/*
 !results/uncertainty_gate_calibration/phase_a/episodes.csv
 !results/uncertainty_gate_calibration/phase_a/evaluation_manifest.json
 !results/uncertainty_gate_calibration/phase_a/transitions.csv.gz
+!results/uncertainty_gate_calibration/calibration.json
+!results/uncertainty_gate_calibration/u_ref.csv
+!results/uncertainty_gate_calibration/sensitivity.csv
 
 # Model checkpoints and context tensors are never committed. Their SHA-256
 # fingerprints in the retained manifests preserve the identity of the exact

@@ -90,6 +90,18 @@ def test_uncertainty_gate_is_monotonic_and_has_floor():
     assert huge == 0.2
 
 
+def test_dimensionless_uncertainty_gate_maps_reference_to_half_authority():
+    gate = UncertaintyGate(gain=1.0, min_scale=0.1, reference_uncertainty=6.0)
+    assert gate.scale(np.array([6.0, 0.0])) == 0.5
+    assert gate.scale(np.array([54.0, 0.0])) == 0.1
+
+
+def test_uncertainty_gate_rejects_invalid_reference():
+    for reference in (0.0, -1.0, float("nan"), float("inf")):
+        with np.testing.assert_raises(ValueError):
+            UncertaintyGate(reference_uncertainty=reference)
+
+
 def test_motor_gain_mismatch_is_visible_in_residual_target():
     nominal = PlanarArm()
     state = np.array([0.3, -0.4, 0.2, -0.1], dtype=np.float64)

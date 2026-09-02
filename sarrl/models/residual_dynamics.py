@@ -236,16 +236,29 @@ class UncertaintyGate:
 
     gain: float = 4.0
     min_scale: float = 0.1
+    reference_uncertainty: float | None = None
 
     def __post_init__(self) -> None:
-        if self.gain < 0.0 or not 0.0 <= self.min_scale <= 1.0:
+        if (
+            not np.isfinite(self.gain)
+            or self.gain < 0.0
+            or not np.isfinite(self.min_scale)
+            or not 0.0 <= self.min_scale <= 1.0
+        ):
             raise ValueError("invalid uncertainty gate parameters")
+        if self.reference_uncertainty is not None and (
+            not np.isfinite(self.reference_uncertainty)
+            or self.reference_uncertainty <= 0.0
+        ):
+            raise ValueError("reference uncertainty must be finite and positive")
 
     def scale(self, uncertainty) -> float:
         u = np.asarray(uncertainty, dtype=np.float64)
         if not np.all(np.isfinite(u)) or np.any(u < 0.0):
             raise ValueError("uncertainty must be finite and non-negative")
         scalar = float(np.linalg.norm(u))
+        if self.reference_uncertainty is not None:
+            scalar /= self.reference_uncertainty
         return float(max(self.min_scale, 1.0 / (1.0 + self.gain * scalar)))
 
     def apply(self, residual, uncertainty) -> tuple[np.ndarray, float]:

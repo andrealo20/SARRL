@@ -1,3 +1,10 @@
+from .calibration_artifact import (
+    canonical_float,
+    canonical_json,
+    derive_reference_uncertainties,
+    write_canonical_csv,
+    write_canonical_json,
+)
 from .gate_calibration import (
     PhaseAEpisode,
     analyze_phase_a,
@@ -95,6 +102,11 @@ from .safety_audit import (
 from .stacked import StackEpisodeDiagnostics, evaluate_stack_episodes
 
 __all__ = [
+    "canonical_float",
+    "canonical_json",
+    "derive_reference_uncertainties",
+    "write_canonical_csv",
+    "write_canonical_json",
     "GateEpisodeDiagnostics",
     "evaluate_gated_policy_episodes",
     "V12_A3_TRAINING_COMMIT",
