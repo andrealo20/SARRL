@@ -2,9 +2,9 @@
 
 [![CI](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml/badge.svg)](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml)
 [![CodeQL](https://img.shields.io/github/actions/workflow/status/andrealo20/SARRL/dynamic%2Fgithub-code-scanning%2Fcodeql?branch=main&label=CodeQL)](https://github.com/andrealo20/SARRL/actions/workflows/dynamic/github-code-scanning/codeql)
-[![release](https://img.shields.io/github/v/release/andrealo20/SARRL?sort=semver)](https://github.com/andrealo20/SARRL/releases/latest)
-[![Python](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org/)
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![release](https://img.shields.io/github/v/release/andrealo20/SARRL?sort=semver&color=6f42c1&label=release)](https://github.com/andrealo20/SARRL/releases/latest)
+[![Python](https://img.shields.io/badge/python-3.10%2B-FFD43B.svg?logo=python&logoColor=white&labelColor=3776AB)](https://www.python.org/)
+[![license](https://img.shields.io/badge/license-MIT-f39c12.svg)](LICENSE)
 
 ![SARRL banner](assets/banner.png)
 
