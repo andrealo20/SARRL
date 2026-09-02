@@ -1,8 +1,9 @@
 # SARRL
 
 [![CI](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml/badge.svg)](https://github.com/andrealo20/SARRL/actions/workflows/ci.yml)
+[![CodeQL](https://img.shields.io/github/actions/workflow/status/andrealo20/SARRL/dynamic%2Fgithub-code-scanning%2Fcodeql?branch=main&label=CodeQL)](https://github.com/andrealo20/SARRL/actions/workflows/dynamic/github-code-scanning/codeql)
+[![release](https://img.shields.io/github/v/release/andrealo20/SARRL?sort=semver)](https://github.com/andrealo20/SARRL/releases/latest)
 [![Python](https://img.shields.io/badge/python-3.10%2B-3776AB.svg)](https://www.python.org/)
-[![version](https://img.shields.io/badge/version-1.5.1-6f42c1.svg)](docs/changelog.md)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 ![SARRL banner](assets/banner.png)
