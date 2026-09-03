@@ -1,0 +1,29 @@
+{
+  "config": {
+    "campaign": "uncertainty_gate_calibration_phase_r_landmark",
+    "condition": "A6c_gate_off_control",
+    "episodes": 1500,
+    "infeasible_episodes": 37,
+    "landmark_table_path": "results\\uncertainty_gate_calibration\\phase_r\\landmark_episodes.csv",
+    "landmark_table_sha256": "0eddda1d76d6db898397f2d05c1016f6a413373e4690e57f6a3643e215d59696",
+    "n_rows_in_window": 25,
+    "operational_failure_episodes": 236,
+    "population": "safety",
+    "raw_source_path": "results\\uncertainty_gate_calibration\\phase_c\\transitions.csv.gz",
+    "raw_source_sha256": "fb8257f1759d1a47ccf0172d68eca6b5e8adf42dd43cf65e212263695523e90d",
+    "unsafe_episodes": 230,
+    "window_first_step": 0,
+    "window_last_step": 24
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": false,
+    "git_commit": "3190345db8eda594269156840633b3f471031352",
+    "imported_repository_root": "C:\\Users\\Dummy Account\\Documents\\GitHub\\SARRL",
+    "numpy": "2.5.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.6",
+    "scipy": "1.18.0",
+    "torch": "2.13.0+cpu"
+  }
+}
