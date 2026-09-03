@@ -318,18 +318,26 @@ def verify(rng, auc: float, icc_seed: float, replicates: int) -> dict:
 
 
 def run_cell(args_tuple) -> dict:
-    """Estimate one grid cell. Deterministic per cell via a SeedSequence spawn."""
-    auc, icc, replicates, draws, cell_index = args_tuple
-    rng = np.random.default_rng(np.random.SeedSequence([RNG_SEED, cell_index]))
+    """Estimate one grid cell with the calibrated per-scenario critical quantiles.
+
+    Per Amendment 3: the fixed 5th-percentile bound (``decide``/
+    ``bootstrap_lower_bounds``) was validated anticonservative and is no longer
+    used for the reported power. ``critical`` names the quantile each scenario
+    uses; power is seeded independently (``POWER_RNG_SEED``) from selection and
+    validation so it is not fit to either.
+    """
+    auc, icc, replicates, draws, critical, cell_index = args_tuple
+    rng = np.random.default_rng(np.random.SeedSequence([POWER_RNG_SEED, cell_index]))
     positives = 0
     marginal = {s: 0 for s in PRIMARY_SCENARIOS}
+    quantiles = sorted({critical[s] for s in PRIMARY_SCENARIOS})
     for _ in range(replicates):
         rep = simulate_replicate(rng, auc, icc)
-        bounds = bootstrap_lower_bounds(rng, rep, draws)
-        for s, b in bounds.items():
-            if b > THRESHOLD:
+        bounds_by_q = bootstrap_quantile_bounds(rng, rep, draws, quantiles)
+        for s in PRIMARY_SCENARIOS:
+            if bounds_by_q[s][critical[s]] > THRESHOLD:
                 marginal[s] += 1
-        if decide(bounds):
+        if decide_with(bounds_by_q, critical):
             positives += 1
     return {
         "auc_target": auc,
@@ -592,9 +600,17 @@ def main() -> None:
         )
         return
 
-    print("=== power grid")
+    recal_path = Path(args.output) / "recalibration_manifest.json"
+    if not recal_path.exists():
+        raise SystemExit(
+            f"missing {recal_path}: run --recalibrate first (Amendment 3); "
+            "the power grid must use the calibrated critical quantiles, not the "
+            "superseded fixed 5th percentile"
+        )
+    critical = json.loads(recal_path.read_text())["config"]["critical_quantiles"]
+    print(f"=== power grid, calibrated critical quantiles {critical}")
     cells = [
-        (auc, icc, args.replicates, args.draws, i)
+        (auc, icc, args.replicates, args.draws, critical, i)
         for i, (auc, icc) in enumerate((a, c) for a in AUC_GRID for c in ICC_GRID)
     ]
     with ProcessPoolExecutor(max_workers=args.workers) as pool:
@@ -613,8 +629,8 @@ def main() -> None:
         "icc_grid": list(ICC_GRID),
         "threshold": THRESHOLD,
         "bootstrap_draws": args.draws,
-        "lower_quantile": LOWER_QUANTILE,
-        "rng_seed": RNG_SEED,
+        "critical_quantiles": critical,
+        "rng_seed": POWER_RNG_SEED,
         "replicates": args.replicates,
         "verification": ver,
         "grid": grid,
