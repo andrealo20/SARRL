@@ -6,6 +6,7 @@ from scipy.stats import norm
 
 from tools.run_planar_v16_r_power import (
     CALIBRATION_CONFIGS,
+    CANDIDATE_QUANTILES,
     EPISODE_SEEDS,
     PREVALENCE,
     PRIMARY_SCENARIOS,
@@ -13,8 +14,11 @@ from tools.run_planar_v16_r_power import (
     TRAINING_SEEDS,
     auc_from_arrays,
     bootstrap_lower_bounds,
+    bootstrap_quantile_bounds,
     decide,
+    decide_with,
     mu_for_auc,
+    select_critical_quantiles,
     simulate_replicate,
     solve_tau,
     variance_components,
@@ -156,3 +160,65 @@ def test_calibration_configs_place_exactly_one_component_on_the_boundary():
         assert len(on_boundary) == 1
         other = [a for s, a in config.items() if s not in on_boundary]
         assert all(a > THRESHOLD for a in other)
+
+
+def test_quantile_bounds_are_monotone_in_the_quantile():
+    """A lower percentile is a stricter (smaller) bound on the same draws."""
+    rng = np.random.default_rng(31)
+    rep = simulate_replicate(rng, 0.70, 0.10)
+    q = bootstrap_quantile_bounds(rng, rep, draws=256, quantiles=(1.0, 2.5, 5.0))
+    for s in PRIMARY_SCENARIOS:
+        assert q[s][1.0] <= q[s][2.5] <= q[s][5.0]
+
+
+def test_calibrated_decision_uses_each_scenario_own_quantile():
+    bounds = {
+        "id_reference": {2.0: 0.61, 5.0: 0.65},
+        "ood_compound": {2.0: 0.59, 5.0: 0.62},
+    }
+    assert decide_with(bounds, {"id_reference": 2.0, "ood_compound": 5.0})
+    assert not decide_with(bounds, {"id_reference": 2.0, "ood_compound": 2.0})
+
+
+def test_selection_picks_the_least_strict_quantile_meeting_the_target():
+    """Rates rise with the quantile; the loosest one still at or under 4% wins."""
+    cells = [
+        {
+            "marginal_rate_by_quantile": {
+                # crosses 0.04 between q=2.5 (0.035) and q=3.0 (0.042)
+                "id_reference": {float(q): 0.014 * q for q in CANDIDATE_QUANTILES},
+                # still 0.038 at the loosest candidate
+                "ood_compound": {float(q): 0.0076 * q for q in CANDIDATE_QUANTILES},
+            }
+        }
+    ]
+    chosen = select_critical_quantiles(cells)
+    assert chosen["id_reference"] == 2.5
+    assert chosen["ood_compound"] == 5.0
+
+
+def test_selection_takes_the_worst_icc_cell_not_the_average():
+    lenient = {
+        s: dict.fromkeys(map(float, CANDIDATE_QUANTILES), 0.01) for s in PRIMARY_SCENARIOS
+    }
+    strict = {
+        s: {float(q): (0.02 if q <= 1.0 else 0.09) for q in CANDIDATE_QUANTILES}
+        for s in PRIMARY_SCENARIOS
+    }
+    chosen = select_critical_quantiles(
+        [{"marginal_rate_by_quantile": lenient}, {"marginal_rate_by_quantile": strict}]
+    )
+    assert all(v == 1.0 for v in chosen.values())
+
+
+def test_selection_raises_when_no_candidate_reaches_the_target():
+    cells = [
+        {
+            "marginal_rate_by_quantile": {
+                s: dict.fromkeys(map(float, CANDIDATE_QUANTILES), 0.9)
+                for s in PRIMARY_SCENARIOS
+            }
+        }
+    ]
+    with pytest.raises(RuntimeError):
+        select_critical_quantiles(cells)

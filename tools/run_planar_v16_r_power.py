@@ -74,6 +74,17 @@ CALIBRATION_CONFIGS = (
 )
 CALIBRATION_ICC = (0.0, 0.10, 0.20)
 
+# Recalibration (Amendment 3). The 5th-percentile bootstrap bound was measured
+# anticonservative: worst-case IUT size 0.078 [0.067, 0.091] at commit d9855cc.
+# Each component is recalibrated separately at its own boundary, because the
+# inflation is prevalence-driven and id_reference carries 4.8% events against
+# 18.4% in ood_compound. Selection and validation use disjoint synthetic seeds.
+CANDIDATE_QUANTILES = (0.5, 1.0, 1.5, 2.0, 2.5, 3.0, 3.5, 4.0, 4.5, 5.0)
+CALIBRATION_TARGET_SIZE = 0.04  # margin so the Wilson upper end stays under 0.05
+SELECTION_RNG_SEED = 161_000
+VALIDATION_RNG_SEED = 162_000
+POWER_RNG_SEED = 163_000
+
 VERIFY_REPLICATES = 2000
 VERIFY_TOL_PREVALENCE = 0.005
 VERIFY_TOL_AUC = 0.005
@@ -202,6 +213,34 @@ def wilson_interval(successes: int, trials: int, z: float = 1.959963985) -> tupl
     centre = (p + z * z / (2 * trials)) / d
     half = z * math.sqrt(p * (1 - p) / trials + z * z / (4 * trials * trials)) / d
     return float(centre - half), float(centre + half)
+
+
+def bootstrap_quantile_bounds(rng, rep: dict, draws: int, quantiles) -> dict:
+    """Bootstrap lower bounds at several candidate quantiles in one pass.
+
+    The expensive step is the resampling and the AUC of each resample; evaluating
+    additional percentiles of the same distribution is free. Selection,
+    validation and power therefore share one simulation cost.
+    """
+    idx = rng.integers(0, EPISODE_SEEDS, size=(draws, EPISODE_SEEDS))
+    out = {}
+    for scenario in PRIMARY_SCENARIOS:
+        x = rep["x"][scenario][:, idx]
+        y = rep["y"][scenario][:, idx]
+        x = np.moveaxis(x, 1, 0).reshape(draws, -1)
+        y = np.moveaxis(y, 1, 0).reshape(draws, -1)
+        aucs = _auc_rows(x, y)
+        out[scenario] = {
+            float(q): float(np.nanpercentile(aucs, q)) for q in quantiles
+        }
+    return out
+
+
+def decide_with(bounds_by_q: dict, critical: dict) -> bool:
+    """Positive iff every component exceeds the threshold at its own quantile."""
+    return all(
+        bounds_by_q[s][float(critical[s])] > THRESHOLD for s in PRIMARY_SCENARIOS
+    )
 
 
 def decide(bounds: dict) -> bool:
@@ -333,6 +372,56 @@ def run_calibration_cell(args_tuple) -> dict:
     return entry
 
 
+def run_quantile_cell(args_tuple) -> dict:
+    """Marginal rejection rate at every candidate quantile, for one null cell."""
+    config, icc, replicates, draws, base_seed, cell_index = args_tuple
+    rng = np.random.default_rng(np.random.SeedSequence([base_seed, cell_index]))
+    counts = {s: dict.fromkeys(map(float, CANDIDATE_QUANTILES), 0) for s in PRIMARY_SCENARIOS}
+    joint = dict.fromkeys(map(float, CANDIDATE_QUANTILES), 0)
+    for _ in range(replicates):
+        rep = simulate_replicate(rng, config, icc)
+        bounds = bootstrap_quantile_bounds(rng, rep, draws, CANDIDATE_QUANTILES)
+        for q in map(float, CANDIDATE_QUANTILES):
+            hits = 0
+            for s in PRIMARY_SCENARIOS:
+                if bounds[s][q] > THRESHOLD:
+                    counts[s][q] += 1
+                    hits += 1
+            if hits == len(PRIMARY_SCENARIOS):
+                joint[q] += 1
+    return {
+        "auc_by_scenario": (
+            dict(config)
+            if isinstance(config, dict)
+            else {s: config for s in PRIMARY_SCENARIOS}
+        ),
+        "icc_seed": icc,
+        "replicates": replicates,
+        "marginal_rate_by_quantile": {
+            s: {q: c / replicates for q, c in counts[s].items()} for s in PRIMARY_SCENARIOS
+        },
+        "joint_rate_by_quantile": {q: c / replicates for q, c in joint.items()},
+    }
+
+
+def select_critical_quantiles(cells: list) -> dict:
+    """Strictest-per-scenario quantile whose worst ICC rate meets the target."""
+    critical = {}
+    for scenario in PRIMARY_SCENARIOS:
+        chosen = None
+        for q in sorted(map(float, CANDIDATE_QUANTILES), reverse=True):
+            worst = max(c["marginal_rate_by_quantile"][scenario][q] for c in cells)
+            if worst <= CALIBRATION_TARGET_SIZE:
+                chosen = q
+                break
+        if chosen is None:
+            raise RuntimeError(
+                f"no candidate quantile reaches size {CALIBRATION_TARGET_SIZE} for {scenario}"
+            )
+        critical[scenario] = chosen
+    return critical
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Preregistered v1.6-R operating-characteristic simulation"
@@ -350,6 +439,11 @@ def main() -> None:
         "--calibration-only",
         action="store_true",
         help="run only the asymmetric composite-null size check",
+    )
+    parser.add_argument(
+        "--recalibrate",
+        action="store_true",
+        help="select per-scenario critical quantiles on synthetic nulls, then validate",
     )
     parser.add_argument("--benchmark", action="store_true", help="time a single replicate and exit")
     parser.add_argument("--workers", type=int, default=16)
@@ -377,6 +471,84 @@ def main() -> None:
         raise SystemExit("verification failed: the simulator is defective; do not estimate power")
 
     if args.verify_only:
+        return
+
+    if args.recalibrate:
+        print("=== selection: marginal size at every candidate quantile (boundary cells)")
+        sel_cells = [
+            ({s: THRESHOLD for s in PRIMARY_SCENARIOS}, icc, args.replicates,
+             args.draws, SELECTION_RNG_SEED, i)
+            for i, icc in enumerate(ICC_GRID)
+        ]
+        with ProcessPoolExecutor(max_workers=args.workers) as pool:
+            selection = list(pool.map(run_quantile_cell, sel_cells))
+        critical = select_critical_quantiles(selection)
+        print(json.dumps({"critical_quantiles": critical}))
+
+        print("=== independent validation on a disjoint synthetic seed")
+        val_cells = [
+            ({s: THRESHOLD for s in PRIMARY_SCENARIOS}, icc, args.replicates,
+             args.draws, VALIDATION_RNG_SEED, i)
+            for i, icc in enumerate(ICC_GRID)
+        ] + [
+            (cfg, icc, args.replicates, args.draws, VALIDATION_RNG_SEED, 100 + i)
+            for i, (cfg, icc) in enumerate(
+                (c, k) for c in CALIBRATION_CONFIGS for k in CALIBRATION_ICC
+            )
+        ]
+        with ProcessPoolExecutor(max_workers=args.workers) as pool:
+            validation = list(pool.map(run_quantile_cell, val_cells))
+        sizes = []
+        for cell in validation:
+            # Under an intersection-union test the joint rejection probability is
+            # bounded above by the smallest component rejection probability, so
+            # the per-scenario marginal rates at their own critical quantiles
+            # upper-bound the IUT size without needing a joint counter.
+            bound = min(
+                cell["marginal_rate_by_quantile"][s][critical[s]]
+                for s in PRIMARY_SCENARIOS
+            )
+            sizes.append({
+                "auc_by_scenario": cell["auc_by_scenario"],
+                "icc_seed": cell["icc_seed"],
+                "iut_size_upper_bound": bound,
+                "iut_size_ci95": list(
+                    wilson_interval(
+                        round(bound * cell["replicates"]), cell["replicates"]
+                    )
+                ),
+                "marginal_at_critical": {
+                    s: cell["marginal_rate_by_quantile"][s][critical[s]] for s in PRIMARY_SCENARIOS
+                },
+                "joint_rate_at_uniform_quantile": cell["joint_rate_by_quantile"],
+            })
+        worst = max(sizes, key=lambda e: e["iut_size_upper_bound"])
+        print(json.dumps({"validated_worst_case_size": worst["iut_size_upper_bound"],
+                          "ci95": worst["iut_size_ci95"]}))
+        out = Path(args.output)
+        out.mkdir(parents=True, exist_ok=True)
+        write_run_manifest(
+            out / "recalibration_manifest.json",
+            {
+                "campaign": "uncertainty_gate_calibration_phase_r_recalibration",
+                "amendment": "3",
+                "supersedes_size_evidence_commit": "d9855cc",
+                "observed_size_before": 0.078,
+                "candidate_quantiles": list(CANDIDATE_QUANTILES),
+                "target_size": CALIBRATION_TARGET_SIZE,
+                "nominal_alpha": 0.05,
+                "selection_rng_seed": SELECTION_RNG_SEED,
+                "validation_rng_seed": VALIDATION_RNG_SEED,
+                "replicates": args.replicates,
+                "bootstrap_draws": args.draws,
+                "critical_quantiles": critical,
+                "selection_cells": selection,
+                "validation": sizes,
+                "validated_worst_case_size": worst["iut_size_upper_bound"],
+                "verification": ver,
+            },
+            root=root,
+        )
         return
 
     print("=== composite-null size check (asymmetric configurations)")
