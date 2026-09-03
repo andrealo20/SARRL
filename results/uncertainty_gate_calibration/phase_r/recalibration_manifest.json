@@ -1,0 +1,707 @@
+{
+  "config": {
+    "amendment": "3",
+    "bootstrap_draws": 10000,
+    "campaign": "uncertainty_gate_calibration_phase_r_recalibration",
+    "candidate_quantiles": [
+      0.5,
+      1.0,
+      1.5,
+      2.0,
+      2.5,
+      3.0,
+      3.5,
+      4.0,
+      4.5,
+      5.0
+    ],
+    "critical_quantiles": {
+      "id_reference": 2.0,
+      "ood_compound": 2.5
+    },
+    "nominal_alpha": 0.05,
+    "observed_size_before": 0.078,
+    "replicates": 2000,
+    "selection_cells": [
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.0,
+        "joint_rate_by_quantile": {
+          "0.5": 0.0,
+          "1.0": 0.0,
+          "1.5": 0.0,
+          "2.0": 0.0,
+          "2.5": 0.0,
+          "3.0": 0.0005,
+          "3.5": 0.0005,
+          "4.0": 0.001,
+          "4.5": 0.0015,
+          "5.0": 0.0015
+        },
+        "marginal_rate_by_quantile": {
+          "id_reference": {
+            "0.5": 0.0125,
+            "1.0": 0.016,
+            "1.5": 0.0245,
+            "2.0": 0.029,
+            "2.5": 0.038,
+            "3.0": 0.043,
+            "3.5": 0.0485,
+            "4.0": 0.0545,
+            "4.5": 0.0605,
+            "5.0": 0.066
+          },
+          "ood_compound": {
+            "0.5": 0.0065,
+            "1.0": 0.01,
+            "1.5": 0.016,
+            "2.0": 0.0225,
+            "2.5": 0.0295,
+            "3.0": 0.035,
+            "3.5": 0.0415,
+            "4.0": 0.0455,
+            "4.5": 0.051,
+            "5.0": 0.054
+          }
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.05,
+        "joint_rate_by_quantile": {
+          "0.5": 0.0,
+          "1.0": 0.0005,
+          "1.5": 0.0005,
+          "2.0": 0.001,
+          "2.5": 0.001,
+          "3.0": 0.001,
+          "3.5": 0.0015,
+          "4.0": 0.002,
+          "4.5": 0.003,
+          "5.0": 0.0035
+        },
+        "marginal_rate_by_quantile": {
+          "id_reference": {
+            "0.5": 0.008,
+            "1.0": 0.0145,
+            "1.5": 0.022,
+            "2.0": 0.029,
+            "2.5": 0.0335,
+            "3.0": 0.0395,
+            "3.5": 0.0445,
+            "4.0": 0.0475,
+            "4.5": 0.052,
+            "5.0": 0.0565
+          },
+          "ood_compound": {
+            "0.5": 0.0045,
+            "1.0": 0.0085,
+            "1.5": 0.0145,
+            "2.0": 0.0245,
+            "2.5": 0.0305,
+            "3.0": 0.041,
+            "3.5": 0.048,
+            "4.0": 0.0535,
+            "4.5": 0.0595,
+            "5.0": 0.063
+          }
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.1,
+        "joint_rate_by_quantile": {
+          "0.5": 0.0,
+          "1.0": 0.0005,
+          "1.5": 0.0005,
+          "2.0": 0.0005,
+          "2.5": 0.001,
+          "3.0": 0.0015,
+          "3.5": 0.0015,
+          "4.0": 0.002,
+          "4.5": 0.003,
+          "5.0": 0.004
+        },
+        "marginal_rate_by_quantile": {
+          "id_reference": {
+            "0.5": 0.0075,
+            "1.0": 0.0145,
+            "1.5": 0.0185,
+            "2.0": 0.025,
+            "2.5": 0.034,
+            "3.0": 0.0415,
+            "3.5": 0.044,
+            "4.0": 0.05,
+            "4.5": 0.0535,
+            "5.0": 0.0585
+          },
+          "ood_compound": {
+            "0.5": 0.0065,
+            "1.0": 0.01,
+            "1.5": 0.015,
+            "2.0": 0.019,
+            "2.5": 0.0235,
+            "3.0": 0.026,
+            "3.5": 0.0305,
+            "4.0": 0.037,
+            "4.5": 0.045,
+            "5.0": 0.0495
+          }
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.2,
+        "joint_rate_by_quantile": {
+          "0.5": 0.0,
+          "1.0": 0.0,
+          "1.5": 0.0,
+          "2.0": 0.0,
+          "2.5": 0.0005,
+          "3.0": 0.001,
+          "3.5": 0.001,
+          "4.0": 0.002,
+          "4.5": 0.0025,
+          "5.0": 0.003
+        },
+        "marginal_rate_by_quantile": {
+          "id_reference": {
+            "0.5": 0.0135,
+            "1.0": 0.0215,
+            "1.5": 0.0275,
+            "2.0": 0.0355,
+            "2.5": 0.0435,
+            "3.0": 0.049,
+            "3.5": 0.055,
+            "4.0": 0.0615,
+            "4.5": 0.067,
+            "5.0": 0.0735
+          },
+          "ood_compound": {
+            "0.5": 0.007,
+            "1.0": 0.0095,
+            "1.5": 0.0185,
+            "2.0": 0.0245,
+            "2.5": 0.027,
+            "3.0": 0.031,
+            "3.5": 0.0335,
+            "4.0": 0.0385,
+            "4.5": 0.0425,
+            "5.0": 0.0475
+          }
+        },
+        "replicates": 2000
+      }
+    ],
+    "selection_rng_seed": 161000,
+    "supersedes_size_evidence_commit": "d9855cc",
+    "target_size": 0.04,
+    "validated_worst_case_size": 0.0365,
+    "validation": [
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.0,
+        "iut_size_ci95": [
+          0.018149556702109083,
+          0.03167547231049864
+        ],
+        "iut_size_upper_bound": 0.024,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0005,
+          "1.0": 0.0005,
+          "1.5": 0.001,
+          "2.0": 0.0015,
+          "2.5": 0.0015,
+          "3.0": 0.0015,
+          "3.5": 0.002,
+          "4.0": 0.0025,
+          "4.5": 0.0025,
+          "5.0": 0.003
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.0275,
+          "ood_compound": 0.024
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.05,
+        "iut_size_ci95": [
+          0.01642890811319715,
+          0.029403789088539165
+        ],
+        "iut_size_upper_bound": 0.022,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0,
+          "1.0": 0.0,
+          "1.5": 0.001,
+          "2.0": 0.001,
+          "2.5": 0.001,
+          "3.0": 0.002,
+          "3.5": 0.0025,
+          "4.0": 0.0035,
+          "4.5": 0.0035,
+          "5.0": 0.004
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.022,
+          "ood_compound": 0.03
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.1,
+        "iut_size_ci95": [
+          0.02337785471157297,
+          0.038424169733648934
+        ],
+        "iut_size_upper_bound": 0.03,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.001,
+          "1.0": 0.001,
+          "1.5": 0.001,
+          "2.0": 0.001,
+          "2.5": 0.0015,
+          "3.0": 0.0015,
+          "3.5": 0.0015,
+          "4.0": 0.0025,
+          "4.5": 0.0035,
+          "5.0": 0.0055
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.039,
+          "ood_compound": 0.03
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.2,
+        "iut_size_ci95": [
+          0.02075239624021015,
+          0.03506113048870466
+        ],
+        "iut_size_upper_bound": 0.027,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0,
+          "1.0": 0.0,
+          "1.5": 0.0,
+          "2.0": 0.001,
+          "2.5": 0.001,
+          "3.0": 0.0015,
+          "3.5": 0.002,
+          "4.0": 0.002,
+          "4.5": 0.0025,
+          "5.0": 0.003
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.032,
+          "ood_compound": 0.027
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.75
+        },
+        "icc_seed": 0.0,
+        "iut_size_ci95": [
+          0.019447915823076378,
+          0.033371362047684885
+        ],
+        "iut_size_upper_bound": 0.0255,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0055,
+          "1.0": 0.0095,
+          "1.5": 0.019,
+          "2.0": 0.0255,
+          "2.5": 0.029,
+          "3.0": 0.0345,
+          "3.5": 0.0435,
+          "4.0": 0.05,
+          "4.5": 0.0545,
+          "5.0": 0.059
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.0255,
+          "ood_compound": 1.0
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.75
+        },
+        "icc_seed": 0.1,
+        "iut_size_ci95": [
+          0.027351694146233136,
+          0.043433076873449425
+        ],
+        "iut_size_upper_bound": 0.0345,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0115,
+          "1.0": 0.018,
+          "1.5": 0.0275,
+          "2.0": 0.0345,
+          "2.5": 0.042,
+          "3.0": 0.047,
+          "3.5": 0.053,
+          "4.0": 0.0575,
+          "4.5": 0.0625,
+          "5.0": 0.068
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.0345,
+          "ood_compound": 0.9955
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.75
+        },
+        "icc_seed": 0.2,
+        "iut_size_ci95": [
+          0.026465276469176645,
+          0.04232332864507022
+        ],
+        "iut_size_upper_bound": 0.0335,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0125,
+          "1.0": 0.0175,
+          "1.5": 0.0245,
+          "2.0": 0.0335,
+          "2.5": 0.0425,
+          "3.0": 0.053,
+          "3.5": 0.063,
+          "4.0": 0.065,
+          "4.5": 0.07,
+          "5.0": 0.0775
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.0335,
+          "ood_compound": 0.9955
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.8
+        },
+        "icc_seed": 0.0,
+        "iut_size_ci95": [
+          0.025139125201870307,
+          0.040655231054223
+        ],
+        "iut_size_upper_bound": 0.032,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.012,
+          "1.0": 0.019,
+          "1.5": 0.0255,
+          "2.0": 0.032,
+          "2.5": 0.0355,
+          "3.0": 0.041,
+          "3.5": 0.0475,
+          "4.0": 0.053,
+          "4.5": 0.0615,
+          "5.0": 0.0645
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.032,
+          "ood_compound": 1.0
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.8
+        },
+        "icc_seed": 0.1,
+        "iut_size_ci95": [
+          0.022062516053206947,
+          0.03674525953386141
+        ],
+        "iut_size_upper_bound": 0.0285,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.013,
+          "1.0": 0.0175,
+          "1.5": 0.0245,
+          "2.0": 0.0285,
+          "2.5": 0.035,
+          "3.0": 0.044,
+          "3.5": 0.0485,
+          "4.0": 0.0565,
+          "4.5": 0.06,
+          "5.0": 0.068
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.0285,
+          "ood_compound": 1.0
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.8
+        },
+        "icc_seed": 0.2,
+        "iut_size_ci95": [
+          0.029129752278934263,
+          0.045647350551619684
+        ],
+        "iut_size_upper_bound": 0.0365,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.014,
+          "1.0": 0.021,
+          "1.5": 0.0275,
+          "2.0": 0.0365,
+          "2.5": 0.0435,
+          "3.0": 0.052,
+          "3.5": 0.058,
+          "4.0": 0.0645,
+          "4.5": 0.071,
+          "5.0": 0.0755
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.0365,
+          "ood_compound": 1.0
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.75,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.0,
+        "iut_size_ci95": [
+          0.022500401614793226,
+          0.037305456924992986
+        ],
+        "iut_size_upper_bound": 0.029,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0045,
+          "1.0": 0.0065,
+          "1.5": 0.011,
+          "2.0": 0.015,
+          "2.5": 0.0205,
+          "3.0": 0.025,
+          "3.5": 0.0305,
+          "4.0": 0.038,
+          "4.5": 0.0435,
+          "5.0": 0.0485
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.7495,
+          "ood_compound": 0.029
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.75,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.1,
+        "iut_size_ci95": [
+          0.022062516053206947,
+          0.03674525953386141
+        ],
+        "iut_size_upper_bound": 0.0285,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0065,
+          "1.0": 0.01,
+          "1.5": 0.015,
+          "2.0": 0.017,
+          "2.5": 0.0215,
+          "3.0": 0.027,
+          "3.5": 0.03,
+          "4.0": 0.0365,
+          "4.5": 0.04,
+          "5.0": 0.0445
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.732,
+          "ood_compound": 0.0285
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.75,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.2,
+        "iut_size_ci95": [
+          0.02075239624021015,
+          0.03506113048870466
+        ],
+        "iut_size_upper_bound": 0.027,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.002,
+          "1.0": 0.0075,
+          "1.5": 0.0105,
+          "2.0": 0.015,
+          "2.5": 0.02,
+          "3.0": 0.0295,
+          "3.5": 0.0355,
+          "4.0": 0.043,
+          "4.5": 0.048,
+          "5.0": 0.054
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.724,
+          "ood_compound": 0.027
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.8,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.0,
+        "iut_size_ci95": [
+          0.027351694146233136,
+          0.043433076873449425
+        ],
+        "iut_size_upper_bound": 0.0345,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.007,
+          "1.0": 0.0155,
+          "1.5": 0.021,
+          "2.0": 0.0255,
+          "2.5": 0.0335,
+          "3.0": 0.037,
+          "3.5": 0.0435,
+          "4.0": 0.05,
+          "4.5": 0.053,
+          "5.0": 0.0555
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.9395,
+          "ood_compound": 0.0345
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.8,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.1,
+        "iut_size_ci95": [
+          0.01988208767671712,
+          0.03393527314676199
+        ],
+        "iut_size_upper_bound": 0.026,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0025,
+          "1.0": 0.007,
+          "1.5": 0.015,
+          "2.0": 0.021,
+          "2.5": 0.0245,
+          "3.0": 0.0295,
+          "3.5": 0.033,
+          "4.0": 0.038,
+          "4.5": 0.041,
+          "5.0": 0.045
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.9215,
+          "ood_compound": 0.026
+        }
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.8,
+          "ood_compound": 0.6
+        },
+        "icc_seed": 0.2,
+        "iut_size_ci95": [
+          0.02337785471157297,
+          0.038424169733648934
+        ],
+        "iut_size_upper_bound": 0.03,
+        "joint_rate_at_uniform_quantile": {
+          "0.5": 0.0045,
+          "1.0": 0.009,
+          "1.5": 0.015,
+          "2.0": 0.022,
+          "2.5": 0.0265,
+          "3.0": 0.03,
+          "3.5": 0.0365,
+          "4.0": 0.042,
+          "4.5": 0.0455,
+          "5.0": 0.052
+        },
+        "marginal_at_critical": {
+          "id_reference": 0.906,
+          "ood_compound": 0.03
+        }
+      }
+    ],
+    "validation_rng_seed": 162000,
+    "verification": {
+      "auc_target": 0.7,
+      "icc_seed_target": 0.1,
+      "latent_icc_formula_target": 0.1,
+      "passed": true,
+      "replicates": 2000,
+      "scenarios": {
+        "id_reference": {
+          "auc_empirical": 0.7008104528958063,
+          "auc_target": 0.7,
+          "binary_icc_descriptive_no_target": 0.217269739781341,
+          "latent_within_seed_icc_empirical": 0.0994906606794039,
+          "latent_within_seed_icc_target": 0.1,
+          "passed": true,
+          "prevalence_empirical": 0.04794900000000001,
+          "prevalence_target": 0.048
+        },
+        "ood_compound": {
+          "auc_empirical": 0.7007574381896977,
+          "auc_target": 0.7,
+          "binary_icc_descriptive_no_target": 0.2344665053778612,
+          "latent_within_seed_icc_empirical": 0.09897088287861387,
+          "latent_within_seed_icc_target": 0.1,
+          "passed": true,
+          "prevalence_empirical": 0.183697,
+          "prevalence_target": 0.184
+        }
+      }
+    }
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": false,
+    "git_commit": "b27cb823abfe5bb208c1a448e2a2eba63b5584b8",
+    "imported_repository_root": "C:\\Users\\Dummy Account\\Documents\\GitHub\\SARRL",
+    "numpy": "2.5.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.6",
+    "scipy": "1.18.0",
+    "torch": "2.13.0+cpu"
+  }
+}
