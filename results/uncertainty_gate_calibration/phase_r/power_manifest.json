@@ -1,0 +1,321 @@
+{
+  "config": {
+    "auc_grid": [
+      0.55,
+      0.6,
+      0.65,
+      0.7,
+      0.75,
+      0.8
+    ],
+    "bootstrap_draws": 10000,
+    "campaign": "uncertainty_gate_calibration_phase_r_power",
+    "grid": [
+      {
+        "auc_target": 0.55,
+        "icc_seed": 0.0,
+        "joint_positive_power": 0.0,
+        "marginal_component_power": {
+          "id_reference": 0.0105,
+          "ood_compound": 0.0015
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.55,
+        "icc_seed": 0.05,
+        "joint_positive_power": 0.0,
+        "marginal_component_power": {
+          "id_reference": 0.01,
+          "ood_compound": 0.0015
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.55,
+        "icc_seed": 0.1,
+        "joint_positive_power": 0.0,
+        "marginal_component_power": {
+          "id_reference": 0.008,
+          "ood_compound": 0.0015
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.55,
+        "icc_seed": 0.2,
+        "joint_positive_power": 0.0,
+        "marginal_component_power": {
+          "id_reference": 0.013,
+          "ood_compound": 0.0005
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.6,
+        "icc_seed": 0.0,
+        "joint_positive_power": 0.0065,
+        "marginal_component_power": {
+          "id_reference": 0.063,
+          "ood_compound": 0.051
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.6,
+        "icc_seed": 0.05,
+        "joint_positive_power": 0.001,
+        "marginal_component_power": {
+          "id_reference": 0.07,
+          "ood_compound": 0.0595
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.6,
+        "icc_seed": 0.1,
+        "joint_positive_power": 0.004,
+        "marginal_component_power": {
+          "id_reference": 0.0575,
+          "ood_compound": 0.062
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.6,
+        "icc_seed": 0.2,
+        "joint_positive_power": 0.001,
+        "marginal_component_power": {
+          "id_reference": 0.063,
+          "ood_compound": 0.047
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.65,
+        "icc_seed": 0.0,
+        "joint_positive_power": 0.1055,
+        "marginal_component_power": {
+          "id_reference": 0.2345,
+          "ood_compound": 0.471
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.65,
+        "icc_seed": 0.05,
+        "joint_positive_power": 0.1075,
+        "marginal_component_power": {
+          "id_reference": 0.2215,
+          "ood_compound": 0.4825
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.65,
+        "icc_seed": 0.1,
+        "joint_positive_power": 0.129,
+        "marginal_component_power": {
+          "id_reference": 0.263,
+          "ood_compound": 0.4775
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.65,
+        "icc_seed": 0.2,
+        "joint_positive_power": 0.121,
+        "marginal_component_power": {
+          "id_reference": 0.2405,
+          "ood_compound": 0.489
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.7,
+        "icc_seed": 0.0,
+        "joint_positive_power": 0.533,
+        "marginal_component_power": {
+          "id_reference": 0.5675,
+          "ood_compound": 0.94
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.7,
+        "icc_seed": 0.05,
+        "joint_positive_power": 0.5135,
+        "marginal_component_power": {
+          "id_reference": 0.5515,
+          "ood_compound": 0.933
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.7,
+        "icc_seed": 0.1,
+        "joint_positive_power": 0.534,
+        "marginal_component_power": {
+          "id_reference": 0.5645,
+          "ood_compound": 0.944
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.7,
+        "icc_seed": 0.2,
+        "joint_positive_power": 0.522,
+        "marginal_component_power": {
+          "id_reference": 0.561,
+          "ood_compound": 0.9255
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.75,
+        "icc_seed": 0.0,
+        "joint_positive_power": 0.859,
+        "marginal_component_power": {
+          "id_reference": 0.859,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.75,
+        "icc_seed": 0.05,
+        "joint_positive_power": 0.847,
+        "marginal_component_power": {
+          "id_reference": 0.8475,
+          "ood_compound": 0.9995
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.75,
+        "icc_seed": 0.1,
+        "joint_positive_power": 0.851,
+        "marginal_component_power": {
+          "id_reference": 0.852,
+          "ood_compound": 0.9985
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.75,
+        "icc_seed": 0.2,
+        "joint_positive_power": 0.845,
+        "marginal_component_power": {
+          "id_reference": 0.8465,
+          "ood_compound": 0.997
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.8,
+        "icc_seed": 0.0,
+        "joint_positive_power": 0.981,
+        "marginal_component_power": {
+          "id_reference": 0.981,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.8,
+        "icc_seed": 0.05,
+        "joint_positive_power": 0.973,
+        "marginal_component_power": {
+          "id_reference": 0.973,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.8,
+        "icc_seed": 0.1,
+        "joint_positive_power": 0.96,
+        "marginal_component_power": {
+          "id_reference": 0.96,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_target": 0.8,
+        "icc_seed": 0.2,
+        "joint_positive_power": 0.96,
+        "marginal_component_power": {
+          "id_reference": 0.96,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      }
+    ],
+    "icc_grid": [
+      0.0,
+      0.05,
+      0.1,
+      0.2
+    ],
+    "lower_quantile": 5.0,
+    "prevalence": {
+      "id_reference": 0.048,
+      "ood_compound": 0.184
+    },
+    "primary_scenarios": [
+      "id_reference",
+      "ood_compound"
+    ],
+    "replicates": 2000,
+    "rng_seed": 160000,
+    "target": {
+      "achieved_joint_power": 0.534,
+      "auc": 0.7,
+      "icc_seed": 0.1,
+      "meets_target": false,
+      "required_joint_power": 0.8
+    },
+    "threshold": 0.6,
+    "verification": {
+      "auc_target": 0.7,
+      "icc_seed_target": 0.1,
+      "latent_icc_formula_target": 0.1,
+      "passed": true,
+      "replicates": 2000,
+      "scenarios": {
+        "id_reference": {
+          "auc_empirical": 0.7008104528958063,
+          "auc_target": 0.7,
+          "binary_icc_descriptive_no_target": 0.217269739781341,
+          "latent_within_seed_icc_empirical": 0.0994906606794039,
+          "latent_within_seed_icc_target": 0.1,
+          "passed": true,
+          "prevalence_empirical": 0.04794900000000001,
+          "prevalence_target": 0.048
+        },
+        "ood_compound": {
+          "auc_empirical": 0.7007574381896977,
+          "auc_target": 0.7,
+          "binary_icc_descriptive_no_target": 0.2344665053778612,
+          "latent_within_seed_icc_empirical": 0.09897088287861387,
+          "latent_within_seed_icc_target": 0.1,
+          "passed": true,
+          "prevalence_empirical": 0.183697,
+          "prevalence_target": 0.184
+        }
+      }
+    }
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": false,
+    "git_commit": "32aa7019d936b042e5f10e4c8fd8f3f6556ad7b9",
+    "imported_repository_root": "C:\\Users\\Dummy Account\\Documents\\GitHub\\SARRL",
+    "numpy": "2.5.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.6",
+    "scipy": "1.18.0",
+    "torch": "2.13.0+cpu"
+  }
+}
