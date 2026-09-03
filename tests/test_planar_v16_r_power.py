@@ -5,6 +5,7 @@ import pytest
 from scipy.stats import norm
 
 from tools.run_planar_v16_r_power import (
+    CALIBRATION_CONFIGS,
     EPISODE_SEEDS,
     PREVALENCE,
     PRIMARY_SCENARIOS,
@@ -17,6 +18,7 @@ from tools.run_planar_v16_r_power import (
     simulate_replicate,
     solve_tau,
     variance_components,
+    wilson_interval,
 )
 
 
@@ -118,3 +120,39 @@ def test_decision_requires_both_components_to_exceed_the_threshold():
 def test_prevalences_match_the_retained_gate_off_arm():
     assert PREVALENCE["id_reference"] == pytest.approx(24 / 500)
     assert PREVALENCE["ood_compound"] == pytest.approx(92 / 500)
+
+
+def test_per_scenario_auc_is_honoured():
+    """Asymmetric composite-null cells need a different AUC in each scenario."""
+    rng = np.random.default_rng(21)
+    config = {"id_reference": 0.60, "ood_compound": 0.85}
+    aucs = {s: [] for s in PRIMARY_SCENARIOS}
+    for _ in range(40):
+        rep = simulate_replicate(rng, config, 0.10)
+        for s in PRIMARY_SCENARIOS:
+            y = rep["y"][s].ravel()
+            if 0 < y.sum() < y.size:
+                aucs[s].append(auc_from_arrays(rep["x"][s].ravel(), y))
+    assert float(np.mean(aucs["id_reference"])) == pytest.approx(0.60, abs=0.03)
+    assert float(np.mean(aucs["ood_compound"])) == pytest.approx(0.85, abs=0.03)
+
+
+def test_scalar_auc_still_applies_to_both_scenarios():
+    rng = np.random.default_rng(22)
+    rep = simulate_replicate(rng, 0.70, 0.10)
+    assert set(rep["x"]) == set(PRIMARY_SCENARIOS)
+
+
+def test_wilson_interval_brackets_the_point_estimate():
+    lo, hi = wilson_interval(100, 2000)
+    assert lo < 0.05 < hi
+    lo, hi = wilson_interval(140, 2000)
+    assert lo > 0.05  # 7.0% excludes the nominal level at n=2000
+
+
+def test_calibration_configs_place_exactly_one_component_on_the_boundary():
+    for config in CALIBRATION_CONFIGS:
+        on_boundary = [s for s, a in config.items() if a == THRESHOLD]
+        assert len(on_boundary) == 1
+        other = [a for s, a in config.items() if s not in on_boundary]
+        assert all(a > THRESHOLD for a in other)

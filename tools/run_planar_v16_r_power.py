@@ -61,6 +61,19 @@ TARGET_AUC = 0.70
 TARGET_ICC = 0.10
 TARGET_JOINT_POWER = 0.80
 
+# Composite-null configurations for the intersection-union size check. The size
+# of an IUT is the supremum over the null, and the worst case is one component on
+# the boundary while the other sits deep in the alternative: the joint rejection
+# rate then collapses onto the boundary component's marginal rate. Symmetric
+# boundary cells are trivially conservative and cannot demonstrate calibration.
+CALIBRATION_CONFIGS = (
+    {"id_reference": 0.60, "ood_compound": 0.75},
+    {"id_reference": 0.60, "ood_compound": 0.80},
+    {"id_reference": 0.75, "ood_compound": 0.60},
+    {"id_reference": 0.80, "ood_compound": 0.60},
+)
+CALIBRATION_ICC = (0.0, 0.10, 0.20)
+
 VERIFY_REPLICATES = 2000
 VERIFY_TOL_PREVALENCE = 0.005
 VERIFY_TOL_AUC = 0.005
@@ -97,11 +110,15 @@ def mu_for_auc(auc: float) -> float:
     return math.sqrt(2.0) * norm.ppf(auc)
 
 
-def simulate_replicate(rng, auc: float, icc_seed: float) -> dict:
-    """One complete 100-seed x 5-artifact x 2-scenario clustered dataset."""
+def simulate_replicate(rng, auc, icc_seed: float) -> dict:
+    """One complete 100-seed x 5-artifact x 2-scenario clustered dataset.
+
+    ``auc`` is either a scalar applied to both scenarios or a mapping giving a
+    per-scenario target, which is what the asymmetric calibration cells need.
+    """
     var_seed, var_artifact = variance_components(icc_seed)
     var_total = var_seed + var_artifact + 1.0
-    mu = mu_for_auc(auc)
+    auc_map = auc if isinstance(auc, dict) else {s: auc for s in PRIMARY_SCENARIOS}
 
     u = (
         rng.normal(0.0, math.sqrt(var_seed), size=EPISODE_SEEDS)
@@ -121,7 +138,7 @@ def simulate_replicate(rng, auc: float, icc_seed: float) -> dict:
         eps = rng.normal(0.0, 1.0, size=(TRAINING_SEEDS, EPISODE_SEEDS))
         liability = shared + eps
         y = (liability > tau).astype(np.int8)
-        x = rng.normal(0.0, 1.0, size=y.shape) + mu * y
+        x = rng.normal(0.0, 1.0, size=y.shape) + mu_for_auc(auc_map[scenario]) * y
         out["latent"][scenario] = liability
         out["x"][scenario] = x
         out["y"][scenario] = y
@@ -174,6 +191,17 @@ def bootstrap_lower_bounds(rng, rep: dict, draws: int) -> dict:
         aucs = _auc_rows(x, y)
         bounds[scenario] = float(np.nanpercentile(aucs, LOWER_QUANTILE))
     return bounds
+
+
+def wilson_interval(successes: int, trials: int, z: float = 1.959963985) -> tuple[float, float]:
+    """Wilson score interval for a Monte-Carlo rejection rate."""
+    if trials <= 0:
+        raise ValueError("trials must be positive")
+    p = successes / trials
+    d = 1.0 + z * z / trials
+    centre = (p + z * z / (2 * trials)) / d
+    half = z * math.sqrt(p * (1 - p) / trials + z * z / (4 * trials * trials)) / d
+    return float(centre - half), float(centre + half)
 
 
 def decide(bounds: dict) -> bool:
@@ -273,6 +301,38 @@ def run_cell(args_tuple) -> dict:
     }
 
 
+def run_calibration_cell(args_tuple) -> dict:
+    """Rejection rate under one asymmetric composite-null configuration."""
+    config, icc, replicates, draws, cell_index = args_tuple
+    rng = np.random.default_rng(np.random.SeedSequence([RNG_SEED, 900, cell_index]))
+    positives = 0
+    marginal = {s: 0 for s in PRIMARY_SCENARIOS}
+    for _ in range(replicates):
+        rep = simulate_replicate(rng, config, icc)
+        bounds = bootstrap_lower_bounds(rng, rep, draws)
+        for s, b in bounds.items():
+            if b > THRESHOLD:
+                marginal[s] += 1
+        if decide(bounds):
+            positives += 1
+    lo, hi = wilson_interval(positives, replicates)
+    entry = {
+        "auc_by_scenario": dict(config),
+        "icc_seed": icc,
+        "replicates": replicates,
+        "boundary_component": [s for s, a in config.items() if a == THRESHOLD],
+        "joint_rejection_rate": positives / replicates,
+        "joint_rejection_ci95": [lo, hi],
+        "marginal_rejection_rate": {
+            s: marginal[s] / replicates for s in PRIMARY_SCENARIOS
+        },
+        "marginal_rejection_ci95": {
+            s: list(wilson_interval(marginal[s], replicates)) for s in PRIMARY_SCENARIOS
+        },
+    }
+    return entry
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         description="Preregistered v1.6-R operating-characteristic simulation"
@@ -286,6 +346,11 @@ def main() -> None:
         default=Path("results/uncertainty_gate_calibration/phase_r"),
     )
     parser.add_argument("--verify-only", action="store_true")
+    parser.add_argument(
+        "--calibration-only",
+        action="store_true",
+        help="run only the asymmetric composite-null size check",
+    )
     parser.add_argument("--benchmark", action="store_true", help="time a single replicate and exit")
     parser.add_argument("--workers", type=int, default=16)
     args = parser.parse_args()
@@ -312,6 +377,42 @@ def main() -> None:
         raise SystemExit("verification failed: the simulator is defective; do not estimate power")
 
     if args.verify_only:
+        return
+
+    print("=== composite-null size check (asymmetric configurations)")
+    cal_cells = [
+        (cfg, icc, args.replicates, args.draws, i)
+        for i, (cfg, icc) in enumerate(
+            (c, k) for c in CALIBRATION_CONFIGS for k in CALIBRATION_ICC
+        )
+    ]
+    with ProcessPoolExecutor(max_workers=args.workers) as pool:
+        calibration = list(pool.map(run_calibration_cell, cal_cells))
+    for entry in calibration:
+        print(json.dumps(entry))
+    worst = max(calibration, key=lambda e: e["joint_rejection_rate"])
+    print(json.dumps({"worst_case_size": worst["joint_rejection_rate"]}))
+
+    if args.calibration_only:
+        out = Path(args.output)
+        out.mkdir(parents=True, exist_ok=True)
+        write_run_manifest(
+            out / "calibration_manifest.json",
+            {
+                "campaign": "uncertainty_gate_calibration_phase_r_size",
+                "configs": [dict(c) for c in CALIBRATION_CONFIGS],
+                "icc_grid": list(CALIBRATION_ICC),
+                "threshold": THRESHOLD,
+                "bootstrap_draws": args.draws,
+                "replicates": args.replicates,
+                "nominal_alpha": 0.05,
+                "verification": ver,
+                "cells": calibration,
+                "worst_case_size": worst["joint_rejection_rate"],
+                "worst_case_cell": worst,
+            },
+            root=root,
+        )
         return
 
     print("=== power grid")
