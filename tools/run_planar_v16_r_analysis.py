@@ -258,6 +258,8 @@ def main() -> None:
             trunc_acc[key].append(float(row["uncertainty_norm"]))
     trunc_rows, dropped = [], 0
     for k, r in by_key.items():
+        if r["scenario"] not in PRIMARY_SCENARIOS:
+            continue  # out of scope for the primary estimand, not a dropped episode
         vals = trunc_acc.get(k, [])
         if not vals:
             dropped += 1
