@@ -1,0 +1,465 @@
+{
+  "config": {
+    "bootstrap_draws": 10000,
+    "campaign": "uncertainty_gate_calibration_phase_r_size",
+    "cells": [
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.75
+        },
+        "boundary_component": [
+          "id_reference"
+        ],
+        "icc_seed": 0.0,
+        "joint_rejection_ci95": [
+          0.04766276887622495,
+          0.06803573501576082
+        ],
+        "joint_rejection_rate": 0.057,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.04766276887622495,
+            0.06803573501576082
+          ],
+          "ood_compound": [
+            0.9955989674432161,
+            0.9994897364164795
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.057,
+          "ood_compound": 0.9985
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.75
+        },
+        "boundary_component": [
+          "id_reference"
+        ],
+        "icc_seed": 0.1,
+        "joint_rejection_ci95": [
+          0.06703950613246701,
+          0.09057848177366842
+        ],
+        "joint_rejection_rate": 0.078,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.06703950613246701,
+            0.09057848177366842
+          ],
+          "ood_compound": [
+            0.9980829527178491,
+            1.0
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.078,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.75
+        },
+        "boundary_component": [
+          "id_reference"
+        ],
+        "icc_seed": 0.2,
+        "joint_rejection_ci95": [
+          0.058236365387553966,
+          0.08041804641694233
+        ],
+        "joint_rejection_rate": 0.0685,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.058236365387553966,
+            0.08041804641694233
+          ],
+          "ood_compound": [
+            0.9963610657299922,
+            0.9997257210824213
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.0685,
+          "ood_compound": 0.999
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.8
+        },
+        "boundary_component": [
+          "id_reference"
+        ],
+        "icc_seed": 0.0,
+        "joint_rejection_ci95": [
+          0.060084974667912516,
+          0.08256176894745518
+        ],
+        "joint_rejection_rate": 0.0705,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.060084974667912516,
+            0.08256176894745518
+          ],
+          "ood_compound": [
+            0.9980829527178491,
+            1.0
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.0705,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.8
+        },
+        "boundary_component": [
+          "id_reference"
+        ],
+        "icc_seed": 0.1,
+        "joint_rejection_ci95": [
+          0.04629144858487488,
+          0.06641280644895735
+        ],
+        "joint_rejection_rate": 0.0555,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.04629144858487488,
+            0.06641280644895735
+          ],
+          "ood_compound": [
+            0.9980829527178491,
+            1.0
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.0555,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.6,
+          "ood_compound": 0.8
+        },
+        "boundary_component": [
+          "id_reference"
+        ],
+        "icc_seed": 0.2,
+        "joint_rejection_ci95": [
+          0.06332620153277735,
+          0.08630712275161528
+        ],
+        "joint_rejection_rate": 0.074,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.06332620153277735,
+            0.08630712275161528
+          ],
+          "ood_compound": [
+            0.9980829527178491,
+            1.0
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.074,
+          "ood_compound": 1.0
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.75,
+          "ood_compound": 0.6
+        },
+        "boundary_component": [
+          "ood_compound"
+        ],
+        "icc_seed": 0.0,
+        "joint_rejection_ci95": [
+          0.03946691898892665,
+          0.05826609175413783
+        ],
+        "joint_rejection_rate": 0.048,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.8238027769470759,
+            0.8558917138537794
+          ],
+          "ood_compound": [
+            0.04720544161579811,
+            0.06749497932346982
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.8405,
+          "ood_compound": 0.0565
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.75,
+          "ood_compound": 0.6
+        },
+        "boundary_component": [
+          "ood_compound"
+        ],
+        "icc_seed": 0.1,
+        "joint_rejection_ci95": [
+          0.043099720207656754,
+          0.0626179541571505
+        ],
+        "joint_rejection_rate": 0.052,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.8243221492597599,
+            0.8563704244938131
+          ],
+          "ood_compound": [
+            0.05178817023203509,
+            0.07289308023441132
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.841,
+          "ood_compound": 0.0615
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.75,
+          "ood_compound": 0.6
+        },
+        "boundary_component": [
+          "ood_compound"
+        ],
+        "icc_seed": 0.2,
+        "joint_rejection_ci95": [
+          0.03585182041469297,
+          0.053896526706628714
+        ],
+        "joint_rejection_rate": 0.044,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.7989346277928198,
+            0.8328518812775787
+          ],
+          "ood_compound": [
+            0.04355496702319954,
+            0.06316079029432559
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.8165,
+          "ood_compound": 0.0525
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.8,
+          "ood_compound": 0.6
+        },
+        "boundary_component": [
+          "ood_compound"
+        ],
+        "icc_seed": 0.0,
+        "joint_rejection_ci95": [
+          0.0426447200484483,
+          0.06207487136364112
+        ],
+        "joint_rejection_rate": 0.0515,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.9734549739095085,
+            0.9857027436523446
+          ],
+          "ood_compound": [
+            0.043099720207656754,
+            0.0626179541571505
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.9805,
+          "ood_compound": 0.052
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.8,
+          "ood_compound": 0.6
+        },
+        "boundary_component": [
+          "ood_compound"
+        ],
+        "icc_seed": 0.1,
+        "joint_rejection_ci95": [
+          0.053166899527032546,
+          0.07450859979756741
+        ],
+        "joint_rejection_rate": 0.063,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.9565669231265506,
+            0.9726483058537669
+          ],
+          "ood_compound": [
+            0.05408699935041191,
+            0.07558466587962373
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.9655,
+          "ood_compound": 0.064
+        },
+        "replicates": 2000
+      },
+      {
+        "auc_by_scenario": {
+          "id_reference": 0.8,
+          "ood_compound": 0.6
+        },
+        "boundary_component": [
+          "ood_compound"
+        ],
+        "icc_seed": 0.2,
+        "joint_rejection_ci95": [
+          0.03810906850942744,
+          0.056629693375483486
+        ],
+        "joint_rejection_rate": 0.0465,
+        "marginal_rejection_ci95": {
+          "id_reference": [
+            0.9455562350526322,
+            0.9636973348733283
+          ],
+          "ood_compound": [
+            0.0412812336168735,
+            0.06044410893706238
+          ]
+        },
+        "marginal_rejection_rate": {
+          "id_reference": 0.9555,
+          "ood_compound": 0.05
+        },
+        "replicates": 2000
+      }
+    ],
+    "configs": [
+      {
+        "id_reference": 0.6,
+        "ood_compound": 0.75
+      },
+      {
+        "id_reference": 0.6,
+        "ood_compound": 0.8
+      },
+      {
+        "id_reference": 0.75,
+        "ood_compound": 0.6
+      },
+      {
+        "id_reference": 0.8,
+        "ood_compound": 0.6
+      }
+    ],
+    "icc_grid": [
+      0.0,
+      0.1,
+      0.2
+    ],
+    "nominal_alpha": 0.05,
+    "replicates": 2000,
+    "threshold": 0.6,
+    "verification": {
+      "auc_target": 0.7,
+      "icc_seed_target": 0.1,
+      "latent_icc_formula_target": 0.1,
+      "passed": true,
+      "replicates": 2000,
+      "scenarios": {
+        "id_reference": {
+          "auc_empirical": 0.7008104528958063,
+          "auc_target": 0.7,
+          "binary_icc_descriptive_no_target": 0.217269739781341,
+          "latent_within_seed_icc_empirical": 0.0994906606794039,
+          "latent_within_seed_icc_target": 0.1,
+          "passed": true,
+          "prevalence_empirical": 0.04794900000000001,
+          "prevalence_target": 0.048
+        },
+        "ood_compound": {
+          "auc_empirical": 0.7007574381896977,
+          "auc_target": 0.7,
+          "binary_icc_descriptive_no_target": 0.2344665053778612,
+          "latent_within_seed_icc_empirical": 0.09897088287861387,
+          "latent_within_seed_icc_target": 0.1,
+          "passed": true,
+          "prevalence_empirical": 0.183697,
+          "prevalence_target": 0.184
+        }
+      }
+    },
+    "worst_case_cell": {
+      "auc_by_scenario": {
+        "id_reference": 0.6,
+        "ood_compound": 0.75
+      },
+      "boundary_component": [
+        "id_reference"
+      ],
+      "icc_seed": 0.1,
+      "joint_rejection_ci95": [
+        0.06703950613246701,
+        0.09057848177366842
+      ],
+      "joint_rejection_rate": 0.078,
+      "marginal_rejection_ci95": {
+        "id_reference": [
+          0.06703950613246701,
+          0.09057848177366842
+        ],
+        "ood_compound": [
+          0.9980829527178491,
+          1.0
+        ]
+      },
+      "marginal_rejection_rate": {
+        "id_reference": 0.078,
+        "ood_compound": 1.0
+      },
+      "replicates": 2000
+    },
+    "worst_case_size": 0.078
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": false,
+    "git_commit": "a970afc5de6ed4692e1374c0761f0f517d636138",
+    "imported_repository_root": "C:\\Users\\Dummy Account\\Documents\\GitHub\\SARRL",
+    "numpy": "2.5.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.6",
+    "scipy": "1.18.0",
+    "torch": "2.13.0+cpu"
+  }
+}
