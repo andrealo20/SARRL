@@ -1,0 +1,208 @@
+{
+  "config": {
+    "bootstrap_draws": 10000,
+    "campaign": "uncertainty_gate_calibration_phase_r_analysis",
+    "critical_quantiles": {
+      "id_reference": 2.0,
+      "ood_compound": 2.5
+    },
+    "decision": "inconclusive",
+    "endpoint": "operational_failure = unsafe_episode OR safety_infeasible",
+    "estimand": "fixed-window observational association, conditional on five frozen artifacts",
+    "landmark_table_sha256": "0eddda1d76d6db898397f2d05c1016f6a413373e4690e57f6a3643e215d59696",
+    "power_label": "low-power feasibility screen: joint power 38.5% at AUC 0.70 / ICC 0.10 against an 80% target; a non-rejection is inconclusive, NOT evidence of absence; the procedure's validated worst-case size is 3.65% [2.91%, 4.56%]",
+    "predictor": "uncertainty_norm_landmark_median (raw steps 0..24)",
+    "primary": {
+      "id_reference": {
+        "auc": 0.5199579831932774,
+        "critical_quantile": 2.0,
+        "episodes": 500,
+        "events": 24,
+        "lower_bound": 0.395794685152592,
+        "per_cell_auc": [
+          0.6432291666666666,
+          0.6116838487972509,
+          0.44680851063829785,
+          0.7157894736842105,
+          0.4698581560283688
+        ],
+        "upper_bound": 0.6390655241935483
+      },
+      "ood_compound": {
+        "auc": 0.47868712702472294,
+        "critical_quantile": 2.5,
+        "episodes": 500,
+        "events": 92,
+        "lower_bound": 0.4084929881511597,
+        "per_cell_auc": [
+          0.546875,
+          0.3448509485094851,
+          0.43902439024390244,
+          0.49858836815358554,
+          0.5726435152374203
+        ],
+        "upper_bound": 0.5479273231031543
+      }
+    },
+    "primary_scenarios": [
+      "id_reference",
+      "ood_compound"
+    ],
+    "rng_seed": 160000,
+    "secondary_excluded_from_decision": {
+      "endpoint_unsafe_episode_only": {
+        "id_reference": {
+          "auc": 0.533195020746888,
+          "critical_quantile": 2.0,
+          "episodes": 500,
+          "events": 18,
+          "lower_bound": 0.3675129006094757,
+          "per_cell_auc": [
+            0.5979381443298969,
+            0.41836734693877553,
+            0.5651041666666666,
+            0.7317708333333334,
+            0.5284210526315789
+          ],
+          "upper_bound": 0.7022905964355773
+        },
+        "ood_compound": {
+          "auc": 0.47868712702472294,
+          "critical_quantile": 2.5,
+          "episodes": 500,
+          "events": 92,
+          "lower_bound": 0.4084929881511597,
+          "per_cell_auc": [
+            0.546875,
+            0.3448509485094851,
+            0.43902439024390244,
+            0.49858836815358554,
+            0.5726435152374203
+          ],
+          "upper_bound": 0.5479273231031543
+        }
+      },
+      "motor_fault_onset_conditional": {
+        "auc": 0.6531281281281281,
+        "excluded_by_operational_failure": {
+          "False": 20,
+          "True": 9
+        },
+        "excluded_episodes": 29,
+        "included_episodes": 471,
+        "note": "conditional post-onset estimand with an outcome-dependent inclusion criterion; must not be ranked against or compared with the primary scenario AUCs, and cannot change the decision",
+        "window_first_step": 21,
+        "window_last_step": 45
+      },
+      "predictor_pre_event_truncated": {
+        "episodes_dropped_no_pre_event_rows": 0,
+        "id_reference": {
+          "auc": 0.5082282913165266,
+          "critical_quantile": 2.0,
+          "episodes": 500,
+          "events": 24,
+          "lower_bound": 0.38313057198663725,
+          "per_cell_auc": [
+            0.6432291666666666,
+            0.6082474226804123,
+            0.4787234042553192,
+            0.6526315789473685,
+            0.4574468085106383
+          ],
+          "upper_bound": 0.6116229082174759
+        },
+        "ood_compound": {
+          "auc": 0.47823422847399827,
+          "critical_quantile": 2.5,
+          "episodes": 500,
+          "events": 92,
+          "lower_bound": 0.40865773991442544,
+          "per_cell_auc": [
+            0.5438988095238095,
+            0.3611111111111111,
+            0.4573170731707317,
+            0.4579333709768492,
+            0.6385542168674698
+          ],
+          "upper_bound": 0.545394361511465
+        }
+      },
+      "predictor_uncertainty_ratio": {
+        "id_reference": {
+          "auc": 0.5015756302521008,
+          "critical_quantile": 2.0,
+          "episodes": 500,
+          "events": 24,
+          "lower_bound": 0.3815667024394988,
+          "per_cell_auc": [
+            0.6432291666666666,
+            0.6116838487972509,
+            0.44680851063829785,
+            0.7157894736842105,
+            0.4698581560283688
+          ],
+          "upper_bound": 0.6142857142857143
+        },
+        "ood_compound": {
+          "auc": 0.49248721227621484,
+          "critical_quantile": 2.5,
+          "episodes": 500,
+          "events": 92,
+          "lower_bound": 0.4294765720783926,
+          "per_cell_auc": [
+            0.546875,
+            0.3448509485094851,
+            0.43902439024390244,
+            0.49858836815358554,
+            0.5726435152374203
+          ],
+          "upper_bound": 0.5556001545183291
+        }
+      },
+      "predictor_whole_episode": {
+        "id_reference": {
+          "auc": 0.5850840336134454,
+          "critical_quantile": 2.0,
+          "episodes": 500,
+          "events": 24,
+          "lower_bound": 0.34026053852876953,
+          "per_cell_auc": [
+            0.6015625,
+            0.6563573883161512,
+            0.5354609929078015,
+            0.6589473684210526,
+            0.4946808510638298
+          ],
+          "upper_bound": 0.7791181337181335
+        },
+        "ood_compound": {
+          "auc": 0.4185315430520034,
+          "critical_quantile": 2.5,
+          "episodes": 500,
+          "events": 92,
+          "lower_bound": 0.3384524235132093,
+          "per_cell_auc": [
+            0.4255952380952381,
+            0.3319783197831978,
+            0.6307588075880759,
+            0.45398080180688877,
+            0.26222537207654145
+          ],
+          "upper_bound": 0.4965681398802094
+        }
+      }
+    },
+    "threshold": 0.6
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": false,
+    "git_commit": "7bebf22cbfcdaf1d2302bad72051d5149b8fbc48",
+    "imported_repository_root": "C:\\Users\\Dummy Account\\Documents\\GitHub\\SARRL",
+    "numpy": "2.5.1",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.14.6",
+    "scipy": "1.18.0",
+    "torch": "2.13.0+cpu"
+  }
+}
