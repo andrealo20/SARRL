@@ -43,11 +43,12 @@ disagreement carries information about *operational failure*, not just about
 model error. On the gate-off arm, over a fixed early window and against a
 composite endpoint of unsafe episode or HOCBF abort, the per-scenario AUCs were
 `0.520` in distribution (24/500 events) and `0.479` under compound OOD (92/500).
-The preregistered decision is **Inconclusive**: this excludes a useful
-association at the `AUC > 0.60` screening threshold but does not demonstrate the
-absence of a weaker one, and identifies no causal relationship. The screen was
-explicitly low-powered — 38.5% joint power at AUC 0.70 against an 80% target —
-so a non-rejection is inconclusive, never evidence of absence. The conditional
+The preregistered decision is **Inconclusive**: `ood_compound` excludes an
+association above `AUC 0.60`, but `id_reference` does not, and neither excludes a
+weaker association or identifies any causal relationship. The screen used a
+decision rule corrected before the data were opened, after the original bound was
+found anticonservative; calibrated joint power was only 38.5% at AUC 0.70 against
+an 80% target, so a non-rejection is inconclusive, never evidence of absence. The conditional
 intervention arm was closed unexecuted.
 
 Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. Evidence remains limited to the analytical planar benchmark.
@@ -100,7 +101,7 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Limitations
 
-The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration and v1.6 disagreement/failure campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was underpowered by design constraint — 24 composite events in 500 in-distribution episodes — so its Inconclusive verdict bounds a useful association rather than excluding a weak one. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration and v1.6 disagreement/failure campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 

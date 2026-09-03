@@ -7,12 +7,12 @@ This file records implemented release increments. Performance evidence is kept s
 - Tested the link v1.5 assumed but never measured: Phase A validated `disagreement -> model prediction error`, while Phase C acted on `disagreement -> operational failure`.
 - Introduced no new episodes and no retraining; the analysis is a preregistered re-analysis of the retained v1.5 Phase-C gate-off arm, frozen and committed before the association was computed.
 - Used the `A6c_gate_off_control` arm — 1,500 episodes in 15 cells of exactly 100 over 100 shared episode seeds — because the gated arms would condition on gate-induced trajectory changes.
-- Fixed the predictor to the median disagreement over raw rows `step = 0..24`, a uniform window that keeps exposure identical across outcomes, since 19.1% of unsafe, 32.1% of safe and 100% of aborted episodes end before the horizon.
+- Fixed the predictor to the median disagreement over raw rows `step = 0..24`, a uniform window that keeps exposure identical across outcomes, since 19.1% of unsafe, 32.1% of safe non-infeasible, and 100% of aborted episodes end before the horizon.
 - Defined the endpoint as `operational_failure = unsafe_episode OR safety_infeasible`, 236 events in 1,500, because a HOCBF abort is an operational failure rather than a success.
 - Measured and corrected an **anticonservative decision rule** before opening the data: the uniform 5th-percentile bound had a worst-case composite-null size of 7.8% [6.7%, 9.1%] against a nominal 5%, recalibrated per component on synthetic nulls to the 2.0th and 2.5th percentiles and validated at 3.65% [2.91%, 4.56%].
 - Recomputed power under the calibrated rule: 38.5% joint power at AUC 0.70 against an 80% target, so the screen is reported as an explicitly low-power feasibility screen.
 - Measured `id_reference` AUC **0.5200** (24/500 events, bounds [0.3958, 0.6391]) and `ood_compound` AUC **0.4787** (92/500, [0.4085, 0.5479]).
-- **Decision: Inconclusive.** The result excludes a useful association at the preregistered `AUC > 0.60` threshold; it does not demonstrate the absence of any weaker association, and identifies no causal relationship.
+- **Decision: Inconclusive.** The `ood_compound` component excludes an association above `AUC 0.60`, while the `id_reference` component remains unresolved; neither demonstrates the absence of a weaker association, and no causal relationship is identified.
 - Closed the conditional intervention arm unexecuted; its numerical parameters were never frozen.
 - Retained the derived landmark table with SHA-256 bindings to its raw source, so the primary analysis reproduces from the repository without the 106 MiB local transition file.
 

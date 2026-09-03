@@ -94,9 +94,11 @@ certainly at moderate effect sizes.
 **Decision: Inconclusive.** Both point estimates sit essentially at chance.
 `ood_compound`, the better-powered component, meets the component-negative
 criterion on its own with an upper bound of `0.5479`. Precisely stated, this
-**excludes a useful association at the preregistered threshold `AUC > 0.60`; it
-does not demonstrate the absence of any weaker association** — an AUC near 0.55
-is not excluded. The global verdict is Inconclusive rather than Negative only
+the **`ood_compound` component excludes an association above the preregistered
+`AUC > 0.60` threshold, while the `id_reference` component does not**, so the
+overall two-scenario decision remains Inconclusive. Neither component
+demonstrates the absence of a weaker association — an AUC near 0.55 is not
+excluded anywhere. The global verdict is Inconclusive rather than Negative only
 because `id_reference`'s upper bound of `0.6391` does not fall below the
 threshold, a direct consequence of its 24 events and the low power recorded
 before the data were opened.
@@ -136,10 +138,10 @@ intervention arm, which would have used disagreement to tighten the HOCBF margin
 rather than to weaken the residual policy, is closed and was never executed; its
 numerical parameters were never frozen.
 
-The evidence establishes that disagreement carries no association with
-operational failure strong enough to clear a `0.60` AUC screen on this arm. It
-does not establish that no weak association exists, does not identify any causal
-relationship, and does not support any deployment or actionability claim. The
+The `ood_compound` component does not support an association above `AUC 0.60`;
+the `id_reference` component remains unresolved, so the overall evidence is
+Inconclusive. Nothing here establishes that no weak association exists, identifies
+any causal relationship, or supports any deployment or actionability claim. The
 analysis is observational and conditional on the five frozen training artifacts;
 inference to other training runs would require new artifacts.
 
