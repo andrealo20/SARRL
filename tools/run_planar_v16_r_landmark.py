@@ -3,13 +3,13 @@
 
 Per PLAN.md ("Predictor: landmark window" / "Reproducibility"): no association
 analysis may begin until this artifact exists. This script does exactly one
-thing — derive `landmark_episodes.csv` from the local-only raw Phase-C
-transition table and the retained gate-off arm — and computes no association
+thing, derive `landmark_episodes.csv` from the local-only raw Phase-C
+transition table and the retained gate-off arm, and computes no association
 between predictor and endpoint. Run `run_planar_v16_r_analysis.py` after this.
 
 Window: raw rows `step = 0..24` (zero-indexed, 25 transitions), fixed for
 every episode regardless of scenario. Any episode with fewer than 25 rows in
-that range is an error, not a silent truncation — the frozen feasibility check
+that range is an error, not a silent truncation: the frozen feasibility check
 established the shortest gate-off episode runs 27 steps, so this cannot occur
 on the real arm.
 """

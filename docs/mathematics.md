@@ -152,7 +152,7 @@ z_t = f_{\mathrm{GRU}}(H_t)
 ```
 
 Ground-truth dynamics parameters can be used as auxiliary supervision during training or diagnostics, but
-are **not required as runtime policy inputs** — this prevents privileged physical information from leaking
+are **not required as runtime policy inputs**: this prevents privileged physical information from leaking
 directly into the deployed controller.
 
 ## Learned residual dynamics

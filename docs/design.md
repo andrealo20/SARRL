@@ -4,15 +4,15 @@ SARRL is developed bottom-up. Later layers are not trusted until lower layers ha
 
 ## Layered architecture
 
-1. **Analytical plant** — deterministic 2-DoF rigid-body dynamics, friction and payload.
-2. **Nominal control** — computed torque and constrained nonlinear MPC.
-3. **Learning** — direct or residual Soft Actor-Critic implemented in PyTorch.
-4. **Robustness** — domain randomisation, delay and explicit fault injection.
-5. **Adaptation** — causal GRU context inferred only from transition history.
-6. **Learned dynamics** — residual acceleration ensemble with bootstrap disagreement.
-7. **Runtime gating** — uncertainty may reduce residual-policy authority.
-8. **Safety** — exact 2-D hard HOCBF projection with explicit infeasibility.
-9. **Evaluation** — disjoint training, validation and held-out seed populations with retained raw artifacts.
+1. **Analytical plant**: deterministic 2-DoF rigid-body dynamics, friction and payload.
+2. **Nominal control**: computed torque and constrained nonlinear MPC.
+3. **Learning**: direct or residual Soft Actor-Critic implemented in PyTorch.
+4. **Robustness**: domain randomisation, delay and explicit fault injection.
+5. **Adaptation**: causal GRU context inferred only from transition history.
+6. **Learned dynamics**: residual acceleration ensemble with bootstrap disagreement.
+7. **Runtime gating**: uncertainty may reduce residual-policy authority.
+8. **Safety**: exact 2-D hard HOCBF projection with explicit infeasibility.
+9. **Evaluation**: disjoint training, validation and held-out seed populations with retained raw artifacts.
 
 Each layer has a narrow API so it can be ablated independently.
 

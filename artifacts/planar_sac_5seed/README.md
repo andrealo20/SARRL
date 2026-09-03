@@ -25,15 +25,15 @@ run manifest records that resume source.
 
 ## Files
 
-- `summary.csv` — per-training-seed held-out metrics and Wilson intervals.
-- `heldout_episodes.csv` — all 500 policy held-out episodes.
-- `baseline_heldout_40000.csv` — paired computed-torque baseline episodes.
-- `paired_comparison.csv` — per-policy paired success differences and bootstrap intervals.
-- `validation_seed_*.csv` — checkpoint-selection learning curves.
-- `run_manifest_seed_*.json` — runtime and training provenance.
-- `checkpoint_sha256.txt` — SHA-256 fingerprints of the evaluated `best.pt` checkpoints.
-- `result.json` — release-level summary using sample SD across training runs.
-- `aggregate.json` — original generated cross-model aggregate (population SD, `ddof=0`).
+- `summary.csv`: per-training-seed held-out metrics and Wilson intervals.
+- `heldout_episodes.csv`: all 500 policy held-out episodes.
+- `baseline_heldout_40000.csv`: paired computed-torque baseline episodes.
+- `paired_comparison.csv`: per-policy paired success differences and bootstrap intervals.
+- `validation_seed_*.csv`: checkpoint-selection learning curves.
+- `run_manifest_seed_*.json`: runtime and training provenance.
+- `checkpoint_sha256.txt`: SHA-256 fingerprints of the evaluated `best.pt` checkpoints.
+- `result.json`: release-level summary using sample SD across training runs.
+- `aggregate.json`: original generated cross-model aggregate (population SD, `ddof=0`).
 
 The model checkpoint binaries are intentionally not committed because of their size. This bundle supports the
 retained randomized planar residual-SAC result only; it is not evidence for Franka/MuJoCo, hardware or sim-to-real

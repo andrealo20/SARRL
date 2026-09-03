@@ -205,9 +205,9 @@ episodes per scenario, for 6,000 episodes.
 
 The campaign isolates two filter effects on identical episode seeds:
 
-- `A2_unfiltered` versus `A5_hocbf` — the same residual policy without and
+- `A2_unfiltered` versus `A5_hocbf`: the same residual policy without and
   with required hard-HOCBF projection;
-- `A6_prefilter` versus `A6_hocbf` — the same context-plus-gate stack
+- `A6_prefilter` versus `A6_hocbf`: the same context-plus-gate stack
   immediately before and after required hard-HOCBF projection.
 
 Earlier campaigns reported task success only. Success alone cannot separate a
@@ -295,7 +295,7 @@ hashes were revalidated against the audited v1.3 evaluation manifest before
 the first episode.
 
 The 4,500 A2, A5 and A6 episodes that also exist in the v1.3 campaign
-reproduced their retained v1.3 outcomes exactly — identical success and step
+reproduced their retained v1.3 outcomes exactly: identical success and step
 counts, with rewards matching to within 1e-12 and zero discrepancies. This
 confirms that the frozen artifacts were reused without retraining and that the
 filter comparison is genuinely paired.

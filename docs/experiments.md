@@ -428,8 +428,8 @@ is admissible.
 Exposure is outcome-dependent: 19.1% of unsafe, 32.1% of safe non-infeasible and
 100% of aborted episodes end before the 250-step horizon. The predictor is
 therefore the median `uncertainty_norm` over a **fixed window of raw rows
-`step = 0..24`** — 25 transitions, 0.5 s at `dt = 0.02`, the first 10% of the
-horizon — identical for every episode so that exposure does not vary with
+`step = 0..24`** (25 transitions, 0.5 s at `dt = 0.02`, the first 10% of the
+horizon), identical for every episode so that exposure does not vary with
 outcome. The window is not uniformly pre-outcome and is not claimed to be: 5 of
 18 `id_reference` and 15 of 92 `ood_compound` unsafe episodes have their first
 unsafe observation inside it. The estimand is a fixed-window association that
@@ -476,7 +476,7 @@ separately per component, since the inflation is prevalence-driven and the two
 scenarios carry 4.8% and 18.4% event rates. Selection and independent validation
 used disjoint synthetic seeds; the frozen values are the 2.0th percentile for
 `id_reference` and the 2.5th for `ood_compound`, validated at a worst-case size
-of 3.65% [2.91%, 4.56%] — conservative rather than anticonservative. Second,
+of 3.65% [2.91%, 4.56%], conservative rather than anticonservative. Second,
 power was recomputed under the calibrated rule: joint power at the preregistered
 target of AUC 0.70 and ICC 0.10 is 38.5% against an 80% goal, so v1.6-R is
 executed and reported as an explicitly **low-power feasibility screen** in which

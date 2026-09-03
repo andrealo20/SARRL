@@ -21,7 +21,7 @@ On the randomized planar held-out benchmark:
 | Controller | v1.2 held-out | v1.3 compound OOD | v1.3 motor fault |
 |---|---:|---:|---:|
 | Computed torque | 11.0% | 0.0% | 3.0% |
-| Direct SAC | 6.0% ± 3.7 pp | — | — |
+| Direct SAC | 6.0% ± 3.7 pp | n/a | n/a |
 | Residual SAC | 56.4% ± 7.0 pp | 6.0% ± 2.3 pp | 23.6% ± 1.9 pp |
 | Residual SAC + learned context | **64.2% ± 6.7 pp** | **11.6% ± 3.8 pp** | **32.6% ± 6.4 pp** |
 | Residual SAC + uncertainty gate | 15.2% ± 1.6 pp | 0.0% | 3.2% ± 0.8 pp |
@@ -38,15 +38,15 @@ gate-off control. Both preregistered acceptance decisions failed. This is a
 retained negative result: disagreement is informative about model error, but
 direct residual attenuation is not useful in this benchmark.
 
-v1.6 then tested the link v1.5 had assumed rather than measured — whether
+v1.6 then tested the link v1.5 had assumed rather than measured, whether
 disagreement carries information about *operational failure*, not just about
 model error. On the gate-off arm, over a fixed early window and against a
 composite endpoint of unsafe episode or HOCBF abort, the per-scenario AUCs were
 `0.520` in distribution (24/500 events) and `0.479` under compound OOD (92/500).
 The preregistered decision is **Inconclusive**: `ood_compound` excludes an
 association above `AUC 0.60`, but `id_reference` does not. Neither establishes
-the absence of all weaker associations — weaker effects remain plausible,
-particularly because `id_reference` is unresolved — and neither identifies any
+the absence of all weaker associations (weaker effects remain plausible,
+particularly because `id_reference` is unresolved), and neither identifies any
 causal relationship. The screen used a
 decision rule corrected before the data were opened, after the original bound was
 found anticonservative; calibrated joint power was only 38.5% at AUC 0.70 against
@@ -66,7 +66,7 @@ Task success alone cannot separate a controller that reaches the target through 
 | Full adaptive stack, pre-filter | 64.2% ± 0.4 pp | 74.6% ± 1.1 pp | 71.6% ± 0.9 pp | 14.6% ± 1.3 pp |
 | **+ hard HOCBF** | **8.2% ± 0.4 pp** | **27.4% ± 0.5 pp** | **27.4% ± 1.1 pp** | 12.8% ± 0.8 pp |
 
-Measured as a paired difference per trained model on identical episode seeds, the filter removed 68.6 pp of unsafe episodes on the ID reference for the plain residual policy and 56.0 pp for the full stack. All 15 per-model paired bootstrap intervals excluded zero in every scenario for both pairings, while the paired success cost — -4.6 pp and -1.8 pp — excluded zero in only 4/15 and 0/15 comparisons.
+Measured as a paired difference per trained model on identical episode seeds, the filter removed 68.6 pp of unsafe episodes on the ID reference for the plain residual policy and 56.0 pp for the full stack. All 15 per-model paired bootstrap intervals excluded zero in every scenario for both pairings, while the paired success cost (-4.6 pp and -1.8 pp) excluded zero in only 4/15 and 0/15 comparisons.
 
 The unfiltered conditions were never trained against the safety envelope, so their violation rates characterize the baseline rather than a defect introduced by residual learning; the claim this campaign supports is the paired filter effect. Filtering reduces violations without eliminating them, because the HOCBF certificate covers the nominal instantaneous command model only.
 
@@ -95,11 +95,11 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Repository guide
 
-- `sarrl/` — dynamics, controllers, RL, adaptation and safety
-- `tools/` — training, evaluation and sweep commands
-- `tests/` — automated verification
-- `artifacts/` and `results/` — retained experimental evidence
-- `docs/` — [design](docs/design.md), [mathematics](docs/mathematics.md), [experiments](docs/experiments.md), [verification](docs/verification.md) and [changelog](docs/changelog.md)
+- `sarrl/`: dynamics, controllers, RL, adaptation and safety
+- `tools/`: training, evaluation and sweep commands
+- `tests/`: automated verification
+- `artifacts/` and `results/`: retained experimental evidence
+- `docs/`: [design](docs/design.md), [mathematics](docs/mathematics.md), [experiments](docs/experiments.md), [verification](docs/verification.md) and [changelog](docs/changelog.md)
 
 ## Limitations
 
