@@ -93,12 +93,12 @@ certainly at moderate effect sizes.
 
 **Decision: Inconclusive.** Both point estimates sit essentially at chance.
 `ood_compound`, the better-powered component, meets the component-negative
-criterion on its own with an upper bound of `0.5479`. Precisely stated, this
-the **`ood_compound` component excludes an association above the preregistered
+criterion on its own with an upper bound of `0.5479`. Precisely stated, the
+**`ood_compound` component excludes an association above the preregistered
 `AUC > 0.60` threshold, while the `id_reference` component does not**, so the
 overall two-scenario decision remains Inconclusive. Neither component
-demonstrates the absence of a weaker association — an AUC near 0.55 is not
-excluded anywhere. The global verdict is Inconclusive rather than Negative only
+establishes the absence of all weaker associations; weaker effects remain
+plausible, particularly because `id_reference` is unresolved. The global verdict is Inconclusive rather than Negative only
 because `id_reference`'s upper bound of `0.6391` does not fall below the
 threshold, a direct consequence of its 24 events and the low power recorded
 before the data were opened.

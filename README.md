@@ -44,8 +44,10 @@ model error. On the gate-off arm, over a fixed early window and against a
 composite endpoint of unsafe episode or HOCBF abort, the per-scenario AUCs were
 `0.520` in distribution (24/500 events) and `0.479` under compound OOD (92/500).
 The preregistered decision is **Inconclusive**: `ood_compound` excludes an
-association above `AUC 0.60`, but `id_reference` does not, and neither excludes a
-weaker association or identifies any causal relationship. The screen used a
+association above `AUC 0.60`, but `id_reference` does not. Neither establishes
+the absence of all weaker associations — weaker effects remain plausible,
+particularly because `id_reference` is unresolved — and neither identifies any
+causal relationship. The screen used a
 decision rule corrected before the data were opened, after the original bound was
 found anticonservative; calibrated joint power was only 38.5% at AUC 0.70 against
 an 80% target, so a non-rejection is inconclusive, never evidence of absence. The conditional
