@@ -474,21 +474,18 @@ def main() -> None:
         return
 
     if args.recalibrate:
-        print("=== selection: marginal size at every candidate quantile (boundary cells)")
+        # Selection and validation cells are independent: every cell reports the
+        # rejection rate at ALL candidate quantiles, and the choice among them is
+        # post-processing. They are therefore dispatched as one pool so the whole
+        # machine stays busy. Each cell's RNG is seeded by (base_seed, index), so
+        # the results do not depend on worker count or scheduling order.
+        boundary = {s: THRESHOLD for s in PRIMARY_SCENARIOS}
         sel_cells = [
-            ({s: THRESHOLD for s in PRIMARY_SCENARIOS}, icc, args.replicates,
-             args.draws, SELECTION_RNG_SEED, i)
+            (boundary, icc, args.replicates, args.draws, SELECTION_RNG_SEED, i)
             for i, icc in enumerate(ICC_GRID)
         ]
-        with ProcessPoolExecutor(max_workers=args.workers) as pool:
-            selection = list(pool.map(run_quantile_cell, sel_cells))
-        critical = select_critical_quantiles(selection)
-        print(json.dumps({"critical_quantiles": critical}))
-
-        print("=== independent validation on a disjoint synthetic seed")
         val_cells = [
-            ({s: THRESHOLD for s in PRIMARY_SCENARIOS}, icc, args.replicates,
-             args.draws, VALIDATION_RNG_SEED, i)
+            (boundary, icc, args.replicates, args.draws, VALIDATION_RNG_SEED, i)
             for i, icc in enumerate(ICC_GRID)
         ] + [
             (cfg, icc, args.replicates, args.draws, VALIDATION_RNG_SEED, 100 + i)
@@ -496,8 +493,16 @@ def main() -> None:
                 (c, k) for c in CALIBRATION_CONFIGS for k in CALIBRATION_ICC
             )
         ]
+        print(
+            f"=== selection + independent validation, {len(sel_cells) + len(val_cells)} "
+            f"cells in one pool on {args.workers} workers"
+        )
         with ProcessPoolExecutor(max_workers=args.workers) as pool:
-            validation = list(pool.map(run_quantile_cell, val_cells))
+            everything = list(pool.map(run_quantile_cell, sel_cells + val_cells))
+        selection = everything[: len(sel_cells)]
+        validation = everything[len(sel_cells) :]
+        critical = select_critical_quantiles(selection)
+        print(json.dumps({"critical_quantiles": critical}))
         sizes = []
         for cell in validation:
             # Under an intersection-union test the joint rejection probability is
