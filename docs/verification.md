@@ -40,6 +40,115 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## v1.6.0 disagreement and operational failure evidence
+
+v1.6 introduced no new episodes and no retraining. It is a preregistered
+re-analysis of the retained v1.5 Phase-C gate-off arm, with the protocol,
+statistic, threshold, decision rule and operating characteristics frozen and
+committed before the association was computed.
+
+### Preregistered operating characteristics
+
+The procedure was simulated on synthetic nulls before the data were opened. The
+simulator was verified against its own targets on 2,000 replicates per grid
+point: empirical prevalence `0.0479` and `0.1837` against targets `0.048` and
+`0.184`, empirical AUC `0.7008` in both scenarios against a target of `0.70`,
+and latent within-seed correlation `0.0995` and `0.0990` against `0.100`.
+
+Two corrections followed and are part of the record. The uniform 5th-percentile
+bound was measured **anticonservative** under the composite null, with a
+worst-case size of **7.8%** `[6.7%, 9.1%]` against a nominal 5%, attained with
+`id_reference` on the boundary and `ood_compound` deep in the alternative. The
+inflation is prevalence-driven: with the higher-prevalence scenario on the
+boundary the size runs `0.044`-`0.063`, and with the 4.8%-event scenario on the
+boundary it runs `0.056`-`0.078`. Critical quantiles were therefore recalibrated
+per component on synthetic nulls only, selected on one seed and validated on a
+disjoint one: **2.0th percentile for `id_reference`, 2.5th for `ood_compound`**,
+validated worst-case size **3.65%** `[2.91%, 4.56%]`, conservative against the
+nominal 5%.
+
+Power was then recomputed under the calibrated rule. Joint power at the
+preregistered target of AUC `0.70` and ICC `0.10` is **38.5%** against an 80%
+goal, so the screen was executed and is reported as an explicitly **low-power
+feasibility screen**:
+
+| True AUC | Joint power | `id_reference` | `ood_compound` |
+|---:|---:|---:|---:|
+| 0.60 | 0.2% | 2.8% | 2.8% |
+| 0.65 | 5.9% | 14.9% | 34.5% |
+| 0.70 | 38.5% | 42.9% | 89.9% |
+| 0.75 | 73.6% | 73.8% | 99.8% |
+| 0.80 | 93.0% | 93.0% | 100.0% |
+
+`id_reference` is the binding component throughout, with 24 events in 500
+episodes; joint power tracks it closely because `ood_compound` rejects almost
+certainly at moderate effect sizes.
+
+### Result
+
+| Scenario | AUC | Events | Lower bound | Upper bound |
+|---|---:|---:|---:|---:|
+| `id_reference` | 0.5200 | 24/500 | 0.3958 | 0.6391 |
+| `ood_compound` | 0.4787 | 92/500 | 0.4085 | 0.5479 |
+
+**Decision: Inconclusive.** Both point estimates sit essentially at chance.
+`ood_compound`, the better-powered component, meets the component-negative
+criterion on its own with an upper bound of `0.5479`. Precisely stated, this
+**excludes a useful association at the preregistered threshold `AUC > 0.60`; it
+does not demonstrate the absence of any weaker association** — an AUC near 0.55
+is not excluded. The global verdict is Inconclusive rather than Negative only
+because `id_reference`'s upper bound of `0.6391` does not fall below the
+threshold, a direct consequence of its 24 events and the low power recorded
+before the data were opened.
+
+Per-cell AUCs show the dispersion those event counts imply: `id_reference`
+0.643 / 0.612 / 0.447 / 0.716 / 0.470 and `ood_compound` 0.547 / 0.345 / 0.439 /
+0.499 / 0.573.
+
+### Secondary analyses, excluded from the decision by preregistration
+
+| Analysis | `id_reference` | `ood_compound` |
+|---|---:|---:|
+| `uncertainty_ratio` predictor | 0.5016 | 0.4925 |
+| `unsafe_episode` endpoint only | 0.5332 | 0.4787 |
+| whole-episode predictor | 0.5851 | 0.4185 |
+| pre-event truncated | 0.5082 | 0.4782 |
+
+The whole-episode predictor gives a higher `id_reference` AUC than the fixed
+window. This is **consistent with** duration and censoring contamination, since
+whole-episode summaries partly encode how long an episode ran and that is itself
+outcome-dependent, but a single paired comparison does not demonstrate the
+mechanism and no such demonstration is claimed. The pre-event-truncated
+sensitivity, at `0.5082` with no in-scope episode dropped, indicates the primary
+estimate is not carried by post-failure observations.
+
+The `motor_fault` onset-anchored secondary gives AUC `0.6531` over 471 included
+and 29 excluded episodes (20 non-failure, 9 failure). It is reported
+**exclusively as a selection-affected sensitivity**: its inclusion criterion,
+surviving to raw step 45, is outcome-dependent, so the quantity is a conditional
+post-onset estimand on a survivor subset and is not comparable with the primary
+scenario AUCs. It cannot reopen the decision.
+
+### Interpretation and scope
+
+v1.6 closes as a preregistered **Inconclusive / no-go**. The conditional
+intervention arm, which would have used disagreement to tighten the HOCBF margin
+rather than to weaken the residual policy, is closed and was never executed; its
+numerical parameters were never frozen.
+
+The evidence establishes that disagreement carries no association with
+operational failure strong enough to clear a `0.60` AUC screen on this arm. It
+does not establish that no weak association exists, does not identify any causal
+relationship, and does not support any deployment or actionability claim. The
+analysis is observational and conditional on the five frozen training artifacts;
+inference to other training runs would require new artifacts.
+
+Retained evidence is under `results/uncertainty_gate_calibration/phase_r/`:
+the derived landmark table and its manifest with SHA-256 bindings to the raw
+source, the operating-characteristic and recalibration manifests, and the
+analysis manifest carrying the primary result, every secondary and the low-power
+label.
+
 ## v1.5.0 uncertainty-gate calibration evidence
 
 v1.5 reused the five frozen v1.2 artifact pairs without retraining. Phase A

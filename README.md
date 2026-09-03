@@ -35,8 +35,20 @@ disagreement correlated with prediction error (median Spearman rho `0.298`,
 95% CI `[0.228, 0.356]`), but the calibrated gate still reduced success. A4c
 lost 13.0 pp versus A2 on ID; A6c lost 12.2 pp versus an otherwise identical
 gate-off control. Both preregistered acceptance decisions failed. This is a
-retained negative result: disagreement is informative, but direct residual
-attenuation is not useful in this benchmark.
+retained negative result: disagreement is informative about model error, but
+direct residual attenuation is not useful in this benchmark.
+
+v1.6 then tested the link v1.5 had assumed rather than measured — whether
+disagreement carries information about *operational failure*, not just about
+model error. On the gate-off arm, over a fixed early window and against a
+composite endpoint of unsafe episode or HOCBF abort, the per-scenario AUCs were
+`0.520` in distribution (24/500 events) and `0.479` under compound OOD (92/500).
+The preregistered decision is **Inconclusive**: this excludes a useful
+association at the `AUC > 0.60` screening threshold but does not demonstrate the
+absence of a weaker one, and identifies no causal relationship. The screen was
+explicitly low-powered — 38.5% joint power at AUC 0.70 against an 80% target —
+so a non-rejection is inconclusive, never evidence of absence. The conditional
+intervention arm was closed unexecuted.
 
 Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. Evidence remains limited to the analytical planar benchmark.
 
@@ -88,7 +100,7 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Limitations
 
-The v1.3 OOD/fault, v1.4 quantified-safety and v1.5 gate-calibration campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration and v1.6 disagreement/failure campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was underpowered by design constraint — 24 composite events in 500 in-distribution episodes — so its Inconclusive verdict bounds a useful association rather than excluding a weak one. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 

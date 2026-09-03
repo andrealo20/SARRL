@@ -403,3 +403,81 @@ the respective 95% intervals were `[-19.4, -6.4]`, `[-7.6, -2.8]` and
 control, with intervals `[-20.0, -4.8]`, `[-4.0, -0.4]` and
 `[-16.2, -4.6]`. Neither stack passed non-inferiority or the strict OOD
 benefit endpoint. The calibrated gate is retained as a negative result.
+
+## v1.6 disagreement and operational failure
+
+v1.6 asks whether ensemble disagreement carries information about operational
+failure, a link v1.5 assumed but never tested: Phase A validated
+`disagreement -> model prediction error`, while Phase C acted on
+`disagreement -> operational failure`. No new episodes and no retraining are
+involved; the analysis is a preregistered re-analysis of retained v1.5 Phase-C
+evidence, frozen before the association was computed.
+
+The arm is `A6c_gate_off_control` on the safety population: 1,500 episodes in 15
+cells of exactly 100, over 100 episode seeds shared across scenarios and cells.
+The gated arms are excluded from the primary analysis because there the gate's
+action alters the trajectory, which alters both subsequent disagreement and the
+outcome. In the gate-off control the ensemble is queried and its disagreement
+recorded while the policy retains full authority, so disagreement is an
+observation rather than a cause of the trajectory. This avoids conditioning on
+gate-induced trajectory changes; it does not remove confounding, and the
+analysis is reported as observational. No covariate adjustment is performed and
+no claim that disagreement adds information beyond state or scenario difficulty
+is admissible.
+
+Exposure is outcome-dependent: 19.1% of unsafe, 32.1% of safe non-infeasible and
+100% of aborted episodes end before the 250-step horizon. The predictor is
+therefore the median `uncertainty_norm` over a **fixed window of raw rows
+`step = 0..24`** — 25 transitions, 0.5 s at `dt = 0.02`, the first 10% of the
+horizon — identical for every episode so that exposure does not vary with
+outcome. The window is not uniformly pre-outcome and is not claimed to be: 5 of
+18 `id_reference` and 15 of 92 `ood_compound` unsafe episodes have their first
+unsafe observation inside it. The estimand is a fixed-window association that
+permits early post-failure observations; truncating each episode at its own
+first failure would restore the outcome-dependent exposure the window exists to
+remove. A derived per-episode table is retained so the analysis reproduces from
+the repository without the 106 MiB raw transition file.
+
+The endpoint is `operational_failure = unsafe_episode OR safety_infeasible`,
+236 events in 1,500 episodes. The composite is used because the HOCBF can abort
+rather than violate, and an abort is an operational failure the filter exists to
+prevent, not a success. All six additional composite events are `id_reference`;
+the fault and OOD aborts were already unsafe.
+
+The statistic is the per-scenario AUC over the five seeds pooled, with a
+clustered bootstrap of 10,000 draws that resamples the 100 shared episode seeds
+into one joint index applied identically across scenarios, the five artifacts
+held fixed. The effective independent unit is the episode seed, not the episode.
+The decision is an intersection-union test on marginal one-sided lower bounds
+against a threshold of `AUC = 0.60`, with the boundary value belonging to the
+null: Positive requires the lower bound above `0.60` in both primary scenarios,
+Negative requires both upper bounds at or below it, anything else is
+Inconclusive.
+
+The primary scenarios are `id_reference` and `ood_compound`, where the
+perturbation is present from t = 0 and the window is representative of the
+regime being scored. `motor_fault` is a prespecified secondary: the fault
+activates at step 20, so the primary window contains at most four post-onset
+predictor observations. It is analysed on its own onset-anchored window, raw
+rows `21..45`, conditional on surviving to step 45. Because that inclusion
+criterion is outcome-dependent, its AUC is a conditional post-onset estimand and
+is reported exclusively as a selection-affected sensitivity; it is never ranked
+against or compared with the primary AUCs and cannot change the decision.
+
+Operating characteristics were simulated on synthetic nulls before the
+association was read. Two corrections were required and are recorded in the
+retained evidence. First, the uniform 5th-percentile bound proved
+anticonservative under the composite null, with a worst-case size of 7.8%
+[6.7%, 9.1%] against a nominal 5%: the size of an intersection-union test is the
+supremum over the null, attained when one component sits on the boundary while
+the other lies deep in the alternative, and symmetric boundary cells are
+trivially conservative. Critical quantiles were therefore recalibrated
+separately per component, since the inflation is prevalence-driven and the two
+scenarios carry 4.8% and 18.4% event rates. Selection and independent validation
+used disjoint synthetic seeds; the frozen values are the 2.0th percentile for
+`id_reference` and the 2.5th for `ood_compound`, validated at a worst-case size
+of 3.65% [2.91%, 4.56%] — conservative rather than anticonservative. Second,
+power was recomputed under the calibrated rule: joint power at the preregistered
+target of AUC 0.70 and ICC 0.10 is 38.5% against an 80% goal, so v1.6-R is
+executed and reported as an explicitly **low-power feasibility screen** in which
+a non-rejection is Inconclusive and never evidence of absence.
