@@ -61,7 +61,7 @@ TARGET_AUC = 0.70
 TARGET_ICC = 0.10
 TARGET_JOINT_POWER = 0.80
 
-VERIFY_REPLICATES = 200
+VERIFY_REPLICATES = 2000
 VERIFY_TOL_PREVALENCE = 0.005
 VERIFY_TOL_AUC = 0.005
 VERIFY_TOL_LATENT_ICC = 0.02
@@ -198,10 +198,22 @@ def verify(rng, auc: float, icc_seed: float, replicates: int) -> dict:
             lat = rep["latent"][scenario]
             prevalence[scenario].append(float(y.mean()))
             empirical_auc[scenario].append(auc_from_arrays(x.ravel(), y.ravel()))
-            # within-seed correlation on the latent scale: between-seed variance
-            # of the column means over the total variance.
-            col = lat.mean(axis=0)
-            latent_icc[scenario].append(float(np.var(col, ddof=1) / np.var(lat, ddof=1)))
+            # Within-seed correlation on the latent scale, estimated as the mean
+            # covariance between episodes that share a seed but not an artifact,
+            # over the total variance. Averaging over artifacts would NOT isolate
+            # var_seed: with only five artifacts it carries var_artifact/5 + 1/5
+            # of residual noise and inflates the estimate.
+            centred = lat - lat.mean(axis=1, keepdims=True)
+            pair_cov = float(
+                np.mean(
+                    [
+                        float(np.mean(centred[i] * centred[j]))
+                        for i in range(TRAINING_SEEDS)
+                        for j in range(i + 1, TRAINING_SEEDS)
+                    ]
+                )
+            )
+            latent_icc[scenario].append(pair_cov / float(np.var(lat, ddof=1)))
             yc = y.mean(axis=0)
             binary_icc[scenario].append(float(np.var(yc, ddof=1) / max(np.var(y, ddof=1), 1e-12)))
 
