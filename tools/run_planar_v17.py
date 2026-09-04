@@ -39,7 +39,6 @@ from sarrl.evaluation import (
     two_level_paired_interval,
     v13_scenarios,
     v17_protocol_dict,
-    write_dataclass_csv,
     write_episode_csv,
     write_run_manifest,
 )
@@ -55,6 +54,7 @@ TRAINING_CHECKPOINT_EVERY = 50_000
 TRAINING_VALIDATE_EVERY = 25_000
 INTERVENTION_TOLERANCE = 1e-9
 PAIRING_PATTERN = re.compile(r"^(C[01]_[a-z0-9_]+)_train_seed_(\d+)$")
+V17_TRAINING_SOURCE_COMMIT = "2c149de747d6f6cbd244339a5a54a9831b459a93"
 
 
 def _sha256(path: Path) -> str:
@@ -67,6 +67,18 @@ def _sha256(path: Path) -> str:
 
 def _relative(path: Path, root: Path) -> str:
     return path.resolve().relative_to(root.resolve()).as_posix()
+
+
+def _write_diagnostic_csv(path: Path, rows) -> None:
+    """Write a non-empty collection of same-schema diagnostic dataclasses."""
+    if not rows:
+        raise ValueError("diagnostic output must not be empty")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fields = list(asdict(rows[0]))
+    with path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fields, lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(asdict(row) for row in rows)
 
 
 def _training_dir(output: Path, condition: str, training_seed: int) -> Path:
@@ -421,7 +433,6 @@ def train_shard(
 
 def build_checkpoint_inventory(root: Path, output: Path) -> Path:
     assert_source_tree_clean(root)
-    commit = repository_commit(root)
     records = []
     for condition in V17_CONDITIONS:
         for training_seed in V17_TRAINING_SEEDS:
@@ -453,7 +464,7 @@ def build_checkpoint_inventory(root: Path, output: Path) -> Path:
                 manifest,
                 condition=condition,
                 training_seed=training_seed,
-                expected_commit=commit,
+                expected_commit=V17_TRAINING_SOURCE_COMMIT,
             )
             selected_row, selected_hash = _validate_selection_artifacts(run_dir)
             _validate_training_episode_artifacts(run_dir, condition)
@@ -490,6 +501,7 @@ def build_checkpoint_inventory(root: Path, output: Path) -> Path:
         path,
         {
             "protocol": v17_protocol_dict(),
+            "training_source_commit": V17_TRAINING_SOURCE_COMMIT,
             "records": records,
         },
         root=root,
@@ -511,6 +523,8 @@ def _load_inventory(root: Path, output: Path) -> tuple[Path, dict]:
         raise ValueError("checkpoint inventory has the wrong number of records")
     if payload["config"].get("protocol") != v17_protocol_dict():
         raise ValueError("checkpoint inventory protocol does not match frozen protocol")
+    if payload["config"].get("training_source_commit") != V17_TRAINING_SOURCE_COMMIT:
+        raise ValueError("checkpoint inventory training source commit is invalid")
     expected_pairs = {
         (condition, training_seed)
         for condition in V17_CONDITIONS
@@ -540,7 +554,7 @@ def _load_inventory(root: Path, output: Path) -> tuple[Path, dict]:
             manifest,
             condition=condition,
             training_seed=training_seed,
-            expected_commit=commit,
+            expected_commit=V17_TRAINING_SOURCE_COMMIT,
         )
         validation_rows = _read_csv(root / record["validation"])
         selected_row = _selected_validation_row(validation_rows)
@@ -627,7 +641,7 @@ def evaluate_shard(root: Path, output: Path, training_seed: int) -> None:
     episodes_path = shard / "episodes.csv"
     safety_path = shard / "safety_diagnostics.csv"
     write_episode_csv(episodes_path, outcome_rows)
-    write_dataclass_csv(safety_path, safety_rows)
+    _write_diagnostic_csv(safety_path, safety_rows)
     write_run_manifest(
         shard / "evaluation_manifest.json",
         {

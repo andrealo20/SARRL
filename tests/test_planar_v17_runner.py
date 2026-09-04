@@ -1,6 +1,7 @@
 import csv
 import json
 from copy import deepcopy
+from dataclasses import dataclass
 from pathlib import Path
 
 import pytest
@@ -9,12 +10,30 @@ from sarrl.envs import DomainRandomization, PlanarReachEnv, SafetyProjectedEnv
 from tools import run_planar_v17
 
 
+@dataclass(frozen=True)
+class _SyntheticDiagnostics:
+    scenario: str
+    unsafe_episode: bool
+
+
 def _write_csv(path: Path, rows: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def test_v17_diagnostic_writer_uses_the_actual_row_schema(tmp_path: Path):
+    path = tmp_path / "safety_diagnostics.csv"
+    rows = [_SyntheticDiagnostics(scenario="id_reference", unsafe_episode=False)]
+
+    run_planar_v17._write_diagnostic_csv(path, rows)
+
+    with path.open(newline="") as handle:
+        assert list(csv.DictReader(handle)) == [
+            {"scenario": "id_reference", "unsafe_episode": "False"}
+        ]
 
 
 def _training_manifest(condition: str) -> dict:
