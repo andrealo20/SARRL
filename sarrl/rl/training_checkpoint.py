@@ -86,7 +86,11 @@ def load_training_session(path):
     replay = ReplayBuffer.from_state_dict(payload["replay"])
 
     env_state = payload["environment"]
-    if env_state.get("environment_type") == "adaptive_context":
+    if env_state.get("environment_type") == "safety_projected":
+        from sarrl.envs import SafetyProjectedEnv
+
+        env = SafetyProjectedEnv.from_state_dict(env_state)
+    elif env_state.get("environment_type") == "adaptive_context":
         from sarrl.adaptation import AdaptiveContextEnv
 
         env = AdaptiveContextEnv.from_state_dict(env_state)

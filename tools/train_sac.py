@@ -7,13 +7,18 @@ import argparse
 import copy
 import csv
 import hashlib
+import json
 from pathlib import Path
 
 import numpy as np
 import torch
 
 from sarrl.adaptation import AdaptiveContextEnv, DynamicsContextEncoder
-from sarrl.envs.planar_reach import DomainRandomization, PlanarReachEnv
+from sarrl.envs import (
+    DomainRandomization,
+    PlanarReachEnv,
+    SafetyProjectedEnv,
+)
 from sarrl.evaluation import (
     assert_repository_import_root,
     evaluate_policy,
@@ -37,9 +42,30 @@ def _sha256(path: Path) -> str:
     return digest.hexdigest()
 
 
+def _save_agent_atomically(agent, path: Path) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    agent.save(temporary)
+    temporary.replace(path)
+
+
+def _write_csv_atomically(path: Path, header: list[str], rows: list) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    with temporary.open("w", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(header)
+        writer.writerows(rows)
+    temporary.replace(path)
+
+
+def _write_json_atomically(path: Path, payload: dict) -> None:
+    temporary = path.with_suffix(path.suffix + ".tmp")
+    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    temporary.replace(path)
+
+
 def _base_env(env):
-    if isinstance(env, AdaptiveContextEnv):
-        return env.env
+    while isinstance(env, (AdaptiveContextEnv, SafetyProjectedEnv)):
+        env = env.env
     return env
 
 
@@ -47,7 +73,12 @@ def _environment_mode(env) -> str:
     return _base_env(env).mode
 
 
-def _validation_env(env):
+def _validation_env(
+    env,
+    *,
+    safety_projected: bool = False,
+    infeasible_reward: float = -500.0,
+):
     """Construct an independent deterministic validation environment."""
     base = _base_env(env)
 
@@ -62,17 +93,28 @@ def _validation_env(env):
         fault=base.fault,
     )
 
-    if not isinstance(env, AdaptiveContextEnv):
-        return val_base
+    if isinstance(env, AdaptiveContextEnv):
+        if safety_projected:
+            raise ValueError("safety projection with adaptive context is not supported")
 
-    # deepcopy preserves the frozen encoder exactly without consuming the
-    # global torch RNG that drives stochastic SAC actions.
-    encoder = copy.deepcopy(env.encoder)
-    return AdaptiveContextEnv(
-        val_base,
-        encoder,
-        device="cpu",
-    )
+        # deepcopy preserves the frozen encoder exactly without consuming the
+        # global torch RNG that drives stochastic SAC actions.
+        encoder = copy.deepcopy(env.encoder)
+        return AdaptiveContextEnv(
+            val_base,
+            encoder,
+            device="cpu",
+        )
+
+    if safety_projected:
+        config = env.safety_config if isinstance(env, SafetyProjectedEnv) else None
+        return SafetyProjectedEnv(
+            val_base,
+            safety_config=config,
+            infeasible_reward=infeasible_reward,
+        )
+
+    return val_base
 
 
 def _load_context_encoder(path: Path) -> DynamicsContextEncoder:
@@ -106,6 +148,17 @@ def main() -> int:
     p.add_argument("--replay-capacity", type=int, default=200_000)
     p.add_argument("--randomize", action="store_true")
     p.add_argument(
+        "--training-hocbf",
+        action="store_true",
+        help="Apply the required HOCBF projection to every training action.",
+    )
+    p.add_argument(
+        "--validation-hocbf",
+        action="store_true",
+        help="Evaluate validation checkpoints through the required HOCBF.",
+    )
+    p.add_argument("--infeasible-reward", type=float, default=-500.0)
+    p.add_argument(
         "--context-checkpoint",
         default=None,
         help=(
@@ -134,6 +187,14 @@ def main() -> int:
 
     if args.context_checkpoint is not None and args.mode != "residual":
         raise SystemExit("--context-checkpoint requires --mode residual")
+    if (args.training_hocbf or args.validation_hocbf) and args.mode != "residual":
+        raise SystemExit("HOCBF training and validation require --mode residual")
+    if args.context_checkpoint is not None and (
+        args.training_hocbf or args.validation_hocbf
+    ):
+        raise SystemExit("HOCBF training is not combined with adaptive context")
+    if not np.isfinite(args.infeasible_reward) or args.infeasible_reward >= 0.0:
+        raise SystemExit("--infeasible-reward must be finite and negative")
 
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
@@ -145,18 +206,41 @@ def main() -> int:
         ep_reward = float(loop["ep_reward"])
         obs = np.asarray(loop["obs"], dtype=np.float32)
         rows = list(loop.get("rows", []))
+        safety_rows = list(loop.get("safety_rows", []))
         validation_rows = list(loop.get("validation_rows", []))
         best_key = tuple(loop.get("best_key", (-np.inf, -np.inf)))
+        best_step = loop.get("best_step")
+        best_step = None if best_step is None else int(best_step)
+        if best_step is None and validation_rows and np.isfinite(best_key).all():
+            matching_steps = [
+                int(row[0])
+                for row in validation_rows
+                if (float(row[3]), float(row[4])) == best_key
+            ]
+            if matching_steps:
+                best_step = min(matching_steps)
         trainer_cfg = dict(loop.get("trainer_config", {}))
         batch_size = int(trainer_cfg.get("batch_size", args.batch_size))
         start_steps = int(trainer_cfg.get("start_steps", args.start_steps))
         update_every = int(trainer_cfg.get("update_every", args.update_every))
         context_checkpoint_path = trainer_cfg.get("context_checkpoint")
         context_checkpoint_sha256 = trainer_cfg.get("context_checkpoint_sha256")
+        training_hocbf = bool(trainer_cfg.get("training_hocbf", False))
+        validation_hocbf = bool(trainer_cfg.get("validation_hocbf", False))
+        infeasible_reward = float(
+            trainer_cfg.get("infeasible_reward", args.infeasible_reward)
+        )
 
         if step0 > args.steps:
             raise SystemExit("resume checkpoint exceeds requested --steps")
         stored_context_sha256 = trainer_cfg.get("context_checkpoint_sha256")
+
+        if args.training_hocbf != training_hocbf:
+            raise SystemExit("resume --training-hocbf does not match the checkpoint")
+        if args.validation_hocbf != validation_hocbf:
+            raise SystemExit("resume --validation-hocbf does not match the checkpoint")
+        if args.infeasible_reward != infeasible_reward:
+            raise SystemExit("resume --infeasible-reward does not match the checkpoint")
 
         if isinstance(env, AdaptiveContextEnv):
             if stored_context_sha256 is None:
@@ -187,7 +271,8 @@ def main() -> int:
             f"mode={_environment_mode(env)} "
             f"hidden={agent.config.hidden} replay={replay.capacity} "
             f"batch={batch_size} update_every={update_every} "
-            f"context={isinstance(env, AdaptiveContextEnv)}"
+            f"context={isinstance(env, AdaptiveContextEnv)} "
+            f"training_hocbf={training_hocbf} validation_hocbf={validation_hocbf}"
         )
     else:
         seed_everything(args.seed)
@@ -209,6 +294,9 @@ def main() -> int:
 
         context_checkpoint_path = None
         context_checkpoint_sha256 = None
+        training_hocbf = args.training_hocbf
+        validation_hocbf = args.validation_hocbf
+        infeasible_reward = args.infeasible_reward
 
         if args.context_checkpoint is not None:
             context_checkpoint_path = Path(args.context_checkpoint).resolve()
@@ -221,6 +309,11 @@ def main() -> int:
                 base_env,
                 encoder,
                 device="cpu",
+            )
+        elif training_hocbf:
+            env = SafetyProjectedEnv(
+                base_env,
+                infeasible_reward=infeasible_reward,
             )
         else:
             env = base_env
@@ -242,8 +335,10 @@ def main() -> int:
         episode = 0
         step0 = 0
         rows = []
+        safety_rows = []
         validation_rows = []
         best_key = (-np.inf, -np.inf)
+        best_step = None
         batch_size = args.batch_size
         start_steps = args.start_steps
         update_every = args.update_every
@@ -256,8 +351,15 @@ def main() -> int:
             None if context_checkpoint_path is None else str(context_checkpoint_path)
         ),
         "context_checkpoint_sha256": context_checkpoint_sha256,
+        "training_hocbf": training_hocbf,
+        "validation_hocbf": validation_hocbf,
+        "infeasible_reward": infeasible_reward,
     }
-    val_env = _validation_env(env)
+    val_env = _validation_env(
+        env,
+        safety_projected=validation_hocbf,
+        infeasible_reward=infeasible_reward,
+    )
     write_run_manifest(
         out / "run_manifest.json",
         {
@@ -283,6 +385,17 @@ def main() -> int:
                     env.config.latent_dim if isinstance(env, AdaptiveContextEnv) else None
                 ),
             },
+            "safety": {
+                "training_hocbf": training_hocbf,
+                "validation_hocbf": validation_hocbf,
+                "infeasible_reward": infeasible_reward,
+                "training_environment": (
+                    env.constructor_config() if training_hocbf else None
+                ),
+                "validation_environment": (
+                    val_env.constructor_config() if validation_hocbf else None
+                ),
+            },
             "replay_capacity": replay.capacity,
             "trainer": trainer_config,
             "validation": {
@@ -301,13 +414,15 @@ def main() -> int:
             "ep_reward": ep_reward,
             "obs": obs,
             "rows": rows,
+            "safety_rows": safety_rows,
             "validation_rows": validation_rows,
             "best_key": list(best_key),
+            "best_step": best_step,
             "trainer_config": trainer_config,
         }
 
     def validate(step: int) -> None:
-        nonlocal best_key
+        nonlocal best_key, best_step
         result = evaluate_policy(
             agent,
             val_env,
@@ -332,7 +447,8 @@ def main() -> int:
         )
         if key > best_key:
             best_key = key
-            agent.save(out / "best.pt")
+            best_step = step
+            _save_agent_atomically(agent, out / "best.pt")
 
     for step in range(step0 + 1, args.steps + 1):
         action = env.sample_action() if step <= start_steps else agent.act(obs)
@@ -349,6 +465,19 @@ def main() -> int:
         if terminated or truncated:
             episode += 1
             rows.append((episode, step, ep_reward, int(info["success"]), info["distance"]))
+            if training_hocbf:
+                safety_rows.append(
+                    (
+                        episode,
+                        step,
+                        int(info["safety_infeasible"]),
+                        int(info["safety_command_attempts"]),
+                        int(info["safety_certified_steps"]),
+                        int(info["safety_intervention_steps"]),
+                        float(info["safety_correction_sum"]),
+                        float(info["safety_correction_max"]),
+                    )
+                )
             if episode % 20 == 0:
                 alpha = metrics.get("alpha", float("nan"))
                 print(
@@ -369,26 +498,60 @@ def main() -> int:
     if args.validate_every and (not validation_rows or validation_rows[-1][0] != args.steps):
         validate(args.steps)
 
-    agent.save(out / "final.pt")
-    save_training_checkpoint(out / "training_final.pt", agent, replay, env, loop_state(args.steps))
-    with (out / "episodes.csv").open("w", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(["episode", "step", "reward", "success", "final_distance"])
-        w.writerows(rows)
-    with (out / "validation.csv").open("w", newline="") as f:
-        w = csv.writer(f)
-        w.writerow(
+    _save_agent_atomically(agent, out / "final.pt")
+    save_training_checkpoint(
+        out / "training_final.pt", agent, replay, env, loop_state(args.steps)
+    )
+    _write_csv_atomically(
+        out / "episodes.csv",
+        ["episode", "step", "reward", "success", "final_distance"],
+        rows,
+    )
+    _write_csv_atomically(
+        out / "validation.csv",
+        [
+            "step",
+            "successes",
+            "episodes",
+            "success_rate",
+            "reward_mean",
+            "reward_std",
+            "final_distance_mean",
+        ],
+        validation_rows,
+    )
+    if training_hocbf:
+        _write_csv_atomically(
+            out / "training_safety.csv",
             [
+                "episode",
                 "step",
-                "successes",
-                "episodes",
-                "success_rate",
-                "reward_mean",
-                "reward_std",
-                "final_distance_mean",
-            ]
+                "safety_infeasible",
+                "command_attempts",
+                "safety_certified_steps",
+                "safety_intervention_steps",
+                "safety_correction_sum",
+                "safety_correction_max",
+            ],
+            safety_rows,
         )
-        w.writerows(validation_rows)
+    if args.validate_every:
+        best_path = out / "best.pt"
+        if not best_path.is_file() or best_step is None:
+            raise RuntimeError("training completed without a selected validation checkpoint")
+        _write_json_atomically(
+            out / "selection.json",
+            {
+                "selection_key": {
+                    "success_rate": float(best_key[0]),
+                    "reward_mean": float(best_key[1]),
+                },
+                "best_step": best_step,
+                "checkpoint": "best.pt",
+                "checkpoint_sha256": _sha256(best_path),
+                "tie_break": "success_rate_then_reward_then_earliest_step",
+            },
+        )
     return 0
 
 
