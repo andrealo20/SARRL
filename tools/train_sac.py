@@ -136,6 +136,13 @@ def _load_context_encoder(path: Path) -> DynamicsContextEncoder:
     return encoder
 
 
+def _validation_reward(training_reward: float, override: float | None) -> float:
+    value = training_reward if override is None else override
+    if not np.isfinite(value) or value >= 0.0:
+        raise ValueError("validation infeasible reward must be finite and negative")
+    return float(value)
+
+
 def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--mode", choices=["torque", "residual"], default="residual")
@@ -158,6 +165,7 @@ def main() -> int:
         help="Evaluate validation checkpoints through the required HOCBF.",
     )
     p.add_argument("--infeasible-reward", type=float, default=-500.0)
+    p.add_argument("--validation-infeasible-reward", type=float, default=None)
     p.add_argument(
         "--context-checkpoint",
         default=None,
@@ -189,12 +197,19 @@ def main() -> int:
         raise SystemExit("--context-checkpoint requires --mode residual")
     if (args.training_hocbf or args.validation_hocbf) and args.mode != "residual":
         raise SystemExit("HOCBF training and validation require --mode residual")
-    if args.context_checkpoint is not None and (
-        args.training_hocbf or args.validation_hocbf
-    ):
+    if args.context_checkpoint is not None and (args.training_hocbf or args.validation_hocbf):
         raise SystemExit("HOCBF training is not combined with adaptive context")
     if not np.isfinite(args.infeasible_reward) or args.infeasible_reward >= 0.0:
         raise SystemExit("--infeasible-reward must be finite and negative")
+    validation_reward = _validation_reward(
+        args.infeasible_reward, args.validation_infeasible_reward
+    )
+    explicit_validation = args.validation_infeasible_reward is not None
+    validation_config = {
+        "every": args.validate_every,
+        "episodes": args.validation_episodes,
+        "seed": args.validation_seed,
+    }
 
     out = Path(args.output)
     out.mkdir(parents=True, exist_ok=True)
@@ -213,9 +228,7 @@ def main() -> int:
         best_step = None if best_step is None else int(best_step)
         if best_step is None and validation_rows and np.isfinite(best_key).all():
             matching_steps = [
-                int(row[0])
-                for row in validation_rows
-                if (float(row[3]), float(row[4])) == best_key
+                int(row[0]) for row in validation_rows if (float(row[3]), float(row[4])) == best_key
             ]
             if matching_steps:
                 best_step = min(matching_steps)
@@ -227,9 +240,7 @@ def main() -> int:
         context_checkpoint_sha256 = trainer_cfg.get("context_checkpoint_sha256")
         training_hocbf = bool(trainer_cfg.get("training_hocbf", False))
         validation_hocbf = bool(trainer_cfg.get("validation_hocbf", False))
-        infeasible_reward = float(
-            trainer_cfg.get("infeasible_reward", args.infeasible_reward)
-        )
+        infeasible_reward = float(trainer_cfg.get("infeasible_reward", args.infeasible_reward))
 
         if step0 > args.steps:
             raise SystemExit("resume checkpoint exceeds requested --steps")
@@ -241,6 +252,26 @@ def main() -> int:
             raise SystemExit("resume --validation-hocbf does not match the checkpoint")
         if args.infeasible_reward != infeasible_reward:
             raise SystemExit("resume --infeasible-reward does not match the checkpoint")
+        stored_validation_reward = trainer_cfg.get(
+            "validation_infeasible_reward", infeasible_reward
+        )
+        if validation_reward != stored_validation_reward:
+            raise SystemExit("resume --validation-infeasible-reward does not match the checkpoint")
+        explicit_validation = explicit_validation or "validation_infeasible_reward" in trainer_cfg
+        if "training_seed" in trainer_cfg and trainer_cfg["training_seed"] != args.seed:
+            raise SystemExit("resume training seed does not match the checkpoint")
+        if (
+            "validation_config" in trainer_cfg
+            and trainer_cfg["validation_config"] != validation_config
+        ):
+            raise SystemExit("resume validation configuration does not match the checkpoint")
+        if explicit_validation and best_step is not None:
+            selected_bytes = loop.get("selected_checkpoint_bytes")
+            if selected_bytes is None:
+                raise SystemExit("resume lacks the selected checkpoint snapshot")
+            temporary = out / "best.pt.tmp"
+            temporary.write_bytes(selected_bytes)
+            temporary.replace(out / "best.pt")
 
         if isinstance(env, AdaptiveContextEnv):
             if stored_context_sha256 is None:
@@ -355,10 +386,14 @@ def main() -> int:
         "validation_hocbf": validation_hocbf,
         "infeasible_reward": infeasible_reward,
     }
+    if explicit_validation:
+        trainer_config["training_seed"] = args.seed
+        trainer_config["validation_infeasible_reward"] = validation_reward
+        trainer_config["validation_config"] = validation_config
     val_env = _validation_env(
         env,
         safety_projected=validation_hocbf,
-        infeasible_reward=infeasible_reward,
+        infeasible_reward=validation_reward,
     )
     write_run_manifest(
         out / "run_manifest.json",
@@ -389,9 +424,12 @@ def main() -> int:
                 "training_hocbf": training_hocbf,
                 "validation_hocbf": validation_hocbf,
                 "infeasible_reward": infeasible_reward,
-                "training_environment": (
-                    env.constructor_config() if training_hocbf else None
+                **(
+                    {"validation_infeasible_reward": validation_reward}
+                    if explicit_validation
+                    else {}
                 ),
+                "training_environment": (env.constructor_config() if training_hocbf else None),
                 "validation_environment": (
                     val_env.constructor_config() if validation_hocbf else None
                 ),
@@ -419,6 +457,11 @@ def main() -> int:
             "best_key": list(best_key),
             "best_step": best_step,
             "trainer_config": trainer_config,
+            **(
+                {"selected_checkpoint_bytes": (out / "best.pt").read_bytes()}
+                if explicit_validation and best_step is not None
+                else {}
+            ),
         }
 
     def validate(step: int) -> None:
@@ -499,9 +542,7 @@ def main() -> int:
         validate(args.steps)
 
     _save_agent_atomically(agent, out / "final.pt")
-    save_training_checkpoint(
-        out / "training_final.pt", agent, replay, env, loop_state(args.steps)
-    )
+    save_training_checkpoint(out / "training_final.pt", agent, replay, env, loop_state(args.steps))
     _write_csv_atomically(
         out / "episodes.csv",
         ["episode", "step", "reward", "success", "final_distance"],
