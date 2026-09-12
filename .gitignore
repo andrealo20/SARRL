@@ -61,6 +61,72 @@ results/uncertainty_gate_calibration/phase_c/*
 !results/uncertainty_gate_calibration/phase_r/
 !results/uncertainty_gate_calibration/phase_r/**
 
+# Canonical retained evidence for the v1.7 safety-aware training campaign.
+# Checkpoints stay local; the per-seed evaluation shards duplicate the
+# top-level evaluation tables row for row and stay local as well.
+!results/safety_aware_training/
+results/safety_aware_training/*
+!results/safety_aware_training/checkpoint_inventory.json
+!results/safety_aware_training/evaluation/
+!results/safety_aware_training/evaluation/**
+!results/safety_aware_training/diagnostics/
+!results/safety_aware_training/diagnostics/**
+!results/safety_aware_training/training/
+!results/safety_aware_training/training/**
+
+# Canonical retained evidence for the v1.8 terminal-penalty ablation and its
+# failure audit. Checkpoints, the campaign lock and the evaluation shards
+# stay local.
+!results/penalty_ablation/
+results/penalty_ablation/*
+!results/penalty_ablation/*.json
+!results/penalty_ablation/*.csv
+!results/penalty_ablation/workflow.log
+!results/penalty_ablation/failure_audit/
+!results/penalty_ablation/failure_audit/**
+!results/penalty_ablation/training/
+!results/penalty_ablation/training/**
+results/**/*.lock
+
+# Compact evidence of the exploratory failure diagnosis. The per-episode
+# transition records (about 210 MiB) and the frozen local planning documents
+# stay local; manifests, cell completion markers, summaries and the read-only
+# analysis outputs are retained. The analysis scripts reference local planning
+# files and stay local with them.
+!results/residual_diagnosis_20260905/
+results/residual_diagnosis_20260905/*
+!results/residual_diagnosis_20260905/manifest.json
+!results/residual_diagnosis_20260905/complete.json
+!results/residual_diagnosis_20260905/summary.json
+!results/residual_diagnosis_20260905/contrasts.json
+!results/residual_diagnosis_20260905/*.complete.json
+!results/residual_diagnosis_20260905/*.started.json
+!results/nominal_integral_v19a_20260907/
+results/nominal_integral_v19a_20260907/*
+!results/nominal_integral_v19a_20260907/manifest.json
+!results/nominal_integral_v19a_20260907/complete.json
+!results/nominal_integral_v19a_20260907/report.json
+!results/nominal_integral_v19a_20260907/*.complete.json
+!results/nominal_integral_v19a_20260907/*.started.json
+!results/residual_device_provenance_20260906/
+results/residual_device_provenance_20260906/*
+!results/residual_device_provenance_20260906/*.json
+!results/residual_analysis_20260907/
+results/residual_analysis_20260907/*
+!results/residual_analysis_20260907/*.json
+!results/residual_analysis_20260907/*.md
+!results/nominal_static_review_20260907/
+results/nominal_static_review_20260907/*
+!results/nominal_static_review_20260907/*.json
+!results/nominal_integral_analysis_20260912/
+results/nominal_integral_analysis_20260912/*
+!results/nominal_integral_analysis_20260912/*.json
+!results/nominal_integral_analysis_20260912/*.md
+!results/integral_fault_static_review_20260912/
+results/integral_fault_static_review_20260912/*
+!results/integral_fault_static_review_20260912/*.json
+!results/integral_fault_static_review_20260912/*.md
+
 # Model checkpoints and context tensors are never committed. Their SHA-256
 # fingerprints in the retained manifests preserve the identity of the exact
 # models used to produce the evaluation records.

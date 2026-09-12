@@ -1,0 +1,351 @@
+{
+  "I1": {
+    "actual_upper2_barrier_negative_intervals": [
+      [
+        62,
+        63
+      ],
+      [
+        137,
+        138
+      ],
+      [
+        154,
+        156
+      ],
+      [
+        189,
+        248
+      ]
+    ],
+    "initial": {
+      "action_delay": 2,
+      "arm_params": {
+        "coulomb": [
+          0.02362981477407731,
+          0.021083928794583602
+        ],
+        "friction_smoothing": 0.02,
+        "gravity": 9.81,
+        "i1": 0.08788206519510652,
+        "i2": 0.08338782110199708,
+        "l1": 1.0,
+        "l2": 1.0,
+        "lc1": 0.5,
+        "lc2": 0.5,
+        "m1": 1.0545847823412784,
+        "m2": 1.000653853223965,
+        "payload_mass": 0.38197663743123034,
+        "viscous": [
+          0.05907453693519328,
+          0.05270982198645901
+        ]
+      },
+      "command_queue": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "constructor_config": {
+        "dt": 0.02,
+        "fault": {
+          "motor_gain_multiplier": [
+            1.0,
+            0.55
+          ],
+          "payload_delta": 0.0,
+          "start_step": 20
+        },
+        "max_steps": 250,
+        "mode": "torque",
+        "randomization": {
+          "action_delay_max": 2,
+          "friction_fraction": 0.3,
+          "mass_fraction": 0.15,
+          "motor_gain_fraction": 0.15,
+          "payload_range": [
+            0.0,
+            1.0
+          ],
+          "sensor_noise_std": 0.0
+        },
+        "residual_limit": 8.0,
+        "success_radius": 0.05,
+        "torque_limit": 40.0
+      },
+      "dt": 0.02,
+      "fault_active": false,
+      "friction_scale": [
+        1.1814907387038656,
+        1.05419643972918
+      ],
+      "mass_scale": [
+        1.0545847823412784,
+        1.000653853223965
+      ],
+      "max_steps": 250,
+      "mode": "torque",
+      "motor_gain": [
+        1.134204902668873,
+        0.8811839895870922
+      ],
+      "noise_rng_state": {
+        "bit_generator": "PCG64",
+        "has_uint32": 0,
+        "state": {
+          "inc": 145143966488047689559529170910475493791,
+          "state": 116563767840825464407482211250158026994
+        },
+        "uinteger": 0
+      },
+      "payload_mass": 0.38197663743123034,
+      "q_des": [
+        -0.6156647359880134,
+        2.447133666818109
+      ],
+      "rng_state": {
+        "bit_generator": "PCG64",
+        "has_uint32": 1,
+        "state": {
+          "inc": 263667792955176547664194074848952653223,
+          "state": 106777857950048695669501510933680540911
+        },
+        "uinteger": 1256815608
+      },
+      "state": [
+        -0.07701362848886295,
+        0.10316910551784214,
+        0.03243890849079714,
+        -0.003325737332188161
+      ],
+      "steps": 0,
+      "target": [
+        0.558659249889386,
+        0.3887155126572547
+      ]
+    },
+    "last_projection_attempt": 195,
+    "late_first_negative_error2": 199,
+    "late_first_negative_integral_torque2": 229,
+    "late_first_negative_z2": 229,
+    "nominal_constraint_failure_count": 0,
+    "peak_q2": 4.278125645478839,
+    "peak_q2_observation": 237,
+    "position_unsafe_intervals": [
+      [
+        208,
+        250
+      ]
+    ],
+    "psi1_upper2_negative_intervals": [
+      [
+        199,
+        249
+      ]
+    ],
+    "safety": {
+      "candidate_constraint_margin_min": -439.589201820438,
+      "candidate_constraint_violation_fraction": 0.784,
+      "candidate_constraint_violation_steps": 196,
+      "command_attempts": 250,
+      "controller": "I1",
+      "executed_constraint_margin_min": -4.263256414560601e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 64,
+      "joint_position_violation_max_rad": 1.2281256454788387,
+      "joint_velocity_violation_max_rad_s": 1.085688581968551,
+      "normalized_violation_integral": 0.25314439250715437,
+      "normalized_violation_max": 0.40266414605863565,
+      "normalized_violation_mean": 0.050427169822142306,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 38.980015972264255,
+      "safety_correction_mean": 6.721225929671436,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.784,
+      "safety_intervention_steps": 196,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 2,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.17928286852589642,
+      "unsafe_state_observations": 45
+    },
+    "velocity_unsafe_intervals": [
+      [
+        64,
+        65
+      ]
+    ]
+  },
+  "R0": {
+    "actual_upper2_barrier_negative_intervals": [
+      [
+        65,
+        67
+      ]
+    ],
+    "initial": {
+      "action_delay": 2,
+      "arm_params": {
+        "coulomb": [
+          0.02362981477407731,
+          0.021083928794583602
+        ],
+        "friction_smoothing": 0.02,
+        "gravity": 9.81,
+        "i1": 0.08788206519510652,
+        "i2": 0.08338782110199708,
+        "l1": 1.0,
+        "l2": 1.0,
+        "lc1": 0.5,
+        "lc2": 0.5,
+        "m1": 1.0545847823412784,
+        "m2": 1.000653853223965,
+        "payload_mass": 0.38197663743123034,
+        "viscous": [
+          0.05907453693519328,
+          0.05270982198645901
+        ]
+      },
+      "command_queue": [
+        [
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "constructor_config": {
+        "dt": 0.02,
+        "fault": {
+          "motor_gain_multiplier": [
+            1.0,
+            0.55
+          ],
+          "payload_delta": 0.0,
+          "start_step": 20
+        },
+        "max_steps": 250,
+        "mode": "torque",
+        "randomization": {
+          "action_delay_max": 2,
+          "friction_fraction": 0.3,
+          "mass_fraction": 0.15,
+          "motor_gain_fraction": 0.15,
+          "payload_range": [
+            0.0,
+            1.0
+          ],
+          "sensor_noise_std": 0.0
+        },
+        "residual_limit": 8.0,
+        "success_radius": 0.05,
+        "torque_limit": 40.0
+      },
+      "dt": 0.02,
+      "fault_active": false,
+      "friction_scale": [
+        1.1814907387038656,
+        1.05419643972918
+      ],
+      "mass_scale": [
+        1.0545847823412784,
+        1.000653853223965
+      ],
+      "max_steps": 250,
+      "mode": "torque",
+      "motor_gain": [
+        1.134204902668873,
+        0.8811839895870922
+      ],
+      "noise_rng_state": {
+        "bit_generator": "PCG64",
+        "has_uint32": 0,
+        "state": {
+          "inc": 145143966488047689559529170910475493791,
+          "state": 116563767840825464407482211250158026994
+        },
+        "uinteger": 0
+      },
+      "payload_mass": 0.38197663743123034,
+      "q_des": [
+        -0.6156647359880134,
+        2.447133666818109
+      ],
+      "rng_state": {
+        "bit_generator": "PCG64",
+        "has_uint32": 1,
+        "state": {
+          "inc": 263667792955176547664194074848952653223,
+          "state": 106777857950048695669501510933680540911
+        },
+        "uinteger": 1256815608
+      },
+      "state": [
+        -0.07701362848886295,
+        0.10316910551784214,
+        0.03243890849079714,
+        -0.003325737332188161
+      ],
+      "steps": 0,
+      "target": [
+        0.558659249889386,
+        0.3887155126572547
+      ]
+    },
+    "last_projection_attempt": 249,
+    "nominal_constraint_failure_count": 0,
+    "peak_q2": 0.4362132483360173,
+    "peak_q2_observation": 27,
+    "position_unsafe_intervals": [],
+    "psi1_upper2_negative_intervals": [],
+    "safety": {
+      "candidate_constraint_margin_min": -523.857710228481,
+      "candidate_constraint_violation_fraction": 1.0,
+      "candidate_constraint_violation_steps": 250,
+      "command_attempts": 250,
+      "controller": "R0",
+      "executed_constraint_margin_min": -2.842170943040401e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 67,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 2.286591273766591,
+      "normalized_violation_integral": 0.012060367188390804,
+      "normalized_violation_max": 0.32665589625237024,
+      "normalized_violation_mean": 0.0024024635833447814,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 44.35412347074746,
+      "safety_correction_mean": 9.857575244103547,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 1.0,
+      "safety_intervention_steps": 250,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.01195219123505976,
+      "unsafe_state_observations": 3
+    },
+    "velocity_unsafe_intervals": [
+      [
+        67,
+        69
+      ]
+    ]
+  }
+}

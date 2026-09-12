@@ -1,0 +1,9 @@
+{
+  "hashes": {
+    "analyze.py": "2857ff224035145485f4918d4f0c0bc31892df037f60fc88c20e8650fe7bbde1",
+    "cases.json": "92d70cc0da606be234b7f1b69e84ad1353dcdf0c181e901c2c05291bf294e769",
+    "integrity.json": "f7cdf5e4449568daced2a93cb5558c61cfbe7e7600332a92a5cf2e687edd1e79",
+    "tables.md": "9c91e71394f30acba8639072a6ac41813b3eef6a40105883296560824a61cccb",
+    "tail_mechanics.json": "1ef448952d5a518222c1ba39ea4aa34e9cec1867366d85fe0ed064636c6f56d7"
+  }
+}

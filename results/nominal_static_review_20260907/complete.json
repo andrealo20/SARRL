@@ -1,0 +1,8 @@
+{
+  "hashes": {
+    "analyze.py": "e396e9d9a938af59f34b20282f1993828d75f338946db26e85f030c2b86ff96b",
+    "balance.json": "5a4c53a9cb68097571190ff6d0b4ebe90cff911fea0d98b14a5a28bd64e1a4ad",
+    "provenance.json": "31b8a21574e3bb1f8225632676006bbc3b5c1a5d99f5bc849a222fed95fe9090",
+    "reference_checks.json": "eb397db7343658d86b2cfbda565e49b668d5584c7b5f0865a5135956c9a2374a"
+  }
+}

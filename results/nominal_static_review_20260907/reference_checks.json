@@ -1,0 +1,98 @@
+[
+  {
+    "case": [
+      "id_reference",
+      9801800
+    ],
+    "q_des": [
+      -1.2397166825611943,
+      1.434204258450726
+    ],
+    "reference_fk_error_m": 0.0,
+    "wrapped_q_des": [
+      -1.2397166825611943,
+      1.434204258450726
+    ],
+    "wrapped_reference_inside_3_05_rad": true
+  },
+  {
+    "case": [
+      "id_reference",
+      9801801
+    ],
+    "q_des": [
+      -3.9253227704028824,
+      2.687052342672496
+    ],
+    "reference_fk_error_m": 3.7341307954279784e-16,
+    "wrapped_q_des": [
+      2.3578625367767043,
+      2.687052342672496
+    ],
+    "wrapped_reference_inside_3_05_rad": true
+  },
+  {
+    "case": [
+      "motor_fault",
+      9802000
+    ],
+    "q_des": [
+      -0.6156647359880134,
+      2.447133666818109
+    ],
+    "reference_fk_error_m": 1.1102230246251565e-16,
+    "wrapped_q_des": [
+      -0.6156647359880134,
+      2.447133666818109
+    ],
+    "wrapped_reference_inside_3_05_rad": true
+  },
+  {
+    "case": [
+      "motor_fault",
+      9802001
+    ],
+    "q_des": [
+      1.1271111788441726,
+      1.9532422040224375
+    ],
+    "reference_fk_error_m": 1.5700924586837752e-16,
+    "wrapped_q_des": [
+      1.1271111788441726,
+      1.9532422040224375
+    ],
+    "wrapped_reference_inside_3_05_rad": true
+  },
+  {
+    "case": [
+      "ood_compound",
+      9801900
+    ],
+    "q_des": [
+      1.5159528308500572,
+      1.8375639880945862
+    ],
+    "reference_fk_error_m": 3.510833468576701e-16,
+    "wrapped_q_des": [
+      1.5159528308500572,
+      1.8375639880945862
+    ],
+    "wrapped_reference_inside_3_05_rad": true
+  },
+  {
+    "case": [
+      "ood_compound",
+      9801901
+    ],
+    "q_des": [
+      0.8528874410291755,
+      1.5842178205605488
+    ],
+    "reference_fk_error_m": 2.7755575615628914e-17,
+    "wrapped_q_des": [
+      0.8528874410291755,
+      1.5842178205605488
+    ],
+    "wrapped_reference_inside_3_05_rad": true
+  }
+]

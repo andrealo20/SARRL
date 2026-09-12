@@ -1,0 +1,5714 @@
+[
+  {
+    "episode": {
+      "controller": "Z",
+      "fault_seen": false,
+      "final_distance": 0.5936826462878227,
+      "max_command_torque": 40.0,
+      "max_speed": 5.244983443245263,
+      "reward": -188.8018047850172,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": null,
+    "safety": {
+      "candidate_constraint_margin_min": 0.0,
+      "candidate_constraint_violation_fraction": 0.0,
+      "candidate_constraint_violation_steps": 0,
+      "command_attempts": 250,
+      "controller": "Z",
+      "executed_constraint_margin_min": 0.0,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 0.0,
+      "safety_correction_mean": 0.0,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.0,
+      "safety_intervention_steps": 0,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.5936826462878227,
+      "final_speed_rad_s": 0.00010449817103185125,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.3696793117242673,
+      "minimum_distance_m": 0.3696793117242673,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.5936826462878227,
+          "mean": 0.5935790039078682,
+          "median": 0.5936034119512765
+        },
+        "distance_range_m": 0.0002735098693060767,
+        "net_norm": {
+          "max": 0.0023050411918537125,
+          "rms": 0.0013915519341626127
+        },
+        "qdd_norm": {
+          "max": 0.005569734879406248,
+          "rms": 0.0021309724856282356
+        },
+        "speed_rad_s": {
+          "max": 0.000718063732911387,
+          "mean": 0.0004587581431978996,
+          "median": 0.0004838184973894094
+        },
+        "state_range": [
+          9.137875738196577e-05,
+          0.00043322060679495955,
+          0.00038276434562667903,
+          0.000798544758384924
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_30",
+      "fault_seen": false,
+      "final_distance": 0.3532713664052081,
+      "max_command_torque": 40.0,
+      "max_speed": 5.321843551813565,
+      "reward": -130.09415660168912,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_30/best.pt",
+      "sha256": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -60.75912107159847,
+      "candidate_constraint_violation_fraction": 0.12,
+      "candidate_constraint_violation_steps": 30,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_30",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 9.13189455121335,
+      "safety_correction_mean": 0.7378586866634153,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.12,
+      "safety_intervention_steps": 30,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.3532713664052081,
+      "final_speed_rad_s": 0.0030886062598704353,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.14846697690590974,
+      "minimum_distance_m": 0.14846697690590974,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.3532713664052081,
+          "mean": 0.35237936004401393,
+          "median": 0.3525108897791589
+        },
+        "distance_range_m": 0.002232482405177705,
+        "net_norm": {
+          "max": 0.03134295305435474,
+          "rms": 0.011569302358067713
+        },
+        "qdd_norm": {
+          "max": 0.019466990776069257,
+          "rms": 0.010522726208932916
+        },
+        "speed_rad_s": {
+          "max": 0.012912416704483795,
+          "mean": 0.006883065134744858,
+          "median": 0.0063348094773757625
+        },
+        "state_range": [
+          0.0030092709947180385,
+          0.006012622153425129,
+          0.004966686642261574,
+          0.00848019219059622
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_31",
+      "fault_seen": false,
+      "final_distance": 0.19325734145383983,
+      "max_command_torque": 40.0,
+      "max_speed": 6.792309773070927,
+      "reward": -90.19571081060477,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_31/best.pt",
+      "sha256": "1f263db609a037eaa32fa4456e13c50f4d4a72fe1edfd4dcfa1d0089a49b4a0b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -93.94838988348982,
+      "candidate_constraint_violation_fraction": 0.116,
+      "candidate_constraint_violation_steps": 29,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_31",
+      "executed_constraint_margin_min": -3.552713678800501e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 8.09628194181366,
+      "safety_correction_mean": 0.5874564565588819,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.116,
+      "safety_intervention_steps": 29,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.19325734145383983,
+      "final_speed_rad_s": 0.000489153747402431,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.09239796815089908,
+      "minimum_distance_m": 0.09239796815089908,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.19325734145383983,
+          "mean": 0.1924643305253772,
+          "median": 0.19266131352491986
+        },
+        "distance_range_m": 0.0021677616207388117,
+        "net_norm": {
+          "max": 0.013636669823134717,
+          "rms": 0.010868724594836654
+        },
+        "qdd_norm": {
+          "max": 0.01984052339208795,
+          "rms": 0.010393273431900768
+        },
+        "speed_rad_s": {
+          "max": 0.006879154042808831,
+          "mean": 0.004093413288643813,
+          "median": 0.004642449651855888
+        },
+        "state_range": [
+          0.0008607285628690065,
+          0.0038572772886598106,
+          0.0017780164589633525,
+          0.007205373267025724
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_32",
+      "fault_seen": false,
+      "final_distance": 0.3107473583234939,
+      "max_command_torque": 40.0,
+      "max_speed": 6.923234823808721,
+      "reward": -118.19920177151269,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_32/best.pt",
+      "sha256": "6b4970cca9e4b8e516af48dfa96099e171879cb80ae5690b59b06beced14a9d8",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -26.637354113229698,
+      "candidate_constraint_violation_fraction": 0.112,
+      "candidate_constraint_violation_steps": 28,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_32",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 3.792443851738028,
+      "safety_correction_mean": 0.22082418857717553,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.112,
+      "safety_intervention_steps": 28,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.3107473583234939,
+      "final_speed_rad_s": 0.0025664758276912752,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.2543171092843646,
+      "minimum_distance_m": 0.2543171092843646,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.31105762089607364,
+          "mean": 0.31039291116146417,
+          "median": 0.31035978973233036
+        },
+        "distance_range_m": 0.0010143875588644602,
+        "net_norm": {
+          "max": 0.03936656162603365,
+          "rms": 0.022030466539784528
+        },
+        "qdd_norm": {
+          "max": 0.04826354529741484,
+          "rms": 0.022011643570129573
+        },
+        "speed_rad_s": {
+          "max": 0.006541950184598181,
+          "mean": 0.0036303340665506923,
+          "median": 0.0030806869823067342
+        },
+        "state_range": [
+          0.0018476365719761745,
+          0.0022602413229553253,
+          0.006025143659471035,
+          0.007492625605985318
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_33",
+      "fault_seen": false,
+      "final_distance": 0.1357619487087735,
+      "max_command_torque": 40.0,
+      "max_speed": 6.632987776546043,
+      "reward": -78.99054783712285,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_33/best.pt",
+      "sha256": "d25156bd1b6d41928cbb732af597d4fa3dc20e6e20db49758e578b9cdb0894ae",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -46.256668292782265,
+      "candidate_constraint_violation_fraction": 0.104,
+      "candidate_constraint_violation_steps": 26,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_33",
+      "executed_constraint_margin_min": -1.7763568394002505e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 7.580226816115499,
+      "safety_correction_mean": 0.5297092096057089,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.104,
+      "safety_intervention_steps": 26,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.1357619487087735,
+      "final_speed_rad_s": 1.6312498855780136e-05,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.014007530175297843,
+      "minimum_distance_m": 0.014007530175297843,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.13577299072067042,
+          "mean": 0.13575988297030148,
+          "median": 0.1357650810329209
+        },
+        "distance_range_m": 4.566236367051224e-05,
+        "net_norm": {
+          "max": 0.0016371439580333228,
+          "rms": 0.0006001090479383919
+        },
+        "qdd_norm": {
+          "max": 0.0006654766820730321,
+          "rms": 0.000346395892325917
+        },
+        "speed_rad_s": {
+          "max": 0.00015303080068056104,
+          "mean": 6.735659752508788e-05,
+          "median": 4.220937954749137e-05
+        },
+        "state_range": [
+          8.204073490780672e-06,
+          4.740257948765425e-05,
+          7.303897429911593e-05,
+          0.00019365673898534894
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_34",
+      "fault_seen": false,
+      "final_distance": 0.060470319440314974,
+      "max_command_torque": 40.0,
+      "max_speed": 6.945959201014241,
+      "reward": -64.22370617948754,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_34/best.pt",
+      "sha256": "8935a715fff3ef26e1d37aaa1e9f804135e9b667c31f9cfc624ea62916fc2057",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -44.93222788985415,
+      "candidate_constraint_violation_fraction": 0.096,
+      "candidate_constraint_violation_steps": 24,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_34",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 6.933557987213135,
+      "safety_correction_mean": 0.27298952535619836,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.096,
+      "safety_intervention_steps": 24,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.060470319440314974,
+      "final_speed_rad_s": 0.0021681285094373197,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.0530491721621842,
+      "minimum_distance_m": 0.0530491721621842,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.061066348532568364,
+          "mean": 0.06048693169288491,
+          "median": 0.06052780921007679
+        },
+        "distance_range_m": 0.0009973474529370585,
+        "net_norm": {
+          "max": 0.08065749718182609,
+          "rms": 0.040254587389642285
+        },
+        "qdd_norm": {
+          "max": 0.08229127272167523,
+          "rms": 0.04493662533637363
+        },
+        "speed_rad_s": {
+          "max": 0.01276336650568482,
+          "mean": 0.005512364846277571,
+          "median": 0.004543329955974246
+        },
+        "state_range": [
+          0.0007107548489271309,
+          0.0021094976256392783,
+          0.007265464542622256,
+          0.019536074032881472
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "fault_seen": false,
+      "final_distance": 0.17647503734277928,
+      "max_command_torque": 40.0,
+      "max_speed": 7.272381587852824,
+      "reward": -90.71296396033829,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_30/best.pt",
+      "sha256": "c97050eb309b7b2571da768b127d91a65daa155e2fe967912f80a0d085440fd4",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -111.50022395594834,
+      "candidate_constraint_violation_fraction": 0.112,
+      "candidate_constraint_violation_steps": 28,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 7,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.2723815878528244,
+      "normalized_violation_integral": 0.0007782331081509275,
+      "normalized_violation_max": 0.038911655407546375,
+      "normalized_violation_mean": 0.00015502651556791386,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 8.67264574141319,
+      "safety_correction_mean": 0.7639958867315226,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.112,
+      "safety_intervention_steps": 28,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00398406374501992,
+      "unsafe_state_observations": 1
+    },
+    "summary": {
+      "final_distance_m": 0.17647503734277928,
+      "final_speed_rad_s": 0.07662609793223446,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.02119371265252864,
+      "minimum_distance_m": 0.02119371265252864,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.18034721884110178,
+          "mean": 0.17388959225336292,
+          "median": 0.17436832758101997
+        },
+        "distance_range_m": 0.013443411647175385,
+        "net_norm": {
+          "max": 0.4115149664411785,
+          "rms": 0.29548591670698665
+        },
+        "qdd_norm": {
+          "max": 0.5535212739367933,
+          "rms": 0.39765507113330784
+        },
+        "speed_rad_s": {
+          "max": 0.09910826941946838,
+          "mean": 0.05698870514521268,
+          "median": 0.06164500843022304
+        },
+        "state_range": [
+          0.010513232793160965,
+          0.024127561383801233,
+          0.0704325782425749,
+          0.1716441401750306
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "fault_seen": false,
+      "final_distance": 0.1359175362944586,
+      "max_command_torque": 40.0,
+      "max_speed": 7.174791889839493,
+      "reward": -81.15216860209554,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_31/best.pt",
+      "sha256": "eecbbe05ac2ee3ac26b69b6e25f0269b41f19144ae2f320819b7e5f19ce5d41b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -97.13560468543221,
+      "candidate_constraint_violation_fraction": 0.108,
+      "candidate_constraint_violation_steps": 27,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 7,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.17479188983949268,
+      "normalized_violation_integral": 0.0004994053995414083,
+      "normalized_violation_max": 0.024970269977070414,
+      "normalized_violation_mean": 9.948314731900564e-05,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 6.924943778348667,
+      "safety_correction_mean": 0.49582332776461485,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.108,
+      "safety_intervention_steps": 27,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00398406374501992,
+      "unsafe_state_observations": 1
+    },
+    "summary": {
+      "final_distance_m": 0.1359175362944586,
+      "final_speed_rad_s": 2.0775954775592887e-05,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.02673925655857779,
+      "minimum_distance_m": 0.02673925655857779,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.1359398357165116,
+          "mean": 0.13592989792313495,
+          "median": 0.13593060209184454
+        },
+        "distance_range_m": 2.4389643514283188e-05,
+        "net_norm": {
+          "max": 0.0013478608564399528,
+          "rms": 0.0005553985899762539
+        },
+        "qdd_norm": {
+          "max": 0.0009603635474436943,
+          "rms": 0.0003887220409425893
+        },
+        "speed_rad_s": {
+          "max": 0.00017932701965105093,
+          "mean": 4.575250830935391e-05,
+          "median": 3.6408497521204886e-05
+        },
+        "state_range": [
+          3.3410904880515346e-06,
+          2.184370664259916e-05,
+          2.310935361065872e-05,
+          0.0002197230185899807
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "fault_seen": false,
+      "final_distance": 0.07919142783598453,
+      "max_command_torque": 40.0,
+      "max_speed": 7.041836260625876,
+      "reward": -70.88161464457063,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_32/best.pt",
+      "sha256": "7c7965c2bca07d03916ad484eeae2a5e31140084247411b5c8b302d7ecbaa436",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -70.14027842374861,
+      "candidate_constraint_violation_fraction": 0.116,
+      "candidate_constraint_violation_steps": 29,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 7,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.04183626062587642,
+      "normalized_violation_integral": 0.00011953217321678977,
+      "normalized_violation_max": 0.005976608660839489,
+      "normalized_violation_mean": 2.3811189883822664e-05,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 7.366814613342285,
+      "safety_correction_mean": 0.5015479153748893,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.116,
+      "safety_intervention_steps": 29,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00398406374501992,
+      "unsafe_state_observations": 1
+    },
+    "summary": {
+      "final_distance_m": 0.07919142783598453,
+      "final_speed_rad_s": 1.2352559533661821e-06,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.05712705827446028,
+      "minimum_distance_m": 0.05712705827446028,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.07919246944539447,
+          "mean": 0.07919098007210962,
+          "median": 0.07919108166128483
+        },
+        "distance_range_m": 3.5522550873162695e-06,
+        "net_norm": {
+          "max": 0.00035818515382578285,
+          "rms": 0.00018416760479778984
+        },
+        "qdd_norm": {
+          "max": 0.0006764676784525274,
+          "rms": 0.00023625556735065812
+        },
+        "speed_rad_s": {
+          "max": 4.368068836373302e-05,
+          "mean": 1.5634936737212663e-05,
+          "median": 1.213863985275765e-05
+        },
+        "state_range": [
+          4.820394352345048e-06,
+          7.741506394598474e-06,
+          3.334321646694033e-05,
+          5.462589047964958e-05
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "fault_seen": false,
+      "final_distance": 0.20646659121227756,
+      "max_command_torque": 40.0,
+      "max_speed": 6.953800817119571,
+      "reward": -92.98035187622308,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_33/best.pt",
+      "sha256": "e35740cebeaf67230a03d62c7fc12141a2267fbcace1d73e2939ea0272d17a39",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -69.94040668402882,
+      "candidate_constraint_violation_fraction": 0.124,
+      "candidate_constraint_violation_steps": 31,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 7.976533458835085,
+      "safety_correction_mean": 0.7424128155462507,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.124,
+      "safety_intervention_steps": 31,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.20646659121227756,
+      "final_speed_rad_s": 0.0007205725294209971,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.0762747031884439,
+      "minimum_distance_m": 0.0762747031884439,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.20662543530466912,
+          "mean": 0.2065460500963987,
+          "median": 0.20654914396092736
+        },
+        "distance_range_m": 0.00016048706913002198,
+        "net_norm": {
+          "max": 0.023652778605768695,
+          "rms": 0.009968928508722554
+        },
+        "qdd_norm": {
+          "max": 0.01878792769152275,
+          "rms": 0.00857913559707146
+        },
+        "speed_rad_s": {
+          "max": 0.0020145688095724664,
+          "mean": 0.0011106846022564528,
+          "median": 0.0009860258430127256
+        },
+        "state_range": [
+          0.00018851919205054024,
+          0.0008031224416340521,
+          0.0009954542539791858,
+          0.0036105215160037825
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "fault_seen": false,
+      "final_distance": 0.16927955291693156,
+      "max_command_torque": 40.0,
+      "max_speed": 6.207563252305261,
+      "reward": -87.41103866465328,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_34/best.pt",
+      "sha256": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -53.616016180694125,
+      "candidate_constraint_violation_fraction": 0.116,
+      "candidate_constraint_violation_steps": 29,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 9.17322977377267,
+      "safety_correction_mean": 0.5191687232681993,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.116,
+      "safety_intervention_steps": 29,
+      "scenario": "id_reference",
+      "seed": 9801800,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.16927955291693156,
+      "final_speed_rad_s": 0.003680290386726261,
+      "initial_distance_m": 1.0608443835380215,
+      "minimum_callback_distance_m": 0.1355516246541315,
+      "minimum_distance_m": 0.1355516246541315,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.17387909712774574,
+          "mean": 0.17160032165503034,
+          "median": 0.17169095665905976
+        },
+        "distance_range_m": 0.005279317394926292,
+        "net_norm": {
+          "max": 0.18495990429614523,
+          "rms": 0.11514422376211977
+        },
+        "qdd_norm": {
+          "max": 0.07292377506483921,
+          "rms": 0.04858130009044506
+        },
+        "speed_rad_s": {
+          "max": 0.015933822812374626,
+          "mean": 0.009531869689641674,
+          "median": 0.00920786564176643
+        },
+        "state_range": [
+          0.0045219115755441575,
+          0.002470348680440493,
+          0.025179995514315018,
+          0.010808951592155093
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "Z",
+      "fault_seen": false,
+      "final_distance": 0.9878240532856022,
+      "max_command_torque": 40.0,
+      "max_speed": 5.2965306980957445,
+      "reward": -393.45302690980884,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 167,
+      "success": false
+    },
+    "identity": null,
+    "safety": {
+      "candidate_constraint_margin_min": -324.1436842832907,
+      "candidate_constraint_violation_fraction": 0.9285714285714286,
+      "candidate_constraint_violation_steps": 156,
+      "command_attempts": 168,
+      "controller": "Z",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 167,
+      "safety_correction_max": 25.29099069851108,
+      "safety_correction_mean": 17.313601049525676,
+      "safety_enabled": true,
+      "safety_infeasible": true,
+      "safety_intervention_fraction": 0.9226190476190477,
+      "safety_intervention_steps": 155,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 168,
+      "steps": 167,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.9878240532856022,
+      "final_speed_rad_s": 2.999328226126182,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.9878240532856022,
+      "minimum_distance_m": 0.9878240532856022,
+      "off_target_stop": false,
+      "outcome": "abort",
+      "tail50": {
+        "distance_m": {
+          "max": 1.91085175552314,
+          "mean": 1.4186032786157983,
+          "median": 1.391342396462489
+        },
+        "distance_range_m": 0.9230277022375377,
+        "net_norm": {
+          "max": 29.162175193784524,
+          "rms": 20.74920522128483
+        },
+        "qdd_norm": {
+          "max": 17.11241086617521,
+          "rms": 9.026725755467925
+        },
+        "speed_rad_s": {
+          "max": 5.422136480873306,
+          "mean": 3.4738532578674177,
+          "median": 3.332565201855882
+        },
+        "state_range": [
+          3.265835703161565,
+          0.4284632483726025,
+          4.322348734353778,
+          2.5689506095471493
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_30",
+      "fault_seen": false,
+      "final_distance": 0.7212087703927179,
+      "max_command_torque": 40.0,
+      "max_speed": 6.1416876444310775,
+      "reward": -373.4187927987046,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_30/best.pt",
+      "sha256": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -249.43114038297097,
+      "candidate_constraint_violation_fraction": 1.0,
+      "candidate_constraint_violation_steps": 250,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_30",
+      "executed_constraint_margin_min": -8.526512829121202e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 98,
+      "joint_position_violation_max_rad": 1.2690154537956246,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.8224037096449375,
+      "normalized_violation_max": 0.4160706405887294,
+      "normalized_violation_mean": 0.16382544016831424,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 42.589313987291376,
+      "safety_correction_mean": 19.072595771233903,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 1.0,
+      "safety_intervention_steps": 250,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.6095617529880478,
+      "unsafe_state_observations": 153
+    },
+    "summary": {
+      "final_distance_m": 0.7212087703927179,
+      "final_speed_rad_s": 0.07085424788080881,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.3027459337112682,
+      "minimum_distance_m": 0.3027459337112682,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.7600546575595882,
+          "mean": 0.717439542675887,
+          "median": 0.7125702089496193
+        },
+        "distance_range_m": 0.056202852414396376,
+        "net_norm": {
+          "max": 2.2341096744365485,
+          "rms": 0.9893795869977641
+        },
+        "qdd_norm": {
+          "max": 0.9451713871824453,
+          "rms": 0.5844599958200644
+        },
+        "speed_rad_s": {
+          "max": 0.302717815337245,
+          "mean": 0.13759895280631806,
+          "median": 0.10074318843206631
+        },
+        "state_range": [
+          0.07586350503897243,
+          0.053457014009523185,
+          0.17298269018261955,
+          0.38041020954483584
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_31",
+      "fault_seen": false,
+      "final_distance": 0.33384971216689097,
+      "max_command_torque": 40.0,
+      "max_speed": 5.51573899712241,
+      "reward": -365.12167708336904,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_31/best.pt",
+      "sha256": "1f263db609a037eaa32fa4456e13c50f4d4a72fe1edfd4dcfa1d0089a49b4a0b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -333.6297614581763,
+      "candidate_constraint_violation_fraction": 1.0,
+      "candidate_constraint_violation_steps": 250,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_31",
+      "executed_constraint_margin_min": -4.263256414560601e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 111,
+      "joint_position_violation_max_rad": 0.7252054002409518,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.27765445333996275,
+      "normalized_violation_max": 0.23777226237408258,
+      "normalized_violation_mean": 0.05530965205975353,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 38.63154250242671,
+      "safety_correction_mean": 16.346004170017714,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 1.0,
+      "safety_intervention_steps": 250,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.5577689243027888,
+      "unsafe_state_observations": 140
+    },
+    "summary": {
+      "final_distance_m": 0.33384971216689097,
+      "final_speed_rad_s": 0.347353621273504,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.25688164327725976,
+      "minimum_distance_m": 0.25688164327725976,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.4408340285965583,
+          "mean": 0.4014334813939156,
+          "median": 0.40723840405623435
+        },
+        "distance_range_m": 0.10698431642966733,
+        "net_norm": {
+          "max": 3.5793990367621866,
+          "rms": 2.280892155780286
+        },
+        "qdd_norm": {
+          "max": 2.5977719084617332,
+          "rms": 1.694514695149108
+        },
+        "speed_rad_s": {
+          "max": 0.9376799109831415,
+          "mean": 0.43228311848004,
+          "median": 0.4025915515687696
+        },
+        "state_range": [
+          0.17401151716874352,
+          0.18552187587704738,
+          0.271925996480603,
+          1.3177575617426482
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_32",
+      "fault_seen": false,
+      "final_distance": 0.8663371660894965,
+      "max_command_torque": 40.0,
+      "max_speed": 5.496780337355788,
+      "reward": -397.11685172348433,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 172,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_32/best.pt",
+      "sha256": "6b4970cca9e4b8e516af48dfa96099e171879cb80ae5690b59b06beced14a9d8",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -443.2467424333389,
+      "candidate_constraint_violation_fraction": 1.0,
+      "candidate_constraint_violation_steps": 173,
+      "command_attempts": 173,
+      "controller": "P0_inloop_reference_train_seed_32",
+      "executed_constraint_margin_min": -4.973799150320701e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 172,
+      "safety_correction_max": 32.37916313877207,
+      "safety_correction_mean": 20.467734590209968,
+      "safety_enabled": true,
+      "safety_infeasible": true,
+      "safety_intervention_fraction": 0.9942196531791907,
+      "safety_intervention_steps": 172,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 173,
+      "steps": 172,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.8663371660894965,
+      "final_speed_rad_s": 2.47581903666099,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.8663371660894965,
+      "minimum_distance_m": 0.8663371660894965,
+      "off_target_stop": false,
+      "outcome": "abort",
+      "tail50": {
+        "distance_m": {
+          "max": 1.801099143139124,
+          "mean": 1.290799218454267,
+          "median": 1.264444649896994
+        },
+        "distance_range_m": 0.9347619770496274,
+        "net_norm": {
+          "max": 31.54938483706191,
+          "rms": 21.202925830539687
+        },
+        "qdd_norm": {
+          "max": 18.177606383259047,
+          "rms": 10.059508918636006
+        },
+        "speed_rad_s": {
+          "max": 5.638822637724894,
+          "mean": 3.502424803426872,
+          "median": 3.16182147832362
+        },
+        "state_range": [
+          3.341047742576903,
+          0.3223371347232278,
+          4.269820713498152,
+          2.704919173198271
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_33",
+      "fault_seen": false,
+      "final_distance": 0.9605039159428734,
+      "max_command_torque": 40.0,
+      "max_speed": 5.180712636281476,
+      "reward": -498.91675923337897,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_33/best.pt",
+      "sha256": "d25156bd1b6d41928cbb732af597d4fa3dc20e6e20db49758e578b9cdb0894ae",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -383.10626070046067,
+      "candidate_constraint_violation_fraction": 0.736,
+      "candidate_constraint_violation_steps": 184,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_33",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 174,
+      "joint_position_violation_max_rad": 0.5013395836962817,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.11052638929920765,
+      "normalized_violation_max": 0.1643736339987809,
+      "normalized_violation_mean": 0.022017209023746542,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 32.15776076200095,
+      "safety_correction_mean": 16.591138134172514,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.736,
+      "safety_intervention_steps": 184,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.20318725099601595,
+      "unsafe_state_observations": 51
+    },
+    "summary": {
+      "final_distance_m": 0.9605039159428734,
+      "final_speed_rad_s": 1.1551479608526656,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.9605039159428734,
+      "minimum_distance_m": 0.9605039159428734,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 1.0939475999397317,
+          "mean": 1.039638305925705,
+          "median": 1.035016939527923
+        },
+        "distance_range_m": 0.13344368399685824,
+        "net_norm": {
+          "max": 23.18944351146976,
+          "rms": 15.320857454009518
+        },
+        "qdd_norm": {
+          "max": 8.178787803572986,
+          "rms": 4.105548684148959
+        },
+        "speed_rad_s": {
+          "max": 1.5928417562822463,
+          "mean": 1.1293499466487273,
+          "median": 1.1121957440222683
+        },
+        "state_range": [
+          0.9019618644828169,
+          0.34461602648202505,
+          1.1841408888063938,
+          1.9273171836366907
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_34",
+      "fault_seen": false,
+      "final_distance": 1.1015010791383362,
+      "max_command_torque": 40.0,
+      "max_speed": 4.967473803852648,
+      "reward": -498.57271770096264,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_34/best.pt",
+      "sha256": "8935a715fff3ef26e1d37aaa1e9f804135e9b667c31f9cfc624ea62916fc2057",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -401.2466022153901,
+      "candidate_constraint_violation_fraction": 0.828,
+      "candidate_constraint_violation_steps": 207,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_34",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 176,
+      "joint_position_violation_max_rad": 0.4107997021082528,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.08801512840077294,
+      "normalized_violation_max": 0.13468842692073862,
+      "normalized_violation_mean": 0.017532894103739628,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 32.63152826881439,
+      "safety_correction_mean": 16.89804617180661,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.828,
+      "safety_intervention_steps": 207,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.1952191235059761,
+      "unsafe_state_observations": 49
+    },
+    "summary": {
+      "final_distance_m": 1.1015010791383362,
+      "final_speed_rad_s": 0.5695029329509325,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.7321372692505865,
+      "minimum_distance_m": 0.7321372692505865,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 1.2438855127600454,
+          "mean": 1.1952771454454179,
+          "median": 1.2043700845059853
+        },
+        "distance_range_m": 0.14238443362170927,
+        "net_norm": {
+          "max": 19.54890801596464,
+          "rms": 12.43607989888961
+        },
+        "qdd_norm": {
+          "max": 8.508177061648489,
+          "rms": 3.922567213843286
+        },
+        "speed_rad_s": {
+          "max": 1.3252542467410315,
+          "mean": 0.8182732138469596,
+          "median": 0.8916384172672445
+        },
+        "state_range": [
+          0.5418366392068026,
+          0.23402474516728766,
+          1.4434195198102886,
+          1.6429532445825394
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "fault_seen": false,
+      "final_distance": 0.6622731845846306,
+      "max_command_torque": 40.0,
+      "max_speed": 5.847465909809657,
+      "reward": -395.8598760072948,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_30/best.pt",
+      "sha256": "c97050eb309b7b2571da768b127d91a65daa155e2fe967912f80a0d085440fd4",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -343.3497662561024,
+      "candidate_constraint_violation_fraction": 0.96,
+      "candidate_constraint_violation_steps": 240,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "executed_constraint_margin_min": -4.973799150320701e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 124,
+      "joint_position_violation_max_rad": 0.8213300223600695,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.2788760894247207,
+      "normalized_violation_max": 0.2692885319213343,
+      "normalized_violation_mean": 0.055553005861498146,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 34.096759618464674,
+      "safety_correction_mean": 17.73413047626046,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.96,
+      "safety_intervention_steps": 240,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.5059760956175299,
+      "unsafe_state_observations": 127
+    },
+    "summary": {
+      "final_distance_m": 0.6622731845846306,
+      "final_speed_rad_s": 0.11027246322819245,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.2745664203589687,
+      "minimum_distance_m": 0.2745664203589687,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.6629759948923489,
+          "mean": 0.5079581772731747,
+          "median": 0.4988730198078838
+        },
+        "distance_range_m": 0.29545049426257614,
+        "net_norm": {
+          "max": 4.6534155048645625,
+          "rms": 3.2061907557165896
+        },
+        "qdd_norm": {
+          "max": 3.8879036575082395,
+          "rms": 2.5761056514185863
+        },
+        "speed_rad_s": {
+          "max": 1.4443057250854243,
+          "mean": 0.9094017017173833,
+          "median": 1.084633028939988
+        },
+        "state_range": [
+          0.19842850737960038,
+          0.8576780406575444,
+          0.7860633293193534,
+          1.4039931968557677
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "fault_seen": false,
+      "final_distance": 0.12060338507218382,
+      "max_command_torque": 40.0,
+      "max_speed": 5.007286760567692,
+      "reward": -441.12413180933015,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_31/best.pt",
+      "sha256": "eecbbe05ac2ee3ac26b69b6e25f0269b41f19144ae2f320819b7e5f19ce5d41b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -373.38117513291365,
+      "candidate_constraint_violation_fraction": 0.94,
+      "candidate_constraint_violation_steps": 235,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "executed_constraint_margin_min": -1.2079226507921703e-13,
+      "fault_seen": false,
+      "first_unsafe_observation": 176,
+      "joint_position_violation_max_rad": 0.2905326456591153,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.03201600606912887,
+      "normalized_violation_max": 0.09525660513413617,
+      "normalized_violation_mean": 0.006377690452017703,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 33.04251251798153,
+      "safety_correction_mean": 18.129850745247026,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.94,
+      "safety_intervention_steps": 235,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.10358565737051793,
+      "unsafe_state_observations": 26
+    },
+    "summary": {
+      "final_distance_m": 0.12060338507218382,
+      "final_speed_rad_s": 0.1648848021818226,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.11335671508152283,
+      "minimum_distance_m": 0.11335671508152283,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.4955853183555519,
+          "mean": 0.2676202438225906,
+          "median": 0.28867404913840056
+        },
+        "distance_range_m": 0.3822286032740291,
+        "net_norm": {
+          "max": 13.386735263377757,
+          "rms": 6.923429178704536
+        },
+        "qdd_norm": {
+          "max": 9.301455972679927,
+          "rms": 4.478831241040507
+        },
+        "speed_rad_s": {
+          "max": 2.4525653852248417,
+          "mean": 0.8865297331146302,
+          "median": 0.6297735359099821
+        },
+        "state_range": [
+          0.6310691540592921,
+          0.306656970372877,
+          2.610996477706872,
+          0.8660616113732973
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "fault_seen": false,
+      "final_distance": 0.7080235196166529,
+      "max_command_torque": 40.0,
+      "max_speed": 6.045967404587722,
+      "reward": -428.4062209780582,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_32/best.pt",
+      "sha256": "7c7965c2bca07d03916ad484eeae2a5e31140084247411b5c8b302d7ecbaa436",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -381.4239535623839,
+      "candidate_constraint_violation_fraction": 1.0,
+      "candidate_constraint_violation_steps": 250,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "executed_constraint_margin_min": -5.684341886080802e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 129,
+      "joint_position_violation_max_rad": 1.233021828210001,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.5997352488707494,
+      "normalized_violation_max": 0.4042694518721315,
+      "normalized_violation_mean": 0.11946917308182257,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 31.943811574446958,
+      "safety_correction_mean": 20.014063839544754,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 1.0,
+      "safety_intervention_steps": 250,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.4860557768924303,
+      "unsafe_state_observations": 122
+    },
+    "summary": {
+      "final_distance_m": 0.7080235196166529,
+      "final_speed_rad_s": 0.10258285636878794,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.3110119697395162,
+      "minimum_distance_m": 0.3110119697395162,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.7922634008313435,
+          "mean": 0.7561503638855117,
+          "median": 0.7624234326904311
+        },
+        "distance_range_m": 0.08423988121469062,
+        "net_norm": {
+          "max": 3.1201537467185463,
+          "rms": 2.2361452763035548
+        },
+        "qdd_norm": {
+          "max": 2.390770788685154,
+          "rms": 1.350440217310079
+        },
+        "speed_rad_s": {
+          "max": 0.6562992040192539,
+          "mean": 0.3088422099781602,
+          "median": 0.2854677825962405
+        },
+        "state_range": [
+          0.1557977366996659,
+          0.16710748856998592,
+          0.7791566691861599,
+          0.3973115891592688
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "fault_seen": false,
+      "final_distance": 1.215861212406899,
+      "max_command_torque": 40.0,
+      "max_speed": 5.50835194596682,
+      "reward": -396.9411692157049,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 169,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_33/best.pt",
+      "sha256": "e35740cebeaf67230a03d62c7fc12141a2267fbcace1d73e2939ea0272d17a39",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -370.7249032876806,
+      "candidate_constraint_violation_fraction": 0.9058823529411765,
+      "candidate_constraint_violation_steps": 154,
+      "command_attempts": 170,
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 169,
+      "safety_correction_max": 31.86888559467702,
+      "safety_correction_mean": 19.717705440533297,
+      "safety_enabled": true,
+      "safety_infeasible": true,
+      "safety_intervention_fraction": 0.9,
+      "safety_intervention_steps": 153,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 170,
+      "steps": 169,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 1.215861212406899,
+      "final_speed_rad_s": 2.850986162282803,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 1.1421879712998075,
+      "minimum_distance_m": 1.1421879712998075,
+      "off_target_stop": false,
+      "outcome": "abort",
+      "tail50": {
+        "distance_m": {
+          "max": 1.883860978314256,
+          "mean": 1.4072424290299759,
+          "median": 1.2996541464424234
+        },
+        "distance_range_m": 0.7416730070144484,
+        "net_norm": {
+          "max": 37.32328171778434,
+          "rms": 23.35810124877951
+        },
+        "qdd_norm": {
+          "max": 19.146251309347694,
+          "rms": 9.836179771232997
+        },
+        "speed_rad_s": {
+          "max": 5.665103051879672,
+          "mean": 3.726791395351449,
+          "median": 3.7994610883530955
+        },
+        "state_range": [
+          3.4154873344188674,
+          0.7896566983859019,
+          4.419943992927744,
+          3.1349144645776184
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "fault_seen": false,
+      "final_distance": 0.14640840487902765,
+      "max_command_torque": 40.0,
+      "max_speed": 5.114987236885966,
+      "reward": -458.7688943785173,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_34/best.pt",
+      "sha256": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -381.1579383560333,
+      "candidate_constraint_violation_fraction": 0.792,
+      "candidate_constraint_violation_steps": 198,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 175,
+      "joint_position_violation_max_rad": 0.4183003081773191,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.06713407932337695,
+      "normalized_violation_max": 0.13714764202535054,
+      "normalized_violation_mean": 0.013373322574377879,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 29.63113523718415,
+      "safety_correction_mean": 16.000301661216977,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.792,
+      "safety_intervention_steps": 198,
+      "scenario": "id_reference",
+      "seed": 9801801,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.14741035856573706,
+      "unsafe_state_observations": 37
+    },
+    "summary": {
+      "final_distance_m": 0.14640840487902765,
+      "final_speed_rad_s": 0.4284886348990249,
+      "initial_distance_m": 2.369906637621723,
+      "minimum_callback_distance_m": 0.14640840487902765,
+      "minimum_distance_m": 0.14640840487902765,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.8470521287339271,
+          "mean": 0.40102495880928773,
+          "median": 0.35376602971091664
+        },
+        "distance_range_m": 0.7006437238548995,
+        "net_norm": {
+          "max": 26.003752737987895,
+          "rms": 10.735495686124588
+        },
+        "qdd_norm": {
+          "max": 9.665855503478838,
+          "rms": 4.906872800269571
+        },
+        "speed_rad_s": {
+          "max": 2.482880418848532,
+          "mean": 1.2843472945186187,
+          "median": 1.032719460480226
+        },
+        "state_range": [
+          1.016461955379413,
+          0.628510960336017,
+          2.1638982792867245,
+          1.2607069097303873
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "Z",
+      "fault_seen": false,
+      "final_distance": 0.7559205094749301,
+      "max_command_torque": 40.0,
+      "max_speed": 3.622650922161744,
+      "reward": -408.3189838182698,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": null,
+    "safety": {
+      "candidate_constraint_margin_min": -344.29114168317477,
+      "candidate_constraint_violation_fraction": 0.2,
+      "candidate_constraint_violation_steps": 50,
+      "command_attempts": 250,
+      "controller": "Z",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 25.348156812506016,
+      "safety_correction_mean": 3.767923443373911,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.2,
+      "safety_intervention_steps": 50,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.7559205094749301,
+      "final_speed_rad_s": 0.04734772481688586,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.05825979239225635,
+      "minimum_distance_m": 0.05825979239225635,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.7559205094749301,
+          "mean": 0.7094908371229479,
+          "median": 0.7040729502328066
+        },
+        "distance_range_m": 0.07885572932201612,
+        "net_norm": {
+          "max": 1.9994129475639222,
+          "rms": 1.0453401487829794
+        },
+        "qdd_norm": {
+          "max": 1.0048108419425323,
+          "rms": 0.5130649220601905
+        },
+        "speed_rad_s": {
+          "max": 0.18202146377498948,
+          "mean": 0.1291191284469936,
+          "median": 0.13269795437265658
+        },
+        "state_range": [
+          0.021339878829299996,
+          0.11207413899314478,
+          0.14279396940501604,
+          0.23594062659355558
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_30",
+      "fault_seen": false,
+      "final_distance": 1.9122376721012138,
+      "max_command_torque": 40.0,
+      "max_speed": 9.921795113800677,
+      "reward": -544.844487699155,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_30/best.pt",
+      "sha256": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -654.3336167092067,
+      "candidate_constraint_violation_fraction": 0.944,
+      "candidate_constraint_violation_steps": 236,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_30",
+      "executed_constraint_margin_min": -4.263256414560601e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": 71,
+      "joint_position_violation_max_rad": 1.3497949239598714,
+      "joint_velocity_violation_max_rad_s": 2.921795113800677,
+      "normalized_violation_integral": 0.7952833820184322,
+      "normalized_violation_max": 0.44255571277372835,
+      "normalized_violation_mean": 0.15842298446582312,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 58.48499098791586,
+      "safety_correction_mean": 19.719178201685242,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.944,
+      "safety_intervention_steps": 236,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 2,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.5856573705179283,
+      "unsafe_state_observations": 147
+    },
+    "summary": {
+      "final_distance_m": 1.9122376721012138,
+      "final_speed_rad_s": 0.13683947057063475,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.26266383660768317,
+      "minimum_distance_m": 0.26266383660768317,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.037335442126577,
+          "mean": 1.9834003127329118,
+          "median": 1.9892473087825948
+        },
+        "distance_range_m": 0.12509777002536304,
+        "net_norm": {
+          "max": 3.720568013359613,
+          "rms": 2.608977599106652
+        },
+        "qdd_norm": {
+          "max": 2.0550726421053795,
+          "rms": 1.1173900039161377
+        },
+        "speed_rad_s": {
+          "max": 0.48170714190007824,
+          "mean": 0.3037818475318592,
+          "median": 0.32177339122574267
+        },
+        "state_range": [
+          0.1056070124945605,
+          0.21184107933667207,
+          0.6577434425464384,
+          0.3661155292965909
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_31",
+      "fault_seen": false,
+      "final_distance": 0.3111256143004007,
+      "max_command_torque": 40.0,
+      "max_speed": 3.622682996984216,
+      "reward": -379.49027037590923,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_31/best.pt",
+      "sha256": "1f263db609a037eaa32fa4456e13c50f4d4a72fe1edfd4dcfa1d0089a49b4a0b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -303.974813008158,
+      "candidate_constraint_violation_fraction": 0.376,
+      "candidate_constraint_violation_steps": 94,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_31",
+      "executed_constraint_margin_min": -1.7763568394002505e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 29.136299774081436,
+      "safety_correction_mean": 5.2536855436382055,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.376,
+      "safety_intervention_steps": 94,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.3111256143004007,
+      "final_speed_rad_s": 0.036237727528584854,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.3111256143004007,
+      "minimum_distance_m": 0.3111256143004007,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.4338461821545652,
+          "mean": 0.35445584717329254,
+          "median": 0.3444374688909757
+        },
+        "distance_range_m": 0.12272056785416452,
+        "net_norm": {
+          "max": 0.5447799077105263,
+          "rms": 0.4638729898941273
+        },
+        "qdd_norm": {
+          "max": 0.32670750708034707,
+          "rms": 0.25730508930696017
+        },
+        "speed_rad_s": {
+          "max": 0.27032352764077006,
+          "mean": 0.17416067518212802,
+          "median": 0.18615657459298113
+        },
+        "state_range": [
+          0.015593980991297718,
+          0.1702064817752571,
+          0.030591353364163104,
+          0.23456975158481552
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_32",
+      "fault_seen": false,
+      "final_distance": 0.3812192562118916,
+      "max_command_torque": 40.0,
+      "max_speed": 3.6306156937896694,
+      "reward": -395.61234752558,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_32/best.pt",
+      "sha256": "6b4970cca9e4b8e516af48dfa96099e171879cb80ae5690b59b06beced14a9d8",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -317.4661110201188,
+      "candidate_constraint_violation_fraction": 0.416,
+      "candidate_constraint_violation_steps": 104,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_32",
+      "executed_constraint_margin_min": -3.552713678800501e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 22.703039610947137,
+      "safety_correction_mean": 4.432594491267595,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.416,
+      "safety_intervention_steps": 104,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.3812192562118916,
+      "final_speed_rad_s": 0.03159587259111504,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.16444354616629797,
+      "minimum_distance_m": 0.16444354616629797,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.3812192562118916,
+          "mean": 0.36181445457933586,
+          "median": 0.35910875817038135
+        },
+        "distance_range_m": 0.030090635688389822,
+        "net_norm": {
+          "max": 1.187729569982349,
+          "rms": 0.6436644795346231
+        },
+        "qdd_norm": {
+          "max": 0.382340908878836,
+          "rms": 0.20571559909267126
+        },
+        "speed_rad_s": {
+          "max": 0.08337877599969026,
+          "mean": 0.06937358629631354,
+          "median": 0.07758284310825768
+        },
+        "state_range": [
+          0.02003597406208879,
+          0.057089842371930155,
+          0.10548526666492197,
+          0.07214801532313934
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_33",
+      "fault_seen": false,
+      "final_distance": 0.486498698740521,
+      "max_command_torque": 40.0,
+      "max_speed": 3.622650922161744,
+      "reward": -447.60997385103815,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_33/best.pt",
+      "sha256": "d25156bd1b6d41928cbb732af597d4fa3dc20e6e20db49758e578b9cdb0894ae",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -396.62224289973653,
+      "candidate_constraint_violation_fraction": 0.4,
+      "candidate_constraint_violation_steps": 100,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_33",
+      "executed_constraint_margin_min": -2.842170943040401e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 32.62761716179329,
+      "safety_correction_mean": 4.82239783347461,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.4,
+      "safety_intervention_steps": 100,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.486498698740521,
+      "final_speed_rad_s": 0.22564780253780997,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.27108328503676743,
+      "minimum_distance_m": 0.27108328503676743,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.49775210589129687,
+          "mean": 0.47889979045462355,
+          "median": 0.4771398381386342
+        },
+        "distance_range_m": 0.026843423702305247,
+        "net_norm": {
+          "max": 0.7651486582229126,
+          "rms": 0.3174001284799565
+        },
+        "qdd_norm": {
+          "max": 0.3461616955955592,
+          "rms": 0.18024817274996663
+        },
+        "speed_rad_s": {
+          "max": 0.3418197489157968,
+          "mean": 0.2745051974426467,
+          "median": 0.2647368248830505
+        },
+        "state_range": [
+          0.12364738317535151,
+          0.23814541801100386,
+          0.02080829800429157,
+          0.12596303229050965
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_34",
+      "fault_seen": false,
+      "final_distance": 0.5404759371313373,
+      "max_command_torque": 40.0,
+      "max_speed": 3.622650922161744,
+      "reward": -395.7165330256865,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_34/best.pt",
+      "sha256": "8935a715fff3ef26e1d37aaa1e9f804135e9b667c31f9cfc624ea62916fc2057",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -456.10719187126955,
+      "candidate_constraint_violation_fraction": 0.432,
+      "candidate_constraint_violation_steps": 108,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_34",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 33.449051631916454,
+      "safety_correction_mean": 6.8078265476114295,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.432,
+      "safety_intervention_steps": 108,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.5404759371313373,
+      "final_speed_rad_s": 0.03587140656030572,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.18534692201147399,
+      "minimum_distance_m": 0.18534692201147399,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.5404759371313373,
+          "mean": 0.5085606056204479,
+          "median": 0.510912927706082
+        },
+        "distance_range_m": 0.07239415419130196,
+        "net_norm": {
+          "max": 2.8602256846637393,
+          "rms": 1.2143630293507142
+        },
+        "qdd_norm": {
+          "max": 1.395554983238387,
+          "rms": 0.7191584008253932
+        },
+        "speed_rad_s": {
+          "max": 0.36227744011701873,
+          "mean": 0.11582054734343145,
+          "median": 0.0939123275799968
+        },
+        "state_range": [
+          0.059341413296069234,
+          0.046208450649590116,
+          0.11395203473002216,
+          0.4300999481094464
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "fault_seen": false,
+      "final_distance": 0.4903014605664919,
+      "max_command_torque": 40.0,
+      "max_speed": 3.6228698749643455,
+      "reward": -378.69051605009355,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_30/best.pt",
+      "sha256": "c97050eb309b7b2571da768b127d91a65daa155e2fe967912f80a0d085440fd4",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -422.4743805197158,
+      "candidate_constraint_violation_fraction": 0.348,
+      "candidate_constraint_violation_steps": 87,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 32.46567576560649,
+      "safety_correction_mean": 5.4244020151083125,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.348,
+      "safety_intervention_steps": 87,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.4903014605664919,
+      "final_speed_rad_s": 0.06838412799653887,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.013711576900983524,
+      "minimum_distance_m": 0.013711576900983524,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.5502073394297476,
+          "mean": 0.5056515986726439,
+          "median": 0.49703593900619536
+        },
+        "distance_range_m": 0.06306790165341386,
+        "net_norm": {
+          "max": 1.1024393854783316,
+          "rms": 0.857387019248214
+        },
+        "qdd_norm": {
+          "max": 0.4325380126533988,
+          "rms": 0.34318550049423713
+        },
+        "speed_rad_s": {
+          "max": 0.2527145152947583,
+          "mean": 0.10244536078157448,
+          "median": 0.07109390239999122
+        },
+        "state_range": [
+          0.029029137036454822,
+          0.0802664248296372,
+          0.055733873259221155,
+          0.3198568020948502
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "fault_seen": false,
+      "final_distance": 0.38089463906447646,
+      "max_command_torque": 40.0,
+      "max_speed": 3.622650922161744,
+      "reward": -360.1429651941593,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_31/best.pt",
+      "sha256": "eecbbe05ac2ee3ac26b69b6e25f0269b41f19144ae2f320819b7e5f19ce5d41b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -309.8354505357346,
+      "candidate_constraint_violation_fraction": 0.348,
+      "candidate_constraint_violation_steps": 87,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 27.466925202221024,
+      "safety_correction_mean": 4.957769878247529,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.348,
+      "safety_intervention_steps": 87,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.38089463906447646,
+      "final_speed_rad_s": 0.09196167497213767,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.0014173502833036153,
+      "minimum_distance_m": 0.0014173502833036153,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.38089463906447646,
+          "mean": 0.34595323192083804,
+          "median": 0.3409124874040793
+        },
+        "distance_range_m": 0.05883777472743895,
+        "net_norm": {
+          "max": 2.168493918615154,
+          "rms": 1.2264813103408834
+        },
+        "qdd_norm": {
+          "max": 0.8330113697414445,
+          "rms": 0.500478811960234
+        },
+        "speed_rad_s": {
+          "max": 0.23794512971270504,
+          "mean": 0.10935656689492283,
+          "median": 0.1069112801069434
+        },
+        "state_range": [
+          0.03137238058852021,
+          0.05689163918227269,
+          0.07072516715643988,
+          0.35466995707417465
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "fault_seen": false,
+      "final_distance": 0.3943549176076376,
+      "max_command_torque": 40.0,
+      "max_speed": 3.622650922161744,
+      "reward": -360.92966903203927,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_32/best.pt",
+      "sha256": "7c7965c2bca07d03916ad484eeae2a5e31140084247411b5c8b302d7ecbaa436",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -378.048802112952,
+      "candidate_constraint_violation_fraction": 0.336,
+      "candidate_constraint_violation_steps": 84,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 31.932216184992168,
+      "safety_correction_mean": 5.058836780961943,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.336,
+      "safety_intervention_steps": 84,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.3943549176076376,
+      "final_speed_rad_s": 0.006506927362521999,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.17707265723738594,
+      "minimum_distance_m": 0.17707265723738594,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.3943549176076376,
+          "mean": 0.3776395136420863,
+          "median": 0.3784918068791322
+        },
+        "distance_range_m": 0.034153695205206,
+        "net_norm": {
+          "max": 1.013137061869347,
+          "rms": 0.428706695604521
+        },
+        "qdd_norm": {
+          "max": 0.36267604354698063,
+          "rms": 0.1647819869198935
+        },
+        "speed_rad_s": {
+          "max": 0.08753339801154199,
+          "mean": 0.05849234073238545,
+          "median": 0.06484964433492187
+        },
+        "state_range": [
+          0.004241871493094962,
+          0.05692638840734854,
+          0.0347289555729057,
+          0.08394957345106117
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "fault_seen": false,
+      "final_distance": 0.4033858012388548,
+      "max_command_torque": 40.0,
+      "max_speed": 3.6229885189848137,
+      "reward": -386.35617191101676,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_33/best.pt",
+      "sha256": "e35740cebeaf67230a03d62c7fc12141a2267fbcace1d73e2939ea0272d17a39",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -356.61155541752095,
+      "candidate_constraint_violation_fraction": 0.324,
+      "candidate_constraint_violation_steps": 81,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "executed_constraint_margin_min": -1.7763568394002505e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 29.036237387055753,
+      "safety_correction_mean": 4.548257449896564,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.324,
+      "safety_intervention_steps": 81,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.4033858012388548,
+      "final_speed_rad_s": 0.09457406228309531,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.23905837527233476,
+      "minimum_distance_m": 0.23905837527233476,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.4033858012388548,
+          "mean": 0.33211299380554765,
+          "median": 0.32084791638750454
+        },
+        "distance_range_m": 0.11171043483744625,
+        "net_norm": {
+          "max": 3.3368477903374103,
+          "rms": 2.044490393853834
+        },
+        "qdd_norm": {
+          "max": 1.1790826904258562,
+          "rms": 0.7610793136525832
+        },
+        "speed_rad_s": {
+          "max": 0.2880827432970842,
+          "mean": 0.21923831853531467,
+          "median": 0.22309676439901055
+        },
+        "state_range": [
+          0.06163993254426692,
+          0.17589796442319527,
+          0.3023643557684589,
+          0.34016095382220163
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "fault_seen": false,
+      "final_distance": 0.7900850457817203,
+      "max_command_torque": 40.0,
+      "max_speed": 3.622650922161744,
+      "reward": -408.96174801448944,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_34/best.pt",
+      "sha256": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -355.55721504484734,
+      "candidate_constraint_violation_fraction": 0.316,
+      "candidate_constraint_violation_steps": 79,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 27.73076544312374,
+      "safety_correction_mean": 3.3832027074425413,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.316,
+      "safety_intervention_steps": 79,
+      "scenario": "ood_compound",
+      "seed": 9801900,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.7900850457817203,
+      "final_speed_rad_s": 0.049621170227011596,
+      "initial_distance_m": 3.101464429347629,
+      "minimum_callback_distance_m": 0.33257445570661115,
+      "minimum_distance_m": 0.33257445570661115,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.7900850457817203,
+          "mean": 0.7518318811193174,
+          "median": 0.7566962887594966
+        },
+        "distance_range_m": 0.09431093434917948,
+        "net_norm": {
+          "max": 0.8267459911964643,
+          "rms": 0.44386591395390956
+        },
+        "qdd_norm": {
+          "max": 0.5766297454214158,
+          "rms": 0.2982835957038948
+        },
+        "speed_rad_s": {
+          "max": 0.24381698331146937,
+          "mean": 0.11394546046588663,
+          "median": 0.09917831173424574
+        },
+        "state_range": [
+          0.10700583622832949,
+          0.020821816480677047,
+          0.191778609308867,
+          0.08536213469697956
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "Z",
+      "fault_seen": false,
+      "final_distance": 0.6307347665845257,
+      "max_command_torque": 40.0,
+      "max_speed": 2.404463580303374,
+      "reward": -736.0833142810269,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": null,
+    "safety": {
+      "candidate_constraint_margin_min": -333.4461486335201,
+      "candidate_constraint_violation_fraction": 0.848,
+      "candidate_constraint_violation_steps": 212,
+      "command_attempts": 250,
+      "controller": "Z",
+      "executed_constraint_margin_min": -2.842170943040401e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 24.36539282275184,
+      "safety_correction_mean": 18.274722891351125,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.848,
+      "safety_intervention_steps": 212,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.6307347665845257,
+      "final_speed_rad_s": 1.8209354046733546,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 0.6307347665845257,
+      "minimum_distance_m": 0.6307347665845257,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.04937873017258,
+          "mean": 1.4330985436273633,
+          "median": 1.4849480187942508
+        },
+        "distance_range_m": 1.4186439635880546,
+        "net_norm": {
+          "max": 17.229461588148435,
+          "rms": 11.448142115939483
+        },
+        "qdd_norm": {
+          "max": 10.42751128389463,
+          "rms": 6.354104874116366
+        },
+        "speed_rad_s": {
+          "max": 2.6558938409141692,
+          "mean": 1.847109900671547,
+          "median": 1.845553358334136
+        },
+        "state_range": [
+          1.007887930736214,
+          0.7593706292116882,
+          3.136182772711978,
+          2.898313641307028
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_30",
+      "fault_seen": false,
+      "final_distance": 2.3135983346329363,
+      "max_command_torque": 40.0,
+      "max_speed": 1.7559455702962767,
+      "reward": -767.9797829548259,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_30/best.pt",
+      "sha256": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -426.6744625449294,
+      "candidate_constraint_violation_fraction": 0.928,
+      "candidate_constraint_violation_steps": 232,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_30",
+      "executed_constraint_margin_min": -8.526512829121202e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 31.253546439269495,
+      "safety_correction_mean": 15.039392475665908,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.928,
+      "safety_intervention_steps": 232,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 2.3135983346329363,
+      "final_speed_rad_s": 0.09002110763748027,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 2.0248788291877506,
+      "minimum_distance_m": 2.0248788291877506,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.317695355590792,
+          "mean": 2.1550723290801503,
+          "median": 2.113079971973532
+        },
+        "distance_range_m": 0.29281652640304134,
+        "net_norm": {
+          "max": 14.652137897435423,
+          "rms": 8.676955950897128
+        },
+        "qdd_norm": {
+          "max": 9.954107268754402,
+          "rms": 6.308469779321282
+        },
+        "speed_rad_s": {
+          "max": 1.953050032827705,
+          "mean": 1.1671757329325154,
+          "median": 1.2737529072698948
+        },
+        "state_range": [
+          0.36234857542078047,
+          0.5950267814507499,
+          2.08748028750382,
+          3.123432115044523
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_31",
+      "fault_seen": false,
+      "final_distance": 0.6700135768817082,
+      "max_command_torque": 40.0,
+      "max_speed": 2.19137555101146,
+      "reward": -735.4072655819609,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_31/best.pt",
+      "sha256": "1f263db609a037eaa32fa4456e13c50f4d4a72fe1edfd4dcfa1d0089a49b4a0b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -436.7138096416829,
+      "candidate_constraint_violation_fraction": 0.924,
+      "candidate_constraint_violation_steps": 231,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_31",
+      "executed_constraint_margin_min": -9.947598300641403e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 30.59924014440664,
+      "safety_correction_mean": 17.6662816625191,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.924,
+      "safety_intervention_steps": 231,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.6700135768817082,
+      "final_speed_rad_s": 1.4274085223387416,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 0.6700135768817082,
+      "minimum_distance_m": 0.6700135768817082,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.034256817904716,
+          "mean": 1.4339893970360518,
+          "median": 1.4664599600402568
+        },
+        "distance_range_m": 1.3642432410230079,
+        "net_norm": {
+          "max": 18.28066420848229,
+          "rms": 10.919515579910133
+        },
+        "qdd_norm": {
+          "max": 12.396398651425894,
+          "rms": 6.815435470285122
+        },
+        "speed_rad_s": {
+          "max": 2.440205307571599,
+          "mean": 1.7574849960506653,
+          "median": 1.7946759223642852
+        },
+        "state_range": [
+          0.9682051117012681,
+          0.7119939087719866,
+          2.9217276563640096,
+          2.8166325758967137
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_32",
+      "fault_seen": false,
+      "final_distance": 0.4185216879779037,
+      "max_command_torque": 40.0,
+      "max_speed": 2.3443087086981684,
+      "reward": -680.621463590746,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_32/best.pt",
+      "sha256": "6b4970cca9e4b8e516af48dfa96099e171879cb80ae5690b59b06beced14a9d8",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -416.24834413119413,
+      "candidate_constraint_violation_fraction": 0.852,
+      "candidate_constraint_violation_steps": 213,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_32",
+      "executed_constraint_margin_min": -8.526512829121202e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 29.7617092821526,
+      "safety_correction_mean": 15.878294119579044,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.852,
+      "safety_intervention_steps": 213,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.4185216879779037,
+      "final_speed_rad_s": 0.6044001534988446,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 0.24008442445866493,
+      "minimum_distance_m": 0.24008442445866493,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 1.550861524933545,
+          "mean": 0.6741428301471057,
+          "median": 0.4576606441111196
+        },
+        "distance_range_m": 1.31077710047488,
+        "net_norm": {
+          "max": 25.098673192831125,
+          "rms": 15.721652659110683
+        },
+        "qdd_norm": {
+          "max": 16.06961143701674,
+          "rms": 7.6853790890516365
+        },
+        "speed_rad_s": {
+          "max": 2.367747644045484,
+          "mean": 1.546248302366021,
+          "median": 1.679861105124244
+        },
+        "state_range": [
+          1.082006281068765,
+          0.5346261520353299,
+          2.6353424407113324,
+          2.6498682779185994
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_33",
+      "fault_seen": false,
+      "final_distance": 1.2760852042093107,
+      "max_command_torque": 40.0,
+      "max_speed": 1.7971358489586735,
+      "reward": -738.6165644041789,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_33/best.pt",
+      "sha256": "d25156bd1b6d41928cbb732af597d4fa3dc20e6e20db49758e578b9cdb0894ae",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -400.63983632636297,
+      "candidate_constraint_violation_fraction": 0.86,
+      "candidate_constraint_violation_steps": 215,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_33",
+      "executed_constraint_margin_min": -8.526512829121202e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 31.73217811446845,
+      "safety_correction_mean": 15.612146317965248,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.86,
+      "safety_intervention_steps": 215,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 1.2760852042093107,
+      "final_speed_rad_s": 1.0649384694634105,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 1.2760852042093107,
+      "minimum_distance_m": 1.2760852042093107,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 1.9560628312640551,
+          "mean": 1.604122983480884,
+          "median": 1.5608657012208822
+        },
+        "distance_range_m": 0.6799776270547444,
+        "net_norm": {
+          "max": 17.817105094181557,
+          "rms": 10.208655873306135
+        },
+        "qdd_norm": {
+          "max": 9.413457105189098,
+          "rms": 6.393461044125117
+        },
+        "speed_rad_s": {
+          "max": 1.9116395187360014,
+          "mean": 1.2579933498836953,
+          "median": 1.2787698619898895
+        },
+        "state_range": [
+          0.6282001832340196,
+          0.4453356827009045,
+          2.032342941975677,
+          2.9416955131866596
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_34",
+      "fault_seen": false,
+      "final_distance": 0.7488514323936902,
+      "max_command_torque": 40.0,
+      "max_speed": 2.5739623120271125,
+      "reward": -693.5977267721455,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_34/best.pt",
+      "sha256": "8935a715fff3ef26e1d37aaa1e9f804135e9b667c31f9cfc624ea62916fc2057",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -465.5089195193301,
+      "candidate_constraint_violation_fraction": 0.864,
+      "candidate_constraint_violation_steps": 216,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_34",
+      "executed_constraint_margin_min": -1.0658141036401503e-13,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 32.45071936600986,
+      "safety_correction_mean": 17.791813233734057,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.864,
+      "safety_intervention_steps": 216,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.7488514323936902,
+      "final_speed_rad_s": 1.2236588901330174,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 0.4746747099509993,
+      "minimum_distance_m": 0.4746747099509993,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 1.678679165780525,
+          "mean": 0.8956517021878295,
+          "median": 0.7315859034287158
+        },
+        "distance_range_m": 1.2040044558295255,
+        "net_norm": {
+          "max": 26.862715354725296,
+          "rms": 14.739002444222907
+        },
+        "qdd_norm": {
+          "max": 15.390276096993988,
+          "rms": 7.008208832259867
+        },
+        "speed_rad_s": {
+          "max": 2.5749536888922546,
+          "mean": 1.8501033735195902,
+          "median": 1.8348192745903362
+        },
+        "state_range": [
+          1.3099686605490612,
+          0.7824039451819433,
+          2.9894693457993915,
+          2.1958430107996825
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "fault_seen": false,
+      "final_distance": 1.2436787094920339,
+      "max_command_torque": 40.0,
+      "max_speed": 1.8365344630214488,
+      "reward": -743.5983600545596,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_30/best.pt",
+      "sha256": "c97050eb309b7b2571da768b127d91a65daa155e2fe967912f80a0d085440fd4",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -399.6573464449615,
+      "candidate_constraint_violation_fraction": 0.848,
+      "candidate_constraint_violation_steps": 212,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "executed_constraint_margin_min": -7.815970093361102e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 30.559631710454326,
+      "safety_correction_mean": 19.456284367466512,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.848,
+      "safety_intervention_steps": 212,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 1.2436787094920339,
+      "final_speed_rad_s": 1.1838391712736533,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 1.2436787094920339,
+      "minimum_distance_m": 1.2436787094920339,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.0329512777204752,
+          "mean": 1.6087751615482626,
+          "median": 1.5741877913550613
+        },
+        "distance_range_m": 0.7892725682284414,
+        "net_norm": {
+          "max": 11.423804627606927,
+          "rms": 6.3499522092544645
+        },
+        "qdd_norm": {
+          "max": 8.352466359922397,
+          "rms": 4.3019533175668725
+        },
+        "speed_rad_s": {
+          "max": 1.8883491469043294,
+          "mean": 1.186933353243218,
+          "median": 1.0927316022918014
+        },
+        "state_range": [
+          0.5245451356581725,
+          0.581259186077816,
+          1.8463006489503102,
+          2.261217157072176
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "fault_seen": false,
+      "final_distance": 2.128209296170821,
+      "max_command_torque": 40.0,
+      "max_speed": 1.7542391476076231,
+      "reward": -793.0169335144258,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_31/best.pt",
+      "sha256": "eecbbe05ac2ee3ac26b69b6e25f0269b41f19144ae2f320819b7e5f19ce5d41b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -241.81489635470058,
+      "candidate_constraint_violation_fraction": 0.964,
+      "candidate_constraint_violation_steps": 241,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "executed_constraint_margin_min": -1.1368683772161603e-13,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 21.860028124219827,
+      "safety_correction_mean": 15.930900772051901,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.964,
+      "safety_intervention_steps": 241,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 2.128209296170821,
+      "final_speed_rad_s": 0.25903117716991414,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 2.128209296170821,
+      "minimum_distance_m": 2.128209296170821,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.4549410182544396,
+          "mean": 2.3016674894054856,
+          "median": 2.30787390309799
+        },
+        "distance_range_m": 0.32673172208361834,
+        "net_norm": {
+          "max": 5.842641605450663,
+          "rms": 3.8541922986384334
+        },
+        "qdd_norm": {
+          "max": 3.8078344164654614,
+          "rms": 1.5409561679674177
+        },
+        "speed_rad_s": {
+          "max": 1.2611144873369469,
+          "mean": 0.9117442211588862,
+          "median": 1.0015859624077668
+        },
+        "state_range": [
+          0.43881857514156286,
+          0.7710841830175135,
+          0.8392582541672319,
+          0.8527037915916134
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "fault_seen": false,
+      "final_distance": 0.42159243157187654,
+      "max_command_torque": 40.0,
+      "max_speed": 2.872347967125513,
+      "reward": -733.5593235178862,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_32/best.pt",
+      "sha256": "7c7965c2bca07d03916ad484eeae2a5e31140084247411b5c8b302d7ecbaa436",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -399.8721636598267,
+      "candidate_constraint_violation_fraction": 0.936,
+      "candidate_constraint_violation_steps": 234,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "executed_constraint_margin_min": -2.842170943040401e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 31.045836054955338,
+      "safety_correction_mean": 22.953120937588196,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.936,
+      "safety_intervention_steps": 234,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.42159243157187654,
+      "final_speed_rad_s": 2.262906991738167,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 0.42159243157187654,
+      "minimum_distance_m": 0.42159243157187654,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.04937873017258,
+          "mean": 1.3803651722355448,
+          "median": 1.4720585929801677
+        },
+        "distance_range_m": 1.6277862986007037,
+        "net_norm": {
+          "max": 21.011869938619668,
+          "rms": 14.221837278861047
+        },
+        "qdd_norm": {
+          "max": 11.834868174208511,
+          "rms": 6.976992018621412
+        },
+        "speed_rad_s": {
+          "max": 3.1259581194895345,
+          "mean": 2.0207744692706417,
+          "median": 1.8677249242313856
+        },
+        "state_range": [
+          1.139293516114921,
+          0.829410753572998,
+          3.604067159534117,
+          3.1206048193854032
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "fault_seen": false,
+      "final_distance": 0.9311683719908455,
+      "max_command_torque": 40.0,
+      "max_speed": 1.9704223018646312,
+      "reward": -747.2822016362279,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_33/best.pt",
+      "sha256": "e35740cebeaf67230a03d62c7fc12141a2267fbcace1d73e2939ea0272d17a39",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -380.2468009891898,
+      "candidate_constraint_violation_fraction": 0.884,
+      "candidate_constraint_violation_steps": 221,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "executed_constraint_margin_min": -7.105427357601002e-14,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 30.786302125188296,
+      "safety_correction_mean": 18.624718694297464,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.884,
+      "safety_intervention_steps": 221,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.9311683719908455,
+      "final_speed_rad_s": 1.992212154414347,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 0.9311683719908455,
+      "minimum_distance_m": 0.9311683719908455,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.1234763709091657,
+          "mean": 1.6166580537700708,
+          "median": 1.6537421471986677
+        },
+        "distance_range_m": 1.1923079989183203,
+        "net_norm": {
+          "max": 13.22464189816898,
+          "rms": 8.410825827596689
+        },
+        "qdd_norm": {
+          "max": 7.464918822340641,
+          "rms": 4.238512235767515
+        },
+        "speed_rad_s": {
+          "max": 2.0050364339808486,
+          "mean": 1.5048225106082354,
+          "median": 1.6291818234614412
+        },
+        "state_range": [
+          0.6917952380576933,
+          0.7879399318297757,
+          2.7269310385899814,
+          2.026356164523472
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "fault_seen": false,
+      "final_distance": 0.607900787958711,
+      "max_command_torque": 40.0,
+      "max_speed": 1.9016730821917849,
+      "reward": -725.2390282838747,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_34/best.pt",
+      "sha256": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -374.0171201771765,
+      "candidate_constraint_violation_fraction": 0.888,
+      "candidate_constraint_violation_steps": 222,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "executed_constraint_margin_min": -1.1368683772161603e-13,
+      "fault_seen": false,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 26.14573380838237,
+      "safety_correction_mean": 15.37955258877449,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.888,
+      "safety_intervention_steps": 222,
+      "scenario": "ood_compound",
+      "seed": 9801901,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.607900787958711,
+      "final_speed_rad_s": 1.4134486900109682,
+      "initial_distance_m": 2.3748872804175982,
+      "minimum_callback_distance_m": 0.607900787958711,
+      "minimum_distance_m": 0.607900787958711,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 1.9378914594077734,
+          "mean": 1.3381607954353547,
+          "median": 1.3784051965394175
+        },
+        "distance_range_m": 1.3299906714490624,
+        "net_norm": {
+          "max": 16.610829359525976,
+          "rms": 9.297274761113153
+        },
+        "qdd_norm": {
+          "max": 10.631244175945326,
+          "rms": 5.73841861050914
+        },
+        "speed_rad_s": {
+          "max": 2.054497692662589,
+          "mean": 1.6301786024397706,
+          "median": 1.712222087658442
+        },
+        "state_range": [
+          0.9710940443449652,
+          0.5994791412058476,
+          2.6450481622453177,
+          2.6303842683134215
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "Z",
+      "fault_seen": true,
+      "final_distance": 2.236193931638214,
+      "max_command_torque": 40.0,
+      "max_speed": 9.286591273766591,
+      "reward": -494.17196054843043,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": null,
+    "safety": {
+      "candidate_constraint_margin_min": -523.857710228481,
+      "candidate_constraint_violation_fraction": 1.0,
+      "candidate_constraint_violation_steps": 250,
+      "command_attempts": 250,
+      "controller": "Z",
+      "executed_constraint_margin_min": -2.842170943040401e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 67,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 2.286591273766591,
+      "normalized_violation_integral": 0.012060367188390804,
+      "normalized_violation_max": 0.32665589625237024,
+      "normalized_violation_mean": 0.0024024635833447814,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 44.35412347074746,
+      "safety_correction_mean": 9.857575244103547,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 1.0,
+      "safety_intervention_steps": 250,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.01195219123505976,
+      "unsafe_state_observations": 3
+    },
+    "summary": {
+      "final_distance_m": 2.236193931638214,
+      "final_speed_rad_s": 0.22145271691994908,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.3541261736525299,
+      "minimum_distance_m": 1.3541261736525299,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.236193931638214,
+          "mean": 2.185123636383766,
+          "median": 2.1805757370363263
+        },
+        "distance_range_m": 0.08576745083528792,
+        "net_norm": {
+          "max": 0.8081960955311017,
+          "rms": 0.3097068212786004
+        },
+        "qdd_norm": {
+          "max": 0.4425223778510239,
+          "rms": 0.29407461102311144
+        },
+        "speed_rad_s": {
+          "max": 0.2317633889695543,
+          "mean": 0.16993465523581583,
+          "median": 0.19986919610628767
+        },
+        "state_range": [
+          0.06924086566135768,
+          0.1516421316764045,
+          0.07385010032476252,
+          0.19837540169815066
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_30",
+      "fault_seen": true,
+      "final_distance": 2.0924927599603813,
+      "max_command_torque": 40.0,
+      "max_speed": 7.821346385751413,
+      "reward": -480.06690510744625,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_30/best.pt",
+      "sha256": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -471.9256910863287,
+      "candidate_constraint_violation_fraction": 0.988,
+      "candidate_constraint_violation_steps": 247,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_30",
+      "executed_constraint_margin_min": -3.552713678800501e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 63,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.8213463857514132,
+      "normalized_violation_integral": 0.0036570241745501964,
+      "normalized_violation_max": 0.11733519796448766,
+      "normalized_violation_mean": 0.0007284908714243419,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 42.36667931519526,
+      "safety_correction_mean": 15.31071940485876,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.988,
+      "safety_intervention_steps": 247,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00796812749003984,
+      "unsafe_state_observations": 2
+    },
+    "summary": {
+      "final_distance_m": 2.0924927599603813,
+      "final_speed_rad_s": 0.13429033418216277,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.3322359434088258,
+      "minimum_distance_m": 1.3322359434088258,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.0924927599603813,
+          "mean": 2.050091550659131,
+          "median": 2.046750820249466
+        },
+        "distance_range_m": 0.07196450377211239,
+        "net_norm": {
+          "max": 0.5640223237323221,
+          "rms": 0.2639298469899902
+        },
+        "qdd_norm": {
+          "max": 0.47577539596769813,
+          "rms": 0.2880441845753051
+        },
+        "speed_rad_s": {
+          "max": 0.17358542225245013,
+          "mean": 0.12813038503611573,
+          "median": 0.14951123754731943
+        },
+        "state_range": [
+          0.053611639188799076,
+          0.11339153906552801,
+          0.09050456120583354,
+          0.15775855946254128
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_31",
+      "fault_seen": true,
+      "final_distance": 2.4889080907773646,
+      "max_command_torque": 40.0,
+      "max_speed": 9.237460672207341,
+      "reward": -512.4088011060234,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_31/best.pt",
+      "sha256": "1f263db609a037eaa32fa4456e13c50f4d4a72fe1edfd4dcfa1d0089a49b4a0b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -608.7376380289662,
+      "candidate_constraint_violation_fraction": 0.976,
+      "candidate_constraint_violation_steps": 244,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_31",
+      "executed_constraint_margin_min": -7.105427357601002e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 69,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 2.237460672207341,
+      "normalized_violation_integral": 0.013020132122353863,
+      "normalized_violation_max": 0.319637238886763,
+      "normalized_violation_mean": 0.0025936518172019647,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 51.95499537027454,
+      "safety_correction_mean": 13.364840585216891,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.976,
+      "safety_intervention_steps": 244,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.01195219123505976,
+      "unsafe_state_observations": 3
+    },
+    "summary": {
+      "final_distance_m": 2.4889080907773646,
+      "final_speed_rad_s": 0.4777788584784644,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.342674624408445,
+      "minimum_distance_m": 1.342674624408445,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.490055200880959,
+          "mean": 2.40706859401878,
+          "median": 2.404295776374403
+        },
+        "distance_range_m": 0.16027447262238592,
+        "net_norm": {
+          "max": 50.92809841706316,
+          "rms": 10.180680911935164
+        },
+        "qdd_norm": {
+          "max": 22.955442143329858,
+          "rms": 4.569466038069074
+        },
+        "speed_rad_s": {
+          "max": 0.6267450302987492,
+          "mean": 0.4611805637697012,
+          "median": 0.47960719592580187
+        },
+        "state_range": [
+          0.16953587835042994,
+          0.41451379533198884,
+          0.7121423264133047,
+          0.5636690051070261
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_32",
+      "fault_seen": true,
+      "final_distance": 2.427696310562389,
+      "max_command_torque": 40.0,
+      "max_speed": 9.17261926438018,
+      "reward": -509.3315235638444,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_32/best.pt",
+      "sha256": "6b4970cca9e4b8e516af48dfa96099e171879cb80ae5690b59b06beced14a9d8",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -604.2926803834607,
+      "candidate_constraint_violation_fraction": 1.0,
+      "candidate_constraint_violation_steps": 250,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_32",
+      "executed_constraint_margin_min": -4.263256414560601e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 71,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 2.172619264380179,
+      "normalized_violation_integral": 0.011603935963757044,
+      "normalized_violation_max": 0.31037418062573985,
+      "normalized_violation_mean": 0.0023115410286368614,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 50.554398741171624,
+      "safety_correction_mean": 14.960015086207223,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 1.0,
+      "safety_intervention_steps": 250,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.01195219123505976,
+      "unsafe_state_observations": 3
+    },
+    "summary": {
+      "final_distance_m": 2.427696310562389,
+      "final_speed_rad_s": 0.5085913569885147,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.3423684885142169,
+      "minimum_distance_m": 1.3423684885142169,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.427696310562389,
+          "mean": 2.3351639756018487,
+          "median": 2.3333024688144564
+        },
+        "distance_range_m": 0.17660681026640068,
+        "net_norm": {
+          "max": 0.5474915533451629,
+          "rms": 0.18736934971965538
+        },
+        "qdd_norm": {
+          "max": 0.6555764608758531,
+          "rms": 0.39942937963520675
+        },
+        "speed_rad_s": {
+          "max": 0.5085913569885147,
+          "mean": 0.4208164560748919,
+          "median": 0.4476244901530107
+        },
+        "state_range": [
+          0.16974039940600605,
+          0.3771906320039494,
+          0.09811873844007231,
+          0.26243841199164286
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_33",
+      "fault_seen": true,
+      "final_distance": 2.008847242589451,
+      "max_command_torque": 40.0,
+      "max_speed": 7.073394820347149,
+      "reward": -479.2098068991633,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_33/best.pt",
+      "sha256": "d25156bd1b6d41928cbb732af597d4fa3dc20e6e20db49758e578b9cdb0894ae",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -491.83450549109506,
+      "candidate_constraint_violation_fraction": 0.976,
+      "candidate_constraint_violation_steps": 244,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_33",
+      "executed_constraint_margin_min": -5.684341886080802e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 68,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.07339482034714884,
+      "normalized_violation_integral": 0.00020969948670614082,
+      "normalized_violation_max": 0.01048497433530704,
+      "normalized_violation_mean": 4.177280611676112e-05,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 43.31665995929156,
+      "safety_correction_mean": 9.467233103534406,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.976,
+      "safety_intervention_steps": 244,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00398406374501992,
+      "unsafe_state_observations": 1
+    },
+    "summary": {
+      "final_distance_m": 2.008847242589451,
+      "final_speed_rad_s": 0.10697443690803154,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.365907975569562,
+      "minimum_distance_m": 1.365907975569562,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.008847242589451,
+          "mean": 1.9841415084528942,
+          "median": 1.9797157935545944
+        },
+        "distance_range_m": 0.03584483206485056,
+        "net_norm": {
+          "max": 1.039645636381335,
+          "rms": 0.4244355508287928
+        },
+        "qdd_norm": {
+          "max": 0.443419487108738,
+          "rms": 0.30702188494016336
+        },
+        "speed_rad_s": {
+          "max": 0.11855085590610737,
+          "mean": 0.08251965421056041,
+          "median": 0.09061013645687263
+        },
+        "state_range": [
+          0.02046133342055123,
+          0.06018408610645598,
+          0.08851459978964361,
+          0.20662272952548977
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_34",
+      "fault_seen": true,
+      "final_distance": 2.3768762916198716,
+      "max_command_torque": 40.0,
+      "max_speed": 8.951486214855247,
+      "reward": -507.73657418345397,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_34/best.pt",
+      "sha256": "8935a715fff3ef26e1d37aaa1e9f804135e9b667c31f9cfc624ea62916fc2057",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -537.2418402658382,
+      "candidate_constraint_violation_fraction": 0.968,
+      "candidate_constraint_violation_steps": 242,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_34",
+      "executed_constraint_margin_min": -2.842170943040401e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 66,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 1.9514862148552474,
+      "normalized_violation_integral": 0.009231628479258736,
+      "normalized_violation_max": 0.2787837449793211,
+      "normalized_violation_mean": 0.0018389698165854054,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 46.853644646729094,
+      "safety_correction_mean": 11.205195304651548,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.968,
+      "safety_intervention_steps": 242,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.01195219123505976,
+      "unsafe_state_observations": 3
+    },
+    "summary": {
+      "final_distance_m": 2.3768762916198716,
+      "final_speed_rad_s": 0.36678377120345645,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.3262329034017066,
+      "minimum_distance_m": 1.3262329034017066,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.3768762916198716,
+          "mean": 2.310195109589766,
+          "median": 2.3045035426850067
+        },
+        "distance_range_m": 0.11427088056388301,
+        "net_norm": {
+          "max": 1.4398741977944385,
+          "rms": 0.5814594439839951
+        },
+        "qdd_norm": {
+          "max": 0.6169638229608492,
+          "rms": 0.4186738067863612
+        },
+        "speed_rad_s": {
+          "max": 0.3792292666538535,
+          "mean": 0.2680514341443938,
+          "median": 0.29054622995562107
+        },
+        "state_range": [
+          0.10199351980153404,
+          0.23928638070102315,
+          0.05045115597142373,
+          0.31676404364011185
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "fault_seen": true,
+      "final_distance": 2.083090231976495,
+      "max_command_torque": 40.0,
+      "max_speed": 8.333785318791698,
+      "reward": -496.1240857517611,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_30/best.pt",
+      "sha256": "c97050eb309b7b2571da768b127d91a65daa155e2fe967912f80a0d085440fd4",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -523.2280951623131,
+      "candidate_constraint_violation_fraction": 0.956,
+      "candidate_constraint_violation_steps": 239,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "executed_constraint_margin_min": -2.842170943040401e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 51,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 1.3337853187916977,
+      "normalized_violation_integral": 0.006720438493138583,
+      "normalized_violation_max": 0.1905407598273854,
+      "normalized_violation_mean": 0.0013387327675574866,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 49.85979642189489,
+      "safety_correction_mean": 12.169871829808839,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.956,
+      "safety_intervention_steps": 239,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00796812749003984,
+      "unsafe_state_observations": 2
+    },
+    "summary": {
+      "final_distance_m": 2.083090231976495,
+      "final_speed_rad_s": 0.06087205671225035,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.3344159320851403,
+      "minimum_distance_m": 1.3344159320851403,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.083090231976495,
+          "mean": 2.0565545808126022,
+          "median": 2.0575140861062002
+        },
+        "distance_range_m": 0.05546204651076314,
+        "net_norm": {
+          "max": 0.24452087831946495,
+          "rms": 0.1697664426294952
+        },
+        "qdd_norm": {
+          "max": 0.2663720503861712,
+          "rms": 0.14153785214237743
+        },
+        "speed_rad_s": {
+          "max": 0.12080920579509823,
+          "mean": 0.09956575940833638,
+          "median": 0.10364735006074852
+        },
+        "state_range": [
+          0.04270631543523318,
+          0.08691454883774696,
+          0.04794436578790894,
+          0.06754199627538247
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "fault_seen": true,
+      "final_distance": 2.359347005237154,
+      "max_command_torque": 40.0,
+      "max_speed": 7.984690659739304,
+      "reward": -506.5207142114643,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_31/best.pt",
+      "sha256": "eecbbe05ac2ee3ac26b69b6e25f0269b41f19144ae2f320819b7e5f19ce5d41b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -553.5316062279771,
+      "candidate_constraint_violation_fraction": 0.86,
+      "candidate_constraint_violation_steps": 215,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "executed_constraint_margin_min": -4.263256414560601e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 66,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.9846906597393037,
+      "normalized_violation_integral": 0.0040464702844245125,
+      "normalized_violation_max": 0.140670094248472,
+      "normalized_violation_mean": 0.0008060697777738072,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 46.67787400149184,
+      "safety_correction_mean": 4.761565735555164,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.86,
+      "safety_intervention_steps": 215,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00796812749003984,
+      "unsafe_state_observations": 2
+    },
+    "summary": {
+      "final_distance_m": 2.359347005237154,
+      "final_speed_rad_s": 0.6274429504421016,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.3669332240566285,
+      "minimum_distance_m": 1.3669332240566285,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.359347005237154,
+          "mean": 2.274360028691002,
+          "median": 2.26736920115414
+        },
+        "distance_range_m": 0.1408343362395974,
+        "net_norm": {
+          "max": 0.8945816984713613,
+          "rms": 0.36962071464275725
+        },
+        "qdd_norm": {
+          "max": 1.3597669397063281,
+          "rms": 0.6363082996222322
+        },
+        "speed_rad_s": {
+          "max": 0.6274429504421016,
+          "mean": 0.31320914504679787,
+          "median": 0.2987546744174473
+        },
+        "state_range": [
+          0.1311710172234941,
+          0.2758415066902047,
+          0.17920344272447547,
+          0.4943665220411099
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "fault_seen": true,
+      "final_distance": 2.0577910135463116,
+      "max_command_torque": 40.0,
+      "max_speed": 8.482120776869607,
+      "reward": -477.55905943790106,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_32/best.pt",
+      "sha256": "7c7965c2bca07d03916ad484eeae2a5e31140084247411b5c8b302d7ecbaa436",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -568.0045666521903,
+      "candidate_constraint_violation_fraction": 1.0,
+      "candidate_constraint_violation_steps": 250,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "executed_constraint_margin_min": -5.684341886080802e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 69,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 1.482120776869607,
+      "normalized_violation_integral": 0.007027825898251257,
+      "normalized_violation_max": 0.211731539552801,
+      "normalized_violation_mean": 0.0013999653183767442,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 47.86057577814619,
+      "safety_correction_mean": 17.106134164865836,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 1.0,
+      "safety_intervention_steps": 250,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00796812749003984,
+      "unsafe_state_observations": 2
+    },
+    "summary": {
+      "final_distance_m": 2.0577910135463116,
+      "final_speed_rad_s": 0.13903943542960143,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.3800025180590936,
+      "minimum_distance_m": 1.3800025180590936,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.0577910135463116,
+          "mean": 2.0183316942163847,
+          "median": 2.013172500541754
+        },
+        "distance_range_m": 0.06186707458720053,
+        "net_norm": {
+          "max": 0.832944336509326,
+          "rms": 0.34680762410528826
+        },
+        "qdd_norm": {
+          "max": 0.4849627490393347,
+          "rms": 0.311514061496322
+        },
+        "speed_rad_s": {
+          "max": 0.16468600140446862,
+          "mean": 0.11261570479384546,
+          "median": 0.14028678342354717
+        },
+        "state_range": [
+          0.04204718289599896,
+          0.0983591167248703,
+          0.09162672936799535,
+          0.19165435028477967
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "fault_seen": true,
+      "final_distance": 2.368697840746954,
+      "max_command_torque": 40.0,
+      "max_speed": 9.157218517306985,
+      "reward": -512.218047692568,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_33/best.pt",
+      "sha256": "e35740cebeaf67230a03d62c7fc12141a2267fbcace1d73e2939ea0272d17a39",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -450.14095849434295,
+      "candidate_constraint_violation_fraction": 0.996,
+      "candidate_constraint_violation_steps": 249,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "executed_constraint_margin_min": -4.973799150320701e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 66,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 2.157218517306985,
+      "normalized_violation_integral": 0.01124070151518906,
+      "normalized_violation_max": 0.30817407390099794,
+      "normalized_violation_mean": 0.002239183568762761,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 37.731119636298736,
+      "safety_correction_mean": 11.177754646957565,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.996,
+      "safety_intervention_steps": 249,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.01195219123505976,
+      "unsafe_state_observations": 3
+    },
+    "summary": {
+      "final_distance_m": 2.368697840746954,
+      "final_speed_rad_s": 0.30298353785810733,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.3709458452102663,
+      "minimum_distance_m": 1.3709458452102663,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.368697840746954,
+          "mean": 2.3083445043390993,
+          "median": 2.306095757494194
+        },
+        "distance_range_m": 0.11342082465535563,
+        "net_norm": {
+          "max": 0.6331387579854384,
+          "rms": 0.2545558354332524
+        },
+        "qdd_norm": {
+          "max": 0.3078673230135953,
+          "rms": 0.2250046339311311
+        },
+        "speed_rad_s": {
+          "max": 0.3170928020922785,
+          "mean": 0.26334306208277697,
+          "median": 0.2789914191599884
+        },
+        "state_range": [
+          0.10040169465867188,
+          0.23824122340323928,
+          0.03603826061855958,
+          0.15427748482272396
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "fault_seen": true,
+      "final_distance": 2.4089747660799734,
+      "max_command_torque": 40.0,
+      "max_speed": 8.219325189569636,
+      "reward": -511.7293963784528,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_34/best.pt",
+      "sha256": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -474.42283289896415,
+      "candidate_constraint_violation_fraction": 0.972,
+      "candidate_constraint_violation_steps": 243,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "executed_constraint_margin_min": -5.684341886080802e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": 68,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 1.219325189569636,
+      "normalized_violation_integral": 0.005753400717545763,
+      "normalized_violation_max": 0.1741893127956622,
+      "normalized_violation_mean": 0.0011460957604672833,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 41.9754653604268,
+      "safety_correction_mean": 7.706747958086458,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.972,
+      "safety_intervention_steps": 243,
+      "scenario": "motor_fault",
+      "seed": 9802000,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 1,
+      "unsafe_episode": true,
+      "unsafe_state_fraction": 0.00796812749003984,
+      "unsafe_state_observations": 2
+    },
+    "summary": {
+      "final_distance_m": 2.4089747660799734,
+      "final_speed_rad_s": 0.37216078186732915,
+      "initial_distance_m": 1.50369688583877,
+      "minimum_callback_distance_m": 1.375139582226529,
+      "minimum_distance_m": 1.375139582226529,
+      "off_target_stop": false,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 2.4089747660799734,
+          "mean": 2.349597647982062,
+          "median": 2.348256376696703
+        },
+        "distance_range_m": 0.11471932596394208,
+        "net_norm": {
+          "max": 0.574367531468279,
+          "rms": 0.24259563159160077
+        },
+        "qdd_norm": {
+          "max": 0.643963787375263,
+          "rms": 0.2320920678456643
+        },
+        "speed_rad_s": {
+          "max": 0.37216078186732915,
+          "mean": 0.28701694421820906,
+          "median": 0.28863852967024156
+        },
+        "state_range": [
+          0.11360872671753985,
+          0.2568779676986874,
+          0.04003421563101664,
+          0.1480513930428847
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "Z",
+      "fault_seen": true,
+      "final_distance": 0.43598936765274304,
+      "max_command_torque": 40.0,
+      "max_speed": 5.6722670738232175,
+      "reward": -167.10634761754199,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 250,
+      "success": false
+    },
+    "identity": null,
+    "safety": {
+      "candidate_constraint_margin_min": -312.79968789569165,
+      "candidate_constraint_violation_fraction": 0.06,
+      "candidate_constraint_violation_steps": 15,
+      "command_attempts": 250,
+      "controller": "Z",
+      "executed_constraint_margin_min": -7.105427357601002e-15,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 26.68184039113524,
+      "safety_correction_mean": 1.2406590185974,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.06,
+      "safety_intervention_steps": 15,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.43598936765274304,
+      "final_speed_rad_s": 7.643990192407757e-06,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.23814770614127162,
+      "minimum_distance_m": 0.23814770614127162,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.43598936765274304,
+          "mean": 0.4359795003729474,
+          "median": 0.4359793501448753
+        },
+        "distance_range_m": 1.8558502793031284e-05,
+        "net_norm": {
+          "max": 0.0003919014292193115,
+          "rms": 0.00016430921823926592
+        },
+        "qdd_norm": {
+          "max": 0.0008265170606476264,
+          "rms": 0.000317958251484926
+        },
+        "speed_rad_s": {
+          "max": 0.0001242343377333461,
+          "mean": 3.860282124865858e-05,
+          "median": 3.633670243559625e-05
+        },
+        "state_range": [
+          1.4505569113421046e-05,
+          2.1292168846276383e-05,
+          5.8416150765006014e-05,
+          0.0001541130261024872
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_30",
+      "fault_seen": true,
+      "final_distance": 0.014737713014854839,
+      "max_command_torque": 40.0,
+      "max_speed": 5.672425350349429,
+      "reward": -68.18539087720792,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 66,
+      "success": true
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_30/best.pt",
+      "sha256": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -350.9880726498586,
+      "candidate_constraint_violation_fraction": 0.25757575757575757,
+      "candidate_constraint_violation_steps": 17,
+      "command_attempts": 66,
+      "controller": "P0_inloop_reference_train_seed_30",
+      "executed_constraint_margin_min": -1.4210854715202004e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 66,
+      "safety_correction_max": 26.68978507246467,
+      "safety_correction_mean": 4.414145315503234,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.25757575757575757,
+      "safety_intervention_steps": 17,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 67,
+      "steps": 66,
+      "success": true,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.014737713014854839,
+      "final_speed_rad_s": 0.32461816683709493,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.014737713014854839,
+      "minimum_distance_m": 0.014737713014854839,
+      "off_target_stop": false,
+      "outcome": "success",
+      "tail50": {
+        "distance_m": {
+          "max": 1.7990519567121328,
+          "mean": 0.476311729222812,
+          "median": 0.17687441201042242
+        },
+        "distance_range_m": 1.7843142436972779,
+        "net_norm": {
+          "max": 40.68856235269762,
+          "rms": 12.421869911141785
+        },
+        "qdd_norm": {
+          "max": 60.88833022098032,
+          "rms": 16.8848864030122
+        },
+        "speed_rad_s": {
+          "max": 4.242067120953884,
+          "mean": 1.7338042356407355,
+          "median": 0.9852866742640026
+        },
+        "state_range": [
+          1.5096414446697695,
+          0.4206291443969128,
+          3.733182664739023,
+          4.227078817672921
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_31",
+      "fault_seen": true,
+      "final_distance": 0.11618704232404148,
+      "max_command_torque": 40.0,
+      "max_speed": 5.6722670738232175,
+      "reward": -106.88068824834694,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_31/best.pt",
+      "sha256": "1f263db609a037eaa32fa4456e13c50f4d4a72fe1edfd4dcfa1d0089a49b4a0b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -300.37198816834865,
+      "candidate_constraint_violation_fraction": 0.06,
+      "candidate_constraint_violation_steps": 15,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_31",
+      "executed_constraint_margin_min": -7.105427357601002e-15,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 28.89945249148433,
+      "safety_correction_mean": 1.2692267036328977,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.06,
+      "safety_intervention_steps": 15,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.11618704232404148,
+      "final_speed_rad_s": 8.469149905372282e-08,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.11618704232404148,
+      "minimum_distance_m": 0.11618704232404148,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.11618770789302972,
+          "mean": 0.11618720646807765,
+          "median": 0.11618712962146112
+        },
+        "distance_range_m": 6.655689882423266e-07,
+        "net_norm": {
+          "max": 8.058626489560035e-06,
+          "rms": 2.980800177482374e-06
+        },
+        "qdd_norm": {
+          "max": 1.592297004042948e-05,
+          "rms": 5.821171606503713e-06
+        },
+        "speed_rad_s": {
+          "max": 3.7012127235390817e-06,
+          "mean": 9.597020189704615e-07,
+          "median": 5.17857750376543e-07
+        },
+        "state_range": [
+          1.783334879768006e-08,
+          9.20799884340795e-07,
+          9.561017216515288e-08,
+          3.616466314893159e-06
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_32",
+      "fault_seen": true,
+      "final_distance": 0.21786017017275017,
+      "max_command_torque": 40.0,
+      "max_speed": 5.673374121846031,
+      "reward": -119.93688172880218,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_32/best.pt",
+      "sha256": "6b4970cca9e4b8e516af48dfa96099e171879cb80ae5690b59b06beced14a9d8",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -299.9126268745454,
+      "candidate_constraint_violation_fraction": 0.072,
+      "candidate_constraint_violation_steps": 18,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_32",
+      "executed_constraint_margin_min": -2.1316282072803006e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 28.234862478505264,
+      "safety_correction_mean": 1.3450291236492735,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.072,
+      "safety_intervention_steps": 18,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.21786017017275017,
+      "final_speed_rad_s": 5.1970248638866525e-06,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.03640914119576728,
+      "minimum_distance_m": 0.03640914119576728,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.21786224938113274,
+          "mean": 0.21785829036464968,
+          "median": 0.21786083462785955
+        },
+        "distance_range_m": 2.23854996126982e-05,
+        "net_norm": {
+          "max": 0.0002529618460103557,
+          "rms": 0.00010116173673128355
+        },
+        "qdd_norm": {
+          "max": 0.0004626012205978411,
+          "rms": 0.0002205756223490892
+        },
+        "speed_rad_s": {
+          "max": 0.0001432052060956945,
+          "mean": 3.69120585163927e-05,
+          "median": 1.5566544789346227e-05
+        },
+        "state_range": [
+          1.3934155350892041e-05,
+          3.005974812486656e-05,
+          3.2410844690074325e-05,
+          0.00014464550697560112
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_33",
+      "fault_seen": true,
+      "final_distance": 0.4966356241159384,
+      "max_command_torque": 40.0,
+      "max_speed": 5.6722670738232175,
+      "reward": -163.71850711333067,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_33/best.pt",
+      "sha256": "d25156bd1b6d41928cbb732af597d4fa3dc20e6e20db49758e578b9cdb0894ae",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -350.12113443669557,
+      "candidate_constraint_violation_fraction": 0.06,
+      "candidate_constraint_violation_steps": 15,
+      "command_attempts": 250,
+      "controller": "P0_inloop_reference_train_seed_33",
+      "executed_constraint_margin_min": -7.105427357601002e-15,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 30.930536143002218,
+      "safety_correction_mean": 1.3322909244411572,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.06,
+      "safety_intervention_steps": 15,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.4966356241159384,
+      "final_speed_rad_s": 0.00810275715251347,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.19063738510710887,
+      "minimum_distance_m": 0.19063738510710887,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.4966356241159384,
+          "mean": 0.48951098436864493,
+          "median": 0.4905429610195685
+        },
+        "distance_range_m": 0.018206416745378096,
+        "net_norm": {
+          "max": 0.026459282810057556,
+          "rms": 0.014650100315300058
+        },
+        "qdd_norm": {
+          "max": 0.049067680986620864,
+          "rms": 0.028858516850092508
+        },
+        "speed_rad_s": {
+          "max": 0.03304647979781439,
+          "mean": 0.018140314398354025,
+          "median": 0.016869174855528093
+        },
+        "state_range": [
+          0.005535854201482504,
+          0.016599217375506736,
+          0.0031868802589295328,
+          0.02673510187957486
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P0_inloop_reference_train_seed_34",
+      "fault_seen": true,
+      "final_distance": 0.04726443091624536,
+      "max_command_torque": 40.0,
+      "max_speed": 5.6722670738232175,
+      "reward": -69.46488312742721,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 78,
+      "success": true
+    },
+    "identity": {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_34/best.pt",
+      "sha256": "8935a715fff3ef26e1d37aaa1e9f804135e9b667c31f9cfc624ea62916fc2057",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -417.1452540160761,
+      "candidate_constraint_violation_fraction": 0.21794871794871795,
+      "candidate_constraint_violation_steps": 17,
+      "command_attempts": 78,
+      "controller": "P0_inloop_reference_train_seed_34",
+      "executed_constraint_margin_min": -7.105427357601002e-15,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 78,
+      "safety_correction_max": 34.9097521769634,
+      "safety_correction_mean": 5.492153768203227,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.21794871794871795,
+      "safety_intervention_steps": 17,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 79,
+      "steps": 78,
+      "success": true,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.04726443091624536,
+      "final_speed_rad_s": 0.24910117753747954,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.04726443091624536,
+      "minimum_distance_m": 0.04726443091624536,
+      "off_target_stop": false,
+      "outcome": "success",
+      "tail50": {
+        "distance_m": {
+          "max": 0.6474081081042262,
+          "mean": 0.21752450740767135,
+          "median": 0.1311789754129819
+        },
+        "distance_range_m": 0.6001436771879809,
+        "net_norm": {
+          "max": 10.71167455981014,
+          "rms": 4.485812222218422
+        },
+        "qdd_norm": {
+          "max": 14.800108650896078,
+          "rms": 5.959581281540107
+        },
+        "speed_rad_s": {
+          "max": 2.7531211443083348,
+          "mean": 1.0061281166283529,
+          "median": 0.9069311050626174
+        },
+        "state_range": [
+          0.7837316326032107,
+          0.4440067793486495,
+          2.4010335338493567,
+          1.9151685776825782
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "fault_seen": true,
+      "final_distance": 0.12035793092173663,
+      "max_command_torque": 40.0,
+      "max_speed": 5.6722791488636455,
+      "reward": -110.22786282157928,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_30/best.pt",
+      "sha256": "c97050eb309b7b2571da768b127d91a65daa155e2fe967912f80a0d085440fd4",
+      "training_seed": 30
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -412.09013589842203,
+      "candidate_constraint_violation_fraction": 0.056,
+      "candidate_constraint_violation_steps": 14,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_30",
+      "executed_constraint_margin_min": -1.4210854715202004e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 30.83216545132929,
+      "safety_correction_mean": 1.0335286869669582,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.056,
+      "safety_intervention_steps": 14,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.12035793092173663,
+      "final_speed_rad_s": 8.726249211942497e-06,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.11762398678233552,
+      "minimum_distance_m": 0.11762398678233552,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.12035793092173663,
+          "mean": 0.1203544624486185,
+          "median": 0.12035523242045802
+        },
+        "distance_range_m": 9.982957548365645e-06,
+        "net_norm": {
+          "max": 0.00011028527636922216,
+          "rms": 5.504032189329709e-05
+        },
+        "qdd_norm": {
+          "max": 0.00014071105602163442,
+          "rms": 7.015774308972972e-05
+        },
+        "speed_rad_s": {
+          "max": 6.408780071598443e-05,
+          "mean": 2.7994054460163687e-05,
+          "median": 2.3757017400626163e-05
+        },
+        "state_range": [
+          1.806579847896117e-05,
+          2.0409317152525475e-05,
+          3.6679466904790254e-05,
+          4.146709625438304e-05
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "fault_seen": true,
+      "final_distance": 0.04778558141275102,
+      "max_command_torque": 40.0,
+      "max_speed": 5.6722670738232175,
+      "reward": -74.89367538559098,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 67,
+      "success": true
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_31/best.pt",
+      "sha256": "eecbbe05ac2ee3ac26b69b6e25f0269b41f19144ae2f320819b7e5f19ce5d41b",
+      "training_seed": 31
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -269.84778194703773,
+      "candidate_constraint_violation_fraction": 0.26865671641791045,
+      "candidate_constraint_violation_steps": 18,
+      "command_attempts": 67,
+      "controller": "P1_inloop_half_penalty_train_seed_31",
+      "executed_constraint_margin_min": -7.105427357601002e-15,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 67,
+      "safety_correction_max": 24.313694677953514,
+      "safety_correction_mean": 3.96267321742125,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.26865671641791045,
+      "safety_intervention_steps": 18,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 68,
+      "steps": 67,
+      "success": true,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.04778558141275102,
+      "final_speed_rad_s": 0.18573759362399203,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.04778558141275102,
+      "minimum_distance_m": 0.04778558141275102,
+      "off_target_stop": false,
+      "outcome": "success",
+      "tail50": {
+        "distance_m": {
+          "max": 1.7045687326548356,
+          "mean": 0.5918289464139542,
+          "median": 0.4591165970749345
+        },
+        "distance_range_m": 1.6567831512420845,
+        "net_norm": {
+          "max": 38.163442219410435,
+          "rms": 11.301216138633484
+        },
+        "qdd_norm": {
+          "max": 60.335118459372666,
+          "rms": 15.584347198393335
+        },
+        "speed_rad_s": {
+          "max": 3.7580141290345184,
+          "mean": 1.5947032723084802,
+          "median": 1.069593545474723
+        },
+        "state_range": [
+          1.4709666859434234,
+          0.19881626992390755,
+          3.7237180566141657,
+          3.3455071488077563
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "fault_seen": true,
+      "final_distance": 0.12409397105425478,
+      "max_command_torque": 40.0,
+      "max_speed": 5.6722670738232175,
+      "reward": -105.42011059646724,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_32/best.pt",
+      "sha256": "7c7965c2bca07d03916ad484eeae2a5e31140084247411b5c8b302d7ecbaa436",
+      "training_seed": 32
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -364.81560243086267,
+      "candidate_constraint_violation_fraction": 0.072,
+      "candidate_constraint_violation_steps": 18,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_32",
+      "executed_constraint_margin_min": -7.105427357601002e-15,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 31.44970605382522,
+      "safety_correction_mean": 1.0540543788411867,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.072,
+      "safety_intervention_steps": 18,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.12409397105425478,
+      "final_speed_rad_s": 2.2092321910003246e-08,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.10220824730108921,
+      "minimum_distance_m": 0.10220824730108921,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.12409397737067594,
+          "mean": 0.12409397475654982,
+          "median": 0.1240939752656367
+        },
+        "distance_range_m": 6.498981269809079e-09,
+        "net_norm": {
+          "max": 7.314384438870915e-07,
+          "rms": 4.57240530791782e-07
+        },
+        "qdd_norm": {
+          "max": 1.0765141326107633e-06,
+          "rms": 6.839777220835417e-07
+        },
+        "speed_rad_s": {
+          "max": 5.063289004053066e-08,
+          "mean": 2.3331098021171754e-08,
+          "median": 2.3723535763848232e-08
+        },
+        "state_range": [
+          5.567542871176556e-09,
+          1.0049595378092135e-08,
+          4.73256925720101e-08,
+          9.112552928956826e-08
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "fault_seen": true,
+      "final_distance": 0.04955512358031374,
+      "max_command_torque": 40.0,
+      "max_speed": 5.672435803721825,
+      "reward": -74.2378825175586,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 113,
+      "success": true
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_33/best.pt",
+      "sha256": "e35740cebeaf67230a03d62c7fc12141a2267fbcace1d73e2939ea0272d17a39",
+      "training_seed": 33
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -347.57667130917116,
+      "candidate_constraint_violation_fraction": 0.12389380530973451,
+      "candidate_constraint_violation_steps": 14,
+      "command_attempts": 113,
+      "controller": "P1_inloop_half_penalty_train_seed_33",
+      "executed_constraint_margin_min": -4.973799150320701e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 113,
+      "safety_correction_max": 29.545543332979676,
+      "safety_correction_mean": 2.623446159567503,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.12389380530973451,
+      "safety_intervention_steps": 14,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 114,
+      "steps": 113,
+      "success": true,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.04955512358031374,
+      "final_speed_rad_s": 0.021620488999891954,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.04955512358031374,
+      "minimum_distance_m": 0.04955512358031374,
+      "off_target_stop": false,
+      "outcome": "success",
+      "tail50": {
+        "distance_m": {
+          "max": 0.07544838191605276,
+          "mean": 0.06607559338159102,
+          "median": 0.06843782977174209
+        },
+        "distance_range_m": 0.025893258335739015,
+        "net_norm": {
+          "max": 0.8621349003879015,
+          "rms": 0.4144685311287465
+        },
+        "qdd_norm": {
+          "max": 1.283990613153955,
+          "rms": 0.49246879395968973
+        },
+        "speed_rad_s": {
+          "max": 0.21789611374855722,
+          "mean": 0.10192277611780357,
+          "median": 0.10459659766678112
+        },
+        "state_range": [
+          0.06893358756098045,
+          0.04917667823720495,
+          0.20002444670756545,
+          0.2039872223629268
+        ]
+      }
+    }
+  },
+  {
+    "episode": {
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "fault_seen": true,
+      "final_distance": 0.09015392043045614,
+      "max_command_torque": 40.0,
+      "max_speed": 5.6722670738232175,
+      "reward": -100.98422751936914,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "steps": 250,
+      "success": false
+    },
+    "identity": {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_34/best.pt",
+      "sha256": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+      "training_seed": 34
+    },
+    "safety": {
+      "candidate_constraint_margin_min": -258.6409988950684,
+      "candidate_constraint_violation_fraction": 0.056,
+      "candidate_constraint_violation_steps": 14,
+      "command_attempts": 250,
+      "controller": "P1_inloop_half_penalty_train_seed_34",
+      "executed_constraint_margin_min": -4.085620730620576e-14,
+      "fault_seen": true,
+      "first_unsafe_observation": -1,
+      "joint_position_violation_max_rad": 0.0,
+      "joint_velocity_violation_max_rad_s": 0.0,
+      "normalized_violation_integral": 0.0,
+      "normalized_violation_max": 0.0,
+      "normalized_violation_mean": 0.0,
+      "safety_certified_steps": 250,
+      "safety_correction_max": 21.740547892550104,
+      "safety_correction_mean": 1.0130826870829979,
+      "safety_enabled": true,
+      "safety_infeasible": false,
+      "safety_intervention_fraction": 0.056,
+      "safety_intervention_steps": 14,
+      "scenario": "motor_fault",
+      "seed": 9802001,
+      "state_observations": 251,
+      "steps": 250,
+      "success": false,
+      "unsafe_entry_count": 0,
+      "unsafe_episode": false,
+      "unsafe_state_fraction": 0.0,
+      "unsafe_state_observations": 0
+    },
+    "summary": {
+      "final_distance_m": 0.09015392043045614,
+      "final_speed_rad_s": 4.019444293731295e-08,
+      "initial_distance_m": 2.819581155059455,
+      "minimum_callback_distance_m": 0.09014977018588702,
+      "minimum_distance_m": 0.09014977018588702,
+      "off_target_stop": true,
+      "outcome": "timeout",
+      "tail50": {
+        "distance_m": {
+          "max": 0.09015392043045614,
+          "mean": 0.09015376095944841,
+          "median": 0.09015384709305646
+        },
+        "distance_range_m": 6.908098645064253e-07,
+        "net_norm": {
+          "max": 7.63487642415339e-06,
+          "rms": 2.815643415102058e-06
+        },
+        "qdd_norm": {
+          "max": 1.3881399338115572e-05,
+          "rms": 5.524609964856933e-06
+        },
+        "speed_rad_s": {
+          "max": 3.484177227427864e-06,
+          "mean": 8.524046072275134e-07,
+          "median": 4.353216896298733e-07
+        },
+        "state_range": [
+          2.0016339297157515e-07,
+          7.887977115927924e-07,
+          1.1895557113506794e-06,
+          3.2432312049251877e-06
+        ]
+      }
+    }
+  }
+]

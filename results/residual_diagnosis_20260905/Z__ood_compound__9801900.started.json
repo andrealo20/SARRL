@@ -1,0 +1,10 @@
+{
+  "key": [
+    "Z",
+    "ood_compound",
+    9801900
+  ],
+  "manifest_sha256": "cb032e52ff66d00d8e1ab53a2036bdbe8b88e7750e9f2f148732ed559ae326e5",
+  "reserved_max_physical_steps": 250,
+  "status": "started"
+}

@@ -1,0 +1,23 @@
+{
+  "evaluated_retained_states": 100,
+  "input_hashes": {
+    "Z__id_reference__9801800.json": "25dabea54e9e4c8226e2de53249433d84893b1a7360deeddb72dd5002739fc32",
+    "Z__id_reference__9801801.json": "ed7249c88c62aff59d74f49bb235310140597aa2fb7e37ae07d06d11d35e7bd2",
+    "Z__motor_fault__9802000.json": "772c6b10571e16cecace597e91e81281ab7e4118635291663cacdf3158a313e2",
+    "Z__motor_fault__9802001.json": "ba0070e07ad962e17603252f0624e0a66dd450bcdd613897d6ec6227e90b2f41",
+    "Z__ood_compound__9801900.json": "0c8f91003381cb62636564e21e97a103af4744eaceab78804508a8cae67476cf",
+    "Z__ood_compound__9801901.json": "0c12880bbd6aba75ef04c6da968c3cd5bae50e90b0508a0282dd41127b3cce75"
+  },
+  "interpretation": "Algebraic decomposition on observed states; no counterfactual trajectories or stability proof.",
+  "new_inferences": 0,
+  "new_physical_steps": 0,
+  "new_resets": 0,
+  "source_hashes": {
+    "sarrl/controllers/computed_torque.py": "8b135135c07762db1676b201133fb2918b151856e506a89cf478531b95f79269",
+    "sarrl/dynamics/planar_arm.py": "96c848ef142bed931b69d2a97daaf4e1834a6cf838c75e509585a2fb45528f92",
+    "sarrl/envs/planar_reach.py": "7f2c9b58f2dde4b0bbd3b27bea7539de5845017551694ef29bc584253d95e2a1",
+    "sarrl/evaluation/residual_diagnosis.py": "9c556a7e4fb60fe2722bcdc4240c53f0cd1f3c925f212b87c21431cd31f8d771",
+    "sarrl/evaluation/safety_audit.py": "61e19f1696a91342395ef386f91417687de8a36cc1eba171da05f8a18882b9ba",
+    "sarrl/runtime/control_stack.py": "99527023d7f882c26361e9ce238ea371f8423b5314a910a43b5c3a0b22188b15"
+  }
+}

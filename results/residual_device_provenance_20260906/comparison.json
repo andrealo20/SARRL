@@ -1,0 +1,1742 @@
+[
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 1.1920928955078125e-06,
+      "residual": [
+        3.7611076831817627,
+        2.0240583419799805
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        3.761108160018921,
+        2.024059534072876
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      3.761108160018921,
+      2.024059534072876
+    ],
+    "scenario": "id_reference",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": true,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.773946285247803,
+        -7.9927825927734375
+      ],
+      "within_protocol_tolerance": true
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.773946285247803,
+        -7.9927825927734375
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      -7.773946285247803,
+      -7.9927825927734375
+    ],
+    "scenario": "id_reference",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": true,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.988122463226318,
+        -4.829676151275635
+      ],
+      "within_protocol_tolerance": true
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.988122463226318,
+        -4.829676151275635
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      -7.988122463226318,
+      -4.829676151275635
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.384185791015625e-07,
+      "residual": [
+        -7.534883499145508,
+        -0.054459743201732635
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.534883499145508,
+        -0.05445998162031174
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      -7.534883499145508,
+      -0.05445998162031174
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        -3.478008508682251,
+        6.772626876831055
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -3.478008270263672,
+        6.772627830505371
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      -3.478008270263672,
+      6.772627830505371
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.384185791015625e-07,
+      "residual": [
+        -7.997697830200195,
+        1.2712711095809937
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.997697830200195,
+        1.2712713479995728
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      -7.997697830200195,
+      1.2712713479995728
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-06,
+      "residual": [
+        -7.998651027679443,
+        5.074032783508301
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.998651027679443,
+        5.074028015136719
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      -7.998651027679443,
+      5.074028015136719
+    ],
+    "scenario": "id_reference",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": true,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.8043599128723145,
+        -7.923682689666748
+      ],
+      "within_protocol_tolerance": true
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.8043599128723145,
+        -7.923682689666748
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      -7.8043599128723145,
+      -7.923682689666748
+    ],
+    "scenario": "id_reference",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        -6.9341535568237305,
+        -6.750974178314209
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -6.934154033660889,
+        -6.750973224639893
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      -6.934154033660889,
+      -6.750973224639893
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 1.9073486328125e-06,
+      "residual": [
+        -6.2490105628967285,
+        -4.297065258026123
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -6.249012470245361,
+        -4.297063827514648
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      -6.249012470245361,
+      -4.297063827514648
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        -1.0953209400177002,
+        3.8787789344787598
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -1.095320463180542,
+        3.878779888153076
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      -1.095320463180542,
+      3.878779888153076
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.6226043701171875e-06,
+      "residual": [
+        -6.036996841430664,
+        -3.267958641052246
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -6.036996364593506,
+        -3.267961263656616
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      -6.036996364593506,
+      -3.267961263656616
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 1.9073486328125e-06,
+      "residual": [
+        -2.385180711746216,
+        7.550725936889648
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -2.385178804397583,
+        7.550725936889648
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      -2.385178804397583,
+      7.550725936889648
+    ],
+    "scenario": "id_reference",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        -4.155621528625488,
+        7.853052616119385
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -4.1556220054626465,
+        7.853052616119385
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      -4.1556220054626465,
+      7.853052616119385
+    ],
+    "scenario": "id_reference",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": true,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.97424840927124,
+        -7.99854040145874
+      ],
+      "within_protocol_tolerance": true
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.97424840927124,
+        -7.99854040145874
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      -7.97424840927124,
+      -7.99854040145874
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        5.5130615234375,
+        7.086531639099121
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        5.513060569763184,
+        7.086531639099121
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      5.513060569763184,
+      7.086531639099121
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 7.152557373046875e-07,
+      "residual": [
+        -2.3683054447174072,
+        6.391559600830078
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -2.36830472946167,
+        6.391559600830078
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      -2.36830472946167,
+      6.391559600830078
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        -7.733744144439697,
+        -7.929166316986084
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.733743667602539,
+        -7.929166316986084
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      -7.733743667602539,
+      -7.929166316986084
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": true,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        6.93105411529541,
+        7.942448139190674
+      ],
+      "within_protocol_tolerance": true
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        6.93105411529541,
+        7.942448139190674
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      6.93105411529541,
+      7.942448139190674
+    ],
+    "scenario": "id_reference",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": true,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        7.6956095695495605,
+        5.865690231323242
+      ],
+      "within_protocol_tolerance": true
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        7.6956095695495605,
+        5.865690231323242
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      7.6956095695495605,
+      5.865690231323242
+    ],
+    "scenario": "id_reference",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.86102294921875e-06,
+      "residual": [
+        5.998952865600586,
+        7.807798862457275
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        5.998950004577637,
+        7.807798862457275
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      5.998950004577637,
+      7.807798862457275
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 1.6689300537109375e-06,
+      "residual": [
+        -2.1706104278564453,
+        5.448949337005615
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -2.1706087589263916,
+        5.448949813842773
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      -2.1706087589263916,
+      5.448949813842773
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        0.4908411502838135,
+        4.270461559295654
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        0.49084022641181946,
+        4.270462512969971
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      0.49084022641181946,
+      4.270462512969971
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.384185791015625e-07,
+      "residual": [
+        2.8204522132873535,
+        -7.997758865356445
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        2.8204519748687744,
+        -7.997758865356445
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      2.8204519748687744,
+      -7.997758865356445
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.384185791015625e-07,
+      "residual": [
+        -3.777756929397583,
+        7.948103427886963
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -3.777757167816162,
+        7.948103427886963
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      -3.777757167816162,
+      7.948103427886963
+    ],
+    "scenario": "id_reference",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        7.630404949188232,
+        -5.087115287780762
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        7.630404949188232,
+        -5.0871148109436035
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      7.630404949188232,
+      -5.0871148109436035
+    ],
+    "scenario": "id_reference",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.6226043701171875e-06,
+      "residual": [
+        2.4920284748077393,
+        -0.6222531795501709
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        2.4920310974121094,
+        -0.6222531795501709
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      2.4920310974121094,
+      -0.6222531795501709
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        -5.5490593910217285,
+        3.4042160511016846
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -5.549060344696045,
+        3.4042162895202637
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      -5.549060344696045,
+      3.4042162895202637
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 1.5497207641601562e-06,
+      "residual": [
+        1.783966302871704,
+        6.2688822746276855
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        1.7839678525924683,
+        6.268881797790527
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      1.7839678525924683,
+      6.268881797790527
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P0_inloop_reference",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        -3.063302993774414,
+        1.9065265655517578
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -3.0633020401000977,
+        1.906526803970337
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      -3.0633020401000977,
+      1.906526803970337
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": true,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.915960788726807,
+        7.99800443649292
+      ],
+      "within_protocol_tolerance": true
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.915960788726807,
+        7.99800443649292
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      -7.915960788726807,
+      7.99800443649292
+    ],
+    "scenario": "id_reference",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        5.889892101287842,
+        -5.9466872215271
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        5.889893054962158,
+        -5.946686744689941
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      5.889893054962158,
+      -5.946686744689941
+    ],
+    "scenario": "id_reference",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        -7.3553361892700195,
+        -6.112390518188477
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.355335712432861,
+        -6.112390041351318
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      -7.355335712432861,
+      -6.112390041351318
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        -6.050826072692871,
+        -6.210379600524902
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -6.050826072692871,
+        -6.210378646850586
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      -6.050826072692871,
+      -6.210378646850586
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 1.1920928955078125e-06,
+      "residual": [
+        1.5312029123306274,
+        -3.7009665966033936
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        1.5312018394470215,
+        -3.700965404510498
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      1.5312018394470215,
+      -3.700965404510498
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.1457672119140625e-06,
+      "residual": [
+        -3.55642032623291,
+        -7.373673439025879
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -3.556422472000122,
+        -7.373673915863037
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      -3.556422472000122,
+      -7.373673915863037
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 30
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 3.814697265625e-06,
+      "residual": [
+        -5.033879280090332,
+        7.99834680557251
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -5.033883094787598,
+        7.99834680557251
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      -5.033883094787598,
+      7.99834680557251
+    ],
+    "scenario": "id_reference",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": true,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.999369144439697,
+        -7.110560894012451
+      ],
+      "within_protocol_tolerance": true
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.999369144439697,
+        -7.110560894012451
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      -7.999369144439697,
+      -7.110560894012451
+    ],
+    "scenario": "id_reference",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 3.814697265625e-06,
+      "residual": [
+        5.196219444274902,
+        -2.826024293899536
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        5.196223258972168,
+        -2.8260223865509033
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      5.196223258972168,
+      -2.8260223865509033
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        5.845365524291992,
+        -1.3015823364257812
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        5.845365047454834,
+        -1.3015824556350708
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      5.845365047454834,
+      -1.3015824556350708
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 1.9073486328125e-06,
+      "residual": [
+        1.6448391675949097,
+        3.38008451461792
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        1.6448410749435425,
+        3.3800840377807617
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      1.6448410749435425,
+      3.3800840377807617
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        5.921253204345703,
+        -5.693322658538818
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        5.921253204345703,
+        -5.693323612213135
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      5.921253204345703,
+      -5.693323612213135
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 31
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        -7.366814136505127,
+        5.722227096557617
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.366814613342285,
+        5.722227096557617
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      -7.366814613342285,
+      5.722227096557617
+    ],
+    "scenario": "id_reference",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        -7.584251880645752,
+        2.2730953693389893
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.584251403808594,
+        2.2730953693389893
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      -7.584251403808594,
+      2.2730953693389893
+    ],
+    "scenario": "id_reference",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        7.903537273406982,
+        7.537674903869629
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        7.903537273406982,
+        7.537674427032471
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      7.903537273406982,
+      7.537674427032471
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.86102294921875e-06,
+      "residual": [
+        2.123830556869507,
+        5.639614582061768
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        2.123833417892456,
+        5.639614105224609
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      2.123833417892456,
+      5.639614105224609
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 7.152557373046875e-07,
+      "residual": [
+        -1.195448398590088,
+        1.4835163354873657
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -1.195448875427246,
+        1.483517050743103
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      -1.195448875427246,
+      1.483517050743103
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        7.898715972900391,
+        7.279634952545166
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        7.898715972900391,
+        7.279635429382324
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      7.898715972900391,
+      7.279635429382324
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 32
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 2.384185791015625e-06,
+      "residual": [
+        -7.234668731689453,
+        6.018152713775635
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.234668731689453,
+        6.018150329589844
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      -7.234668731689453,
+      6.018150329589844
+    ],
+    "scenario": "id_reference",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        7.137371063232422,
+        5.614742279052734
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        7.1373701095581055,
+        5.614742279052734
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      7.1373701095581055,
+      5.614742279052734
+    ],
+    "scenario": "id_reference",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        -7.672337055206299,
+        -0.7560969591140747
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.672337055206299,
+        -0.7560964822769165
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      -7.672337055206299,
+      -0.7560964822769165
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        7.542995929718018,
+        4.7375264167785645
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        7.542995929718018,
+        4.737525463104248
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      7.542995929718018,
+      4.737525463104248
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        -7.94767427444458,
+        5.3119378089904785
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.94767427444458,
+        5.311938285827637
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      -7.94767427444458,
+      5.311938285827637
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        -7.94147253036499,
+        1.0271167755126953
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.94147253036499,
+        1.0271177291870117
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      -7.94147253036499,
+      1.0271177291870117
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 33
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 3.5762786865234375e-06,
+      "residual": [
+        -1.615851640701294,
+        -0.03262488171458244
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -1.6158480644226074,
+        -0.032623451203107834
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801800,
+    "historical_residual": [
+      -1.6158480644226074,
+      -0.032623451203107834
+    ],
+    "scenario": "id_reference",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        2.091304063796997,
+        4.643767356872559
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        2.091303825378418,
+        4.643766403198242
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801801,
+    "historical_residual": [
+      2.091303825378418,
+      4.643766403198242
+    ],
+    "scenario": "id_reference",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        1.771546721458435,
+        -4.119151592254639
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        1.771546721458435,
+        -4.119152069091797
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801900,
+    "historical_residual": [
+      1.771546721458435,
+      -4.119152069091797
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 9.5367431640625e-07,
+      "residual": [
+        -7.626810550689697,
+        -2.1465187072753906
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -7.626810073852539,
+        -2.146519660949707
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9801901,
+    "historical_residual": [
+      -7.626810073852539,
+      -2.146519660949707
+    ],
+    "scenario": "ood_compound",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 4.76837158203125e-07,
+      "residual": [
+        -3.224583625793457,
+        2.159339666366577
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        -3.2245841026306152,
+        2.159339666366577
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802000,
+    "historical_residual": [
+      -3.2245841026306152,
+      2.159339666366577
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 34
+  },
+  {
+    "backends_identical": false,
+    "condition": "P1_inloop_half_penalty",
+    "cpu": {
+      "exact": false,
+      "max_abs_error": 1.9073486328125e-06,
+      "residual": [
+        5.241708755493164,
+        -2.7946438789367676
+      ],
+      "within_protocol_tolerance": false
+    },
+    "cuda": {
+      "exact": true,
+      "max_abs_error": 0.0,
+      "residual": [
+        5.241706848144531,
+        -2.794644355773926
+      ],
+      "within_protocol_tolerance": true
+    },
+    "episode_seed": 9802001,
+    "historical_residual": [
+      5.241706848144531,
+      -2.794644355773926
+    ],
+    "scenario": "motor_fault",
+    "training_seed": 34
+  }
+]

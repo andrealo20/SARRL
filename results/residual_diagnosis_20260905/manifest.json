@@ -1,0 +1,167 @@
+{
+  "amendment_sha256": "d8766a16dcee3f78fd54d96ed8a3565936b99a9922b3ffba29e208488a66283e",
+  "cases": {
+    "id_reference": [
+      9801800,
+      9801801
+    ],
+    "motor_fault": [
+      9802000,
+      9802001
+    ],
+    "ood_compound": [
+      9801900,
+      9801901
+    ]
+  },
+  "episodes": 66,
+  "execution": {
+    "actor_device": "cuda:0",
+    "actor_dtype": "float32",
+    "cuda_matmul_allow_tf32": false,
+    "cuda_runtime": "13.0",
+    "cudnn_allow_tf32": true,
+    "filter_device": "cpu",
+    "float32_matmul_precision": "highest",
+    "gpu_capability": [
+      8,
+      9
+    ],
+    "gpu_name": "NVIDIA GeForce RTX 4080 Laptop GPU",
+    "interop_threads": 1,
+    "intraop_threads": 1,
+    "plant_device": "cpu",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    },
+    "torch": "2.12.0+cu130"
+  },
+  "exploratory": true,
+  "history_sha256": "133a8049918b2d955ec6dc9a6803fd816f63f9035dcd2219ff2320f1d1a0566b",
+  "inventory_sha256": "78f359c13e3146d5b383c522d00809149403af92ed06839895ccf24f47a1754f",
+  "max_physical_steps": 16500,
+  "models": [
+    {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_30/best.pt",
+      "sha256": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+      "training_seed": 30
+    },
+    {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_31/best.pt",
+      "sha256": "1f263db609a037eaa32fa4456e13c50f4d4a72fe1edfd4dcfa1d0089a49b4a0b",
+      "training_seed": 31
+    },
+    {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_32/best.pt",
+      "sha256": "6b4970cca9e4b8e516af48dfa96099e171879cb80ae5690b59b06beced14a9d8",
+      "training_seed": 32
+    },
+    {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_33/best.pt",
+      "sha256": "d25156bd1b6d41928cbb732af597d4fa3dc20e6e20db49758e578b9cdb0894ae",
+      "training_seed": 33
+    },
+    {
+      "condition": "P0_inloop_reference",
+      "path": "results/penalty_ablation/training/P0_inloop_reference/seed_34/best.pt",
+      "sha256": "8935a715fff3ef26e1d37aaa1e9f804135e9b667c31f9cfc624ea62916fc2057",
+      "training_seed": 34
+    },
+    {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_30/best.pt",
+      "sha256": "c97050eb309b7b2571da768b127d91a65daa155e2fe967912f80a0d085440fd4",
+      "training_seed": 30
+    },
+    {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_31/best.pt",
+      "sha256": "eecbbe05ac2ee3ac26b69b6e25f0269b41f19144ae2f320819b7e5f19ce5d41b",
+      "training_seed": 31
+    },
+    {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_32/best.pt",
+      "sha256": "7c7965c2bca07d03916ad484eeae2a5e31140084247411b5c8b302d7ecbaa436",
+      "training_seed": 32
+    },
+    {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_33/best.pt",
+      "sha256": "e35740cebeaf67230a03d62c7fc12141a2267fbcace1d73e2939ea0272d17a39",
+      "training_seed": 33
+    },
+    {
+      "condition": "P1_inloop_half_penalty",
+      "path": "results/penalty_ablation/training/P1_inloop_half_penalty/seed_34/best.pt",
+      "sha256": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+      "training_seed": 34
+    }
+  ],
+  "protocol_sha256": "1fbd0dac205468ee463bde9f08eb6be096c67480b1632f3f5413652db528bf56",
+  "runtime": {
+    "cuda_available": true,
+    "git_commit": "552f66b9e5f5b36f2fbab7e92c57a082be0011d1",
+    "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "torch": "2.12.0+cu130"
+  },
+  "schema_version": 2,
+  "source_hashes": {
+    "pyproject.toml": "864839c96ea712587aaa80163e1c64d7fa8df171745ba339be796b5dc187ba1f",
+    "sarrl/__init__.py": "4697b75e78e88cf52b3650330cf5bef9253a0b816cb93ab2859a854eb6adf940",
+    "sarrl/adaptation/__init__.py": "66fc36cae9f8bf5ea72eb23b84e57c76e3760814d366a1cb4777ae86c610c453",
+    "sarrl/adaptation/context.py": "bac3467ac00109eb630e7b82c1e7f9938463e3c03ad2ab42db2efe46fe5d862c",
+    "sarrl/controllers/__init__.py": "38732d29f5d82c9277a9e8a726ca2b9c95716d79f53533e4208bd68d8f98d3e6",
+    "sarrl/controllers/computed_torque.py": "8b135135c07762db1676b201133fb2918b151856e506a89cf478531b95f79269",
+    "sarrl/controllers/mpc.py": "af6103828a848ff44662b8bf5f3271cb9baf4480466ead66e60aad8a0e672d7b",
+    "sarrl/dynamics/__init__.py": "cf2d12f8f178d8329e23bf14ad63ceeb4803485345b4b33c84c8531f815e0ec6",
+    "sarrl/dynamics/planar_arm.py": "96c848ef142bed931b69d2a97daaf4e1834a6cf838c75e509585a2fb45528f92",
+    "sarrl/envs/__init__.py": "842e3dc7f663ec9d842ac41b778b9cc9337468f5b31fccdca3734e6c9691770e",
+    "sarrl/envs/planar_reach.py": "7f2c9b58f2dde4b0bbd3b27bea7539de5845017551694ef29bc584253d95e2a1",
+    "sarrl/envs/safety_projected.py": "65837180b94a73a0a50878e72345d902058c75b5b2b4179f1deb139dfe08c9d2",
+    "sarrl/evaluation/__init__.py": "64a88bfcdc20eed48352f8bf0f85c9d3c83377c1c5d7e5d679ce8ee95d7450b2",
+    "sarrl/evaluation/calibration_artifact.py": "ac77678b6a1a8a1df27769745ad163240309107eabb25c34a6e58f7e1daabacf",
+    "sarrl/evaluation/gate_calibration.py": "dbdb1dcb979f4dea0fd108a988da703cd77b85e429b1305a41f29e017e29d17e",
+    "sarrl/evaluation/gated.py": "73a38a30ec57750a1984b6940d913935bda22dea04485b223d5451efa4774ee3",
+    "sarrl/evaluation/planar_v12.py": "f20040e6d5a2b5ff80d1cf619bd82db197210eb5136e2c7e65e4c3ee2f6a6636",
+    "sarrl/evaluation/planar_v13.py": "fd4073b948618fc928aa088b50ce336517543c65e48a6fbd6910fdf1a99d06a1",
+    "sarrl/evaluation/planar_v14.py": "8fff84d4603322b51cc96fbb631bd9754e0ce0e387790b98389ea55e02417636",
+    "sarrl/evaluation/planar_v15.py": "4cad1ae6a4b5b611a0a31a842f4166a07cf74df6dd5ba87256cf37e3a20ae27b",
+    "sarrl/evaluation/planar_v17.py": "42c898eadc1571898a4e28ab224e86f428aaf3f6325f42176abf5bef85d0aabe",
+    "sarrl/evaluation/planar_v18.py": "740233a8f525cda4ad12302717270556b6f8099f7bb9853a0328f4a8bb4a06e9",
+    "sarrl/evaluation/policy.py": "78a0ffec03230069d8bc968f65f36d2f4f1535db9513f2e370767ab8fe97ca06",
+    "sarrl/evaluation/protocol.py": "4713df4246fb709823f0ca6c6ddc23b90f503544799fc01503f71db934974190",
+    "sarrl/evaluation/provenance.py": "e86fa4677276b035f0de0e75faf7e5e563ea129340c454667bbeea0edd3723c4",
+    "sarrl/evaluation/residual_diagnosis.py": "9c556a7e4fb60fe2722bcdc4240c53f0cd1f3c925f212b87c21431cd31f8d771",
+    "sarrl/evaluation/safety_audit.py": "61e19f1696a91342395ef386f91417687de8a36cc1eba171da05f8a18882b9ba",
+    "sarrl/evaluation/stacked.py": "281fe5f6ce0142e41634c5ecc2c7c956e96bbf8121722fa8fe70a96c257f27d5",
+    "sarrl/models/__init__.py": "b4430cd8f82c18bd667b87e59e6843d9af17ae58ac0ea843485294040bef8943",
+    "sarrl/models/residual_dynamics.py": "4058c887a3833eecc73cb4598f281b194ac14851bd2b32f7153a5fcb4c0c5ab3",
+    "sarrl/rl/__init__.py": "a62befed89ffa1990993a38fcd9465496cb9560fbf2d3481f86822adb0f872f3",
+    "sarrl/rl/networks.py": "cf3bd42541919b9c792258a82a02c86d9e74bf0eae36d43964b858fa2ba0dc5b",
+    "sarrl/rl/replay_buffer.py": "87b066c849ca825315c9c91d467cd190823cf7aa088993dc0a52ce3fdfad215f",
+    "sarrl/rl/sac.py": "1eeeab5bc401340e022a85a7039508e4900e89c9ab6416148f6d13138a2053bd",
+    "sarrl/rl/training_checkpoint.py": "78de5cc582604ba171708748b68fbf772385fe7102392107faa8ca6057c6416c",
+    "sarrl/runtime/__init__.py": "02d39a8c00d27444a49ddfba9a0c1624020bde21dc00e40c64ee416d5c9d97a5",
+    "sarrl/runtime/control_stack.py": "99527023d7f882c26361e9ce238ea371f8423b5314a910a43b5c3a0b22188b15",
+    "sarrl/safety/__init__.py": "9a0970e14d1c041904aec5d60c15c57a7b55d940746ee2163a1bddee362ec7eb",
+    "sarrl/safety/filter.py": "1f7842bc184aa5c6895dda3d2f180f2df6fc554d99f30114da84665a9782ad2e",
+    "sarrl/utils/__init__.py": "7259dfc0370c3789c7fb621677b13d963e63606c1525ad90eac5643128844468",
+    "sarrl/utils/seeding.py": "87abee3c285a131eb8f433d3772c2ca7e6985ec57d2f6d6b545a8dd9778dbf24",
+    "sarrl/utils/spaces.py": "cb01aa2330a60d11dc4b06cbb73972bd02e4d8893aa340d883a7522b05aa694a",
+    "tools/run_residual_diagnosis.py": "c09161bb3c638767920b0b8a4c9e9b4fb917083222cff4b9683587740fd5e837"
+  },
+  "training": false,
+  "workers": 1
+}

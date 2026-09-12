@@ -1,0 +1,62 @@
+{
+  "command_attempts": 2734,
+  "decision": "no_go_safety",
+  "motivating_cases_succeeded": true,
+  "output_hashes_verified": 39,
+  "paired_initial_states_and_rng_exact": true,
+  "physical_steps": 2733,
+  "reference_parity": [
+    {
+      "all_common_fields_exact": true,
+      "all_common_fields_passed": true,
+      "scenario": "id_reference",
+      "seed": 9801800
+    },
+    {
+      "all_common_fields_exact": true,
+      "all_common_fields_passed": true,
+      "scenario": "id_reference",
+      "seed": 9801801
+    },
+    {
+      "all_common_fields_exact": true,
+      "all_common_fields_passed": true,
+      "scenario": "ood_compound",
+      "seed": 9801900
+    },
+    {
+      "all_common_fields_exact": true,
+      "all_common_fields_passed": true,
+      "scenario": "ood_compound",
+      "seed": 9801901
+    },
+    {
+      "all_common_fields_exact": true,
+      "all_common_fields_passed": true,
+      "scenario": "motor_fault",
+      "seed": 9802000
+    },
+    {
+      "all_common_fields_exact": true,
+      "all_common_fields_passed": true,
+      "scenario": "motor_fault",
+      "seed": 9802001
+    }
+  ],
+  "simulator_calls": 0,
+  "source_complete_sha256": "989221d9a07fea14716f67d9b3b4eeef28e01833ad0e049ea0fdfd9017c14f47",
+  "source_hashes_verified": 47,
+  "torque_decomposition_max_absolute_error": 7.105427357601002e-15,
+  "valid_episodes": 12,
+  "vetoes": [
+    {
+      "I1_max": 0.40266414605863565,
+      "R0_max": 0.32665589625237024,
+      "reasons": [
+        "increased_maximum_violation"
+      ],
+      "scenario": "motor_fault",
+      "seed": 9802000
+    }
+  ]
+}

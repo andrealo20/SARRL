@@ -1,0 +1,14 @@
+{
+  "input_hashes": {
+    "I1__motor_fault__9802000.json": "8c1db541b1d500fa61b809ee717eef5b195d10549273dc0beba8aec30f7e6483",
+    "R0__motor_fault__9802000.json": "20ead0be213dace896ede9d61a4fd528802d54e18d7cd198325df777e2a47133"
+  },
+  "max_acceleration_decomposition_error": 1.1368683772161603e-13,
+  "max_nominal_barrier_reconstruction_error": 3.197442310920451e-14,
+  "new_episodes": 0,
+  "new_filter_calls": 0,
+  "new_physical_steps": 0,
+  "saved_transitions_read": 500,
+  "source_complete_sha256": "989221d9a07fea14716f67d9b3b4eeef28e01833ad0e049ea0fdfd9017c14f47",
+  "source_hashes_verified": 47
+}

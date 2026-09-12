@@ -1,0 +1,12 @@
+{
+  "backends_identical": 8,
+  "cases": 60,
+  "cpu_exact": 8,
+  "cpu_only_exact": 0,
+  "cuda_exact": 60,
+  "cuda_only_exact": 52,
+  "forward_passes": 120,
+  "neither_exact": 0,
+  "physical_steps": 0,
+  "resets": 6
+}

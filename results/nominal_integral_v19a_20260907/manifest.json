@@ -1,0 +1,164 @@
+{
+  "cells": [
+    [
+      "R0",
+      "id_reference",
+      9801800
+    ],
+    [
+      "I1",
+      "id_reference",
+      9801800
+    ],
+    [
+      "R0",
+      "id_reference",
+      9801801
+    ],
+    [
+      "I1",
+      "id_reference",
+      9801801
+    ],
+    [
+      "R0",
+      "ood_compound",
+      9801900
+    ],
+    [
+      "I1",
+      "ood_compound",
+      9801900
+    ],
+    [
+      "R0",
+      "ood_compound",
+      9801901
+    ],
+    [
+      "I1",
+      "ood_compound",
+      9801901
+    ],
+    [
+      "R0",
+      "motor_fault",
+      9802000
+    ],
+    [
+      "I1",
+      "motor_fault",
+      9802000
+    ],
+    [
+      "R0",
+      "motor_fault",
+      9802001
+    ],
+    [
+      "I1",
+      "motor_fault",
+      9802001
+    ]
+  ],
+  "episodes": 12,
+  "execution": {
+    "controller_dtype": "float64",
+    "device": "cpu",
+    "interop_threads": 1,
+    "intraop_threads": 1,
+    "observation_dtype": "float32",
+    "thread_environment": {
+      "MKL_NUM_THREADS": "1",
+      "NUMEXPR_NUM_THREADS": "1",
+      "OMP_NUM_THREADS": "1",
+      "OPENBLAS_NUM_THREADS": "1"
+    },
+    "workers": 1
+  },
+  "experiment": "v1.9-A",
+  "exploratory": true,
+  "history_complete_sha256": "76961ce34cc81aff4df6d8db227409f12140003cef2eac730345a3f1dede8c18",
+  "history_hashes": {
+    "Z__id_reference__9801800.json": "25dabea54e9e4c8226e2de53249433d84893b1a7360deeddb72dd5002739fc32",
+    "Z__id_reference__9801801.json": "ed7249c88c62aff59d74f49bb235310140597aa2fb7e37ae07d06d11d35e7bd2",
+    "Z__motor_fault__9802000.json": "772c6b10571e16cecace597e91e81281ab7e4118635291663cacdf3158a313e2",
+    "Z__motor_fault__9802001.json": "ba0070e07ad962e17603252f0624e0a66dd450bcdd613897d6ec6227e90b2f41",
+    "Z__ood_compound__9801900.json": "0c8f91003381cb62636564e21e97a103af4744eaceab78804508a8cae67476cf",
+    "Z__ood_compound__9801901.json": "0c12880bbd6aba75ef04c6da968c3cd5bae50e90b0508a0282dd41127b3cce75"
+  },
+  "max_episode_steps": 250,
+  "max_physical_steps": 3000,
+  "parameters": {
+    "dt": 0.02,
+    "kaw": 4.0,
+    "kd": 12.0,
+    "ki": 36.0,
+    "kp": 36.0,
+    "torque_limit": 40.0,
+    "z_limit": 36.0
+  },
+  "protocol_sha256": "3af217b1ef351a6f02a02545dd0bfa4742fc7d50efde55b7eab98c2a1084090c",
+  "runtime": {
+    "cuda_available": true,
+    "git_commit": "552f66b9e5f5b36f2fbab7e92c57a082be0011d1",
+    "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "torch": "2.12.0+cu130"
+  },
+  "schema_version": 1,
+  "source_hashes": {
+    "pyproject.toml": "864839c96ea712587aaa80163e1c64d7fa8df171745ba339be796b5dc187ba1f",
+    "sarrl/__init__.py": "4697b75e78e88cf52b3650330cf5bef9253a0b816cb93ab2859a854eb6adf940",
+    "sarrl/adaptation/__init__.py": "66fc36cae9f8bf5ea72eb23b84e57c76e3760814d366a1cb4777ae86c610c453",
+    "sarrl/adaptation/context.py": "bac3467ac00109eb630e7b82c1e7f9938463e3c03ad2ab42db2efe46fe5d862c",
+    "sarrl/controllers/__init__.py": "38732d29f5d82c9277a9e8a726ca2b9c95716d79f53533e4208bd68d8f98d3e6",
+    "sarrl/controllers/computed_torque.py": "8b135135c07762db1676b201133fb2918b151856e506a89cf478531b95f79269",
+    "sarrl/controllers/integral_nominal.py": "328404153b6cb4a855f014936c5deb1fbc052ef51ac40d411384f5d038600802",
+    "sarrl/controllers/mpc.py": "af6103828a848ff44662b8bf5f3271cb9baf4480466ead66e60aad8a0e672d7b",
+    "sarrl/dynamics/__init__.py": "cf2d12f8f178d8329e23bf14ad63ceeb4803485345b4b33c84c8531f815e0ec6",
+    "sarrl/dynamics/planar_arm.py": "96c848ef142bed931b69d2a97daaf4e1834a6cf838c75e509585a2fb45528f92",
+    "sarrl/envs/__init__.py": "842e3dc7f663ec9d842ac41b778b9cc9337468f5b31fccdca3734e6c9691770e",
+    "sarrl/envs/planar_reach.py": "7f2c9b58f2dde4b0bbd3b27bea7539de5845017551694ef29bc584253d95e2a1",
+    "sarrl/envs/safety_projected.py": "65837180b94a73a0a50878e72345d902058c75b5b2b4179f1deb139dfe08c9d2",
+    "sarrl/evaluation/__init__.py": "64a88bfcdc20eed48352f8bf0f85c9d3c83377c1c5d7e5d679ce8ee95d7450b2",
+    "sarrl/evaluation/calibration_artifact.py": "ac77678b6a1a8a1df27769745ad163240309107eabb25c34a6e58f7e1daabacf",
+    "sarrl/evaluation/gate_calibration.py": "dbdb1dcb979f4dea0fd108a988da703cd77b85e429b1305a41f29e017e29d17e",
+    "sarrl/evaluation/gated.py": "73a38a30ec57750a1984b6940d913935bda22dea04485b223d5451efa4774ee3",
+    "sarrl/evaluation/nominal_integral.py": "0b8daaf1c52f4d3183b423eee33a37964efc109978c85f7c8aed1192d4bcff72",
+    "sarrl/evaluation/planar_v12.py": "f20040e6d5a2b5ff80d1cf619bd82db197210eb5136e2c7e65e4c3ee2f6a6636",
+    "sarrl/evaluation/planar_v13.py": "fd4073b948618fc928aa088b50ce336517543c65e48a6fbd6910fdf1a99d06a1",
+    "sarrl/evaluation/planar_v14.py": "8fff84d4603322b51cc96fbb631bd9754e0ce0e387790b98389ea55e02417636",
+    "sarrl/evaluation/planar_v15.py": "4cad1ae6a4b5b611a0a31a842f4166a07cf74df6dd5ba87256cf37e3a20ae27b",
+    "sarrl/evaluation/planar_v17.py": "42c898eadc1571898a4e28ab224e86f428aaf3f6325f42176abf5bef85d0aabe",
+    "sarrl/evaluation/planar_v18.py": "740233a8f525cda4ad12302717270556b6f8099f7bb9853a0328f4a8bb4a06e9",
+    "sarrl/evaluation/policy.py": "78a0ffec03230069d8bc968f65f36d2f4f1535db9513f2e370767ab8fe97ca06",
+    "sarrl/evaluation/protocol.py": "4713df4246fb709823f0ca6c6ddc23b90f503544799fc01503f71db934974190",
+    "sarrl/evaluation/provenance.py": "e86fa4677276b035f0de0e75faf7e5e563ea129340c454667bbeea0edd3723c4",
+    "sarrl/evaluation/residual_diagnosis.py": "9c556a7e4fb60fe2722bcdc4240c53f0cd1f3c925f212b87c21431cd31f8d771",
+    "sarrl/evaluation/safety_audit.py": "61e19f1696a91342395ef386f91417687de8a36cc1eba171da05f8a18882b9ba",
+    "sarrl/evaluation/stacked.py": "281fe5f6ce0142e41634c5ecc2c7c956e96bbf8121722fa8fe70a96c257f27d5",
+    "sarrl/models/__init__.py": "b4430cd8f82c18bd667b87e59e6843d9af17ae58ac0ea843485294040bef8943",
+    "sarrl/models/residual_dynamics.py": "4058c887a3833eecc73cb4598f281b194ac14851bd2b32f7153a5fcb4c0c5ab3",
+    "sarrl/rl/__init__.py": "a62befed89ffa1990993a38fcd9465496cb9560fbf2d3481f86822adb0f872f3",
+    "sarrl/rl/networks.py": "cf3bd42541919b9c792258a82a02c86d9e74bf0eae36d43964b858fa2ba0dc5b",
+    "sarrl/rl/replay_buffer.py": "87b066c849ca825315c9c91d467cd190823cf7aa088993dc0a52ce3fdfad215f",
+    "sarrl/rl/sac.py": "1eeeab5bc401340e022a85a7039508e4900e89c9ab6416148f6d13138a2053bd",
+    "sarrl/rl/training_checkpoint.py": "78de5cc582604ba171708748b68fbf772385fe7102392107faa8ca6057c6416c",
+    "sarrl/runtime/__init__.py": "02d39a8c00d27444a49ddfba9a0c1624020bde21dc00e40c64ee416d5c9d97a5",
+    "sarrl/runtime/control_stack.py": "99527023d7f882c26361e9ce238ea371f8423b5314a910a43b5c3a0b22188b15",
+    "sarrl/safety/__init__.py": "9a0970e14d1c041904aec5d60c15c57a7b55d940746ee2163a1bddee362ec7eb",
+    "sarrl/safety/filter.py": "1f7842bc184aa5c6895dda3d2f180f2df6fc554d99f30114da84665a9782ad2e",
+    "sarrl/utils/__init__.py": "7259dfc0370c3789c7fb621677b13d963e63606c1525ad90eac5643128844468",
+    "sarrl/utils/seeding.py": "87abee3c285a131eb8f433d3772c2ca7e6985ec57d2f6d6b545a8dd9778dbf24",
+    "sarrl/utils/spaces.py": "cb01aa2330a60d11dc4b06cbb73972bd02e4d8893aa340d883a7522b05aa694a",
+    "tests/test_nominal_integral.py": "896fd7f302e78a740c06dee06a591aebbfd7861282da48ff315803f8c3613951",
+    "tools/run_nominal_integral.py": "b0e39f56ab6e13fba892e413c7ac37f66473453b7174a53b5b813fca158f72fc",
+    "tools/run_residual_diagnosis.py": "c09161bb3c638767920b0b8a4c9e9b4fb917083222cff4b9683587740fd5e837"
+  },
+  "technical_physical_steps": 0,
+  "training": false
+}

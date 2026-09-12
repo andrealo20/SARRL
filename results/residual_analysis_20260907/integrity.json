@@ -1,0 +1,22 @@
+{
+  "campaign_complete_sha256": "76961ce34cc81aff4df6d8db227409f12140003cef2eac730345a3f1dede8c18",
+  "command_attempts": 15585,
+  "decomposition_max_abs_error_nm": 7.105427357601002e-15,
+  "episodes": 66,
+  "historical_matches": 60,
+  "learned_outcomes": {
+    "abort": 2,
+    "success": 4,
+    "timeout": 54
+  },
+  "new_inferences_resets_or_physical_steps": 0,
+  "off_target_stops_learned": 15,
+  "off_target_stops_zero": 2,
+  "physical_steps": 15582,
+  "retained_hashes_verified": 203,
+  "unsafe_episodes": 23,
+  "zero_outcomes": {
+    "abort": 1,
+    "timeout": 5
+  }
+}

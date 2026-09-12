@@ -1,0 +1,9 @@
+{
+  "hashes": {
+    "analyze.py": "bd83493a98db73fb08ce60639530ad297cfb0e996fd1999fbce0d465cff04d06",
+    "episodes.json": "66ec3e31f4495c0b9400171544ded4fd6c771e328d76822887fe027202cbf3a1",
+    "integrity.json": "d3e47380f5f7b7a630e716c1e93019eedb4af448648a66f18bb37532b8818c38",
+    "report.md": "969f32c9a9cd6f7b4b9b342248d0cf055c57c63af1317e117f0274d263030ff3"
+  },
+  "source_complete_sha256": "989221d9a07fea14716f67d9b3b4eeef28e01833ad0e049ea0fdfd9017c14f47"
+}
