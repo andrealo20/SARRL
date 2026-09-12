@@ -723,3 +723,118 @@ failed. Compact outputs of the four analyses are retained under
 `results/nominal_integral_analysis_20260912/` and
 `results/integral_fault_static_review_20260912/`; the full per-episode
 transition records of the two campaigns remain local.
+
+## v1.9 adaptive nominal control
+
+The diagnosis after v1.8 located the dominant failure mode in the fixed model
+shared by the computed-torque nominal and the HOCBF certificate. v1.9 asks
+whether identifying the plant online, and giving the identified model to both
+the controller and the filter, recovers task success without weakening the
+safety envelope. No learned residual is involved and nothing is trained: the
+study compares two model-based controllers behind the same filter.
+
+### Controller under test
+
+`AdaptiveNominalController` identifies the plant in command coordinates.
+Dividing the joint-i torque equation by its motor gain leaves a relation that
+is linear in seven parameters per joint (two link masses, two inertias,
+payload, viscous and Coulomb friction, all scaled by `1 / g_i`) and whose
+left-hand side is the command the controller sent. A recursive least-squares
+estimator per joint runs on the finite-difference acceleration of the measured
+velocity, with the regressor at the midpoint state, a random-walk covariance
+term (`process_noise = 0.02` of the prior) so that an in-episode change is
+tracked, and a physical box on the estimates. One estimator per candidate
+actuator lag `0..3` runs in parallel; the lag with the smallest squared
+innovation accumulated over the episode supplies the parameters. The control
+law is the same PD in the virtual acceleration as the fixed nominal
+(`Kp = 36 I`, `Kd = 12 I`), mapped through the identified model.
+
+The HOCBF filter receives the identified model through a command-space view:
+the mass matrix has row i scaled by `1 / g_i`, so the affine acceleration map
+the filter linearises is the one from command to acceleration. Because the
+controller knows the commands still queued in the actuator and the identified
+lag, the state at which the new command will act is predicted by integrating
+the identified model over those commands, once the lag has at least ten
+updates behind it, and both the control law and the certificate are evaluated
+at that predicted state. The configuration is `AdaptiveNominalConfig()` with
+library defaults and `compensate_delay = True`; no parameter is changed after
+this section is committed.
+
+The estimator consumes only joint positions, velocities and its own sent
+commands. Plant parameters, motor gains and the true delay are read from the
+environment for diagnostics only and never enter the control path.
+
+### Design
+
+Four arms run on identical episode seeds, plant draws and targets:
+
+- `fixed`: the frozen computed-torque nominal, unfiltered;
+- `fixed_hocbf`: the same nominal behind the HOCBF on the nominal model;
+- `adaptive`: the adaptive nominal, unfiltered;
+- `adaptive_hocbf`: the adaptive nominal behind the HOCBF on the identified
+  model, with delay compensation.
+
+Seeds are `50000..50099` in each of the three v1.3 scenarios (`id_reference`,
+`ood_compound`, `motor_fault`), 100 episodes per arm and scenario, 1,200 in
+total. These are the seeds of the v1.3 and v1.4 campaigns, so the fixed arms
+reproduce retained evidence and the adaptive arms are scored on the same
+population the learned policies were scored on. None of them was opened by the
+pilot, which used `9801800..9802001` and `9803000..9803219`.
+
+The primary contrast is `adaptive_hocbf` minus `fixed_hocbf`. The two
+unfiltered arms are descriptive: they separate the effect of the model from
+the effect of the filter but carry no decision weight.
+
+### Endpoints and decision rule
+
+All contrasts are paired over episode seeds with a 10,000-draw percentile
+bootstrap seeded at `190000`. The rule is applied in this order:
+
+1. **Safety veto.** For each of the three scenarios, the paired difference in
+   unsafe-episode rate must have a 95% upper bound at or below `+2 pp`. Any
+   scenario above it yields `no_go_safety`, whatever the task result.
+2. **Primary endpoint.** The paired success difference must be at least
+   `+20 pp` with a 95% lower bound above zero in both `id_reference` and
+   `motor_fault`. Both met yields `go`.
+3. Otherwise `inconclusive`.
+
+Secondary, reported without decision weight: the success contrast under
+`ood_compound`; abort rates and their paired differences; intervention
+fractions; median final distances; maximum normalised violations; the
+fraction of adaptive episodes whose selected lag equals the true delay; and
+the per-joint RMS prediction error of the final estimate on fixed probe
+states.
+
+### What the pilot showed and what it did not
+
+The hypothesis was formed on the six diagnostic cases and refined on 60 fresh
+seeds outside every official range. On those 60 seeds `adaptive_hocbf` with
+delay compensation reached the target in 20/20 ID, 16/20 OOD and 19/20 fault
+episodes against 4/20, 0/20 and 0/20 for `fixed_hocbf`, with 0, 3 and 1
+unsafe episodes against 1, 2 and 3. Two of the OOD unsafe episodes exceeded
+the envelope by less than `1e-4` in normalised units. Delay compensation was
+added after tracing the pilot's worst OOD abort to a three-step queue; a
+payload prior and a convergence gate on the filter model were also tried and
+discarded. Those 60 seeds are therefore not evidence and are not reused.
+
+The OOD result is declared uncertain a priori: the pilot produced aborts
+there, and OOD carries the largest payload and the longest delays. Targets
+that lie close to a joint limit remain unreachable through the filter for
+either controller. The kinematic reference does not choose the joint
+representation inside the limits, so a target whose shorter angular path
+crosses a limit is blocked by the filter. The lag is identified but the
+nominal PD is not retuned for it, and the prediction relies on the identified
+model being adequate over at most three steps.
+
+### Commands and retained evidence
+
+```bash
+python tools/run_adaptive_campaign.py --output results/adaptive_nominal_v19
+```
+
+The runner refuses a non-empty output directory and a working tree with
+modified tracked files, writes `manifest.json` (protocol, source hashes, the
+hash of this document, runtime and commit) before the first episode, appends
+every episode to `episodes.jsonl`, and closes with `episodes.csv`,
+`decision.json` carrying the full analysis, and `complete.json` hashing every
+output. All of these are retained.
