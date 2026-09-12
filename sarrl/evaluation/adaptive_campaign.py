@@ -18,12 +18,17 @@ V19_PRIMARY_ARMS = ("fixed_hocbf", "adaptive_hocbf")
 V19_SCENARIOS = ("id_reference", "ood_compound", "motor_fault")
 V19_PRIMARY_SCENARIOS = ("id_reference", "motor_fault")
 V19_SEED_START = 50000
-V19_EPISODES_PER_CELL = 100
+V19_PRIMARY_EPISODES = 1000
+V19_DESCRIPTIVE_EPISODES = 100
 V19_BOOTSTRAP_DRAWS = 10_000
 V19_BOOTSTRAP_SEED = 190_000
 V19_SUCCESS_GAIN = 0.20
-V19_UNSAFE_MARGIN = 0.02
+V19_UNSAFE_MARGIN = 0.03
 V19_COMPENSATE_DELAY = True
+
+
+def v19_episodes(arm: str) -> int:
+    return V19_PRIMARY_EPISODES if arm in V19_PRIMARY_ARMS else V19_DESCRIPTIVE_EPISODES
 
 
 def v19_config() -> AdaptiveNominalConfig:
@@ -46,7 +51,8 @@ def v19_protocol_dict() -> dict:
             "metric": "success",
         },
         "seeds": {
-            scenario: [V19_SEED_START, V19_EPISODES_PER_CELL] for scenario in V19_SCENARIOS
+            arm: {scenario: [V19_SEED_START, v19_episodes(arm)] for scenario in V19_SCENARIOS}
+            for arm in V19_ARMS
         },
         "bootstrap": {
             "type": "paired_over_episode_seeds",
@@ -58,7 +64,12 @@ def v19_protocol_dict() -> dict:
             "safety_veto": {
                 "metric": "unsafe_episode",
                 "scenarios": list(V19_SCENARIOS),
-                "upper_95_limit": V19_UNSAFE_MARGIN,
+                "veto_if": "lower_95_above_zero_or_difference_above_margin",
+                "margin": V19_UNSAFE_MARGIN,
+            },
+            "non_inferiority_secondary": {
+                "metric": "unsafe_episode",
+                "upper_95_at_or_below": V19_UNSAFE_MARGIN,
             },
             "primary_success": {
                 "minimum_gain": V19_SUCCESS_GAIN,
@@ -85,9 +96,10 @@ def v19_protocol_dict() -> dict:
 def v19_cells():
     """Every (arm, scenario, seed) in the fixed order the runner executes."""
     for scenario in V19_SCENARIOS:
-        for offset in range(V19_EPISODES_PER_CELL):
+        for offset in range(V19_PRIMARY_EPISODES):
             for arm in V19_ARMS:
-                yield arm, scenario, V19_SEED_START + offset
+                if offset < v19_episodes(arm):
+                    yield arm, scenario, V19_SEED_START + offset
 
 
 def paired_difference(rows_treatment, rows_reference, metric, rng):
@@ -137,9 +149,10 @@ def analyze(episodes: list[PilotEpisode]) -> dict:
     expected = {(arm, scenario) for arm in V19_ARMS for scenario in V19_SCENARIOS}
     if set(by_cell) != expected:
         raise ValueError("campaign is incomplete: missing cells")
-    for key, rows in by_cell.items():
-        if len(rows) != V19_EPISODES_PER_CELL or len({r.seed for r in rows}) != len(rows):
-            raise ValueError(f"cell {key} does not hold {V19_EPISODES_PER_CELL} unique seeds")
+    for (arm, scenario), rows in by_cell.items():
+        wanted = {V19_SEED_START + offset for offset in range(v19_episodes(arm))}
+        if {r.seed for r in rows} != wanted or len(rows) != len(wanted):
+            raise ValueError(f"cell {(arm, scenario)} does not hold its {len(wanted)} seeds once")
 
     rng = np.random.default_rng(V19_BOOTSTRAP_SEED)
     summary = {f"{arm}/{scenario}": cell_summary(rows) for (arm, scenario), rows in by_cell.items()}
@@ -160,8 +173,13 @@ def analyze(episodes: list[PilotEpisode]) -> dict:
     vetoes = [
         scenario
         for scenario in V19_SCENARIOS
-        if contrasts[scenario]["unsafe_episode"]["ci95_high"] > V19_UNSAFE_MARGIN
+        if contrasts[scenario]["unsafe_episode"]["ci95_low"] > 0.0
+        or contrasts[scenario]["unsafe_episode"]["difference"] > V19_UNSAFE_MARGIN
     ]
+    non_inferior = {
+        scenario: bool(contrasts[scenario]["unsafe_episode"]["ci95_high"] <= V19_UNSAFE_MARGIN)
+        for scenario in V19_SCENARIOS
+    }
     primary_met = all(
         contrasts[s]["success"]["difference"] >= V19_SUCCESS_GAIN
         and contrasts[s]["success"]["ci95_low"] > 0.0
@@ -176,6 +194,7 @@ def analyze(episodes: list[PilotEpisode]) -> dict:
     return {
         "decision": decision,
         "safety_vetoes": vetoes,
+        "unsafe_non_inferior_at_margin": non_inferior,
         "primary_met": primary_met,
         "contrasts": contrasts,
         "summary": summary,

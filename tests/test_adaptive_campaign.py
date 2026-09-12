@@ -3,12 +3,14 @@ import pytest
 
 from sarrl.evaluation.adaptive_campaign import (
     V19_ARMS,
-    V19_EPISODES_PER_CELL,
+    V19_DESCRIPTIVE_EPISODES,
+    V19_PRIMARY_EPISODES,
     V19_SCENARIOS,
     V19_SEED_START,
     analyze,
     paired_difference,
     v19_cells,
+    v19_episodes,
     v19_protocol_dict,
 )
 from sarrl.evaluation.adaptive_pilot import PilotEpisode
@@ -58,10 +60,12 @@ def _campaign(adaptive_success, fixed_success, adaptive_unsafe=0.0, fixed_unsafe
 
 def test_cells_enumerate_every_arm_scenario_and_seed_once():
     cells = list(v19_cells())
-    assert len(cells) == len(V19_ARMS) * len(V19_SCENARIOS) * V19_EPISODES_PER_CELL
+    expected = sum(v19_episodes(arm) for arm in V19_ARMS) * len(V19_SCENARIOS)
+    assert len(cells) == expected == (2 * 1000 + 2 * 100) * 3
     assert len(set(cells)) == len(cells)
     seeds = {seed for _, _, seed in cells}
-    assert min(seeds) == V19_SEED_START and len(seeds) == V19_EPISODES_PER_CELL
+    assert min(seeds) == V19_SEED_START and len(seeds) == V19_PRIMARY_EPISODES
+    assert sum(1 for arm, _, _ in cells if arm == "fixed") == 3 * V19_DESCRIPTIVE_EPISODES
 
 
 def test_protocol_dict_is_json_friendly_and_names_the_primary_contrast():
@@ -86,7 +90,9 @@ def test_go_when_success_gain_is_large_and_safety_holds():
     report = analyze(_campaign(adaptive_success=0.9, fixed_success=0.1))
     assert report["decision"] == "go"
     assert report["safety_vetoes"] == []
-    assert report["summary"]["adaptive_hocbf/id_reference"]["episodes"] == V19_EPISODES_PER_CELL
+    assert report["summary"]["adaptive_hocbf/id_reference"]["episodes"] == V19_PRIMARY_EPISODES
+    assert report["summary"]["fixed/id_reference"]["episodes"] == V19_DESCRIPTIVE_EPISODES
+    assert all(report["unsafe_non_inferior_at_margin"].values())
 
 
 def test_safety_veto_precedes_the_primary_endpoint():
@@ -101,6 +107,20 @@ def test_safety_veto_precedes_the_primary_endpoint():
 def test_small_gain_is_inconclusive():
     report = analyze(_campaign(adaptive_success=0.25, fixed_success=0.2))
     assert report["decision"] == "inconclusive"
+
+
+def test_equal_unsafe_rates_do_not_trigger_the_veto():
+    report = analyze(
+        _campaign(adaptive_success=0.9, fixed_success=0.1, adaptive_unsafe=0.1, fixed_unsafe=0.1)
+    )
+    assert report["decision"] == "go" and report["safety_vetoes"] == []
+
+
+def test_moderate_unsafe_increase_triggers_the_veto():
+    report = analyze(
+        _campaign(adaptive_success=0.9, fixed_success=0.1, adaptive_unsafe=0.16, fixed_unsafe=0.1)
+    )
+    assert report["decision"] == "no_go_safety"
 
 
 def test_incomplete_campaign_is_rejected():

@@ -774,12 +774,15 @@ Four arms run on identical episode seeds, plant draws and targets:
 - `adaptive_hocbf`: the adaptive nominal behind the HOCBF on the identified
   model, with delay compensation.
 
-Seeds are `50000..50099` in each of the three v1.3 scenarios (`id_reference`,
-`ood_compound`, `motor_fault`), 100 episodes per arm and scenario, 1,200 in
-total. These are the seeds of the v1.3 and v1.4 campaigns, so the fixed arms
-reproduce retained evidence and the adaptive arms are scored on the same
-population the learned policies were scored on. None of them was opened by the
-pilot, which used `9801800..9802001` and `9803000..9803219`.
+The two filtered arms run on seeds `50000..50999` in each of the three v1.3
+scenarios (`id_reference`, `ood_compound`, `motor_fault`), 1,000 paired
+episodes per scenario. The first 100 seeds are those of the v1.3 and v1.4
+campaigns, so `fixed` reproduces the retained A0 rows and the adaptive arms
+are scored on the population the learned policies were scored on; the
+remaining 900 have not been opened by any retained campaign. The two
+unfiltered arms run on the first 100 seeds only. None of the official seeds
+was opened by the pilot, which used `9801800..9802001` and
+`9803000..9803219`. The campaign totals 6,600 episodes.
 
 The primary contrast is `adaptive_hocbf` minus `fixed_hocbf`. The two
 unfiltered arms are descriptive: they separate the effect of the model from
@@ -787,16 +790,26 @@ the effect of the filter but carry no decision weight.
 
 ### Endpoints and decision rule
 
-All contrasts are paired over episode seeds with a 10,000-draw percentile
-bootstrap seeded at `190000`. The rule is applied in this order:
+All contrasts are paired over the 1,000 episode seeds with a 10,000-draw
+percentile bootstrap seeded at `190000`. The rule is applied in this order:
 
 1. **Safety veto.** For each of the three scenarios, the paired difference in
-   unsafe-episode rate must have a 95% upper bound at or below `+2 pp`. Any
-   scenario above it yields `no_go_safety`, whatever the task result.
+   unsafe-episode rate (adaptive minus fixed) triggers the veto if its 95%
+   lower bound is above zero, or if its point value exceeds `+3 pp`. Any
+   scenario vetoed yields `no_go_safety`, whatever the task result.
 2. **Primary endpoint.** The paired success difference must be at least
    `+20 pp` with a 95% lower bound above zero in both `id_reference` and
    `motor_fault`. Both met yields `go`.
 3. Otherwise `inconclusive`.
+
+The veto is sized to the precision the sample affords. At the unsafe-episode
+rates the fixed filtered arm showed in the pilot (roughly 5..15%), 1,000
+paired episodes give a 95% interval half-width of about 1.5..3 pp, so the
+campaign can detect a worsening of about 4 pp or more per scenario; a smaller
+worsening is not excluded by the absence of a veto. Non-inferiority at the
+same `+3 pp` margin (95% upper bound at or below it) is reported per scenario
+as a labelled secondary and carries no decision weight, because two arms with
+identical rates would fail it about half the time at this sample size.
 
 Secondary, reported without decision weight: the success contrast under
 `ood_compound`; abort rates and their paired differences; intervention
