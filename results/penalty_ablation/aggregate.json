@@ -1,0 +1,246 @@
+{
+  "decision": "inconclusive",
+  "engineering": false,
+  "episodes": 7000,
+  "late_training": [
+    {
+      "best_step": 200000,
+      "condition": "P0_inloop_reference",
+      "late_training_abort_rate": 0.046511627906976744,
+      "late_training_completed_episodes": 258,
+      "trailing_partial_episode_decisions": 30,
+      "training_seed": 30
+    },
+    {
+      "best_step": 150000,
+      "condition": "P0_inloop_reference",
+      "late_training_abort_rate": 0.02158273381294964,
+      "late_training_completed_episodes": 278,
+      "trailing_partial_episode_decisions": 159,
+      "training_seed": 31
+    },
+    {
+      "best_step": 150000,
+      "condition": "P0_inloop_reference",
+      "late_training_abort_rate": 0.038461538461538464,
+      "late_training_completed_episodes": 260,
+      "trailing_partial_episode_decisions": 157,
+      "training_seed": 32
+    },
+    {
+      "best_step": 200000,
+      "condition": "P0_inloop_reference",
+      "late_training_abort_rate": 0.028925619834710745,
+      "late_training_completed_episodes": 242,
+      "trailing_partial_episode_decisions": 129,
+      "training_seed": 33
+    },
+    {
+      "best_step": 200000,
+      "condition": "P0_inloop_reference",
+      "late_training_abort_rate": 0.0375,
+      "late_training_completed_episodes": 240,
+      "trailing_partial_episode_decisions": 67,
+      "training_seed": 34
+    },
+    {
+      "best_step": 200000,
+      "condition": "P1_inloop_half_penalty",
+      "late_training_abort_rate": 0.046153846153846156,
+      "late_training_completed_episodes": 260,
+      "trailing_partial_episode_decisions": 84,
+      "training_seed": 30
+    },
+    {
+      "best_step": 175000,
+      "condition": "P1_inloop_half_penalty",
+      "late_training_abort_rate": 0.028662420382165606,
+      "late_training_completed_episodes": 314,
+      "trailing_partial_episode_decisions": 58,
+      "training_seed": 31
+    },
+    {
+      "best_step": 200000,
+      "condition": "P1_inloop_half_penalty",
+      "late_training_abort_rate": 0.04887218045112782,
+      "late_training_completed_episodes": 266,
+      "trailing_partial_episode_decisions": 56,
+      "training_seed": 32
+    },
+    {
+      "best_step": 125000,
+      "condition": "P1_inloop_half_penalty",
+      "late_training_abort_rate": 0.040740740740740744,
+      "late_training_completed_episodes": 270,
+      "trailing_partial_episode_decisions": 119,
+      "training_seed": 33
+    },
+    {
+      "best_step": 175000,
+      "condition": "P1_inloop_half_penalty",
+      "late_training_abort_rate": 0.036290322580645164,
+      "late_training_completed_episodes": 248,
+      "trailing_partial_episode_decisions": 223,
+      "training_seed": 34
+    }
+  ],
+  "late_training_abort_delta": 0.005547598058469979,
+  "per_seed_success": {
+    "id_reference": {
+      "30": 0.018,
+      "31": 0.14,
+      "32": 0.078,
+      "33": -0.004,
+      "34": -0.006
+    },
+    "motor_fault": {
+      "30": 0.06,
+      "31": 0.05,
+      "32": 0.01,
+      "33": 0.0,
+      "34": 0.03
+    },
+    "ood_compound": {
+      "30": 0.01,
+      "31": 0.02,
+      "32": 0.0,
+      "33": 0.0,
+      "34": 0.01
+    }
+  },
+  "scenarios": {
+    "id_reference": {
+      "normalized_violation_integral": {
+        "ci95_high": 0.0018754056644507242,
+        "ci95_low": -0.003646195559922398,
+        "difference": -0.000706354956199883,
+        "upper_one_sided_95": 0.0013743773991996555
+      },
+      "safety_correction_mean": {
+        "ci95_high": 0.5466738676103148,
+        "ci95_low": -0.07086877917095794,
+        "difference": 0.22154569900998766,
+        "upper_one_sided_95": 0.48789527733700405
+      },
+      "safety_infeasible": {
+        "ci95_high": 0.0048,
+        "ci95_low": -0.0028,
+        "difference": 0.0008,
+        "upper_one_sided_95": 0.0036
+      },
+      "safety_intervention_fraction": {
+        "ci95_high": 0.051580930773851785,
+        "ci95_low": -0.0065031720025294825,
+        "difference": 0.02330709997286583,
+        "upper_one_sided_95": 0.04693740191115076
+      },
+      "success": {
+        "ci95_high": 0.104,
+        "ci95_low": -0.0088,
+        "difference": 0.0452,
+        "upper_one_sided_95": 0.094
+      },
+      "unsafe_episode": {
+        "ci95_high": 0.0072,
+        "ci95_low": -0.0268,
+        "difference": -0.01,
+        "upper_one_sided_95": 0.004
+      },
+      "unsafe_state_fraction": {
+        "ci95_high": 0.006121447169909314,
+        "ci95_low": -0.008311349689222454,
+        "difference": -0.0014236301087362107,
+        "upper_one_sided_95": 0.004646470506400387
+      }
+    },
+    "motor_fault": {
+      "normalized_violation_integral": {
+        "ci95_high": 0.011628004774531448,
+        "ci95_low": -0.016408473109107695,
+        "difference": -0.0011361617956292063,
+        "upper_one_sided_95": 0.009571915310097386
+      },
+      "safety_correction_mean": {
+        "ci95_high": 1.0123170483930146,
+        "ci95_low": -0.06644421024691645,
+        "difference": 0.4495947271077449,
+        "upper_one_sided_95": 0.9110027307329253
+      },
+      "safety_infeasible": {
+        "ci95_high": 0.036,
+        "ci95_low": -0.006,
+        "difference": 0.01,
+        "upper_one_sided_95": 0.03
+      },
+      "safety_intervention_fraction": {
+        "ci95_high": 0.05185997880183899,
+        "ci95_low": -0.01062926856521156,
+        "difference": 0.021113035514207013,
+        "upper_one_sided_95": 0.04695019174427984
+      },
+      "success": {
+        "ci95_high": 0.084,
+        "ci95_low": -0.02,
+        "difference": 0.03,
+        "upper_one_sided_95": 0.074
+      },
+      "unsafe_episode": {
+        "ci95_high": 0.024,
+        "ci95_low": -0.104,
+        "difference": -0.04,
+        "upper_one_sided_95": 0.012
+      },
+      "unsafe_state_fraction": {
+        "ci95_high": 0.010043158305820908,
+        "ci95_low": -0.03947283480074355,
+        "difference": -0.011907672057893599,
+        "upper_one_sided_95": 0.006249808148109938
+      }
+    },
+    "ood_compound": {
+      "normalized_violation_integral": {
+        "ci95_high": 0.017993107283596634,
+        "ci95_low": -0.01398317500016939,
+        "difference": 0.0009185597440482103,
+        "upper_one_sided_95": 0.014109056796699182
+      },
+      "safety_correction_mean": {
+        "ci95_high": 0.9886577058153605,
+        "ci95_low": -0.3983101006083335,
+        "difference": 0.30562809670492297,
+        "upper_one_sided_95": 0.8767173486114395
+      },
+      "safety_infeasible": {
+        "ci95_high": 0.0,
+        "ci95_low": 0.0,
+        "difference": 0.0,
+        "upper_one_sided_95": 0.0
+      },
+      "safety_intervention_fraction": {
+        "ci95_high": 0.046526032423087525,
+        "ci95_low": -0.020818865989092012,
+        "difference": 0.013997512287994824,
+        "upper_one_sided_95": 0.041467627944145026
+      },
+      "success": {
+        "ci95_high": 0.024,
+        "ci95_low": -0.004,
+        "difference": 0.008,
+        "upper_one_sided_95": 0.02
+      },
+      "unsafe_episode": {
+        "ci95_high": 0.034,
+        "ci95_low": -0.076,
+        "difference": -0.016,
+        "upper_one_sided_95": 0.026
+      },
+      "unsafe_state_fraction": {
+        "ci95_high": 0.009647771455053283,
+        "ci95_low": -0.011577898967222453,
+        "difference": -0.0010907917965175269,
+        "upper_one_sided_95": 0.007398449795306952
+      }
+    }
+  },
+  "scientific_decision": "inconclusive"
+}

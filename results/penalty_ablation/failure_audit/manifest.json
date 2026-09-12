@@ -1,0 +1,14 @@
+{
+  "script_sha256": "ae077701cdaa3cde669181ad553be11580b8469f0dd67b0d0c148c9d90f502f1",
+  "protocol_sha256": "fe5b906cad1c8970c9c2080d860eea862858ee75e13b2a21d74a0b2ed0065f75",
+  "inventory_sha256": "78f359c13e3146d5b383c522d00809149403af92ed06839895ccf24f47a1754f",
+  "evaluation_seed_starts": {
+    "id_reference": 9801800,
+    "ood_compound": 9801900,
+    "motor_fault": 9802000
+  },
+  "episodes_per_cell": 2,
+  "workers": 5,
+  "device": "cpu",
+  "exploratory": true
+}

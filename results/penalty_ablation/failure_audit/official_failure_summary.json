@@ -1,0 +1,140 @@
+[
+  {
+    "condition": "P0_inloop_reference",
+    "scenario": "id_reference",
+    "episodes": 2500,
+    "success": {
+      "count": 587,
+      "median_final_distance_m": 0.0471842508842729,
+      "final_within_radius_count": 587,
+      "mean_intervention_fraction": 0.3984493384570034
+    },
+    "abort": {
+      "count": 119,
+      "median_final_distance_m": 1.6274260855105915,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.9631468375942629
+    },
+    "timeout": {
+      "count": 1794,
+      "median_final_distance_m": 0.1842313143179701,
+      "final_within_radius_count": 1,
+      "mean_intervention_fraction": 0.25723745819398
+    }
+  },
+  {
+    "condition": "P0_inloop_reference",
+    "scenario": "ood_compound",
+    "episodes": 500,
+    "success": {
+      "count": 4,
+      "median_final_distance_m": 0.04721886210785873,
+      "final_within_radius_count": 4,
+      "mean_intervention_fraction": 0.5657683813052151
+    },
+    "abort": {
+      "count": 15,
+      "median_final_distance_m": 3.093282239159701,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.9337393588754163
+    },
+    "timeout": {
+      "count": 481,
+      "median_final_distance_m": 0.9841745484703837,
+      "final_within_radius_count": 2,
+      "mean_intervention_fraction": 0.7871101871101872
+    }
+  },
+  {
+    "condition": "P0_inloop_reference",
+    "scenario": "motor_fault",
+    "episodes": 500,
+    "success": {
+      "count": 58,
+      "median_final_distance_m": 0.04324288033267397,
+      "final_within_radius_count": 58,
+      "mean_intervention_fraction": 0.34464813762990454
+    },
+    "abort": {
+      "count": 36,
+      "median_final_distance_m": 2.0940905684736766,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.944758436406432
+    },
+    "timeout": {
+      "count": 406,
+      "median_final_distance_m": 0.6140843134883622,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.5006896551724138
+    }
+  },
+  {
+    "condition": "P1_inloop_half_penalty",
+    "scenario": "id_reference",
+    "episodes": 2500,
+    "success": {
+      "count": 700,
+      "median_final_distance_m": 0.04661497565870177,
+      "final_within_radius_count": 700,
+      "mean_intervention_fraction": 0.4234666144389767
+    },
+    "abort": {
+      "count": 121,
+      "median_final_distance_m": 1.5914270993711577,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.948308720436853
+    },
+    "timeout": {
+      "count": 1679,
+      "median_final_distance_m": 0.16130937639510182,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.27223585467540207
+    }
+  },
+  {
+    "condition": "P1_inloop_half_penalty",
+    "scenario": "ood_compound",
+    "episodes": 500,
+    "success": {
+      "count": 8,
+      "median_final_distance_m": 0.048299892361654634,
+      "final_within_radius_count": 8,
+      "mean_intervention_fraction": 0.6000743915896407
+    },
+    "abort": {
+      "count": 15,
+      "median_final_distance_m": 3.088622656436418,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.9207549946421595
+    },
+    "timeout": {
+      "count": 477,
+      "median_final_distance_m": 0.9877613043716097,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.8034716981132076
+    }
+  },
+  {
+    "condition": "P1_inloop_half_penalty",
+    "scenario": "motor_fault",
+    "episodes": 500,
+    "success": {
+      "count": 73,
+      "median_final_distance_m": 0.04774343277599085,
+      "final_within_radius_count": 73,
+      "mean_intervention_fraction": 0.35759074354706705
+    },
+    "abort": {
+      "count": 41,
+      "median_final_distance_m": 2.0683344359221194,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.943153394422771
+    },
+    "timeout": {
+      "count": 386,
+      "median_final_distance_m": 0.5787856173321877,
+      "final_within_radius_count": 0,
+      "mean_intervention_fraction": 0.5260725388601036
+    }
+  }
+]

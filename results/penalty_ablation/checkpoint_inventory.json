@@ -1,0 +1,225 @@
+{
+  "campaign_sha256": "933e9a648da3ecd1e38457985347d9f19542ff4167e72dcedc310c4452e1f6bc",
+  "records": [
+    {
+      "best_step": 200000,
+      "condition": "P0_inloop_reference",
+      "hashes": {
+        "best.pt": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+        "episodes.csv": "789df75c98e9005724d8aea8d2523aec4016d141176fc6ede7d0b869763c5acb",
+        "final.pt": "7c920bdb3bbf98081d17ff7ab29b8c2df0dc9cc3f046ed5cb27e0f6cacb6573d",
+        "run_manifest.json": "8bb42ed4b15ec5beb03449631f8ad98883ab3e5cf6c1fce50c8cccf3729476e7",
+        "selection.json": "f2e904c2bc279367418593b2d5361b526bd4e06d9f1931dde4a9777371289958",
+        "train_step100000.pt": "3247e7245a13a7ba87760e9ba1a7f0a7dd5332faf2e130e268db823a201bb48c",
+        "train_step150000.pt": "e0ce7976e4f2b7c01eb0c5b73e0bf71a7841a512fba3573406aed866546b8efd",
+        "train_step200000.pt": "5551a107c9a18127590336a00f378dae267d57de66485db5c48167c35657a7e3",
+        "train_step50000.pt": "8e6f49c5d063131c841c2a645348fa4eed871c89558859300f708b580877bb9c",
+        "training_final.pt": "859b999965d441bc613bafc1223e321425406c858be14b5c2f4bd0cf99d79425",
+        "training_safety.csv": "18d0f06c0c23af0d2d2df251abda414901eb14ea63abffbcae7b4615b4fc9672",
+        "validation.csv": "88087fea3292ae59cfb1a8b17933a6443f533b1ee67913344fe1cd158bd1040a"
+      },
+      "late_training_abort_rate": 0.046511627906976744,
+      "late_training_completed_episodes": 258,
+      "trailing_partial_episode_decisions": 30,
+      "training_seed": 30
+    },
+    {
+      "best_step": 150000,
+      "condition": "P0_inloop_reference",
+      "hashes": {
+        "best.pt": "1f263db609a037eaa32fa4456e13c50f4d4a72fe1edfd4dcfa1d0089a49b4a0b",
+        "episodes.csv": "dc40ad51b24f2d173305abd25edf28f351bf1600e51c3ccae431fc7229429fbf",
+        "final.pt": "2a05b8dd609983a4c4dd90ae9133b4e614285c0721919778221477501e08ca59",
+        "run_manifest.json": "5e08b8b7a777bf700d161c95257724195338f35d6ac717a5822ae9467087875a",
+        "selection.json": "77675cab1d18b7b5e605c781c9bf73f37ee01e890ef60dfcbb9adad6ad82c9b8",
+        "train_step100000.pt": "f8633fd50e4365d708f25be26bf77f550027bd0da5ac5c7f9dab2a062338f19b",
+        "train_step150000.pt": "02cee893eedb942a38663f2aa115ebc169a72101d751312707731eaf0763c181",
+        "train_step200000.pt": "35d9d9ea9f6c1151199f60ecb0789ff702b3a3b97eb0d0a39241780ae95b01d8",
+        "train_step50000.pt": "25408cb1801bf8ce165e8aa5b3c71e4c42a48738402fa4656e29a448e7722fc0",
+        "training_final.pt": "fa87f60f29e9abe3b8465e5ff42add5b6c9960381e7b00bf6e777d4f57697329",
+        "training_safety.csv": "11f3331c5a899e3939452352501453ce5cd832e7fe859edc5719d9b7fa9c9667",
+        "validation.csv": "609c69704e42c0dfca8580036aee42b99b8a9ed3ad54fbaa73809e2dbc100138"
+      },
+      "late_training_abort_rate": 0.02158273381294964,
+      "late_training_completed_episodes": 278,
+      "trailing_partial_episode_decisions": 159,
+      "training_seed": 31
+    },
+    {
+      "best_step": 150000,
+      "condition": "P0_inloop_reference",
+      "hashes": {
+        "best.pt": "6b4970cca9e4b8e516af48dfa96099e171879cb80ae5690b59b06beced14a9d8",
+        "episodes.csv": "169a9c2239f360dfecf5d5a61a26ab8752a80bed9e118086406cfecdfbcd2e80",
+        "final.pt": "d4721185c6611059579ee0ca1da9de9a6b19059e9827b2ecdbcc8b7c092b28ba",
+        "run_manifest.json": "52350da9805b1cd7cf30c9f17cfaf3d7ef2262c12de463d8e3644103a1121b78",
+        "selection.json": "e95a06293a70a621b944207e7b3a34874c9d536a9281ce0df6e23e09cb375713",
+        "train_step100000.pt": "806106103aa151389e46cc394817046a57085c888119abdedec1582a75731d70",
+        "train_step150000.pt": "d088ff5956d1fd3a8b3301a683be1a6c9848482645d4c045eb0cba37a298a1b9",
+        "train_step200000.pt": "1c2a53247a6d062af2f1e3ea58833709f792bc1ea2917eb2642cfadf476c31c6",
+        "train_step50000.pt": "abd716326677eeafb7b0d3a8617f88d5002bd1bddf94e1c7236dcfa40a526c1b",
+        "training_final.pt": "fece7b9e64a609c3cf038fbeb36847c1d2419b8aea03c8cd5c5096a97d7fe630",
+        "training_safety.csv": "fbeef7d09a526bfd329b36e5a2b96da7f5eed575a0663b66529553534575148e",
+        "validation.csv": "733096ad1b27302edee72d313633d2dd150288a48d35df2263ac3a5a1c4d1527"
+      },
+      "late_training_abort_rate": 0.038461538461538464,
+      "late_training_completed_episodes": 260,
+      "trailing_partial_episode_decisions": 157,
+      "training_seed": 32
+    },
+    {
+      "best_step": 200000,
+      "condition": "P0_inloop_reference",
+      "hashes": {
+        "best.pt": "d25156bd1b6d41928cbb732af597d4fa3dc20e6e20db49758e578b9cdb0894ae",
+        "episodes.csv": "720df23bbeba368bcaa2fe0496ae4174b61a17b818fe0db43735aa58f107ec99",
+        "final.pt": "4040d5d2e442bf6359b59012bdc91c7d0a265be30abb301f1b50451e319cdb9d",
+        "run_manifest.json": "c9531fbbd83ac0b3959748c6ddae6953ce9e940fefcd738eef55dec1b54aeb4d",
+        "selection.json": "5f24fe4b73eeda8b7759dd65e6fdd3ef411baf5242ecc8d823d476b618d01325",
+        "train_step100000.pt": "6987aa4f79aba6b74c43db01ae8d97a854c7b5ee958ba40b981227256d274436",
+        "train_step150000.pt": "268d58e4dd417ad92f678edfd0e379ec0ac1638b71e2d6bb4034a685aa609b7c",
+        "train_step200000.pt": "a93afe8ed1ab756b0d6af574d9c792d318a66ef2fec6fb95f1652f7fcefc3468",
+        "train_step50000.pt": "d5f0ca37eb464363c4cf7bcfbdf9b251f27804a02c87e61af7bb837fe70930f7",
+        "training_final.pt": "e30f7cd258523038e13b0083354599daf41ae673f03a804c2259b83458d2c64f",
+        "training_safety.csv": "9fb7be546cddb1eec045a845b4a5439cc41c70709efc74ebba1b63c262970254",
+        "validation.csv": "1a69cc9d780aae8bf0817ccc6c3cec5edeea2d2235172b56f01bad733784560a"
+      },
+      "late_training_abort_rate": 0.028925619834710745,
+      "late_training_completed_episodes": 242,
+      "trailing_partial_episode_decisions": 129,
+      "training_seed": 33
+    },
+    {
+      "best_step": 200000,
+      "condition": "P0_inloop_reference",
+      "hashes": {
+        "best.pt": "8935a715fff3ef26e1d37aaa1e9f804135e9b667c31f9cfc624ea62916fc2057",
+        "episodes.csv": "2734b03e1bc9d022da21c9e25006198d9f7ae731750e132a4415563d4bdee869",
+        "final.pt": "d34bf94430eeb87a7f50f236242c3ae17bd7dcc4ba859681cc2db119083993eb",
+        "run_manifest.json": "37c083685017fe4db360547b008ed8b3b2c3d78c2a078410f58ee73f951bba3c",
+        "selection.json": "7f342ee5f2a8f002c57bb677abf1d9cfdf32ceecb74b801ce017b70d589f29ca",
+        "train_step100000.pt": "f8334b7d4979df22f5024a933271feb6326e5670e9dcbe78274241acd7b40c6b",
+        "train_step150000.pt": "3ee0327d2b1ad9ab6b8f909bea3458ec9fac18d61020f913d1ef9af9279a4dfd",
+        "train_step200000.pt": "64322a458494187038da83703e50527c0076c4acaf59c0949e69e41b4bf3fbed",
+        "train_step50000.pt": "ff467b66cb1775bb65b4a86f029e089171b79410f70e69b8474a77dc3cb36ad4",
+        "training_final.pt": "530d343713cb48f77a903eb3a87c36a9821706e5036f12a3157cd3adcad579fb",
+        "training_safety.csv": "e2d76ba6d9899dab2709d32a6414bdc9a0e63f81866544fb71645faafa13cec2",
+        "validation.csv": "3035e17f0a2d467b046ada32412496c863b0540e9ed09ac004de85be2c306de3"
+      },
+      "late_training_abort_rate": 0.0375,
+      "late_training_completed_episodes": 240,
+      "trailing_partial_episode_decisions": 67,
+      "training_seed": 34
+    },
+    {
+      "best_step": 200000,
+      "condition": "P1_inloop_half_penalty",
+      "hashes": {
+        "best.pt": "c97050eb309b7b2571da768b127d91a65daa155e2fe967912f80a0d085440fd4",
+        "episodes.csv": "b72ab7d55027d158bfeb94d48516a35889b00e6e8ef75a38458e04bc95a795c1",
+        "final.pt": "3e8dcf621310185bc21e7575f08ad961adcc6a58492e348fc3f9242da8dc0873",
+        "run_manifest.json": "03b41354bf5b4a22f537778d67c6d57f5e28800af329283466f16fba41d88a51",
+        "selection.json": "832b03d89f945cb7c3e9914a3acfa2f0b492f71a189e415320e5ea8321e01757",
+        "train_step100000.pt": "f61ee1a4700804456fe9f603e17dc68e7db49baebbdd822ed69b159b4aeae5fb",
+        "train_step150000.pt": "c6b27f385c3b00222c91b71be6492ccb28a8f3b174be0e06754c60258ccad63b",
+        "train_step200000.pt": "51ef9f9f8e724f670f96f317fbccbad97c8367de892326e7202876cc812261d7",
+        "train_step50000.pt": "25f7913a0115eed4335532009fd67f6080f1a08250d68903c03b88ecd211eb38",
+        "training_final.pt": "c3fccc127b87a20b1ce213820abb7c5fd43ec6554e2e9cf8eff68a221d4f3558",
+        "training_safety.csv": "1596e65e87a8099af59335029cb329bbbaa0b4c09c8b0f1d545de30e4d36dca9",
+        "validation.csv": "db205cdc15371d1541edab16552984d3427360706e6aecb26c51bcb8e2968538"
+      },
+      "late_training_abort_rate": 0.046153846153846156,
+      "late_training_completed_episodes": 260,
+      "trailing_partial_episode_decisions": 84,
+      "training_seed": 30
+    },
+    {
+      "best_step": 175000,
+      "condition": "P1_inloop_half_penalty",
+      "hashes": {
+        "best.pt": "eecbbe05ac2ee3ac26b69b6e25f0269b41f19144ae2f320819b7e5f19ce5d41b",
+        "episodes.csv": "64b3d5f7b6997d9fddfa0306a1f75d84012b798c4a326feb48cc800cc0a1ad17",
+        "final.pt": "27937ae32d2a92219dfc396eeb6b7f666b7a2446377e3bcc4d58f215e666c277",
+        "run_manifest.json": "12030301fbd6e63602a6c4da173509202a70f9394e225fbdb8684a67356ba6e1",
+        "selection.json": "01e62789cd2cf8a7a4b9c07ee47ac04a8af347633214bcc34623b4b32d577b78",
+        "train_step100000.pt": "fe4ad16892f370b5e0e2fdd2c05380316a87142c55a9c281fa593cf43ccca069",
+        "train_step150000.pt": "aae91a8759bdbe5901627f1a923f24a85af0682a52bf88c3d00d71815a6b7ea5",
+        "train_step200000.pt": "11bf4294e36db087539875eb0fedcc70c0295953cf32d7a1a236c73f8b2787f6",
+        "train_step50000.pt": "108bdfa13684c4b865a1f7c13b6080fd484c1c4f6ebf9c74d87467698248348f",
+        "training_final.pt": "defd17b2b3b5fc8bbc30725bd60565c3ed2f92ead03df54cc7b49fd416978882",
+        "training_safety.csv": "f5e82ab0aa4aea3b8beb480ed92fafb73c5c6c00680e169961e4a840527951c8",
+        "validation.csv": "117cebef7e59e6b01817e30ec62a3f0ac4ddf56903d0cc4759fa03366e3f46fc"
+      },
+      "late_training_abort_rate": 0.028662420382165606,
+      "late_training_completed_episodes": 314,
+      "trailing_partial_episode_decisions": 58,
+      "training_seed": 31
+    },
+    {
+      "best_step": 200000,
+      "condition": "P1_inloop_half_penalty",
+      "hashes": {
+        "best.pt": "7c7965c2bca07d03916ad484eeae2a5e31140084247411b5c8b302d7ecbaa436",
+        "episodes.csv": "041a8570a07e7d8cd4c2f44b473cb3f84cd4522426b8d15554aff9b600a4c7bc",
+        "final.pt": "b62a4ba2cc01bfff9e84854cc31ee7d5edb313181f4af156ca5ab59b1730d354",
+        "run_manifest.json": "9021519ff3087fa0e9ccfc390492c362e8dc562b4ffe4185d521338234c243c0",
+        "selection.json": "de69c627dcbb90263d43baacb2a4d76c93df83aae44819a15bcd8d68295b320e",
+        "train_step100000.pt": "bf29c7ced7fd978ec6ebed521d7b57730e59fc0a5a038ad67773846e6ee8b353",
+        "train_step150000.pt": "500ff9a4acaec3c438a1ba56fca13505bb1d1129e4411a2716c82841d2adf796",
+        "train_step200000.pt": "6caa256c6ed003f0746e4a648aceba2db990e4ab541e6028880afac5b60246d4",
+        "train_step50000.pt": "0b4172f66a244b733a21327b2052e578e02928ce7e3420d551d043c2b97c14d3",
+        "training_final.pt": "870916e09a013d26fc56e26d05c2bd8d15ae9a2622d613ec7d087961240cfa1e",
+        "training_safety.csv": "ef214a7d4d333c94ae1cc6dcaf3b65e3107eb3ab8a9a4a31536916b32c13b276",
+        "validation.csv": "f57b599dbe85d870d1ca3f59302315a7d807e1443253933b9c52c39646d261ba"
+      },
+      "late_training_abort_rate": 0.04887218045112782,
+      "late_training_completed_episodes": 266,
+      "trailing_partial_episode_decisions": 56,
+      "training_seed": 32
+    },
+    {
+      "best_step": 125000,
+      "condition": "P1_inloop_half_penalty",
+      "hashes": {
+        "best.pt": "e35740cebeaf67230a03d62c7fc12141a2267fbcace1d73e2939ea0272d17a39",
+        "episodes.csv": "e48abd766a14c5f67db945e01eccb37ca65f1bfaea53b7342571d3f929471ccb",
+        "final.pt": "5d5898145f1d18b74ad6ac403cc130418c49c46ba486a1be6edc9ac96b9c9332",
+        "run_manifest.json": "8fe7956129ec495b7b40ee4e80464824e2f9c64fe833c5f174a3a3146057a400",
+        "selection.json": "9daa6bf4d9e90aa7bcd1721d41e146497b0cb14dfa845acd6c0edbbb6f24c7c6",
+        "train_step100000.pt": "b693b032cfdf2ac7af86dee2e6cff64243570f0ec6b20dcd46d61e27e1fab7ab",
+        "train_step150000.pt": "2ae3a20134359043894d47ea22231412eac0241879b609eda19d02b265c09167",
+        "train_step200000.pt": "e4c19b8433fe441bef406f166b23da42c39216b2854aa297c6cf572a9dda7e36",
+        "train_step50000.pt": "777c9b8eb7b6a2963e5104a18a1ca5cc17762fb99c281f6d03d85a7832a06482",
+        "training_final.pt": "dbca2e8695e18f1ce5aebde4dcfe89f3aefc10a3b3b31816ee9780504adbd1e4",
+        "training_safety.csv": "1e27488c7c3f1f15f0ade106edceb7d97fd4ba395bda83ace58a2a1da5a4f63d",
+        "validation.csv": "3a305db6a05c92c6ecbd61be9eece79f20999c666bf6551e4b7dbd168d02a4f2"
+      },
+      "late_training_abort_rate": 0.040740740740740744,
+      "late_training_completed_episodes": 270,
+      "trailing_partial_episode_decisions": 119,
+      "training_seed": 33
+    },
+    {
+      "best_step": 175000,
+      "condition": "P1_inloop_half_penalty",
+      "hashes": {
+        "best.pt": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+        "episodes.csv": "941946738b331d43f0aa84db9bd8223740dba151f0ffe6c4bbb4a4999e9af65c",
+        "final.pt": "0fd9f656870f3e6c57f20e1c23a51bc00301090e59e9d9f65ef753347a3e5f3a",
+        "run_manifest.json": "71a6b8be2fd815cc75302419d7a089ad7e70df9307a204f760596c5087fe0d3a",
+        "selection.json": "5b42816b7dea2dce624ab827b938516debc46110d4abdee0de96e06a2a4c4693",
+        "train_step100000.pt": "4ad190fb3c1282c1eaff8031eaab4883cdd6f6a30799f9bcc2c2bf4e13cf28f3",
+        "train_step150000.pt": "854d08028d5f135886c4d6034dbc18c089477c4667d1615d8fbd84c056ed25a8",
+        "train_step200000.pt": "8786c15af8b271466ddefa9bc3a5cb3bb0ea60dd35108029a6fee40ddc2a1b47",
+        "train_step50000.pt": "e843f09c8a42f64401599d00a0d55a7b674c0849cb32f0a415255eb6e6438225",
+        "training_final.pt": "a5216336c74c2cd294275f4dce1ace614228863f99ce04236e1f14229b35fe81",
+        "training_safety.csv": "d8aa6bf270cda91281086aeec9c162de9ce5f6c740fa4712ad874d1868a2f304",
+        "validation.csv": "26fa4954f53880c2bdc03e99277eb67c5fbaaa8b8d82e1e3ceaba7f2b5f5ad77"
+      },
+      "late_training_abort_rate": 0.036290322580645164,
+      "late_training_completed_episodes": 248,
+      "trailing_partial_episode_decisions": 223,
+      "training_seed": 34
+    }
+  ]
+}

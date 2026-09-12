@@ -53,6 +53,25 @@ found anticonservative; calibrated joint power was only 38.5% at AUC 0.70 agains
 an 80% target, so a non-rejection is inconclusive, never evidence of absence. The conditional
 intervention arm was closed unexecuted.
 
+v1.7 and v1.8 turned to training. Training residual SAC *through* the
+required HOCBF filter, instead of bolting the filter on afterwards, cost
+**17.3 pp** of in-distribution success (`[-23.6, -9.8]`, all five seeds
+negative) with no change in safety, a preregistered **no-go**. Halving the
+terminal penalty on filter aborts recovered `+4.5 pp` with an interval crossing
+zero and three positive seeds out of five: **inconclusive**. An exploratory
+diagnosis on the frozen v1.8 policies then located the failure mode outside the
+learned component. Of 3,473 in-distribution timeouts, one ends within 5 cm of
+the target; the policies stop short. With the residual removed, the bare
+computed-torque nominal stops even farther away, at the equilibrium where the
+joint error supplies the torque that balances the real payload and motor gain
+against the fixed nominal model. A single integral-augmented nominal removed
+that stop on the motivating cases but drove a joint 1.2 rad past its limit on
+the fault case, because the HOCBF certificate uses the same fixed model and
+predicted `-25.6 rad/s^2` of braking where the plant delivered `-0.1`. That
+candidate was vetoed on safety. The nominal controller and the safety
+certificate share one model, and both are wrong by the same amount when the
+plant departs from it.
+
 Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. Evidence remains limited to the analytical planar benchmark.
 
 ### Safety
@@ -103,7 +122,7 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Limitations
 
-The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration and v1.6 disagreement/failure campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training and v1.8 penalty-ablation campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 
@@ -114,7 +133,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {1.5.1},
+  version = {1.8.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```

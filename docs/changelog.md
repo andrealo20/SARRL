@@ -2,6 +2,33 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v1.8.0: terminal-penalty ablation and failure diagnosis
+
+- Asked whether the `-500` terminal penalty on HOCBF-infeasible aborts explains the v1.7 in-loop training loss, by training five paired seeds `30..34` with `P0_inloop_reference` (`-500`) and `P1_inloop_half_penalty` (`-250`); both arms train, validate and evaluate through the required HOCBF filter.
+- Evaluated the ten selected checkpoints on 7,000 fresh held-out episodes (500 ID, 100 compound-OOD and 100 motor-fault episodes per model) with a crossed paired bootstrap of 20,000 replicates over training-seed pairs and shared episode seeds.
+- Measured ID success **23.48%** (P0) against **28.00%** (P1), a difference of **+4.52 pp** with 95% interval `[-0.88, +10.40]`; per-seed effects `+1.8, +14.0, +7.8, -0.4, -0.6` pp, three positive pairs against the four the rule required. OOD `+0.8 pp` `[-0.4, +2.4]`, fault `+3.0 pp` `[-2.0, +8.4]`.
+- Recorded no safety veto: ID unsafe-episode rate 8.68% against 7.68%, ID abort rate 4.76% against 4.84%, late-training abort difference `+0.55 pp`. Absence of a veto is not evidence of safety equivalence.
+- **Decision: Inconclusive.** The halved penalty is not promoted, and the penalty is not identified as the cause of the v1.7 result.
+- Retained a descriptive critic diagnostic on each arm's own replay: aggregate RMSE 2.632 (P0) against 1.667 (P1), with abort transitions carrying 31.39% and 11.03% of the squared error. Replays differ between arms, so this is not causal mediation evidence.
+- Recorded that the campaign was interrupted by a GPU driver fault and resumed from the retained 100k or 150k checkpoints of the P0 arm; the 200k-decision budget per model is preserved, but the recomputed segments are not bit-identical to the lost ones.
+- Closed the official campaign with an exploratory failure diagnosis on six fixed initial conditions outside every official seed range (two per scenario): of 3,473 ID timeouts across both arms, exactly one ends within 5 cm of the target, so the policies stop away from the target rather than overshooting it.
+- Showed with a paired null-residual control (66 episodes, filter active in both arms) that removing the learned residual does not remove the stop: the bare nominal controller halts at 0.594 m on the ID case while all ten policies end closer, between 0.060 m and 0.353 m. HOCBF projection, saturation and command clipping are exactly zero in all 17 stop tails.
+- Traced the stop, on the retained states and without new simulation, to the fixed-model computed-torque nominal: with no integral action, the joint error supplies the feedback torque that balances the real payload and motor gain against the nominal model. The joint-error balance reproduces all 100 tail states within `1e-15 rad`; no algebraic or kinematic-reference defect was found.
+- Tested one integral-augmented nominal (`Ki = 36`, back-calculation `Kaw = 4`, integral limit `36 rad/s^2`) on the same six cases against the frozen nominal. It reached success on three cases, including both motivating stops, but on the already-unsafe fault case it drove joint 2 to `4.278 rad` against the `3.05 rad` limit, raising the normalized violation from 0.3267 to 0.4027. **Decision: no-go on safety.** The candidate is not promoted.
+- Reconstructed that fault trajectory algebraically: in the 12 commands before the limit was crossed, the filter's nominal model predicted `-25.57 rad/s^2` of braking on joint 2 while the plant produced `-0.13 rad/s^2`. The mass-matrix mismatch accounts for `+13.98`, the faulted motor gain `+6.27`, actuator delay `+2.75` and the load terms `+2.45 rad/s^2`. The HOCBF certificate and the nominal controller share the same fixed model, and both are wrong by the same amount.
+- Added the diagnostic instrumentation as repository tools: a transactional null-residual evaluator, an integral nominal controller with explicit anti-windup decomposition, their campaign runners and 75 tests. Campaign CSVs, decisions, manifests, inventories and the compact diagnosis outputs are retained; checkpoints and full trajectory tables remain local.
+
+## v1.7.0: safety-aware policy training
+
+- Asked whether training residual SAC through the required HOCBF filter recovers the paired task-success cost v1.4 measured when the filter is applied only at evaluation.
+- Trained five paired optimization seeds `20..24` for 200,000 decisions each: `C0_posthoc_hocbf` trains unfiltered and evaluates through the HOCBF, `C1_inloop_hocbf` trains, validates and evaluates through it, with an infeasible projection terminating the training episode at a fixed `-500` penalty. Validation every 25,000 decisions on 30 shared episodes selected the checkpoint by success, then mean reward, then earliest step.
+- Evaluated the ten selected checkpoints on 7,000 fresh held-out episodes, seeds `620000..622099`, paired across conditions and training seeds, with a two-level paired bootstrap of 20,000 replicates.
+- Measured ID success **39.72%** (C0) against **22.44%** (C1): a difference of **-17.28 pp**, 95% interval `[-23.60, -9.80]`, with all five per-seed differences negative (`-15.0, -3.8, -19.8, -22.0, -25.8` pp). Motor-fault success fell by 7.6 pp `[-12.2, -3.0]`; compound OOD was flat at `-0.4 pp`.
+- Measured no safety difference: ID unsafe-episode rate 6.36% against 6.44%, abort rate 4.20% against 4.16%, both intervals covering zero. In-loop training reduced the filter's intervention fraction from 36.4% to 27.4% and the mean correction from 3.72 to 2.57 N m.
+- **Decision: no-go.** Training through the projection, under this budget and penalty, makes the policy worse at the task without making it safer. The result applies to projection-only SAC with terminal abort penalty and does not exclude other safety-aware training schemes.
+- Retained the evaluation rows, safety diagnostics, paired comparisons, manifests and checkpoint inventory under `results/safety_aware_training/`. The ten checkpoints are hash-bound and remain local.
+- Published together with v1.8.0.
+
 ## v1.6.0: disagreement and operational failure
 
 - Tested the link v1.5 assumed but never measured: Phase A validated `disagreement -> model prediction error`, while Phase C acted on `disagreement -> operational failure`.

@@ -1,0 +1,32 @@
+{
+  "campaign_sha256": "933e9a648da3ecd1e38457985347d9f19542ff4167e72dcedc310c4452e1f6bc",
+  "hashes": {
+    "aggregate.json": "e935e11443858d9af650a7b178d623f70a000c1af2712405ee19724e16ff6620",
+    "episodes.csv": "7420d4d90eda048aaa3ca5964c16903f39d1c7be00c8a5add04eb585c6bb0d76",
+    "safety_diagnostics.csv": "546fa32d12dcd78a7ffb0359f8bf3879f2e93028e5d0228d2f58127475e1c9af",
+    "summary.csv": "a8127939ef8a269d52f9f7c32994ae10e6d4b921628fa68c37749c5adef0a23a"
+  },
+  "inventory_sha256": "78f359c13e3146d5b383c522d00809149403af92ed06839895ccf24f47a1754f",
+  "shards": [
+    {
+      "completion_sha256": "28715e678b3bbc76e683a8976da4d99aa94df69784983ac85f47ad8ea31dc256",
+      "seed": 30
+    },
+    {
+      "completion_sha256": "17623cd3cc71052ccd01b67876136f4666140bd9c0f95099c4044c07be1af9fc",
+      "seed": 31
+    },
+    {
+      "completion_sha256": "798d14cfafca5ce25bbd5ccc52e231676f6c975fc305b1141c88eba87600674c",
+      "seed": 32
+    },
+    {
+      "completion_sha256": "0feeec63ba94c0e55c9199b21b31d524ad9b7498f3a20e5b6340ea8632dfa3c0",
+      "seed": 33
+    },
+    {
+      "completion_sha256": "509d31844a051e8608dd752ed0e809c0e32264c5750aeb684dc7024b99ed90f2",
+      "seed": 34
+    }
+  ]
+}

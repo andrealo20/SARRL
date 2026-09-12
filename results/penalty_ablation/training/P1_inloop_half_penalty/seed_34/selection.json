@@ -1,0 +1,10 @@
+{
+  "best_step": 175000,
+  "checkpoint": "best.pt",
+  "checkpoint_sha256": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+  "selection_key": {
+    "reward_mean": -161.49176396188525,
+    "success_rate": 0.3
+  },
+  "tie_break": "success_rate_then_reward_then_earliest_step"
+}

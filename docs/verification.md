@@ -40,6 +40,113 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## v1.7.0 and v1.8.0 training campaigns and diagnosis evidence
+
+Both campaigns trained new policies; the diagnosis that follows them did not.
+At the v1.8.0 freeze the suite collects 315 tests across the matrix and passes
+locally with CUDA available; tests that need a CUDA device or the local
+diagnostic artifacts skip on machines without them.
+
+### v1.7 safety-aware training
+
+Ten training runs, five paired seeds `20..24` per condition, 200,000 decisions
+each, completed on a single machine with the in-loop arm trained through
+`SafetyProjectedEnv`. The evaluation writer initially failed after the full
+computation because of a CSV schema mismatch; the writer was corrected and the
+whole 7,000-episode evaluation was re-run from the selected checkpoints. The
+training code is the source commit recorded in each `run_manifest.json`.
+
+The aggregate decision file records `no_go` with the primary ID success
+difference `-0.1728`, 95% interval `[-0.236, -0.098]`, one-sided upper bound
+`-0.110`, per-seed differences `-0.150, -0.038, -0.198, -0.220, -0.258`, an
+unsafe-episode guardrail difference of `+0.0008` `[-0.0108, +0.0124]` and an
+infeasibility guardrail difference of `-0.0004` `[-0.0080, +0.0072]`. The
+evaluation manifest binds the six output files by SHA-256 and references the
+checkpoint inventory at
+`e7ffbac7404abac30f756de8305c966634b972f7a5a6dc0afeaa1d94534ba3a6`.
+
+Retained: `results/safety_aware_training/checkpoint_inventory.json`,
+`evaluation/*.json`, `evaluation/*.csv`, per-seed `run_manifest.json`,
+`selection.json`, `validation.csv` and `episodes.csv`, and the in-loop
+`training_safety.csv` curves. The ten checkpoints, the per-seed evaluation
+shards and the training-replay critic diagnostic remain local; the shards
+duplicate the top-level CSVs row for row.
+
+### v1.8 terminal-penalty ablation
+
+The frozen protocol is embedded in `results/penalty_ablation/campaign.json`
+together with the runtime (Python 3.12.3, torch 2.12.0+cu130, numpy 2.5.2,
+five workers, one thread per process) and the source commit
+`68df4213e2ddae643bb6bdd841719e2a78b422fd`. The plan hash recorded in the
+campaign file is
+`0e5456bccac220e94aabc69a1e59db73bb937a6490fb8a8ef409c12775e72dd1` and the
+checkpoint inventory hash is
+`78f359c13e3146d5b383c522d00809149403af92ed06839895ccf24f47a1754f`.
+
+Before the campaign, 240 tests passed with Ruff and compilation clean, and a
+24-episode engineering smoke run used separate output paths and seeds. The
+campaign was interrupted once by a GPU driver fault and resumed from retained
+checkpoints as described in `docs/experiments.md`; the final inventory lists
+the hashes of the checkpoints each run resumed from. `complete.json` certifies
+the aggregation and `workflow_complete.json` additionally binds the critic
+diagnostic; the presence of a CSV alone is not evidence of completion.
+
+The aggregate records `inconclusive` with ID success difference `+0.0452`
+`[-0.0088, +0.1040]`, per-seed `+0.018, +0.140, +0.078, -0.004, -0.006`,
+ID unsafe-episode difference `-0.010` `[-0.0268, +0.0072]`, ID infeasibility
+`+0.0008` `[-0.0028, +0.0048]`, fault infeasibility `+0.010` with the veto rule
+using a strict inequality at `+0.01`, and a late-training abort difference of
+`+0.00555`.
+
+The failure audit under `results/penalty_ablation/failure_audit/` fixed its
+60-episode protocol before execution, verified 208 hashes listed in the v1.7
+and v1.8 inventories and completion chain, classified all 7,000 official
+episodes and retained the 60 trajectories. Its `audit.py` refuses to overwrite
+a completed audit. The audit manifest records `device = cpu` as a constant
+while the SAC loader selected CUDA when available; a separate provenance check
+(`results/residual_device_provenance_20260906/`, completion hash
+`4c505487376c0d35dbc34502f08429eaaf19e5d2491d7376c6cef0d506fd9b00`) reproduced
+all 60 historical first actions exactly on CUDA and only 8 on CPU, so the audit
+is treated as CUDA inference and the manifest field as an unverified
+declaration that was not rewritten.
+
+### Exploratory diagnosis
+
+The null-residual campaign (`results/residual_diagnosis_20260905/`, completion
+hash `76961ce34cc81aff4df6d8db227409f12140003cef2eac730345a3f1dede8c18`)
+executed 66 episodes, 15,582 physical steps against a preregistered ceiling of
+16,500, with no invalid or repeated cell. Its manifest binds the protocol, the
+device amendment, 43 source and configuration files and the ten checkpoints;
+all 60 policy episodes reproduce the audit rows within `rtol = atol = 1e-10`.
+One deviation is recorded: during synthetic testing of the runner a pytest
+selector repeated the fixtures, so 305 technical physical attempts were run
+against a planned maximum of 200. They are outside the scientific count and
+were not authorised retroactively; the affected test now uses synthetic data.
+
+The nominal-integral campaign (`results/nominal_integral_v19a_20260907/`,
+completion hash
+`989221d9a07fea14716f67d9b3b4eeef28e01833ad0e049ea0fdfd9017c14f47`) executed
+12 episodes and 2,733 physical steps against a ceiling of 3,000 on CPU in
+float64 with one numerical thread. A first launcher failed before any episode
+because a shell interpreted backticks in the code it forwarded; it consumed no
+steps and was replaced by a launcher that passes code through standard input.
+The runner verifies 47 source hashes, the historical references and the
+frozen protocol before the first step, and the six R0 episodes equal the six
+historical Z episodes on every shared field.
+
+The four read-only analyses (`results/residual_analysis_20260907/`,
+`results/nominal_static_review_20260907/`,
+`results/nominal_integral_analysis_20260912/`, completion hash
+`c218da12974312796df9426cdad18cf5a9561bff592d065640521144d94cc60d`, and
+`results/integral_fault_static_review_20260912/`, completion hash
+`5e368f12d85eb82cf57ec7a04e7b48c49d53cbd2269f7af12b7d65810d876edb`) use JSON
+and the standard library or NumPy only, never import the simulator or the
+policy, and each ran once. The torque balance closes within `7.1e-15 N m`, the
+joint-error reconstruction within `1e-15 rad`, the acceleration decomposition
+within `1.14e-13 rad/s^2` and the nominal barrier margin within
+`3.2e-14`. These identities verify the recording and the algebra; they do not
+validate the plant model or identify causal effects.
+
 ## v1.6.0 disagreement and operational failure evidence
 
 v1.6 introduced no new episodes and no retraining. It is a preregistered

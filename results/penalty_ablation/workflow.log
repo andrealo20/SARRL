@@ -1,0 +1,41 @@
+training complete: P0_inloop_reference seed=33
+training complete: P0_inloop_reference seed=31
+training complete: P0_inloop_reference seed=30
+training complete: P0_inloop_reference seed=32
+training complete: P0_inloop_reference seed=34
+training complete: P1_inloop_half_penalty seed=30
+training complete: P1_inloop_half_penalty seed=34
+training complete: P1_inloop_half_penalty seed=31
+training complete: P1_inloop_half_penalty seed=33
+training complete: P1_inloop_half_penalty seed=32
+evaluated P0_inloop_reference seed=31 scenario=id_reference episodes=500
+evaluated P0_inloop_reference seed=32 scenario=id_reference episodes=500
+evaluated P0_inloop_reference seed=34 scenario=id_reference episodes=500
+evaluated P0_inloop_reference seed=30 scenario=id_reference episodes=500
+evaluated P0_inloop_reference seed=33 scenario=id_reference episodes=500
+evaluated P0_inloop_reference seed=31 scenario=ood_compound episodes=100
+evaluated P0_inloop_reference seed=32 scenario=ood_compound episodes=100
+evaluated P0_inloop_reference seed=34 scenario=ood_compound episodes=100
+evaluated P0_inloop_reference seed=30 scenario=ood_compound episodes=100
+evaluated P0_inloop_reference seed=33 scenario=ood_compound episodes=100
+evaluated P0_inloop_reference seed=31 scenario=motor_fault episodes=100
+evaluated P0_inloop_reference seed=32 scenario=motor_fault episodes=100
+evaluated P0_inloop_reference seed=34 scenario=motor_fault episodes=100
+evaluated P0_inloop_reference seed=33 scenario=motor_fault episodes=100
+evaluated P0_inloop_reference seed=30 scenario=motor_fault episodes=100
+evaluated P1_inloop_half_penalty seed=31 scenario=id_reference episodes=500
+evaluated P1_inloop_half_penalty seed=32 scenario=id_reference episodes=500
+evaluated P1_inloop_half_penalty seed=30 scenario=id_reference episodes=500
+evaluated P1_inloop_half_penalty seed=31 scenario=ood_compound episodes=100
+evaluated P1_inloop_half_penalty seed=34 scenario=id_reference episodes=500
+evaluated P1_inloop_half_penalty seed=33 scenario=id_reference episodes=500
+evaluated P1_inloop_half_penalty seed=32 scenario=ood_compound episodes=100
+evaluated P1_inloop_half_penalty seed=31 scenario=motor_fault episodes=100
+evaluated P1_inloop_half_penalty seed=30 scenario=ood_compound episodes=100
+evaluated P1_inloop_half_penalty seed=34 scenario=ood_compound episodes=100
+evaluated P1_inloop_half_penalty seed=33 scenario=ood_compound episodes=100
+evaluated P1_inloop_half_penalty seed=32 scenario=motor_fault episodes=100
+evaluated P1_inloop_half_penalty seed=30 scenario=motor_fault episodes=100
+evaluated P1_inloop_half_penalty seed=34 scenario=motor_fault episodes=100
+evaluated P1_inloop_half_penalty seed=33 scenario=motor_fault episodes=100
+aggregation complete: 7000 episodes; engineering=False

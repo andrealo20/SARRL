@@ -1,0 +1,60 @@
+{
+  "C0_posthoc_hocbf": {
+    "id_reference": {
+      "normalized_violation_integral_mean": 0.0009221901183085995,
+      "safety_correction_mean": 3.722430308622792,
+      "safety_infeasible_rate": 0.042,
+      "safety_intervention_fraction": 0.3640999168134161,
+      "success_rate": 0.39719999999999994,
+      "unsafe_episode_rate": 0.0636,
+      "unsafe_state_fraction": 0.0094424349059253
+    },
+    "motor_fault": {
+      "normalized_violation_integral_mean": 0.04594219537848062,
+      "safety_correction_mean": 5.1407573160798155,
+      "safety_infeasible_rate": 0.032,
+      "safety_intervention_fraction": 0.525729447485107,
+      "success_rate": 0.188,
+      "unsafe_episode_rate": 0.304,
+      "unsafe_state_fraction": 0.09258628448723277
+    },
+    "ood_compound": {
+      "normalized_violation_integral_mean": 0.007544946687202197,
+      "safety_correction_mean": 12.093925811026349,
+      "safety_infeasible_rate": 0.038000000000000006,
+      "safety_intervention_fraction": 0.8313850437913336,
+      "success_rate": 0.042,
+      "unsafe_episode_rate": 0.184,
+      "unsafe_state_fraction": 0.012647732378790005
+    }
+  },
+  "C1_inloop_hocbf": {
+    "id_reference": {
+      "normalized_violation_integral_mean": 0.0012727281032539283,
+      "safety_correction_mean": 2.569900820563805,
+      "safety_infeasible_rate": 0.0416,
+      "safety_intervention_fraction": 0.2744314115169316,
+      "success_rate": 0.22440000000000002,
+      "unsafe_episode_rate": 0.0644,
+      "unsafe_state_fraction": 0.009879939754498308
+    },
+    "motor_fault": {
+      "normalized_violation_integral_mean": 0.06514969906947281,
+      "safety_correction_mean": 4.3351745370818255,
+      "safety_infeasible_rate": 0.032,
+      "safety_intervention_fraction": 0.4613293725577961,
+      "success_rate": 0.11200000000000002,
+      "unsafe_episode_rate": 0.344,
+      "unsafe_state_fraction": 0.09666713037625498
+    },
+    "ood_compound": {
+      "normalized_violation_integral_mean": 0.01155519916799331,
+      "safety_correction_mean": 9.869221230896523,
+      "safety_infeasible_rate": 0.044,
+      "safety_intervention_fraction": 0.7772053034618299,
+      "success_rate": 0.038,
+      "unsafe_episode_rate": 0.194,
+      "unsafe_state_fraction": 0.012826398676154713
+    }
+  }
+}

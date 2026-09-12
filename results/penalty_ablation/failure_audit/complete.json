@@ -1,0 +1,12 @@
+{
+  "episodes": 60,
+  "hashes": {
+    "audit.py": "ae077701cdaa3cde669181ad553be11580b8469f0dd67b0d0c148c9d90f502f1",
+    "episode_summary.json": "e255149fe1f10673dab4a2853868d84ae1faa08d70083715f1e2b38d27dfe04e",
+    "integrity.json": "cd47a2f30000caf6df3408dbbf7672ede475453028048a912590236b5c6be121",
+    "manifest.json": "8c1a0095fd4f78b2a181bdbcfd98e13e60acebf03fbee6f444dc1336abbcd4f2",
+    "official_failure_summary.json": "48f49a6d4c18a5e9aec999260a7c3459b1afc632390d75f570914bbf22e2abd3",
+    "PROTOCOL.md": "fe5b906cad1c8970c9c2080d860eea862858ee75e13b2a21d74a0b2ed0065f75",
+    "trajectories.json": "133a8049918b2d955ec6dc9a6803fd816f63f9035dcd2219ff2320f1d1a0566b"
+  }
+}

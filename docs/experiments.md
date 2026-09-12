@@ -481,3 +481,245 @@ power was recomputed under the calibrated rule: joint power at the preregistered
 target of AUC 0.70 and ICC 0.10 is 38.5% against an 80% goal, so v1.6-R is
 executed and reported as an explicitly **low-power feasibility screen** in which
 a non-rejection is Inconclusive and never evidence of absence.
+
+## v1.7 safety-aware policy training
+
+v1.4 measured a paired task-success cost of 4.6 pp when the hard HOCBF filter
+is applied at evaluation to a policy that never saw it during training. v1.7
+asks whether training through the filter removes that cost: a policy optimised
+against the projected command should learn to propose commands the filter
+accepts, instead of commands it must correct.
+
+Two conditions share architecture, optimiser, randomisation, budget,
+validation seeds and checkpoint-selection rule. `C0_posthoc_hocbf` trains
+unfiltered and is evaluated through the HOCBF, as in v1.4. `C1_inloop_hocbf`
+trains inside `SafetyProjectedEnv`, which projects every proposed command
+through the same filter before the plant step; an infeasible projection
+terminates the training episode with a fixed terminal penalty of `-500`,
+chosen below the worst feasible episode return so that an abort is never
+preferable to any feasible outcome. No other reward shaping is applied.
+Validation runs through the filter in both conditions.
+
+Five optimisation seeds `20..24` are paired across conditions, 200,000
+action decisions each, 5,000 random warm-up decisions, replay capacity
+200,000, one update per decision. Validation every 25,000 decisions on 30
+shared episodes (seeds `630000..630029`) selects the checkpoint by success
+rate, then mean reward, then earliest step. An engineering smoke run had
+opened seeds `10` and `610000..`, so the official ranges were moved before the
+source freeze and no official seed was opened before it.
+
+The ten selected checkpoints are evaluated on fresh paired episodes:
+`id_reference` 500 episodes from seed `620000`, `ood_compound` 100 from
+`621000`, `motor_fault` 100 from `622000`, 7,000 in total. The primary estimand
+is the ID success difference `C1 - C0`. A two-level paired bootstrap of 20,000
+replicates resamples the five seed pairs, then the paired episode seeds within
+each pair. `go` required a gain of at least `+3 pp` with a positive lower
+bound, at least four non-negative seed effects, and ID unsafe-episode and
+abort rates within `+2 pp` of C0. `no_go` follows a non-positive point
+estimate or a safety breach.
+
+Result: **no_go**. ID success fell from 39.72% to 22.44%, `-17.28 pp`
+`[-23.60, -9.80]`, with every seed effect negative. Safety did not change
+(unsafe 6.36% against 6.44%, aborts 4.20% against 4.16%); the filter
+intervened less often on the in-loop policy (27.4% of steps against 36.4%) and
+corrected less (2.57 against 3.72 N m), so the policy did learn to propose
+acceptable commands, at the price of reaching the target less often. The
+training-replay diagnostic retained for the follow-up showed that in C1 the
+160 abort transitions in one million carried 31.39% of the critic's squared
+error, which motivated v1.8. Replay distributions differ between arms, so that
+share is descriptive.
+
+Commands, per condition and seed, then inventory, evaluation and aggregation:
+
+```bash
+python tools/run_planar_v17.py train-shard --condition C1_inloop_hocbf --training-seed 20
+python tools/run_planar_v17.py build-inventory
+python tools/run_planar_v17.py evaluate-shard --training-seed 20
+python tools/run_planar_v17.py aggregate-evaluation
+```
+
+Retained evidence is under `results/safety_aware_training/`: the checkpoint
+inventory, per-seed training manifests, selections and validation curves,
+`evaluation/{aggregate,decision}.json`,
+`evaluation/{episodes,safety_diagnostics,summary,paired_comparisons}.csv`
+and the evaluation manifest with output hashes. Checkpoints are hash-bound in
+the inventory and remain local.
+
+## v1.8 terminal-penalty ablation
+
+v1.8 isolates one candidate cause of the v1.7 loss: the `-500` terminal
+penalty. Two in-loop arms differ only in the training penalty,
+`P0_inloop_reference` at `-500` and `P1_inloop_half_penalty` at `-250`.
+Validation uses `-500` in both arms so that checkpoint selection is common;
+held-out evaluation assigns no artificial abort reward. Training replays the
+raw normalised policy action rather than the projected command.
+
+Five paired seeds `30..34`, 200,000 decisions each, checkpoints every 50,000
+decisions, validation every 25,000 on 30 episodes from seed `640000`. Held-out
+evaluation per model: 500 ID episodes from `650000`, 100 OOD from `651000`,
+100 fault from `652000`, 7,000 in total. The bootstrap is crossed and paired,
+20,000 replicates, seeds `180000..180002`, resampling training-seed pairs and
+shared episode seeds. `advance` required an ID gain of at least `+3 pp` with a
+positive lower bound, at least four positive seed pairs, ID unsafe and abort
+upper bounds within `+2 pp` and `+1 pp`, no pointwise veto and no increase of
+the late-training abort rate above `+1 pp`.
+
+Result: **inconclusive**. ID success 23.48% (P0) against 28.00% (P1),
+`+4.52 pp` `[-0.88, +10.40]`; seed effects `+1.8, +14.0, +7.8, -0.4, -0.6` pp.
+OOD `+0.8 pp` `[-0.4, +2.4]`, fault `+3.0 pp` `[-2.0, +8.4]`. ID unsafe 8.68%
+against 7.68%, ID aborts 4.76% against 4.84%, late-training abort difference
+`+0.55 pp`. No veto fired, which does not establish safety equivalence. The
+critic diagnostic on each arm's own replay gives aggregate RMSE 2.632 (P0)
+against 1.667 (P1) with abort shares of 31.39% and 11.03%; the replays differ,
+so no mediation claim is made. Absolute rates are not comparable with v1.7,
+whose campaign used different seeds.
+
+The campaign was interrupted once: training stopped advancing while processes
+stayed alive and GPU memory stayed allocated, coinciding with Windows
+`nvlddmkm` driver errors. After a WSL restart the P0 arm resumed from the
+retained 100k checkpoints (seed 33 from 150k). The 200k budget per model is
+preserved; the recomputed segments are not bit-identical to the lost ones, and
+the workflow log was rewritten at the restart while training logs are
+append-only.
+
+```bash
+python tools/run_planar_v18.py --output results/penalty_ablation run-all
+```
+
+Retained evidence is under `results/penalty_ablation/`: `campaign.json`
+with the frozen protocol and runtime, `checkpoint_inventory.json`,
+`aggregate.json`, `summary.csv`, `episodes.csv`, `safety_diagnostics.csv`,
+`critic_diagnostics.json`, per-seed training manifests, selections, validation
+curves and logs, and the `complete.json` / `workflow_complete.json` chain. The
+evaluation shards duplicate the top-level CSVs and remain local, as do the
+checkpoints.
+
+## Failure diagnosis after v1.8
+
+Three releases in a row (v1.5, v1.7, v1.8) had measured how a change to the
+learned component moves success, without establishing why the frozen policies
+fail. The diagnosis below is exploratory: it runs on six fixed initial
+conditions, two per scenario, with seeds `9801800..9801801` (ID),
+`9801900..9801901` (OOD) and `9802000..9802001` (fault), outside every
+official and smoke range. Counts on six cases do not estimate population
+rates, and the cases, once observed, informed the hypotheses tested on them.
+
+### Official failure classification
+
+The 7,000 official v1.8 episodes split into 3,473 ID timeouts, 240 ID aborts
+and 1,287 ID successes across both arms. Exactly one ID timeout ends within
+5 cm of the target, and the median final distance of ID timeouts is 0.16 to
+0.18 m. Final velocity alone therefore does not explain the timeouts; the
+policies stop short of the target. The classification is in
+`results/penalty_ablation/failure_audit/official_failure_summary.json`, with
+the 60-episode trajectory audit, its protocol, integrity checks over 208
+retained hashes and manifest alongside.
+
+### Null-residual control
+
+Sixty episodes replay the ten frozen v1.8 checkpoints on the six cases (arm L)
+and six episodes run the same nominal controller and filter with the residual
+fixed at zero (arm Z), sharing initial state, plant parameters and RNG. The
+actor runs on CUDA in float32 because the historical first actions reproduce
+exactly on CUDA in 60/60 cases and on CPU in only 8/60; the plant and filter
+run on CPU in float64. All 60 L episodes reproduce the retained audit rows
+within `1e-10`.
+
+Z yields no success: five timeouts and one abort. On ID `9801800` the bare
+nominal stops at 0.594 m while all ten policies end between 0.060 and
+0.353 m. On fault `9802001` Z stops at 0.436 m while four policies succeed.
+In all 17 stop tails (50 transitions with low velocity) HOCBF projection,
+nominal saturation and plant clipping are exactly zero. In the two Z tails the
+net torque is below `1.4e-3 N m` while the applied torque balances the real
+load: on the ID case the applied torque is `(18.45, 9.00) N m`, the real load
+`(18.45, 9.00) N m` and the nominal load `(11.28, 4.35) N m`. The torque
+balance of seven recorded terms closes within `7.1e-15 N m`.
+
+```bash
+python tools/run_residual_diagnosis.py plan --protocol <protocol.md> --amendment <amendment.md>
+python tools/run_residual_diagnosis.py run --protocol <protocol.md> --amendment <amendment.md> --output results/residual_diagnosis_20260905
+```
+
+The runner freezes the protocol and amendment by hash into its manifest and
+refuses to run if any source, checkpoint or retained reference changed.
+
+### Static review of the nominal controller
+
+`ComputedTorqueController` forms the virtual acceleration `Kp e - Kd qd`
+with `Kp = 36 I`, `Kd = 12 I`, maps it through the nominal inverse dynamics
+with Coriolis, gravity and friction, and saturates at 40 N m. It holds no
+integral state and no bias estimate. The environment randomises link masses,
+friction, payload, motor gain and delay at reset without updating the
+controller model; the motor fault scales the gain and payload of the plant
+only. With `M_n` the nominal mass matrix, `l_n` and `l_r` the nominal and real
+load terms, `G` the motor gains and `d - u` the delay difference,
+
+```text
+M_n Kp e = (l_r - l_n) + (G^-1 - I) l_r + M_n Kd qd + G^-1 net - (d - u)
+```
+
+holds identically along the recorded states and reproduces the joint error on
+all 100 tail states within `1e-15 rad`. The stop is the equilibrium of a
+fixed-model PD under a persistent disturbance. On `9801800` the load mismatch
+dominates; on `9802001` the gain term dominates joint 2. The kinematic
+references are exact within `3.7e-16 m`. No algebraic defect was found.
+
+### Integral nominal candidate
+
+One candidate was frozen before evaluation: an integral state `z` in the
+virtual acceleration with `Ki = 36 I`, back-calculation anti-windup
+`Kaw = 4` on the difference between the sent and the raw command, and a
+per-component limit of `36 rad/s^2`. `IntegralNominalController` keeps the
+pre-command data in a transaction that the caller commits after the filter
+and plant step, or aborts when the filter rejects the command, so that the
+integral never advances on a command that was not executed. The anti-windup
+term is decomposed into nominal clipping, HOCBF correction and send clipping,
+and the decomposition is checked at every commit.
+
+Twelve episodes compare the frozen nominal (R0) with the candidate (I1) on the
+six cases. I1 succeeds on both motivating stops (`9801800` in 172 steps,
+`9802001` in 153) and on `9801801`, where R0 aborts. On fault `9802000`,
+unsafe already under R0, I1 raises the maximum normalised violation from
+0.3267 to 0.4027 and drives joint 2 to `4.278 rad` against the `3.05 rad`
+limit. The preregistered order of decisions puts the safety veto first:
+**no_go_safety**. The candidate is not promoted.
+
+```bash
+python tools/run_nominal_integral.py plan --protocol <protocol.md>
+python tools/run_nominal_integral.py run --protocol <protocol.md> --output results/nominal_integral_v19a_20260907
+```
+
+### Reconstruction of the fault trajectory
+
+The I1 trajectory on `9802000` was reconstructed algebraically from the
+recorded states, with no new simulation. The real acceleration minus the
+filter's nominal prediction decomposes exactly along the trajectory into
+
+```text
+qdd_real - qdd_nominal(h) =
+    M_r^-1 (u - h) + M_r^-1 (d - u) + M_r^-1 (a - d)
+  + (M_r^-1 - M_n^-1)(h - l_n) + M_r^-1 (l_n - l_r)
+```
+
+with `h` the filtered command, `u` the sent command, `d` the delayed command
+and `a` the applied torque. In the 12 commands before joint 2 crossed its
+limit, the nominal model predicted a mean braking of `-25.57 rad/s^2` and the
+plant produced `-0.13 rad/s^2`. The difference splits into `+13.98` from the
+mass matrices, `+6.27` from the faulted motor gain, `+2.75` from the delay and
+`+2.45 rad/s^2` from the load terms; clipping contributes nothing. All 250
+filtered commands satisfy the nominal HOCBF inequalities, so the filter never
+intervened in the final 54 commands: the certificate was valid for a model the
+plant no longer matched. During the same phase the integral kept a positive
+torque contribution for 30 commands after the joint had passed its target,
+because back-calculation compares the sent command with the raw one and
+cannot see the lost motor gain. The decomposition is an identity along one
+observed trajectory, not a causal attribution.
+
+The diagnosis points at the shared fixed model rather than at the learned
+residual, the reward or the penalty. Both the nominal controller and the HOCBF
+certificate use it, and both were wrong by the same amount on the case that
+failed. Compact outputs of the four analyses are retained under
+`results/residual_analysis_20260907/`, `results/nominal_static_review_20260907/`,
+`results/nominal_integral_analysis_20260912/` and
+`results/integral_fault_static_review_20260912/`; the full per-episode
+transition records of the two campaigns remain local.

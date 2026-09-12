@@ -1,0 +1,222 @@
+{
+  "config": {
+    "checkpoint_inventory": "results/safety_aware_training/checkpoint_inventory.json",
+    "checkpoint_inventory_sha256": "e7ffbac7404abac30f756de8305c966634b972f7a5a6dc0afeaa1d94534ba3a6",
+    "outputs": {
+      "results/safety_aware_training/evaluation/aggregate.json": "6a4a4589b70fa3fb253fd3943c32857b280cfc4e5dd18c064700dc4c6020ff22",
+      "results/safety_aware_training/evaluation/decision.json": "b06cc1fb2db1d027e7fecf145022cc6899dfbfd770e7d386895c476c5b092387",
+      "results/safety_aware_training/evaluation/episodes.csv": "c1abfbfd0a6f7ab21dcb2d052a0b2d7db0a80571b0e2baa9bdb013174ea4d321",
+      "results/safety_aware_training/evaluation/paired_comparisons.csv": "366665ff33049ac6bc3edb5b742e183cd2503b229d31af2ee5f27c628e5c7f4e",
+      "results/safety_aware_training/evaluation/safety_diagnostics.csv": "9116e4a0aa413a3b0600b06b7e4292fb6edb1d3e8c316cacd9ec6fabb949eae1",
+      "results/safety_aware_training/evaluation/summary.csv": "3f4640234f93c232b27b5edc6a833497cde11413cc1630a880855fb180c7d6bb"
+    },
+    "protocol": {
+      "campaign": "safety_aware_policy_training",
+      "conditions": {
+        "C0_posthoc_hocbf": {
+          "evaluation_hocbf": true,
+          "training_hocbf": false,
+          "validation_hocbf": true
+        },
+        "C1_inloop_hocbf": {
+          "evaluation_hocbf": true,
+          "training_hocbf": true,
+          "validation_hocbf": true
+        }
+      },
+      "decision": {
+        "minimum_nonnegative_seed_pairs": 4,
+        "promising_success_gain": 0.03,
+        "safety_margin": 0.02
+      },
+      "evaluation": {
+        "id_reference": {
+          "episodes": 500,
+          "seed": 620000
+        },
+        "motor_fault": {
+          "episodes": 100,
+          "seed": 622000
+        },
+        "ood_compound": {
+          "episodes": 100,
+          "seed": 621000
+        }
+      },
+      "primary": {
+        "estimand": "C1_inloop_hocbf_minus_C0_posthoc_hocbf",
+        "metric": "success_rate",
+        "scenario": "id_reference"
+      },
+      "release_target": "v1.7.0",
+      "safety": {
+        "feasibility_tol": 2e-08,
+        "guarantee_scope": "nominal_model_relative",
+        "infeasible_semantics": "abort_episode_unsuccessful",
+        "intervention_tolerance": 1e-09,
+        "joint_gamma1": 5.0,
+        "joint_gamma2": 5.0,
+        "joint_lower": [
+          -3.05,
+          -3.05
+        ],
+        "joint_upper": [
+          3.05,
+          3.05
+        ],
+        "obstacles": [],
+        "require_safety": true,
+        "torque_limit": [
+          40.0,
+          40.0
+        ],
+        "velocity_dt": 0.02,
+        "velocity_limit": [
+          7.0,
+          7.0
+        ]
+      },
+      "scenarios": [
+        {
+          "fault": null,
+          "key": "id_reference",
+          "label": "In-distribution reference",
+          "randomization": {
+            "action_delay_max": 2,
+            "friction_fraction": 0.3,
+            "mass_fraction": 0.15,
+            "motor_gain_fraction": 0.15,
+            "payload_range": [
+              0.0,
+              1.0
+            ],
+            "sensor_noise_std": 0.0
+          }
+        },
+        {
+          "fault": null,
+          "key": "ood_compound",
+          "label": "Compound OOD dynamics",
+          "randomization": {
+            "action_delay_max": 3,
+            "friction_fraction": 0.5,
+            "mass_fraction": 0.3,
+            "motor_gain_fraction": 0.25,
+            "payload_range": [
+              1.25,
+              1.75
+            ],
+            "sensor_noise_std": 0.0
+          }
+        },
+        {
+          "fault": {
+            "motor_gain_multiplier": [
+              1.0,
+              0.55
+            ],
+            "payload_delta": 0.0,
+            "start_step": 20
+          },
+          "key": "motor_fault",
+          "label": "Abrupt joint-2 motor loss",
+          "randomization": {
+            "action_delay_max": 2,
+            "friction_fraction": 0.3,
+            "mass_fraction": 0.15,
+            "motor_gain_fraction": 0.15,
+            "payload_range": [
+              0.0,
+              1.0
+            ],
+            "sensor_noise_std": 0.0
+          }
+        }
+      ],
+      "statistics": {
+        "bootstrap": "paired_two_level_training_seed_then_episode_seed",
+        "bootstrap_samples": 20000,
+        "bootstrap_seed": 170000,
+        "safety_upper_bound": 0.95,
+        "two_sided_interval": 0.95
+      },
+      "training": {
+        "batch_size": 256,
+        "correction_penalty": null,
+        "hidden": [
+          256,
+          256
+        ],
+        "infeasible_reward": -500.0,
+        "mode": "residual",
+        "randomization": {
+          "action_delay_max": 2,
+          "friction_fraction": 0.3,
+          "mass_fraction": 0.15,
+          "motor_gain_fraction": 0.15,
+          "payload_range": [
+            0.0,
+            1.0
+          ]
+        },
+        "replay_action": "raw_normalized_policy_action",
+        "replay_capacity": 200000,
+        "seeds": [
+          20,
+          21,
+          22,
+          23,
+          24
+        ],
+        "start_steps": 5000,
+        "steps_per_seed": 200000,
+        "update_every": 1
+      },
+      "validation": {
+        "episodes": 30,
+        "every_steps": 25000,
+        "hocbf_required_for_both_conditions": true,
+        "seed_start": 630000,
+        "selection": "success_rate_then_reward_then_earliest_step"
+      }
+    },
+    "shards": [
+      {
+        "manifest": "results/safety_aware_training/evaluation_shards/seed_20/evaluation_manifest.json",
+        "manifest_sha256": "d2cedf6859526f2939b60341d1d8f61aff8b57c5e632fb1c4c920d02207cb322",
+        "training_seed": 20
+      },
+      {
+        "manifest": "results/safety_aware_training/evaluation_shards/seed_21/evaluation_manifest.json",
+        "manifest_sha256": "6ebbd3ab79d7a498a09c7b13497e808317fe9a6f148bf7db5c39c614f25317f0",
+        "training_seed": 21
+      },
+      {
+        "manifest": "results/safety_aware_training/evaluation_shards/seed_22/evaluation_manifest.json",
+        "manifest_sha256": "949b5ffe07b4e344ba7786fc5f9bef28e04572d5a488d0e75be090c81da2f47e",
+        "training_seed": 22
+      },
+      {
+        "manifest": "results/safety_aware_training/evaluation_shards/seed_23/evaluation_manifest.json",
+        "manifest_sha256": "0fb431777293f6a40773cf06841d53ac0bd9b327194ffc3d8fc295bc33c6e7ca",
+        "training_seed": 23
+      },
+      {
+        "manifest": "results/safety_aware_training/evaluation_shards/seed_24/evaluation_manifest.json",
+        "manifest_sha256": "1b7fab23eeee8e6ce496d4657ef1c1b6b6472947311e0e5648263e8accaf10ef",
+        "training_seed": 24
+      }
+    ]
+  },
+  "extra": {},
+  "runtime": {
+    "cuda_available": true,
+    "git_commit": "932f84f12580171d768e6ab9eb3c2311ce5f3bfe",
+    "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "torch": "2.12.0+cu130"
+  }
+}

@@ -1,0 +1,85 @@
+{
+  "execution": {
+    "cpu_logical_count": 20,
+    "gpu": "NVIDIA GeForce RTX 4080 Laptop GPU",
+    "threads_per_process": 1,
+    "torch_device": "cuda",
+    "workers": 5
+  },
+  "plan_sha256": "0e5456bccac220e94aabc69a1e59db73bb937a6490fb8a8ef409c12775e72dd1",
+  "protocol": {
+    "bootstrap": {
+      "quantile": "linear",
+      "samples": 20000,
+      "seeds": [
+        180000,
+        180001,
+        180002
+      ],
+      "type": "crossed_paired"
+    },
+    "campaign": "penalty_ablation_v18",
+    "checkpoint_every": 50000,
+    "conditions": {
+      "P0_inloop_reference": -500.0,
+      "P1_inloop_half_penalty": -250.0
+    },
+    "decision": {
+      "abort_margin": 0.01,
+      "positive_seed_pairs": 4,
+      "success_gain": 0.03,
+      "unsafe_margin": 0.02
+    },
+    "diagnostic": {
+      "batch": 4096,
+      "draws": 4,
+      "seed_offset": 181000
+    },
+    "engineering": false,
+    "evaluation": {
+      "id_reference": [
+        650000,
+        500
+      ],
+      "motor_fault": [
+        652000,
+        100
+      ],
+      "ood_compound": [
+        651000,
+        100
+      ]
+    },
+    "heldout_abort_reward": 0.0,
+    "late_training_end_step_window": [
+      150000,
+      200000
+    ],
+    "replay_action": "raw_normalized_policy_action",
+    "seeds": [
+      30,
+      31,
+      32,
+      33,
+      34
+    ],
+    "steps": 200000,
+    "validation": {
+      "episodes": 30,
+      "every": 25000,
+      "seed": 640000
+    },
+    "validation_penalty": -500.0,
+    "warmup": 5000
+  },
+  "runtime": {
+    "cuda_available": true,
+    "git_commit": "68df4213e2ddae643bb6bdd841719e2a78b422fd",
+    "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "torch": "2.12.0+cu130"
+  }
+}

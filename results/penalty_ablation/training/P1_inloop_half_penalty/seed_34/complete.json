@@ -1,0 +1,22 @@
+{
+  "best_step": 175000,
+  "condition": "P1_inloop_half_penalty",
+  "hashes": {
+    "best.pt": "0f50bbed8347dd47e5113efecf85fe79ff136035f5dc145397fd4ae632a3995c",
+    "episodes.csv": "941946738b331d43f0aa84db9bd8223740dba151f0ffe6c4bbb4a4999e9af65c",
+    "final.pt": "0fd9f656870f3e6c57f20e1c23a51bc00301090e59e9d9f65ef753347a3e5f3a",
+    "run_manifest.json": "71a6b8be2fd815cc75302419d7a089ad7e70df9307a204f760596c5087fe0d3a",
+    "selection.json": "5b42816b7dea2dce624ab827b938516debc46110d4abdee0de96e06a2a4c4693",
+    "train_step100000.pt": "4ad190fb3c1282c1eaff8031eaab4883cdd6f6a30799f9bcc2c2bf4e13cf28f3",
+    "train_step150000.pt": "854d08028d5f135886c4d6034dbc18c089477c4667d1615d8fbd84c056ed25a8",
+    "train_step200000.pt": "8786c15af8b271466ddefa9bc3a5cb3bb0ea60dd35108029a6fee40ddc2a1b47",
+    "train_step50000.pt": "e843f09c8a42f64401599d00a0d55a7b674c0849cb32f0a415255eb6e6438225",
+    "training_final.pt": "a5216336c74c2cd294275f4dce1ace614228863f99ce04236e1f14229b35fe81",
+    "training_safety.csv": "d8aa6bf270cda91281086aeec9c162de9ce5f6c740fa4712ad874d1868a2f304",
+    "validation.csv": "26fa4954f53880c2bdc03e99277eb67c5fbaaa8b8d82e1e3ceaba7f2b5f5ad77"
+  },
+  "late_training_abort_rate": 0.036290322580645164,
+  "late_training_completed_episodes": 248,
+  "trailing_partial_episode_decisions": 223,
+  "training_seed": 34
+}

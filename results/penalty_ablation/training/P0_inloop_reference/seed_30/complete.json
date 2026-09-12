@@ -1,0 +1,22 @@
+{
+  "best_step": 200000,
+  "condition": "P0_inloop_reference",
+  "hashes": {
+    "best.pt": "2c6540da7649ea422300de57f52a6feadc7dae480a69f9ec457be00931fcf764",
+    "episodes.csv": "789df75c98e9005724d8aea8d2523aec4016d141176fc6ede7d0b869763c5acb",
+    "final.pt": "7c920bdb3bbf98081d17ff7ab29b8c2df0dc9cc3f046ed5cb27e0f6cacb6573d",
+    "run_manifest.json": "8bb42ed4b15ec5beb03449631f8ad98883ab3e5cf6c1fce50c8cccf3729476e7",
+    "selection.json": "f2e904c2bc279367418593b2d5361b526bd4e06d9f1931dde4a9777371289958",
+    "train_step100000.pt": "3247e7245a13a7ba87760e9ba1a7f0a7dd5332faf2e130e268db823a201bb48c",
+    "train_step150000.pt": "e0ce7976e4f2b7c01eb0c5b73e0bf71a7841a512fba3573406aed866546b8efd",
+    "train_step200000.pt": "5551a107c9a18127590336a00f378dae267d57de66485db5c48167c35657a7e3",
+    "train_step50000.pt": "8e6f49c5d063131c841c2a645348fa4eed871c89558859300f708b580877bb9c",
+    "training_final.pt": "859b999965d441bc613bafc1223e321425406c858be14b5c2f4bd0cf99d79425",
+    "training_safety.csv": "18d0f06c0c23af0d2d2df251abda414901eb14ea63abffbcae7b4615b4fc9672",
+    "validation.csv": "88087fea3292ae59cfb1a8b17933a6443f533b1ee67913344fe1cd158bd1040a"
+  },
+  "late_training_abort_rate": 0.046511627906976744,
+  "late_training_completed_episodes": 258,
+  "trailing_partial_episode_decisions": 30,
+  "training_seed": 30
+}

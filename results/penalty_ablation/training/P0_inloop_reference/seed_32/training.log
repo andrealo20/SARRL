@@ -1,0 +1,58 @@
+episode=   20 step=    4109 reward=  -426.18 success=0 alpha=nan
+episode=   40 step=    8353 reward=  -179.12 success=0 alpha=0.077
+episode=   60 step=   13000 reward=  -142.29 success=0 alpha=0.039
+episode=   80 step=   17974 reward=  -162.35 success=0 alpha=0.060
+episode=  100 step=   22850 reward=   -84.25 success=0 alpha=0.060
+validation step=   25000 success=2/30 reward=-181.94 distance=0.2885
+episode=  120 step=   27669 reward=  -195.83 success=0 alpha=0.046
+episode=  140 step=   31508 reward=   -66.10 success=0 alpha=0.047
+episode=  160 step=   35870 reward=  -162.27 success=0 alpha=0.047
+episode=  180 step=   40135 reward=  -278.03 success=0 alpha=0.047
+episode=  200 step=   44284 reward=  -213.08 success=0 alpha=0.040
+episode=  220 step=   48572 reward=  -278.68 success=0 alpha=0.051
+validation step=   50000 success=2/30 reward=-189.67 distance=0.2995
+episode=  240 step=   53461 reward=  -149.10 success=0 alpha=0.045
+episode=  260 step=   58088 reward=  -148.21 success=0 alpha=0.047
+episode=  280 step=   62406 reward=   -70.90 success=1 alpha=0.043
+episode=  300 step=   66843 reward=  -150.77 success=0 alpha=0.046
+episode=  320 step=   70891 reward=   -44.15 success=1 alpha=0.042
+validation step=   75000 success=4/30 reward=-181.10 distance=0.3021
+episode=  340 step=   75154 reward=   -90.30 success=0 alpha=0.043
+episode=  360 step=   79157 reward=  -165.13 success=0 alpha=0.041
+episode=  380 step=   83500 reward=   -86.67 success=1 alpha=0.039
+episode=  400 step=   87855 reward=   -92.63 success=0 alpha=0.038
+episode=  420 step=   91414 reward=  -119.47 success=0 alpha=0.038
+episode=  440 step=   95642 reward=  -175.83 success=0 alpha=0.041
+episode=  460 step=   99625 reward=  -106.29 success=0 alpha=0.041
+validation step=  100000 success=6/30 reward=-178.61 distance=0.2845
+episode=  480 step=  103597 reward=  -100.70 success=0 alpha=0.040
+resuming exact session: mode=residual hidden=(256, 256) replay=200000 batch=256 update_every=1 context=False training_hocbf=True validation_hocbf=True
+episode=  480 step=  103597 reward=  -100.70 success=0 alpha=0.040
+episode=  500 step=  107425 reward=  -116.74 success=1 alpha=0.039
+episode=  520 step=  110772 reward=  -147.49 success=0 alpha=0.039
+episode=  540 step=  115167 reward=  -314.78 success=0 alpha=0.039
+episode=  560 step=  119506 reward=   -32.13 success=1 alpha=0.039
+episode=  580 step=  123242 reward=  -678.38 success=0 alpha=0.038
+validation step=  125000 success=4/30 reward=-179.27 distance=0.2767
+episode=  600 step=  127931 reward=  -193.02 success=0 alpha=0.036
+episode=  620 step=  131791 reward=  -224.41 success=0 alpha=0.036
+episode=  640 step=  135980 reward=  -146.16 success=0 alpha=0.038
+episode=  660 step=  140179 reward=  -102.38 success=0 alpha=0.037
+episode=  680 step=  143883 reward=   -99.93 success=0 alpha=0.037
+episode=  700 step=  148227 reward=  -427.51 success=0 alpha=0.034
+validation step=  150000 success=8/30 reward=-164.62 distance=0.2169
+episode=  720 step=  152047 reward=   -93.31 success=0 alpha=0.037
+episode=  740 step=  156241 reward=  -231.25 success=0 alpha=0.034
+episode=  760 step=  159654 reward=  -121.28 success=1 alpha=0.032
+episode=  780 step=  162931 reward=  -229.92 success=0 alpha=0.033
+episode=  800 step=  166381 reward=  -139.46 success=0 alpha=0.034
+episode=  820 step=  171028 reward=  -160.96 success=0 alpha=0.033
+episode=  840 step=  174599 reward=   -93.64 success=0 alpha=0.033
+validation step=  175000 success=6/30 reward=-162.83 distance=0.1957
+episode=  860 step=  178635 reward=  -101.99 success=0 alpha=0.035
+episode=  880 step=  182353 reward=  -122.05 success=0 alpha=0.033
+episode=  900 step=  186061 reward=   -55.02 success=1 alpha=0.033
+episode=  920 step=  189901 reward=  -105.13 success=0 alpha=0.032
+episode=  940 step=  193355 reward=   -48.86 success=1 alpha=0.033
+episode=  960 step=  197162 reward=   -99.96 success=0 alpha=0.032
+validation step=  200000 success=7/30 reward=-163.16 distance=0.2170

@@ -1,0 +1,28 @@
+{
+  "decision": "no_go",
+  "infeasibility_guardrail": {
+    "ci95_high": 0.0072,
+    "ci95_low": -0.008,
+    "difference": -0.0004,
+    "upper_one_sided_95": 0.0064
+  },
+  "per_training_seed_success_difference": {
+    "20": -0.15,
+    "21": -0.038,
+    "22": -0.198,
+    "23": -0.22,
+    "24": -0.258
+  },
+  "primary_success": {
+    "ci95_high": -0.098,
+    "ci95_low": -0.236,
+    "difference": -0.1728,
+    "upper_one_sided_95": -0.11
+  },
+  "unsafe_guardrail": {
+    "ci95_high": 0.0124,
+    "ci95_low": -0.0108,
+    "difference": 0.0008,
+    "upper_one_sided_95": 0.0104
+  }
+}
