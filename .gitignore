@@ -2,10 +2,13 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .ruff_cache/
-PLAN*.md
-PLAN-REVIEW-LOG.md
-CLAUDE.md
-AGENTS.md
+# Root-level working notes, local launch scripts and local tool directories
+# stay out of the repository.
+/*.md
+!/README.md
+/*.ps1
+/.*/
+!/.github/
 .venv/
 venv/
 build/
