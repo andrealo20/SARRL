@@ -41,13 +41,13 @@ HISTORICAL_CASES = {
 FRESH_SEED_BASE = {"id_reference": 9803000, "ood_compound": 9803100, "motor_fault": 9803200}
 
 
-def pilot_cases(fresh_per_scenario: int) -> list[tuple[str, int, str]]:
+def pilot_cases(fresh_per_scenario: int, historical: bool = True) -> list[tuple[str, int, str]]:
     """Historical diagnostic seeds first, then fresh seeds outside every official range."""
     if fresh_per_scenario < 0 or fresh_per_scenario > 100:
         raise ValueError("fresh_per_scenario must lie in 0..100")
     cases = []
     for scenario in ("id_reference", "ood_compound", "motor_fault"):
-        for seed in HISTORICAL_CASES[scenario]:
+        for seed in HISTORICAL_CASES[scenario] if historical else ():
             cases.append((scenario, seed, "historical"))
         for offset in range(fresh_per_scenario):
             cases.append((scenario, FRESH_SEED_BASE[scenario] + offset, "fresh"))
@@ -57,14 +57,20 @@ def pilot_cases(fresh_per_scenario: int) -> list[tuple[str, int, str]]:
 class NominalStack:
     """Policy-free stack: nominal command, optional hard projection, no residual."""
 
-    def __init__(self, baseline, safety_filter=None, config=None):
+    def __init__(self, baseline, safety_filter=None, config=None, compensate_delay=False):
         self.baseline = baseline
         self.safety_filter = safety_filter
         self.config = config or ControlStackConfig(require_safety=safety_filter is not None)
         self.config.validate()
+        if compensate_delay and not hasattr(baseline, "predict_state"):
+            raise ValueError("delay compensation needs a controller with predict_state")
+        self.compensate_delay = bool(compensate_delay)
 
     def command(self, observation, state, q_des, obstacles=(), deterministic=True):
         state = np.asarray(state, dtype=np.float64)
+        if self.compensate_delay:
+            # Evaluate control law and certificate where the new command will act.
+            state = self.baseline.predict_state(state)
         baseline = self.baseline.command(state[:2], state[2:], q_des)
         zeros = np.zeros(2, dtype=np.float64)
         limit = np.asarray(self.config.torque_limit)
@@ -119,6 +125,7 @@ class PilotEpisode:
     safety_intervention_fraction: float
     true_delay: int
     selected_lag: int | None
+    converged_at_step: int | None
     prediction_error_rms: tuple[float, float] | None
     estimated_parameters: list | None
     true_parameters: list
@@ -139,6 +146,13 @@ def build_arm(arm: str, config: AdaptiveNominalConfig):
     raise ValueError(f"unknown arm {arm}")
 
 
+def build_stack(arm: str, config: AdaptiveNominalConfig, compensate_delay: bool = False):
+    controller, safety_filter = build_arm(arm, config)
+    adaptive = isinstance(controller, AdaptiveNominalController)
+    stack = NominalStack(controller, safety_filter, compensate_delay=compensate_delay and adaptive)
+    return controller, stack
+
+
 def _prediction_error(controller, env, probes):
     truth = CommandRegressor.parameters(env.arm.params, env.motor_gain)
     estimate = controller.parameters
@@ -149,18 +163,27 @@ def _prediction_error(controller, env, probes):
     return tuple(float(v) for v in np.sqrt(np.mean(errors**2, axis=0)))
 
 
-def run_case(arm: str, scenario: str, seed: int, origin: str, config: AdaptiveNominalConfig):
+def run_case(
+    arm: str,
+    scenario: str,
+    seed: int,
+    origin: str,
+    config: AdaptiveNominalConfig,
+    compensate_delay: bool = False,
+):
     spec = {s.key: s for s in v13_scenarios()}[scenario]
     env = PlanarReachEnv(mode="torque", randomization=spec.randomization, fault=spec.fault)
-    controller, safety_filter = build_arm(arm, config)
-    stack = NominalStack(controller, safety_filter)
+    controller, stack = build_stack(arm, config, compensate_delay)
     adaptive = isinstance(controller, AdaptiveNominalController)
     if adaptive:
         controller.reset()
+    converged_at = {"step": None}
 
     def observe(event):
         if adaptive and event["info"] is not None:
             controller.observe(event["state"], env.state, event["command"].torque)
+            if converged_at["step"] is None and controller.converged:
+                converged_at["step"] = int(env.steps)
 
     outcomes, diagnostics = evaluate_safety_episodes(
         stack,
@@ -204,6 +227,7 @@ def run_case(arm: str, scenario: str, seed: int, origin: str, config: AdaptiveNo
         safety_intervention_fraction=float(safety.safety_intervention_fraction),
         true_delay=int(env.action_delay),
         selected_lag=int(controller.lag) if adaptive else None,
+        converged_at_step=converged_at["step"],
         prediction_error_rms=_prediction_error(controller, env, probes) if adaptive else None,
         estimated_parameters=controller.parameters.tolist() if adaptive else None,
         true_parameters=true_parameters,

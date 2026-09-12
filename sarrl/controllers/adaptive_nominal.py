@@ -122,18 +122,29 @@ class AdaptiveNominalConfig:
     forgetting: float = 1.0
     process_noise: float = 0.02
     max_lag: int = 3
-    selection_memory: float = 0.9
+    lag_min_updates: int = 10
+    selection_memory: float = 1.0
+    payload_prior: float = 0.0
+    filter_gate: bool = False
+    gate_threshold: float = 1.0
+    gate_min_updates: int = 5
     prior_std: tuple[float, ...] = (1.0, 1.0, 0.1, 0.1, 2.0, 0.1, 0.04)
     lower: tuple[float, ...] = (0.2, 0.2, 0.01, 0.01, 0.0, 0.0, 0.0)
     upper: tuple[float, ...] = (5.0, 5.0, 0.5, 0.5, 6.0, 0.5, 0.2)
 
     def validate(self) -> None:
-        if not 0.0 < self.forgetting <= 1.0 or not 0.0 <= self.selection_memory < 1.0:
-            raise ValueError("forgetting must lie in (0, 1] and selection_memory in [0, 1)")
+        if not 0.0 < self.forgetting <= 1.0 or not 0.0 < self.selection_memory <= 1.0:
+            raise ValueError("forgetting and selection_memory must lie in (0, 1]")
         if not np.isfinite(self.process_noise) or self.process_noise < 0.0:
             raise ValueError("process_noise must be finite and non-negative")
         if self.max_lag < 0 or self.dt <= 0.0:
             raise ValueError("max_lag must be non-negative and dt positive")
+        if not np.isfinite(self.payload_prior) or self.payload_prior < 0.0:
+            raise ValueError("payload_prior must be finite and non-negative")
+        if not np.isfinite(self.gate_threshold) or self.gate_threshold <= 0.0:
+            raise ValueError("gate_threshold must be positive")
+        if self.gate_min_updates < 1 or self.lag_min_updates < 1:
+            raise ValueError("gate_min_updates and lag_min_updates must be at least one")
         for name in ("prior_std", "lower", "upper"):
             values = np.asarray(getattr(self, name), dtype=np.float64)
             if values.shape != (7,) or not np.all(np.isfinite(values)):
@@ -156,6 +167,9 @@ class AdaptiveNominalController:
         self.kd = np.asarray(self.config.kd, dtype=np.float64)
         self.torque_limit = np.asarray(self.config.torque_limit, dtype=np.float64)
         self.prior = CommandRegressor.parameters(model.params)
+        # The prior payload is a design choice: the nominal arm carries none,
+        # but the randomised plant usually does.
+        self.prior[:, 4] = self.config.payload_prior
         self._lower = np.asarray(self.config.lower, dtype=np.float64)
         self._upper = np.asarray(self.config.upper, dtype=np.float64)
         self._p0 = np.diag(np.asarray(self.config.prior_std, dtype=np.float64) ** 2)
@@ -168,14 +182,44 @@ class AdaptiveNominalController:
         self.theta = np.repeat(self.prior[None], lags, axis=0)  # (lags, 2, 7)
         self.covariance = np.repeat(np.stack([self._p0, self._p0])[None], lags, axis=0)
         self.error_score = np.zeros(lags)
+        self.recent_score = np.zeros(lags)
         self.updates = 0
+        self._converged = False
         self._sent: list[np.ndarray] = []
 
     @property
     def lag(self) -> int:
+        """Lag hypothesis whose parameters currently explain the data best."""
         if self.updates == 0:
             return 0
         return int(np.argmin(self.error_score))
+
+    @property
+    def prediction_lag(self) -> int:
+        """Lag trusted for state prediction; zero until every hypothesis has data.
+
+        With seven parameters and a live covariance, each hypothesis fits its
+        first few targets almost exactly, so the argmin over lags is noise until
+        the regressors have accumulated. Using the best-fitting parameters for
+        the command is harmless then; walking the state through a wrong queue
+        is not, so prediction waits.
+        """
+        if self.updates < self.config.lag_min_updates:
+            return 0
+        return self.lag
+
+    @property
+    def converged(self) -> bool:
+        """Latched once the selected lag's recent squared innovation drops below the gate.
+
+        The recent score is an exponential average of the squared innovation
+        with memory 0.9, kept apart from the cumulative lag-selection score.
+
+        The latch matters after an in-episode plant change: the innovation rises
+        again while the estimate re-adapts, and during those steps a briefly stale
+        estimate is still closer to the plant than the nominal model.
+        """
+        return self._converged
 
     @property
     def parameters(self) -> np.ndarray:
@@ -216,15 +260,17 @@ class AdaptiveNominalController:
                 cov = 0.5 * (cov + cov.T) + cfg.process_noise * self._p0
                 self.theta[lag, joint] = theta
                 self.covariance[lag, joint] = cov
+            # The actuator lag does not change within an episode, so the score
+            # accumulates by default: a wrong-lag hypothesis with a live covariance
+            # keeps chasing the data with small one-step errors, and only their
+            # sum over the episode separates it from the right one.
             squared = float(innovations[lag] @ innovations[lag])
-            if self.updates == 0:
-                self.error_score[lag] = squared
-            else:
-                self.error_score[lag] = (
-                    cfg.selection_memory * self.error_score[lag]
-                    + (1.0 - cfg.selection_memory) * squared
-                )
+            self.error_score[lag] = cfg.selection_memory * self.error_score[lag] + squared
+            self.recent_score[lag] = 0.9 * self.recent_score[lag] + 0.1 * squared
         self.updates += 1
+        settled = self.recent_score[self.lag] < cfg.gate_threshold
+        if self.updates >= cfg.gate_min_updates and settled:
+            self._converged = True
         return {
             "lag": self.lag,
             "innovation": innovations[self.lag].copy(),
@@ -245,9 +291,43 @@ class AdaptiveNominalController:
         tau = np.einsum("ij,ij->i", rows, theta)
         return np.clip(tau, -self.torque_limit, self.torque_limit)
 
+    def predict_state(self, state, steps: int | None = None) -> np.ndarray:
+        """Propagate the state through the commands still queued in the actuator.
+
+        With an identified lag L, the command computed now acts L steps from now,
+        after the L commands already sent have taken effect. Integrating the
+        estimated model over those known commands gives the state at which the
+        new command will act, so both the control law and the filter can be
+        evaluated there instead of at the current state.
+        """
+        x = np.asarray(state, dtype=np.float64)
+        if x.shape != (4,) or not np.all(np.isfinite(x)):
+            raise ValueError("state must be a finite vector of shape (4,)")
+        lag = self.prediction_lag if steps is None else int(steps)
+        if lag == 0:
+            return x.copy()
+        model = self.estimated_model()
+        history = len(self._sent)
+        for offset in range(lag, 0, -1):
+            index = history - offset
+            applied = self._sent[index] if index >= 0 else np.zeros(2)
+            x = _rk4(model, x, applied, self.config.dt)
+        return x
+
     def estimated_model(self) -> EstimatedCommandModel:
         """Live model view for a safety filter, expressed in command units."""
         return EstimatedCommandModel(self)
+
+
+def _rk4(model, state, command, dt):
+    def derivative(x):
+        return np.concatenate([x[2:], model.forward_dynamics(x[:2], x[2:], command)])
+
+    k1 = derivative(state)
+    k2 = derivative(state + 0.5 * dt * k1)
+    k3 = derivative(state + 0.5 * dt * k2)
+    k4 = derivative(state + dt * k3)
+    return state + (dt / 6.0) * (k1 + 2.0 * k2 + 2.0 * k3 + k4)
 
 
 class EstimatedCommandModel:
@@ -266,11 +346,18 @@ class EstimatedCommandModel:
     def params(self) -> PlanarArmParams:
         return self.kinematics.params
 
+    @property
+    def uses_nominal(self) -> bool:
+        """With the gate enabled, fall back to the nominal model until convergence."""
+        return self.controller.config.filter_gate and not self.controller.converged
+
     def _theta(self) -> np.ndarray:
         return self.controller.theta[self.controller.lag]
 
     def mass_matrix(self, q) -> np.ndarray:
         q = _vector(q, "q")
+        if self.uses_nominal:
+            return self.kinematics.mass_matrix(q)
         blocks = self.controller.regressor.inertial_matrices(q)  # (5, 2, 2)
         theta = self._theta()[:, :5]  # (2, 5)
         return np.stack(
@@ -283,6 +370,8 @@ class EstimatedCommandModel:
         return np.einsum("ij,ij->i", rows, self._theta())
 
     def inverse_dynamics(self, q, qd, qdd, include_friction: bool = True) -> np.ndarray:
+        if self.uses_nominal:
+            return self.kinematics.inverse_dynamics(q, qd, qdd, include_friction=include_friction)
         rows = self.controller.regressor.rows(q, qd, qdd)
         theta = self._theta()
         if not include_friction:

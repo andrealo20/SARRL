@@ -110,6 +110,11 @@ def main() -> int:
     parser.add_argument("--process-noise", type=float, default=None)
     parser.add_argument("--forgetting", type=float, default=None)
     parser.add_argument("--max-lag", type=int, default=None)
+    parser.add_argument("--payload-prior", type=float, default=None)
+    parser.add_argument("--filter-gate", action="store_true")
+    parser.add_argument("--gate-threshold", type=float, default=None)
+    parser.add_argument("--historical", action="store_true", help="include the historical cases")
+    parser.add_argument("--delay-compensation", action="store_true")
     args = parser.parse_args()
     assert_repository_import_root(ROOT)
     output = args.output.resolve()
@@ -125,16 +130,21 @@ def main() -> int:
             ("process_noise", args.process_noise),
             ("forgetting", args.forgetting),
             ("max_lag", args.max_lag),
+            ("payload_prior", args.payload_prior),
+            ("gate_threshold", args.gate_threshold),
+            ("filter_gate", True if args.filter_gate else None),
         )
         if value is not None
     }
     config = AdaptiveNominalConfig(**overrides)
-    cases = pilot_cases(args.fresh)
+    cases = pilot_cases(args.fresh, historical=args.historical)
     started = time.time()
     episodes = []
     for index, (scenario, seed, origin) in enumerate(cases, start=1):
         for arm in args.arms:
-            episodes.append(run_case(arm, scenario, seed, origin, config))
+            episodes.append(
+                run_case(arm, scenario, seed, origin, config, args.delay_compensation)
+            )
         print(f"[{index}/{len(cases)}] {scenario} {seed} done", flush=True)
     records = episodes_to_records(episodes)
     table = summarize(episodes)
@@ -148,6 +158,7 @@ def main() -> int:
         "arms": list(args.arms),
         "cases": [list(case) for case in cases],
         "estimator": asdict(config),
+        "delay_compensation": bool(args.delay_compensation),
         "source_hashes": {name: sha(ROOT / name) for name in SOURCES},
         "runtime": runtime_metadata(ROOT),
         "elapsed_seconds": time.time() - started,

@@ -20,6 +20,7 @@ def test_pilot_cases_keep_historical_seeds_first_and_fresh_seeds_apart():
     assert all(origin in ("historical", "fresh") for _, _, origin in cases)
     seeds = [seed for _, seed, _ in cases]
     assert len(set(seeds)) == len(seeds)
+    assert len(pilot_cases(3, historical=False)) == 9
     with pytest.raises(ValueError):
         pilot_cases(101)
 

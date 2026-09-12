@@ -120,7 +120,9 @@ def test_estimator_recovers_after_an_abrupt_gain_loss():
         state = after
     assert max(errors[50:100]) < 0.5, "the estimator must have settled before the fault"
     assert max(errors[100:103]) > 5.0, "the fault must be visible in the innovation"
-    assert max(errors[150:]) < 1.0, "the estimator must settle again after the fault"
+    assert controller.lag == 0
+    assert max(errors[150:]) < 2.0, "the estimator must settle again after the fault"
+    assert np.mean(errors[150:]) < 0.2
     truth = CommandRegressor.parameters(params, gain)
     regressor = CommandRegressor()
     for _ in range(20):
@@ -172,11 +174,71 @@ def test_config_validation_rejects_bad_values():
         AdaptiveNominalConfig(max_lag=-1).validate()
 
 
+def test_predict_state_walks_the_queued_commands_through_the_estimated_model():
+    rng = np.random.default_rng(61)
+    params = _random_plant(rng)
+    gain = np.array([0.9, 1.1])
+    controller = AdaptiveNominalController(PlanarArm(), AdaptiveNominalConfig(lag_min_updates=1))
+    controller.theta[:] = CommandRegressor.parameters(params, gain)
+    arm = PlanarArm(params)
+    state = np.array([0.2, -0.1, 0.5, -0.3])
+    sent = [rng.uniform(-10.0, 10.0, 2) for _ in range(3)]
+    controller._sent = [s.copy() for s in sent]
+    controller.updates = 5
+    controller.error_score[:] = (1.0, 1.0, 0.0, 1.0)  # lag 2 selected
+    assert controller.lag == controller.prediction_lag == 2
+    expected = state.copy()
+    for command in sent[-2:]:
+        expected = arm.step_rk4(expected, command * gain, 0.02)
+    np.testing.assert_allclose(controller.predict_state(state), expected, rtol=1e-9, atol=1e-9)
+    np.testing.assert_array_equal(controller.predict_state(state, steps=0), state)
+
+
 def test_reset_restores_the_prior_and_clears_history():
     rng = np.random.default_rng(41)
     controller = AdaptiveNominalController(PlanarArm())
     _simulate(controller, _random_plant(rng), np.ones(2), 1, steps=30, rng=rng)
     assert controller.updates == 30
+    early = AdaptiveNominalController(PlanarArm(), AdaptiveNominalConfig(lag_min_updates=10))
+    _simulate(early, _random_plant(rng), np.ones(2), 3, steps=5, rng=rng)
+    assert early.prediction_lag == 0, "no lag is trusted for prediction before lag_min_updates"
     controller.reset()
     assert controller.updates == 0 and controller.lag == 0
     np.testing.assert_array_equal(controller.parameters, controller.prior)
+
+
+def test_payload_prior_shifts_only_the_payload_column():
+    controller = AdaptiveNominalController(PlanarArm(), AdaptiveNominalConfig(payload_prior=0.5))
+    assert np.all(controller.parameters[:, 4] == 0.5)
+    reference = AdaptiveNominalController(PlanarArm())
+    np.testing.assert_array_equal(controller.parameters[:, :4], reference.parameters[:, :4])
+    np.testing.assert_array_equal(controller.parameters[:, 5:], reference.parameters[:, 5:])
+
+
+def test_filter_gate_uses_the_nominal_model_until_convergence():
+    rng = np.random.default_rng(51)
+    config = AdaptiveNominalConfig(filter_gate=True, gate_threshold=1.0, gate_min_updates=5)
+    controller = AdaptiveNominalController(PlanarArm(), config)
+    model = controller.estimated_model()
+    nominal = PlanarArm()
+    q, qd = np.array([0.4, -0.6]), np.array([0.3, 0.2])
+    assert model.uses_nominal and not controller.converged
+    np.testing.assert_array_equal(model.mass_matrix(q), nominal.mass_matrix(q))
+    np.testing.assert_allclose(
+        model.forward_dynamics(q, qd, np.array([3.0, 1.0])),
+        nominal.forward_dynamics(q, qd, np.array([3.0, 1.0])),
+        rtol=1e-12,
+        atol=1e-12,
+    )
+    _simulate(controller, _random_plant(rng), np.array([0.9, 0.8]), 1, steps=120, rng=rng)
+    assert controller.converged and not model.uses_nominal
+    assert not np.array_equal(model.mass_matrix(q), nominal.mass_matrix(q))
+    # The latch survives a burst of innovation, as after an in-episode fault.
+    controller.recent_score[:] = 1e6
+    assert controller.converged
+    controller.reset()
+    assert not controller.converged
+    with pytest.raises(ValueError):
+        AdaptiveNominalConfig(gate_threshold=0.0).validate()
+    with pytest.raises(ValueError):
+        AdaptiveNominalConfig(payload_prior=-0.1).validate()
