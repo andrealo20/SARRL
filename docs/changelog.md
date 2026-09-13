@@ -2,6 +2,13 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## Unreleased
+
+- Added `AdaptiveProjectedEnv`, a residual training environment that composes the identified nominal, the bounded policy residual and the HOCBF projection against the estimate inside every transition, on the analytical or the MuJoCo plant; `tools/train_sac.py` gained `--plant`, `--nominal adaptive`, the sensor and actuator options and the estimator grid, with the configuration checked on resume.
+- Training checkpoints now restore mid-episode state exactly for the estimator (parameters, covariances, scores, command history) and for the MuJoCo plant (per-episode armature and time constant, actuator state, actuator generator), and the cached sensor sample continues the noise stream.
+- `tools/run_adaptive_pilot.py` evaluates `*_residual` arms from a selected policy checkpoint and records the residual RMS per episode.
+- Ran one exploratory training of a residual on the identified nominal (MuJoCo, v1.7 recipe, one seed): success fell from 90 to 67 of 100 in distribution and from 91 to 74 under motor fault on the pilot seeds; no campaign followed. The pilot is described in `docs/experiments.md`; its outputs remain local.
+
 ## v2.0.0: adaptive nominal control on a MuJoCo plant
 
 - Ported the planar reaching benchmark to a MuJoCo plant (`MujocoPlanarReachEnv`) that inherits every episode-defining element of the analytical environment and replaces only the dynamics and integration. Without dry friction the engine reproduces the analytical accelerations within `1e-6 rad/s^2`; MuJoCo's constraint-based dry friction is the one rigid-body difference.

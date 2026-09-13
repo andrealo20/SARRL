@@ -1173,3 +1173,54 @@ true actuator time constant over the adaptive decision episodes read from
 `results/adaptive_mujoco_v20/episodes.csv`. The replay reruns two episodes
 with the frozen configuration and writes nothing under `results/`.
 
+### Exploratory: a learned residual on the identified nominal
+
+After v2.0 an exploratory pilot asked whether a bounded residual policy
+trained through the filter adds task success once the nominal is identified
+online. The training environment (`AdaptiveProjectedEnv`) composes, inside
+every transition, the stack the v2.0 campaign evaluated: measured state,
+per-step guard, delay prediction, identified nominal command, plus the
+policy residual bounded at 8 N m, HOCBF projection against the estimate,
+plant step, estimator update. The policy sees the plant observation only.
+The recipe is the v1.7 one unchanged: 200,000 decisions, 5,000 random
+warm-up decisions, one update per decision, abort penalty `-500` in training
+and validation, checkpoint selection by validation success on 30 episodes.
+The plant is MuJoCo with the v2.0 options and the v1.3 in-distribution
+randomisation, no fault in training. One training seed (`900`), validation
+seeds `9803400..9803429`, evaluation on the 300 pilot seeds
+`9803000..9803299` (100 per scenario), all outside every official range.
+
+Validation success was 10, 8, 11, 18, 17, 22, 17 and 21 of 30 at
+25,000-decision intervals; the selected checkpoint (150,000 decisions,
+73.3%) was evaluated deterministically against the identified nominal alone
+on the same seeds. Counts over 100 episodes per scenario, descriptive:
+
+| Scenario | Identified nominal + HOCBF | Same, plus the learned residual |
+|---|---|---|
+| `id_reference` | 90 success, 12 unsafe, 2 abort, 8 timeout | 67, 9, 2, 31 |
+| `motor_fault` | 91, 15, 2, 7 | 74, 10, 3, 23 |
+| `ood_compound` | 79, 23, 5, 16 | 72, 22, 6, 22 |
+
+The residual cost 23 points of in-distribution success and 17 under motor
+fault. The policy did not learn to stay near zero (residual RMS 5.5, 5.7 and
+6.7 N m against the 8 N m bound), and its in-distribution timeouts ended near
+the target (median final distance 0.14 m, 20 of 31 under 0.20 m, against
+0.55 m for the nominal's eight timeouts): the arm reaches the goal region and
+keeps moving around it instead of settling inside 5 cm below 0.35 rad/s.
+Unsafe episodes were slightly fewer with the residual (9 against 12, 10
+against 15) at a similar filter intervention fraction (0.36 against 0.38).
+
+The pilot rule set before training required a visible in-distribution gain
+without a safety cost before any protocol; a 23-point loss on one seed is
+outside what more seeds could reverse, so no campaign followed and no claim
+is made. What remains is the infrastructure: the projected training
+environment, exact mid-episode checkpoints of the estimator and of the
+MuJoCo plant, the trainer options `--plant mujoco --nominal adaptive`, and
+the `*_residual` arms of `tools/run_adaptive_pilot.py`. The pilot outputs
+stay local under `results/adaptive_residual_pilot/`. Commands:
+
+```bash
+python tools/train_sac.py --mode residual --randomize --training-hocbf --validation-hocbf --nominal adaptive --plant mujoco --sensor-noise 1e-3 --armature-range 0.02 0.08 --actuator-tau-range 0.01 0.05 --actuator-grid 0 0.01 0.03 0.06 --steps 200000 --validation-seed 9803400 --seed 900 --output results/adaptive_residual_pilot/seed_900
+python tools/run_adaptive_pilot.py --output results/adaptive_residual_pilot/residual_seed_900 --fresh 100 --arms adaptive_hocbf_residual --policy results/adaptive_residual_pilot/seed_900/best.pt --delay-compensation --plant mujoco --sensor-noise 1e-3 --armature-range 0.02 0.08 --actuator-tau-range 0.01 0.05 --actuator-grid 0 0.01 0.03 0.06
+```
+
