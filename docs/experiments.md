@@ -1110,3 +1110,59 @@ tree hashes, seed scan, reference hash, runtime, MuJoCo version and execution
 fingerprint, session-tagged at-least-once journal, canonical ordered log
 reloaded for the analysis, `episodes.csv`, `decision.json` and
 `complete.json` hashing every output. All of these are retained.
+
+### Result
+
+The campaign ran once on 13 September 2026 from the sealed state (freeze
+commit `e334eb1`, seal commit `c6fd964`), 12,600 episodes and 2,054,666
+physical steps in 16 minutes 37 seconds on six workers, MuJoCo 3.13.0. The
+decision is **go**: no safety veto, the success gain established in both
+primary scenarios, non-inferiority of the unsafe-episode rate shown in all
+three, and the estimator valid.
+
+| Scenario | Success, fixed → adaptive | Unsafe episodes, fixed → adaptive | Aborts, fixed → adaptive |
+|---|---:|---:|---:|
+| `id_reference` | 11.7% → 90.9%, `+79.2 pp` `[+77.3, +81.0]` | 12.7% → 11.9%, `-0.8 pp` `[-2.6, +1.1]` | 5.6% → 2.3%, `[-4.4, -2.2]` |
+| `motor_fault` | 3.7% → 90.9%, `+87.2 pp` `[+85.5, +88.7]` | 40.5% → 11.9%, `-28.5 pp` `[-30.8, -26.2]` | 5.4% → 1.2%, `[-5.4, -3.2]` |
+| `ood_compound` | 0.1% → 78.9%, `+78.8 pp` `[+77.0, +80.6]` | 26.3% → 16.9%, `-9.3 pp` `[-11.5, -7.1]` | 4.9% → 8.8%, `[+2.4, +5.3]` |
+
+Intervals are 95% seed-paired percentile bootstraps over 1,900 pairs. The
+fixed filtered arm fails by timeout in 83%, 91% and 95% of episodes at median
+final distances of 0.32, 0.77 and 0.99 m; the adaptive filtered arm times out
+in 6.8%, 7.9% and 12.3%. Maximum normalised violations fell from 0.63, 0.87
+and 0.93 to 0.53, 0.54 and 0.73. Two results differ from v1.9 and are part of
+the claim: in distribution the unsafe-episode rate is held rather than
+reduced (the interval covers zero), and under compound OOD the abort rate
+rises by 3.9 pp with an interval excluding zero, so with a slow actuator and
+a payload outside the nominal range the filter refuses more often instead of
+violating.
+
+The estimator identified the actuator lag in 99.6% of adaptive decision
+episodes and the time constant within 8.7 ms on average, the resolution of
+the grid. The guard replaced the estimate in 0.11% of control steps on
+average; 0.04% of episodes exceeded the 10% threshold, against a limit of 10%
+of episodes, and 55 of 5,700 episodes saw a guarded prediction. The final
+estimate's RMS command error against the analytical-parameter oracle was 4.0,
+4.2 and 8.3 N m on joint 1 and 1.5, 2.3 and 2.3 N m on joint 2, an order of
+magnitude above v1.9: the estimate absorbs armature and actuator lag into
+parameters the oracle does not contain, which is what the renaming of this
+endpoint anticipated.
+
+The transfer block reproduced every retained field of the 300 v1.3
+`A0_computed_torque` rows with the analytical plant. On the same seeds the
+MuJoCo plant, without noise or actuator options, gave the same outcome in
+99%, 100% and 100% of episodes, identical unsafe-episode rates, and median
+final-distance differences of 0.8, 0.5 and 0.2 mm: the engine alone does not
+move the baseline, so the v2.0 contrast is attributable to the actuator
+effects, the noise and the controller, not to the plant port. The descriptive
+unfiltered arms reached 100%, 100% and 95% success for the adaptive nominal
+with 90%, 90% and 85% unsafe episodes, against 13%, 4% and 0% for the fixed
+one with 75%, 74% and 75% unsafe episodes.
+
+What the result does not say: the two plants still share geometry, mass
+parametrisation and the absence of contacts; the armature is absorbed rather
+than identified; the PD gains are not retuned for the actuator lag; the
+learned residual policies were not evaluated on this plant. The official
+invocation was `python -m tools.run_mujoco_campaign --workers 6` from the
+repository root.
+

@@ -10,7 +10,7 @@
 
 **SARRL** (Safe Adaptive Residual Reinforcement Learning) is a research stack for robotic control under model mismatch. It combines model-based control with bounded residual reinforcement learning, learned dynamics context, uncertainty-aware policy authority and HOCBF safety filtering.
 
-The current reference platform is a reproducible analytical **2-DoF planar arm**. MuJoCo, Franka Panda, hardware and sim-to-real results are not currently claimed.
+The reference platform is a reproducible **2-DoF planar arm**, available as an analytical model and, since v2.0, as a MuJoCo plant with unmodelled actuator dynamics. Franka Panda, hardware and sim-to-real results are not currently claimed.
 
 ## Results
 
@@ -89,6 +89,19 @@ OOD, while unsafe episodes fell in every scenario (`-4.7`, `-24.3` and
 success, against 62%, 33% and 12% for the best learned policy on the same
 seeds. No learning is involved in this result.
 
+v2.0 moved the plant to MuJoCo and added what the controller does not model:
+reflected motor inertia and a first-order actuator lag drawn per episode, and
+a noisy measured state handed to every arm. The estimator gained a bank of
+actuator time-constant hypotheses alongside its lag hypotheses. Behind the
+same filter, on 1,900 fresh paired episodes per scenario, success rose from
+**11.7% to 90.9%** in distribution, from **3.7% to 90.9%** under motor fault
+and from **0.1% to 78.9%** under compound OOD; unsafe episodes were held in
+distribution (`-0.8 pp`, interval covering zero) and fell under fault and OOD
+(`-28.5` and `-9.3 pp`), while OOD aborts rose by `3.9 pp`. The preregistered
+decision is **go**. Without noise or actuator effects the MuJoCo plant
+reproduces the analytical outcomes on the v1.3 seeds in 99..100% of episodes,
+so the plant port alone does not move the baseline.
+
 Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. The v1.9 row is a single deterministic controller on the same 100 seeds per scenario (the v1.3 `50000..50099` seeds, run as the reproduction block of the v1.9 campaign); its decision rests on 1,900 further paired seeds per scenario. Evidence remains limited to the analytical planar benchmark.
 
 ### Safety
@@ -127,7 +140,7 @@ python -m pip install -e '.[dev]'
 pytest -q
 ```
 
-The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not required. Training and evaluation commands are documented in [`docs/experiments.md`](docs/experiments.md).
+The planar stack requires NumPy, SciPy and PyTorch. The MuJoCo plant needs the optional `mujoco` extra (`pip install -e '.[mujoco]'`); its tests skip without it. Training and evaluation commands are documented in [`docs/experiments.md`](docs/experiments.md).
 
 ## Repository guide
 
@@ -139,7 +152,7 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Limitations
 
-The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation and v1.9 adaptive-nominal campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation, v1.9 adaptive-nominal and v2.0 MuJoCo campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 
@@ -150,7 +163,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {1.9.0},
+  version = {2.0.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```

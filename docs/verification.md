@@ -40,7 +40,43 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
-## v1.9.0 adaptive nominal control evidence
+## v2.0.0 MuJoCo campaign evidence
+
+The campaign trained nothing. The protocol section of `docs/experiments.md`
+and its implementation were committed before any decision seed was opened
+(freeze commit `e334eb1`) and sealed by `c6fd964` in `docs/v20_seal.json`.
+The design went through three rounds of external adversarial review, the
+third returning approval; the first round produced five changes (strict
+reproduction of every retained A0 field, one sensor sample per plant state,
+a per-step guard decision with an estimator-validity condition in the rule,
+the prediction-error endpoint named against the analytical-parameter oracle,
+the descriptive block restricted to the unfiltered arms) and the second a
+true relative tolerance in the reproduction check.
+
+Before the first episode the runner verified the sealed source state and a
+clean tree, scanned 440 committed CSV/JSON artifacts for seed-named values in
+`52200..54099` (none), and recorded the reproduction reference hash, the
+runtime (Python 3.12.3, torch 2.12.0, numpy 2.5.2, MuJoCo 3.13.0 under WSL2),
+the installed distributions and the six-worker fingerprint in
+`manifest.json`.
+
+Retained under `results/adaptive_mujoco_v20/`: `manifest.json`,
+`journal.jsonl` (12,600 session-tagged cell records in completion order),
+`episodes.jsonl` (the same records in the planned order), `episodes.csv`,
+`decision.json` with contrasts, estimator diagnostics, per-cell summaries for
+the decision and descriptive blocks, the transfer check and the protocol,
+and `complete.json` hashing the five files. The decision file records `go`,
+no veto, non-inferiority in all three scenarios, the estimator valid and the
+reproduction check at 300/300 on all seven retained fields.
+
+The MuJoCo plant itself is verified by `tests/test_mujoco_planar.py`: without
+dry friction its accelerations match the analytical model within `1e-5` on
+100 random states; the same seed yields the same plant draws, target, initial
+state, delay and gains on both plants; fault, armature and actuator options
+reach the engine; state dictionaries round-trip. Those tests skip where
+MuJoCo is not installed, as in the default CI environment. At the v2.0.0
+release the suite collects 380 tests.
+
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`
 and the code that implements it were committed before any decision seed was

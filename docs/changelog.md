@@ -2,7 +2,19 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## v1.9.0: adaptive nominal control
+## v2.0.0: adaptive nominal control on a MuJoCo plant
+
+- Ported the planar reaching benchmark to a MuJoCo plant (`MujocoPlanarReachEnv`) that inherits every episode-defining element of the analytical environment and replaces only the dynamics and integration. Without dry friction the engine reproduces the analytical accelerations within `1e-6 rad/s^2`; MuJoCo's constraint-based dry friction is the one rigid-body difference.
+- Added what the controller does not parametrise: joint armature drawn per episode in `[0.02, 0.08] kg m^2`, a first-order actuator lag with time constant drawn in `[10, 50] ms`, and a measured state with sensor noise `1e-3` on positions and velocities, one sample per plant state shared by observation, controller, filter and estimator.
+- Extended the adaptive controller with a time-constant hypothesis bank: every lag is paired with a candidate time constant from `{0, 10, 30, 60} ms`, each hypothesis regresses on the torque it would deliver, and the best-fitting one drives control, filter and prediction. Added two counted guards: a degenerate estimated mass matrix hands the step to the nominal model; a non-finite or runaway prediction leaves the command at the current state.
+- Preregistered, reviewed in three external rounds to approval, sealed and ran the campaign once: `adaptive_hocbf` against `fixed_hocbf` on 1,900 paired episodes per scenario on seeds `52200..54099`, the v1.9 rule plus an estimator-validity condition.
+- Measured success **11.7% → 90.9%** in distribution (`+79.2 pp` `[+77.3, +81.0]`), **3.7% → 90.9%** under motor fault (`+87.2 pp` `[+85.5, +88.7]`) and **0.1% → 78.9%** under compound OOD (`+78.8 pp` `[+77.0, +80.6]`).
+- Measured unsafe episodes 12.7% → 11.9% ID (`-0.8 pp` `[-2.6, +1.1]`), 40.5% → 11.9% fault (`-28.5 pp` `[-30.8, -26.2]`), 26.3% → 16.9% OOD (`-9.3 pp` `[-11.5, -7.1]`). No veto; non-inferiority at `+3 pp` held in all three scenarios. Aborts fell to 2.3% and 1.2% in ID and fault and rose from 4.9% to 8.8% under OOD (`+3.9 pp` `[+2.4, +5.3]`).
+- **Decision: go.** The identified model recovers task success on a plant with unmodelled actuator dynamics and measurement noise without weakening the safety envelope; in ID the envelope is held, not tightened.
+- Identified the lag in 99.6% of adaptive episodes and the time constant within 8.7 ms on average; 0.04% of adaptive decision episodes were guarded in more than 10% of their steps.
+- Reproduced every retained field of the 300 v1.3 `A0_computed_torque` rows with the analytical transfer arm; on the same seeds the MuJoCo plant gave the same outcome in 99%, 100% and 100% of episodes with median final-distance differences under 0.8 mm.
+- Retained manifest, per-cell journal, ordered episode log, episode table, decision and completion marker under `results/adaptive_mujoco_v20/`; 12,600 episodes, 2,054,666 physical steps, no training. MuJoCo is an optional dependency.
+
 
 - Replaced the fixed-model computed-torque nominal with one that identifies the plant online in command coordinates: seven parameters per joint (masses, inertias, payload, friction, all scaled by the motor gain) from recursive least squares on the finite-difference acceleration, one estimator per candidate actuator lag `0..3`, the lag with the smallest accumulated innovation selected, and a random-walk covariance term so an in-episode fault is tracked.
 - Handed the identified model to the HOCBF filter through a command-space view, and evaluated both the control law and the certificate at the state predicted through the commands still queued in the actuator, using the identified lag.
