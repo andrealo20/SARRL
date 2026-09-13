@@ -26,6 +26,7 @@ from sarrl.controllers import AdaptiveNominalConfig
 from sarrl.evaluation import assert_repository_import_root
 from sarrl.evaluation.adaptive_pilot import (
     ARMS,
+    PlantOptions,
     episodes_to_records,
     pilot_cases,
     run_case,
@@ -116,6 +117,16 @@ def main() -> int:
     parser.add_argument("--historical", action="store_true", help="include the historical cases")
     parser.add_argument("--delay-compensation", action="store_true")
     parser.add_argument("--plant", choices=("analytical", "mujoco"), default="analytical")
+    parser.add_argument("--sensor-noise", type=float, default=0.0)
+    parser.add_argument(
+        "--actuator-grid",
+        type=float,
+        nargs="+",
+        default=None,
+        help="candidate actuator time constants for the estimator, in seconds",
+    )
+    parser.add_argument("--armature", type=float, default=0.0)
+    parser.add_argument("--actuator-tau", type=float, default=0.0)
     args = parser.parse_args()
     assert_repository_import_root(ROOT)
     output = args.output.resolve()
@@ -134,10 +145,19 @@ def main() -> int:
             ("payload_prior", args.payload_prior),
             ("gate_threshold", args.gate_threshold),
             ("filter_gate", True if args.filter_gate else None),
+            (
+                "actuator_time_constants",
+                tuple(args.actuator_grid) if args.actuator_grid is not None else None,
+            ),
         )
         if value is not None
     }
     config = AdaptiveNominalConfig(**overrides)
+    options = PlantOptions(
+        sensor_noise_std=args.sensor_noise,
+        armature=args.armature,
+        actuator_time_constant=args.actuator_tau,
+    )
     cases = pilot_cases(args.fresh, historical=args.historical)
     started = time.time()
     episodes = []
@@ -145,7 +165,14 @@ def main() -> int:
         for arm in args.arms:
             episodes.append(
                 run_case(
-                    arm, scenario, seed, origin, config, args.delay_compensation, args.plant
+                    arm,
+                    scenario,
+                    seed,
+                    origin,
+                    config,
+                    args.delay_compensation,
+                    args.plant,
+                    options,
                 )
             )
         print(f"[{index}/{len(cases)}] {scenario} {seed} done", flush=True)
@@ -163,6 +190,7 @@ def main() -> int:
         "estimator": asdict(config),
         "delay_compensation": bool(args.delay_compensation),
         "plant": args.plant,
+        "plant_options": asdict(options),
         "source_hashes": {name: sha(ROOT / name) for name in SOURCES},
         "runtime": runtime_metadata(ROOT),
         "elapsed_seconds": time.time() - started,

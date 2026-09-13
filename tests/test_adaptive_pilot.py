@@ -70,3 +70,25 @@ def test_summary_counts_every_arm():
     row = table["historical/motor_fault/adaptive_hocbf"]
     assert row["episodes"] == 1 and row["lag_correct"] in (0, 1)
     assert table["historical/motor_fault/fixed"]["lag_correct"] is None
+
+
+def test_measured_state_is_sampled_once_per_step_and_noisy():
+    from dataclasses import replace
+
+    from sarrl.envs import PlanarReachEnv
+    from sarrl.evaluation.adaptive_pilot import MeasuredState, PlantOptions, make_env
+    from sarrl.evaluation.planar_v13 import v13_scenarios
+
+    spec = {s.key: s for s in v13_scenarios()}["id_reference"]
+    env = make_env("analytical", spec, PlantOptions(sensor_noise_std=1e-2))
+    assert isinstance(env, PlanarReachEnv)
+    env.reset(seed=9803006)
+    measured = MeasuredState(env)
+    first = measured()
+    assert np.array_equal(first, measured()), "same step, same measurement"
+    assert not np.array_equal(first, env.state), "measurement carries noise"
+    env.step_torque(np.zeros(2))
+    assert not np.array_equal(first, measured()), "new step, new measurement"
+    with pytest.raises(ValueError):
+        make_env("analytical", spec, PlantOptions(armature=0.05))
+    assert replace(spec.randomization, sensor_noise_std=0.0) == spec.randomization

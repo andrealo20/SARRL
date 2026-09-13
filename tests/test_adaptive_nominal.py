@@ -242,3 +242,39 @@ def test_filter_gate_uses_the_nominal_model_until_convergence():
         AdaptiveNominalConfig(gate_threshold=0.0).validate()
     with pytest.raises(ValueError):
         AdaptiveNominalConfig(payload_prior=-0.1).validate()
+
+
+def test_actuator_time_constant_hypotheses_select_the_true_lag_and_constant():
+    rng = np.random.default_rng(71)
+    params = _random_plant(rng)
+    gain = np.array([0.9, 1.1])
+    grid = (0.0, 0.01, 0.03, 0.06)
+    controller = AdaptiveNominalController(
+        PlanarArm(), AdaptiveNominalConfig(actuator_time_constants=grid)
+    )
+    assert len(controller.hypotheses) == 4 * len(grid)
+    arm = PlanarArm(params)
+    dt, substeps, tau, delay = 0.02, 10, 0.03, 1
+    alpha = (dt / substeps) / (tau + dt / substeps)
+    state = np.concatenate([rng.uniform(-0.25, 0.25, 2), rng.uniform(-0.05, 0.05, 2)])
+    queue = [np.zeros(2) for _ in range(delay)]
+    delivered = np.zeros(2)
+    q_des = rng.uniform(-1.0, 1.0, 2)
+    for step in range(300):
+        if step % 40 == 0:
+            q_des = rng.uniform(-1.0, 1.0, 2)
+        sent = controller.command(state[:2], state[2:], q_des)
+        queue.append(sent.copy())
+        applied = queue.pop(0) * gain
+        before = state.copy()
+        # Plant with a first-order actuator advanced on ten sub-steps, as in MuJoCo.
+        for _ in range(substeps):
+            delivered = delivered + alpha * (applied - delivered)
+            state = arm.step_rk4(state, delivered, dt / substeps)
+        controller.observe(before, state, sent)
+    assert controller.lag == delay
+    assert controller.time_constant == pytest.approx(tau)
+    # The default grid keeps the v1.9 behaviour: hypotheses are the lags alone.
+    assert len(AdaptiveNominalController(PlanarArm()).hypotheses) == 4
+    with pytest.raises(ValueError):
+        AdaptiveNominalConfig(actuator_time_constants=(-0.01,)).validate()

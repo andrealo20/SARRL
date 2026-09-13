@@ -144,8 +144,14 @@ def evaluate_safety_episodes(
     context_residual_limit: float | None = None,
     intervention_tolerance: float = 1e-9,
     transition_callback=None,
+    state_source=None,
 ) -> tuple[list[EpisodeResult], list[SafetyEpisodeDiagnostics]]:
-    """Evaluate filtered or unfiltered stacks against one fixed safety envelope."""
+    """Evaluate filtered or unfiltered stacks against one fixed safety envelope.
+
+    `state_source(env)` returns the state handed to the controller; by default
+    it is the exact plant state, the benchmark convention since v1.2. The
+    safety envelope and the outcome are always scored on the exact state.
+    """
     if episodes <= 0 or seed < 0:
         raise ValueError("episodes must be positive and seed non-negative")
     if context_residual_limit is not None and context_residual_limit <= 0.0:
@@ -189,8 +195,9 @@ def evaluate_safety_episodes(
             normalized_violations,
         )
         while True:
-            state = np.asarray(env.state, dtype=np.float64)
-            constraints, bounds, _ = observer.constraints(state)
+            true_state = np.asarray(env.state, dtype=np.float64)
+            state = true_state if state_source is None else np.asarray(state_source(env))
+            constraints, bounds, _ = observer.constraints(true_state)
             command = stack.command(obs, state, env.q_des, deterministic=True)
             attempts += 1
 

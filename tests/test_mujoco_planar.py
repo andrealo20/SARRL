@@ -103,3 +103,24 @@ def test_state_dict_round_trip_keeps_the_engine_in_sync():
 def test_dt_must_be_a_multiple_of_the_timestep():
     with pytest.raises(ValueError):
         MujocoPlanarReachEnv(timestep=0.003)
+
+
+def test_armature_and_actuator_lag_change_the_plant_response():
+    spec = _scenario("id_reference")
+    plain = MujocoPlanarReachEnv(mode="torque", randomization=spec.randomization)
+    heavy = MujocoPlanarReachEnv(
+        mode="torque", randomization=spec.randomization, armature=0.05, actuator_time_constant=0.03
+    )
+    plain.reset(seed=9803005)
+    heavy.reset(seed=9803005)
+    torque = np.array([10.0, 5.0])
+    _, _, _, _, info_plain = plain.step_torque(torque)
+    _, _, _, _, info_heavy = heavy.step_torque(torque)
+    # Reflected inertia lowers the acceleration; the lag delivers less than commanded at first.
+    acc_plain = np.abs(info_plain["pre_step_acceleration"])
+    acc_heavy = np.abs(info_heavy["pre_step_acceleration"])
+    assert np.all(acc_heavy <= acc_plain + 1e-9)
+    assert np.all(np.abs(info_heavy["delivered_torque"]) < np.abs(info_heavy["applied_torque"]))
+    assert heavy.constructor_config()["armature"] == 0.05
+    with pytest.raises(ValueError):
+        MujocoPlanarReachEnv(armature=-1.0)

@@ -123,11 +123,19 @@ class AdaptiveNominalConfig:
     process_noise: float = 0.02
     max_lag: int = 3
     lag_min_updates: int = 10
+    # Candidate first-order actuator time constants, in seconds. Each is paired
+    # with every lag into one hypothesis whose regression target is the command
+    # the actuator would deliver under that lag and time constant. Zero is the
+    # ideal actuator and reproduces the v1.9 behaviour.
+    actuator_time_constants: tuple[float, ...] = (0.0,)
+    actuator_substeps: int = 10
     selection_memory: float = 1.0
     payload_prior: float = 0.0
     filter_gate: bool = False
     gate_threshold: float = 1.0
     gate_min_updates: int = 5
+    prediction_limit: float = 5.0
+    conditioning_floor: float = 0.05
     prior_std: tuple[float, ...] = (1.0, 1.0, 0.1, 0.1, 2.0, 0.1, 0.04)
     lower: tuple[float, ...] = (0.2, 0.2, 0.01, 0.01, 0.0, 0.0, 0.0)
     upper: tuple[float, ...] = (5.0, 5.0, 0.5, 0.5, 6.0, 0.5, 0.2)
@@ -153,6 +161,13 @@ class AdaptiveNominalConfig:
             raise ValueError("prior_std must be positive")
         if np.any(np.asarray(self.lower) >= np.asarray(self.upper)):
             raise ValueError("lower bounds must be below upper bounds")
+        if self.prediction_limit <= 0.0 or not 0.0 < self.conditioning_floor < 1.0:
+            raise ValueError("prediction_limit must be positive and conditioning_floor in (0, 1)")
+        taus = np.asarray(self.actuator_time_constants, dtype=np.float64)
+        if taus.ndim != 1 or taus.size == 0 or np.any(taus < 0.0) or not np.all(np.isfinite(taus)):
+            raise ValueError("actuator_time_constants must be non-negative finite values")
+        if self.actuator_substeps < 1:
+            raise ValueError("actuator_substeps must be at least one")
 
 
 class AdaptiveNominalController:
@@ -178,21 +193,60 @@ class AdaptiveNominalController:
     # Estimator state -------------------------------------------------------
 
     def reset(self) -> None:
-        lags = self.config.max_lag + 1
-        self.theta = np.repeat(self.prior[None], lags, axis=0)  # (lags, 2, 7)
-        self.covariance = np.repeat(np.stack([self._p0, self._p0])[None], lags, axis=0)
-        self.error_score = np.zeros(lags)
-        self.recent_score = np.zeros(lags)
+        cfg = self.config
+        # Hypothesis h = tau_index * (max_lag + 1) + lag; the default grid of one
+        # zero time constant makes hypotheses and lags coincide.
+        self.hypotheses = [
+            (lag, float(tau))
+            for tau in cfg.actuator_time_constants
+            for lag in range(cfg.max_lag + 1)
+        ]
+        count = len(self.hypotheses)
+        self.theta = np.repeat(self.prior[None], count, axis=0)  # (count, 2, 7)
+        self.covariance = np.repeat(np.stack([self._p0, self._p0])[None], count, axis=0)
+        self.error_score = np.zeros(count)
+        self.recent_score = np.zeros(count)
+        self._delivered = np.zeros((count, 2))
         self.updates = 0
         self._converged = False
+        self.prediction_fallbacks = 0
+        self.model_fallbacks = 0
+        self._last_q = None
         self._sent: list[np.ndarray] = []
 
     @property
-    def lag(self) -> int:
-        """Lag hypothesis whose parameters currently explain the data best."""
+    def hypothesis(self) -> int:
+        """Index of the (lag, time constant) hypothesis that explains the data best."""
         if self.updates == 0:
             return 0
         return int(np.argmin(self.error_score))
+
+    @property
+    def lag(self) -> int:
+        """Actuator lag of the selected hypothesis."""
+        return self.hypotheses[self.hypothesis][0]
+
+    @property
+    def time_constant(self) -> float:
+        """Actuator time constant of the selected hypothesis."""
+        return self.hypotheses[self.hypothesis][1]
+
+    def _delivered_mean(self, state, command, tau):
+        """Mean torque an actuator with time constant tau delivers over one control step.
+
+        Mirrors a first-order filter advanced on `actuator_substeps` sub-steps
+        with the command held constant; returns the mean and the final state.
+        """
+        if tau == 0.0:
+            return command.copy(), command.copy()
+        substep = self.config.dt / self.config.actuator_substeps
+        alpha = substep / (tau + substep)
+        total = np.zeros(2)
+        current = state.copy()
+        for _ in range(self.config.actuator_substeps):
+            current = current + alpha * (command - current)
+            total += current
+        return total / self.config.actuator_substeps, current
 
     @property
     def prediction_lag(self) -> int:
@@ -223,8 +277,8 @@ class AdaptiveNominalController:
 
     @property
     def parameters(self) -> np.ndarray:
-        """Per-joint command-space parameters of the selected lag, shape (2, 7)."""
-        return self.theta[self.lag].copy()
+        """Per-joint command-space parameters of the selected hypothesis, shape (2, 7)."""
+        return self.theta[self.hypothesis].copy()
 
     def observe(self, state_before, state_after, sent_torque) -> dict:
         """Update every lag hypothesis with one executed transition."""
@@ -240,11 +294,12 @@ class AdaptiveNominalController:
         mid = 0.5 * (before + after)
         acceleration = (after[2:] - before[2:]) / cfg.dt
         phi = self.regressor.rows(mid[:2], mid[2:], acceleration)  # (2, 7)
-        innovations = np.zeros((cfg.max_lag + 1, 2))
-        for lag in range(cfg.max_lag + 1):
-            index = len(self._sent) - 1 - lag
+        innovations = np.zeros((len(self.hypotheses), 2))
+        for lag, (delay, tau) in enumerate(self.hypotheses):
+            index = len(self._sent) - 1 - delay
             # The plant queue starts with zero commands, exactly as the environment does.
-            target = self._sent[index] if index >= 0 else np.zeros(2)
+            delayed = self._sent[index] if index >= 0 else np.zeros(2)
+            target, self._delivered[lag] = self._delivered_mean(self._delivered[lag], delayed, tau)
             for joint in range(2):
                 row = phi[joint]
                 theta = self.theta[lag, joint]
@@ -268,12 +323,13 @@ class AdaptiveNominalController:
             self.error_score[lag] = cfg.selection_memory * self.error_score[lag] + squared
             self.recent_score[lag] = 0.9 * self.recent_score[lag] + 0.1 * squared
         self.updates += 1
-        settled = self.recent_score[self.lag] < cfg.gate_threshold
+        settled = self.recent_score[self.hypothesis] < cfg.gate_threshold
         if self.updates >= cfg.gate_min_updates and settled:
             self._converged = True
         return {
             "lag": self.lag,
-            "innovation": innovations[self.lag].copy(),
+            "time_constant": self.time_constant,
+            "innovation": innovations[self.hypothesis].copy(),
             "error_score": self.error_score.copy(),
         }
 
@@ -287,7 +343,7 @@ class AdaptiveNominalController:
         qdd_des = _vector(qdd_des, "qdd_des")
         qdd_cmd = qdd_des + self.kd * (qd_des - qd) + self.kp * _angle_error(q_des, q)
         rows = self.regressor.rows(q, qd, qdd_cmd)
-        theta = self.theta[self.lag]
+        theta = self.theta[self.hypothesis]
         tau = np.einsum("ij,ij->i", rows, theta)
         return np.clip(tau, -self.torque_limit, self.torque_limit)
 
@@ -308,10 +364,19 @@ class AdaptiveNominalController:
             return x.copy()
         model = self.estimated_model()
         history = len(self._sent)
+        start = x.copy()
+        tau = self.time_constant
+        delivered = self._delivered[self.hypothesis].copy()
         for offset in range(lag, 0, -1):
             index = history - offset
-            applied = self._sent[index] if index >= 0 else np.zeros(2)
+            queued = self._sent[index] if index >= 0 else np.zeros(2)
+            applied, delivered = self._delivered_mean(delivered, queued, tau)
             x = _rk4(model, x, applied, self.config.dt)
+        if not np.all(np.isfinite(x)) or np.max(np.abs(x - start)) > self.config.prediction_limit:
+            # A degenerate estimate must not propagate; no compensation is safer
+            # than a wild prediction.
+            self.prediction_fallbacks += 1
+            return start
         return x
 
     def estimated_model(self) -> EstimatedCommandModel:
@@ -348,14 +413,42 @@ class EstimatedCommandModel:
 
     @property
     def uses_nominal(self) -> bool:
-        """With the gate enabled, fall back to the nominal model until convergence."""
-        return self.controller.config.filter_gate and not self.controller.converged
+        """Nominal model while gated before convergence, or when the estimate is degenerate.
+
+        The two per-joint parameter vectors are estimated independently, so the
+        command-space mass matrix they imply need not stay well conditioned.
+        When its determinant falls below a fraction of the nominal one, the
+        filter and the prediction use the nominal model for that step.
+        """
+        controller = self.controller
+        if controller.config.filter_gate and not controller.converged:
+            return True
+        estimated = self._estimated_mass_matrix(controller._last_q)
+        if estimated is None:
+            return False
+        nominal = self.kinematics.mass_matrix(controller._last_q)
+        det = float(np.linalg.det(estimated))
+        floor = controller.config.conditioning_floor * float(np.linalg.det(nominal))
+        if not np.isfinite(det) or det < floor:
+            controller.model_fallbacks += 1
+            return True
+        return False
+
+    def _estimated_mass_matrix(self, q):
+        if q is None:
+            return None
+        blocks = self.controller.regressor.inertial_matrices(np.asarray(q, dtype=np.float64))
+        theta = self._theta()[:, :5]
+        return np.stack(
+            [np.tensordot(theta[joint], blocks[:, joint, :], axes=1) for joint in range(2)]
+        )
 
     def _theta(self) -> np.ndarray:
-        return self.controller.theta[self.controller.lag]
+        return self.controller.theta[self.controller.hypothesis]
 
     def mass_matrix(self, q) -> np.ndarray:
         q = _vector(q, "q")
+        self.controller._last_q = q.copy()
         if self.uses_nominal:
             return self.kinematics.mass_matrix(q)
         blocks = self.controller.regressor.inertial_matrices(q)  # (5, 2, 2)
@@ -370,6 +463,7 @@ class EstimatedCommandModel:
         return np.einsum("ij,ij->i", rows, self._theta())
 
     def inverse_dynamics(self, q, qd, qdd, include_friction: bool = True) -> np.ndarray:
+        self.controller._last_q = _vector(q, "q").copy()
         if self.uses_nominal:
             return self.kinematics.inverse_dynamics(q, qd, qdd, include_friction=include_friction)
         rows = self.controller.regressor.rows(q, qd, qdd)

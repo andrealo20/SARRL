@@ -31,7 +31,9 @@ PAYLOAD_INERTIA_FLOOR = 1e-9
 PAYLOAD_MASS_FLOOR = 1e-9
 
 
-def planar_arm_xml(params: PlanarArmParams, timestep: float, integrator: str) -> str:
+def planar_arm_xml(
+    params: PlanarArmParams, timestep: float, integrator: str, armature: float = 0.0
+) -> str:
     """MuJoCo model of the two-link arm with the analytical benchmark's geometry.
 
     Gravity acts along -y in the plane of motion and joint angles are measured
@@ -47,13 +49,13 @@ def planar_arm_xml(params: PlanarArmParams, timestep: float, integrator: str) ->
   <worldbody>
     <body name="link1" pos="0 0 0">
       <joint name="joint1" type="hinge" axis="0 0 1" damping="{p.viscous[0]}"
-             frictionloss="{p.coulomb[0]}" limited="false"/>
+             frictionloss="{p.coulomb[0]}" armature="{armature}" limited="false"/>
       <inertial pos="{p.lc1} 0 0" mass="{p.m1}" diaginertia="{p.i1} {p.i1} {p.i1}"/>
       <geom type="capsule" fromto="0 0 0 {p.l1} 0 0" size="0.03" mass="0"
             contype="0" conaffinity="0"/>
       <body name="link2" pos="{p.l1} 0 0">
         <joint name="joint2" type="hinge" axis="0 0 1" damping="{p.viscous[1]}"
-               frictionloss="{p.coulomb[1]}" limited="false"/>
+               frictionloss="{p.coulomb[1]}" armature="{armature}" limited="false"/>
         <inertial pos="{p.lc2} 0 0" mass="{p.m2}" diaginertia="{p.i2} {p.i2} {p.i2}"/>
         <geom type="capsule" fromto="0 0 0 {p.l2} 0 0" size="0.03" mass="0"
               contype="0" conaffinity="0"/>
@@ -82,6 +84,8 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         fault: FaultSpec | None = None,
         timestep: float = 0.002,
         integrator: str = "implicitfast",
+        armature: float = 0.0,
+        actuator_time_constant: float = 0.0,
     ):
         if mujoco is None:
             raise ImportError("MujocoPlanarReachEnv needs the 'mujoco' package")
@@ -98,11 +102,19 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         substeps = self.dt / timestep
         if abs(substeps - round(substeps)) > 1e-9 or round(substeps) < 1:
             raise ValueError("dt must be a positive integer multiple of the MuJoCo timestep")
+        if armature < 0.0 or actuator_time_constant < 0.0:
+            raise ValueError("armature and actuator_time_constant must be non-negative")
         self.timestep = float(timestep)
         self.substeps = int(round(substeps))
         self.integrator = integrator
+        # Reflected motor inertia on each joint and a first-order lag between the
+        # torque the actuator is asked for and the torque it delivers. Neither is
+        # part of the controller's parametrisation.
+        self.armature = float(armature)
+        self.actuator_time_constant = float(actuator_time_constant)
+        self._actuator_torque = np.zeros(2, dtype=np.float64)
         self.model = mujoco.MjModel.from_xml_string(
-            planar_arm_xml(self.nominal_arm.params, self.timestep, integrator)
+            planar_arm_xml(self.nominal_arm.params, self.timestep, integrator, self.armature)
         )
         self.data = mujoco.MjData(self.model)
         self._body = {
@@ -136,8 +148,20 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
 
     def reset(self, seed: int | None = None, target=None):
         result = super().reset(seed=seed, target=target)
+        self._actuator_torque = np.zeros(2, dtype=np.float64)
         self._sync_plant()
         return result
+
+    def _deliver(self, applied: np.ndarray) -> np.ndarray:
+        """Torque the actuator delivers during the coming substep."""
+        if self.actuator_time_constant == 0.0:
+            self._actuator_torque = applied.copy()
+        else:
+            alpha = self.timestep / (self.actuator_time_constant + self.timestep)
+            self._actuator_torque = self._actuator_torque + alpha * (
+                applied - self._actuator_torque
+            )
+        return self._actuator_torque
 
     def load_state_dict(self, state: dict) -> None:
         super().load_state_dict(state)
@@ -173,8 +197,9 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         delayed = self._delayed_command(commanded)
         applied = delayed * self.motor_gain
         pre_step_state = self.state.copy()
-        pre_step_acceleration = self.plant_acceleration(applied)
+        pre_step_acceleration = self.plant_acceleration(self._actuator_torque)
         for _ in range(self.substeps):
+            self.data.qfrc_applied[:] = self._deliver(applied)
             mujoco.mj_step(self.model, self.data)
         self.state = np.concatenate([self.data.qpos, self.data.qvel]).astype(np.float64)
         self.steps += 1
@@ -204,6 +229,7 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
                 "plant_input_torque": applied.copy(),
                 "pre_step_state": pre_step_state,
                 "pre_step_acceleration": pre_step_acceleration,
+                "delivered_torque": self._actuator_torque.copy(),
                 "plant": "mujoco",
             }
         )
@@ -211,5 +237,12 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
 
     def constructor_config(self) -> dict:
         config = super().constructor_config()
-        config.update({"timestep": self.timestep, "integrator": self.integrator})
+        config.update(
+            {
+                "timestep": self.timestep,
+                "integrator": self.integrator,
+                "armature": self.armature,
+                "actuator_time_constant": self.actuator_time_constant,
+            }
+        )
         return config

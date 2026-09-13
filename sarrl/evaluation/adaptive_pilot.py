@@ -14,7 +14,7 @@ abort and unsafe semantics are those of every retained campaign.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, replace
 
 import numpy as np
 
@@ -133,6 +133,9 @@ class PilotEpisode:
     prediction_error_rms: tuple[float, float] | None
     estimated_parameters: list | None
     true_parameters: list
+    model_fallbacks: int = 0
+    prediction_fallbacks: int = 0
+    selected_time_constant: float | None = None
 
 
 def build_arm(arm: str, config: AdaptiveNominalConfig):
@@ -179,17 +182,54 @@ def _prediction_error(controller, env, probes):
     return tuple(float(v) for v in np.sqrt(np.mean(errors**2, axis=0)))
 
 
-def make_env(plant: str, spec):
+@dataclass(frozen=True)
+class PlantOptions:
+    """What the plant adds beyond the analytical benchmark; all zero reproduces it."""
+
+    sensor_noise_std: float = 0.0
+    armature: float = 0.0
+    actuator_time_constant: float = 0.0
+
+
+def make_env(plant: str, spec, options: PlantOptions | None = None):
     """Analytical plant by default; MuJoCo when requested and installed."""
+    options = options or PlantOptions()
+    randomization = replace(spec.randomization, sensor_noise_std=options.sensor_noise_std)
     if plant == "analytical":
-        return PlanarReachEnv(mode="torque", randomization=spec.randomization, fault=spec.fault)
+        if options.armature or options.actuator_time_constant:
+            raise ValueError("armature and actuator dynamics need the mujoco plant")
+        return PlanarReachEnv(mode="torque", randomization=randomization, fault=spec.fault)
     if plant == "mujoco":
         from sarrl.envs.mujoco_planar import MujocoPlanarReachEnv
 
         return MujocoPlanarReachEnv(
-            mode="torque", randomization=spec.randomization, fault=spec.fault
+            mode="torque",
+            randomization=randomization,
+            fault=spec.fault,
+            armature=options.armature,
+            actuator_time_constant=options.actuator_time_constant,
         )
     raise ValueError(f"unknown plant {plant}")
+
+
+class MeasuredState:
+    """One noisy measurement of the plant state per step, shared by every consumer.
+
+    The environment draws sensor noise from its own seeded generator; caching
+    by step count makes the controller's command and the estimator's update
+    see the same measurement, as one sample-and-hold sensor would provide.
+    """
+
+    def __init__(self, env):
+        self.env = env
+        self._step = None
+        self._value = None
+
+    def __call__(self, env=None) -> np.ndarray:
+        if self._step != self.env.steps:
+            self._value = np.asarray(self.env._sensed_state(), dtype=np.float64)
+            self._step = self.env.steps
+        return self._value.copy()
 
 
 def run_case(
@@ -200,18 +240,22 @@ def run_case(
     config: AdaptiveNominalConfig,
     compensate_delay: bool = False,
     plant: str = "analytical",
+    options: PlantOptions | None = None,
 ):
     spec = {s.key: s for s in v13_scenarios()}[scenario]
-    env = make_env(plant, spec)
+    options = options or PlantOptions()
+    env = make_env(plant, spec, options)
     controller, stack = build_stack(arm, config, compensate_delay)
     adaptive = isinstance(controller, AdaptiveNominalController)
     if adaptive:
         controller.reset()
     converged_at = {"step": None}
+    measured = MeasuredState(env) if options.sensor_noise_std > 0.0 else None
 
     def observe(event):
         if adaptive and event["info"] is not None:
-            controller.observe(event["state"], env.state, event["command"].torque)
+            after = measured() if measured is not None else env.state
+            controller.observe(event["state"], after, event["command"].torque)
             if converged_at["step"] is None and controller.converged:
                 converged_at["step"] = int(env.steps)
 
@@ -224,6 +268,7 @@ def run_case(
         scenario=scenario,
         controller=arm,
         transition_callback=observe,
+        state_source=measured,
     )
     outcome, safety = outcomes[0], diagnostics[0]
     if safety.safety_infeasible:
@@ -254,6 +299,9 @@ def run_case(
         prediction_error_rms=_prediction_error(controller, env, probes) if adaptive else None,
         estimated_parameters=controller.parameters.tolist() if adaptive else None,
         true_parameters=true_parameters,
+        model_fallbacks=int(controller.model_fallbacks) if adaptive else 0,
+        prediction_fallbacks=int(controller.prediction_fallbacks) if adaptive else 0,
+        selected_time_constant=float(controller.time_constant) if adaptive else None,
     )
 
 
@@ -286,6 +334,10 @@ def summarize(episodes: list[PilotEpisode]) -> dict:
                         sum(e.selected_lag == e.true_delay for e in rows)
                         if rows[0].selected_lag is not None
                         else None
+                    ),
+                    "episodes_with_model_fallback": sum(e.model_fallbacks > 0 for e in rows),
+                    "episodes_with_prediction_fallback": sum(
+                        e.prediction_fallbacks > 0 for e in rows
                     ),
                 }
     return table
