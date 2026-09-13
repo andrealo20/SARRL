@@ -983,9 +983,10 @@ analytical environment for the same seed: joint `armature` uniform in
 the actuator is asked for and the torque it delivers, time constant uniform in
 `[10, 50] ms`, advanced on every sub-step. Sensor noise with standard deviation
 `1e-3` is added independently to each joint position (rad) and velocity
-(rad/s); one measurement per control step is drawn and the same measurement is
-handed to the controller, to the filter and to the estimator. The safety
-envelope and the outcome are scored on the exact state.
+(rad/s). The environment draws one measurement per plant state and returns
+that same sample for the policy observation, the controller, the filter and
+the estimator until the plant advances. The safety envelope and the outcome
+are scored on the exact state.
 
 ### Controller under test
 
@@ -997,13 +998,16 @@ commands, and the hypothesis with the smallest squared innovation accumulated
 over the episode supplies the parameters, the filter model and the state
 prediction. The true time constant never lies on the grid except by chance;
 the armature is not in the regressor at all. Two guards are part of the frozen
-controller and are counted per episode: when the estimated command-space mass
-matrix has a determinant below 5% of the nominal one, the filter and the
-prediction use the nominal model for that step; when the predicted state is
-not finite or moves more than 5 units from the current one, the command is
-evaluated at the current state. All other settings are the v1.9 defaults with
-delay compensation on; the estimator still differentiates the measured
-velocity by finite differences.
+controller. At the start of every control step, before any model query, the
+controller decides once whether the estimated command-space mass matrix at
+the measured configuration has a determinant below 5% of the nominal one; if
+so, the filter rows, the drift and every stage of the state prediction use the
+nominal model for that step. When the predicted state is not finite or moves
+more than 5 units from the current one, the command is evaluated at the
+current state. Guarded steps and guarded predictions are counted per episode
+and reported. All other settings are the v1.9 defaults with delay
+compensation on; the estimator still differentiates the measured velocity by
+finite differences.
 
 ### Design
 
@@ -1024,11 +1028,14 @@ decision seeds, with no decision weight.
 
 The **transfer block** runs the unfiltered `fixed` arm on seeds
 `50000..50099` on both plants, with no sensor noise and no actuator options.
-Its analytical rows must reproduce the retained v1.3 `A0_computed_torque`
-rows exactly, which ties the campaign to earlier evidence; its MuJoCo rows,
-paired with the analytical ones seed by seed, report how far the engine alone
-moves outcomes and final distances before any actuator effect is added. It
-carries no decision weight. The campaign totals 12,600 episodes.
+Its analytical rows must reproduce every retained field of the v1.3
+`A0_computed_torque` rows (reward, steps, success, final distance, maximum
+speed, maximum command torque, fault seen; floats within a relative `1e-9`);
+the analysis refuses to run, and no completion marker is written, if any of
+the 300 rows differs. Its MuJoCo rows, paired with the analytical ones seed by
+seed, report how far the engine alone moves outcomes and final distances
+before any actuator effect is added. The block carries no decision weight.
+The campaign totals 12,600 episodes.
 
 ### Endpoints and decision rule
 
@@ -1042,16 +1049,25 @@ Identical to v1.9, on the decision block, paired over its 1,900 seeds with a
    lower bound above zero in both `id_reference` and `motor_fault`.
 3. **Non-inferiority.** Unsafe-episode difference with a 95% upper bound at
    or below `+3 pp` in every scenario.
-4. `go` requires 2 and 3; anything else without a veto is `inconclusive`,
+4. **Estimator validity.** An adaptive decision episode is guarded when the
+   nominal model replaced the estimate in more than 10% of its control steps;
+   `go` requires that at most 10% of the adaptive decision episodes are
+   guarded, so that a systematically unusable estimate cannot ride on the
+   nominal model.
+5. `go` requires 2, 3 and 4; anything else without a veto is `inconclusive`,
    with the failed condition named.
 
 Secondary, without decision weight: the OOD success contrast; abort rates;
 intervention fractions; median final distances; maximum normalised
 violations; the fraction of adaptive episodes whose selected lag equals the
 true delay; the mean absolute difference between the selected and the true
-time constant; the number of episodes with a model or a prediction fallback;
-the per-joint RMS prediction error of the final estimate on the shared probe
-bank (seed `190001`).
+time constant; the mean fraction of guarded steps and the number of episodes
+with a guarded prediction; the per-joint RMS error of the final estimate, on
+the shared probe bank (seed `190001`), against the analytical-parameter
+oracle in command coordinates (the plant's sampled inertial and friction
+parameters and motor gains). That oracle excludes armature, actuator dynamics
+and engine friction by construction, so the figure measures distance from the
+best representable model, not from the plant.
 
 ### What the pilot showed and what it did not
 

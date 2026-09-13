@@ -71,6 +71,9 @@ class NominalStack:
 
     def command(self, observation, state, q_des, obstacles=(), deterministic=True):
         state = np.asarray(state, dtype=np.float64)
+        if hasattr(self.baseline, "begin_step"):
+            # One guard decision per control step, before any model query.
+            self.baseline.begin_step(state[:2])
         if self.compensate_delay:
             # Evaluate control law and certificate where the new command will act.
             state = self.baseline.predict_state(state)
@@ -122,6 +125,10 @@ class PilotEpisode:
     outcome: str
     steps: int
     final_distance: float
+    reward: float
+    max_speed: float
+    max_command_torque: float
+    fault_seen: bool
     success: bool
     unsafe_episode: bool
     normalized_violation_max: float
@@ -135,6 +142,8 @@ class PilotEpisode:
     true_parameters: list
     model_fallbacks: int = 0
     prediction_fallbacks: int = 0
+    model_fallback_steps: int = 0
+    control_steps: int = 0
     selected_time_constant: float | None = None
     true_time_constant: float | None = None
     true_armature: float | None = None
@@ -175,6 +184,14 @@ def probe_bank():
 
 
 def _prediction_error(controller, env, probes):
+    """RMS command error of the final estimate against the analytical-parameter oracle.
+
+    The oracle is the plant's sampled inertial and friction parameters with
+    its motor gains, expressed in command coordinates. Effects outside that
+    parametrisation (armature, actuator dynamics, engine friction) are not in
+    the oracle, so on a MuJoCo plant this measures distance from the best
+    representable model, not from the plant.
+    """
     truth = CommandRegressor.parameters(env.arm.params, env.motor_gain)
     estimate = controller.parameters
     errors = np.zeros((len(probes), 2))
@@ -299,6 +316,10 @@ def run_case(
         outcome=label,
         steps=int(outcome.steps),
         final_distance=float(outcome.final_distance),
+        reward=float(outcome.reward),
+        max_speed=float(outcome.max_speed),
+        max_command_torque=float(outcome.max_command_torque),
+        fault_seen=bool(outcome.fault_seen),
         success=bool(outcome.success),
         unsafe_episode=bool(safety.unsafe_episode),
         normalized_violation_max=float(safety.normalized_violation_max),
@@ -312,6 +333,8 @@ def run_case(
         true_parameters=true_parameters,
         model_fallbacks=int(controller.model_fallbacks) if adaptive else 0,
         prediction_fallbacks=int(controller.prediction_fallbacks) if adaptive else 0,
+        model_fallback_steps=int(controller.model_fallback_steps) if adaptive else 0,
+        control_steps=int(controller.control_steps) if adaptive else 0,
         selected_time_constant=float(controller.time_constant) if adaptive else None,
         true_time_constant=float(getattr(env, "actuator_time_constant", 0.0)),
         true_armature=float(getattr(env, "armature", 0.0)),

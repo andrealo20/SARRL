@@ -211,7 +211,9 @@ class AdaptiveNominalController:
         self._converged = False
         self.prediction_fallbacks = 0
         self.model_fallbacks = 0
-        self._last_q = None
+        self.model_fallback_steps = 0
+        self.control_steps = 0
+        self._step_uses_nominal = False
         self._sent: list[np.ndarray] = []
 
     @property
@@ -335,6 +337,26 @@ class AdaptiveNominalController:
 
     # Control law -----------------------------------------------------------
 
+    def begin_step(self, q) -> bool:
+        """Decide once per control step whether the estimate is usable.
+
+        Called with the state the step starts from (the measured one when the
+        interface is measured). The decision holds for every model query of
+        the step: filter rows, drift, and every RK4 stage of the prediction.
+        Returns True when the nominal model is used for the step.
+        """
+        q = _vector(q, "q")
+        self.control_steps += 1
+        estimated = self.estimated_model()._estimated_mass_matrix(q)
+        nominal = self.model.mass_matrix(q)
+        det = float(np.linalg.det(estimated))
+        floor = self.config.conditioning_floor * float(np.linalg.det(nominal))
+        self._step_uses_nominal = not np.isfinite(det) or det < floor
+        if self._step_uses_nominal:
+            self.model_fallbacks += 1
+            self.model_fallback_steps += 1
+        return self._step_uses_nominal
+
     def command(self, q, qd, q_des, qd_des=(0.0, 0.0), qdd_des=(0.0, 0.0)) -> np.ndarray:
         q = _vector(q, "q")
         qd = _vector(qd, "qd")
@@ -423,20 +445,9 @@ class EstimatedCommandModel:
         controller = self.controller
         if controller.config.filter_gate and not controller.converged:
             return True
-        estimated = self._estimated_mass_matrix(controller._last_q)
-        if estimated is None:
-            return False
-        nominal = self.kinematics.mass_matrix(controller._last_q)
-        det = float(np.linalg.det(estimated))
-        floor = controller.config.conditioning_floor * float(np.linalg.det(nominal))
-        if not np.isfinite(det) or det < floor:
-            controller.model_fallbacks += 1
-            return True
-        return False
+        return controller._step_uses_nominal
 
     def _estimated_mass_matrix(self, q):
-        if q is None:
-            return None
         blocks = self.controller.regressor.inertial_matrices(np.asarray(q, dtype=np.float64))
         theta = self._theta()[:, :5]
         return np.stack(
@@ -448,7 +459,6 @@ class EstimatedCommandModel:
 
     def mass_matrix(self, q) -> np.ndarray:
         q = _vector(q, "q")
-        self.controller._last_q = q.copy()
         if self.uses_nominal:
             return self.kinematics.mass_matrix(q)
         blocks = self.controller.regressor.inertial_matrices(q)  # (5, 2, 2)
@@ -463,7 +473,6 @@ class EstimatedCommandModel:
         return np.einsum("ij,ij->i", rows, self._theta())
 
     def inverse_dynamics(self, q, qd, qdd, include_friction: bool = True) -> np.ndarray:
-        self.controller._last_q = _vector(q, "q").copy()
         if self.uses_nominal:
             return self.kinematics.inverse_dynamics(q, qd, qdd, include_friction=include_friction)
         rows = self.controller.regressor.rows(q, qd, qdd)

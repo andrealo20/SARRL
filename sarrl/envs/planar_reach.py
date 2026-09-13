@@ -166,14 +166,26 @@ class PlanarReachEnv:
         self._command_queue = [np.zeros(2, dtype=np.float64) for _ in range(self.action_delay)]
         self._fault_active = False
         self.steps = 0
+        self._episode_counter = getattr(self, "_episode_counter", 0) + 1
+        self._sensed_key = None
         obs = self._observation()
         return obs, self._info_base()
 
     def _sensed_state(self) -> np.ndarray:
+        """One noisy measurement per plant state, shared by every consumer.
+
+        The sample is drawn once per (episode, step) and returned again until
+        the plant advances, so the observation and any measured-state interface
+        see the same sensor reading. Without noise this is the exact state.
+        """
         if self.randomization.sensor_noise_std == 0.0:
             return self.state.copy()
-        noise = self._noise_rng.normal(0.0, self.randomization.sensor_noise_std, size=4)
-        return self.state + noise
+        key = (self._episode_counter, self.steps)
+        if getattr(self, "_sensed_key", None) != key:
+            noise = self._noise_rng.normal(0.0, self.randomization.sensor_noise_std, size=4)
+            self._sensed_cache = self.state + noise
+            self._sensed_key = key
+        return self._sensed_cache.copy()
 
     def _observation(self) -> np.ndarray:
         sensed = self._sensed_state()

@@ -32,8 +32,12 @@ def _episode(arm, scenario, seed, plant, success, unsafe=False, distance=None):
         origin="official",
         plant=plant,
         outcome="success" if success else "timeout",
-        steps=100,
+        steps=250 if seed < V20_PRIMARY_SEED_START else 100,
         final_distance=0.04 if success else 0.5 if distance is None else distance,
+        reward=-1.0,
+        max_speed=0.0,
+        max_command_torque=0.0,
+        fault_seen=False,
         success=success,
         unsafe_episode=unsafe,
         normalized_violation_max=0.1 if unsafe else 0.0,
@@ -48,6 +52,8 @@ def _episode(arm, scenario, seed, plant, success, unsafe=False, distance=None):
         selected_time_constant=0.03 if adaptive else None,
         true_time_constant=0.02,
         true_armature=0.05,
+        control_steps=100,
+        model_fallback_steps=0,
     )
 
 
@@ -75,10 +81,11 @@ def _campaign(adaptive_success, fixed_success, adaptive_unsafe=0.0, fixed_unsafe
 
 @pytest.fixture
 def reference(tmp_path):
-    lines = ["scenario,controller,seed,reward,steps,success,final_distance"]
+    header = "scenario,controller,seed,reward,steps,success,final_distance,max_speed,"
+    lines = [header + "max_command_torque,fault_seen"]
     for scenario in V20_SCENARIOS:
         for seed in v20_seeds("transfer"):
-            lines.append(f"{scenario},A0_computed_torque,{seed},-1.0,250,False,0.5")
+            lines.append(f"{scenario},A0_computed_torque,{seed},-1.0,250,False,0.5,0.0,0.0,False")
     path = tmp_path / "heldout_episodes.csv"
     path.write_text("\n".join(lines) + "\n")
     return path
@@ -134,10 +141,24 @@ def test_reordered_or_incomplete_campaign_is_rejected(reference):
         analyze(episodes[1:] + episodes[:1], reference)
 
 
-def test_analysis_with_the_retained_reference():
+def test_analysis_refuses_rows_that_do_not_reproduce_the_retained_reference():
     retained = Path(V19_REPRODUCTION_REFERENCE)
     if not retained.exists():
         pytest.skip("retained v1.3 evidence unavailable")
-    report = analyze(_campaign(0.9, 0.1), retained)
-    # Synthetic rows do not reproduce the retained outcomes; the check reports that.
-    assert report["transfer_check"]["reproduction_of_retained_a0"]["compared"] == 300
+    with pytest.raises(ValueError, match="do not reproduce"):
+        analyze(_campaign(0.9, 0.1), retained)
+
+
+def test_guarded_estimates_force_inconclusive(reference):
+    episodes = _campaign(0.9, 0.1)
+    from dataclasses import replace
+
+    guarded = [
+        replace(e, model_fallback_steps=50) if e.arm == "adaptive_hocbf" and e.seed % 4 == 0 else e
+        for e in episodes
+    ]
+    report = analyze(guarded, reference)
+    assert report["estimator_valid"] is False
+    assert report["decision"] == "inconclusive"
+    assert any("guarded" in reason for reason in report["inconclusive_reasons"])
+    assert report["estimator"]["guarded_episode_fraction"] == pytest.approx(0.25, abs=0.01)

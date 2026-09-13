@@ -14,6 +14,7 @@ plant change alone moves the baseline.
 
 from __future__ import annotations
 
+import csv
 from dataclasses import asdict
 from pathlib import Path
 
@@ -27,7 +28,6 @@ from sarrl.evaluation.adaptive_campaign import (
     cell_summary,
     load_episodes,
     paired_difference,
-    reproduction_check,
 )
 from sarrl.evaluation.adaptive_pilot import PilotEpisode, PlantOptions
 
@@ -54,6 +54,11 @@ V20_TRANSFER_EPISODES = 100
 V20_BOOTSTRAP_SEED = 200_000
 V20_SUCCESS_GAIN = 0.20
 V20_UNSAFE_MARGIN = 0.03
+# Estimator validity: an adaptive decision episode spending more than this
+# fraction of its control steps on the nominal model is guarded, and the
+# campaign cannot reach go if more than this fraction of decision episodes are.
+V20_GUARDED_STEP_FRACTION = 0.10
+V20_GUARDED_EPISODE_FRACTION = 0.10
 V20_FROZEN_PATHS = (
     "sarrl",
     "tools",
@@ -107,6 +112,7 @@ def v20_protocol_dict() -> dict:
                 "episodes_per_scenario": V20_TRANSFER_EPISODES,
                 "reference": V19_REPRODUCTION_REFERENCE,
                 "reference_controller": V19_REPRODUCTION_CONTROLLER,
+                "analytical_rows_must_match_reference": "all retained fields, exactly",
                 "decision_weight": False,
             },
             "scenarios": list(V20_SCENARIOS),
@@ -145,7 +151,16 @@ def v20_protocol_dict() -> dict:
                 "upper_95_at_or_below": V20_UNSAFE_MARGIN,
                 "decision_weight": True,
             },
-            "go_requires": ["no_safety_veto", "primary_success", "non_inferiority_all_scenarios"],
+            "estimator_validity": {
+                "guarded_step_fraction_per_episode": V20_GUARDED_STEP_FRACTION,
+                "max_guarded_episode_fraction": V20_GUARDED_EPISODE_FRACTION,
+            },
+            "go_requires": [
+                "no_safety_veto",
+                "primary_success",
+                "non_inferiority_all_scenarios",
+                "estimator_validity",
+            ],
         },
         "seal_file": V20_SEAL_FILE,
         "frozen_paths": list(V20_FROZEN_PATHS),
@@ -205,6 +220,59 @@ def _select(episodes, arm, scenario, seeds, plant):
     ]
 
 
+REFERENCE_FIELDS = (
+    ("reward", float),
+    ("steps", int),
+    ("success", bool),
+    ("final_distance", float),
+    ("max_speed", float),
+    ("max_command_torque", float),
+    ("fault_seen", bool),
+)
+
+
+def strict_reproduction_check(rows: list[PilotEpisode], reference_path: Path) -> dict:
+    """Every retained A0 field must match the analytical transfer rows exactly."""
+    if not reference_path.exists():
+        raise FileNotFoundError(f"reproduction reference missing: {reference_path}")
+    reference = {}
+    with reference_path.open(newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row["controller"] != V19_REPRODUCTION_CONTROLLER:
+                continue
+            key = (row["scenario"], int(row["seed"]))
+            if key in reference:
+                raise ValueError(f"duplicate reference row {key}")
+            reference[key] = {
+                name: (row[name] == "True" if kind is bool else kind(row[name]))
+                for name, kind in REFERENCE_FIELDS
+            }
+    expected = {(s, seed) for s in V20_SCENARIOS for seed in v20_seeds("transfer")}
+    if set(reference) != expected:
+        raise ValueError("reproduction reference does not hold exactly the 300 expected rows")
+    if {(e.scenario, e.seed) for e in rows} != expected:
+        raise ValueError("analytical transfer rows do not cover the 300 reference keys")
+    mismatches = []
+    for episode in rows:
+        retained = reference[(episode.scenario, episode.seed)]
+        for name, kind in REFERENCE_FIELDS:
+            ours = getattr(episode, name)
+            if kind is float:
+                same = abs(ours - retained[name]) <= 1e-9 * max(1.0, abs(retained[name]))
+            else:
+                same = ours == retained[name]
+            if not same:
+                mismatches.append([episode.scenario, episode.seed, name, ours, retained[name]])
+    return {
+        "reference": reference_path.name,
+        "reference_controller": V19_REPRODUCTION_CONTROLLER,
+        "fields": [name for name, _ in REFERENCE_FIELDS],
+        "compared": len(rows),
+        "matched": len(rows) - len({(m[0], m[1]) for m in mismatches}),
+        "mismatches": mismatches[:20],
+    }
+
+
 def transfer_check(episodes: list[PilotEpisode], reference_path: Path) -> dict:
     """Analytical fixed rows must reproduce the retained A0 rows; MuJoCo rows are compared."""
     analytical = [
@@ -217,7 +285,12 @@ def transfer_check(episodes: list[PilotEpisode], reference_path: Path) -> dict:
         for scenario in V20_SCENARIOS
         for e in _select(episodes, "fixed", scenario, v20_seeds("transfer"), V20_PLANT)
     }
-    reproduction = reproduction_check(analytical, reference_path)
+    reproduction = strict_reproduction_check(analytical, reference_path)
+    if reproduction["mismatches"]:
+        raise ValueError(
+            "analytical transfer rows do not reproduce the retained A0 rows: "
+            f"{reproduction['mismatches'][:3]}"
+        )
     per_scenario = {}
     for scenario in V20_SCENARIOS:
         pairs = [
@@ -251,7 +324,7 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
     }
     descriptive_block = {
         (arm, scenario): _select(episodes, arm, scenario, v20_seeds("descriptive"), V20_PLANT)
-        for arm in V20_ARMS
+        for arm in ("fixed", "adaptive")
         for scenario in V20_SCENARIOS
     }
 
@@ -285,6 +358,18 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
         and contrasts[s]["success"]["ci95_low"] > 0.0
         for s in V20_PRIMARY_SCENARIOS
     )
+    adaptive_rows = [
+        e for (arm, _), rows in decision_block.items() if arm == "adaptive_hocbf" for e in rows
+    ]
+    guarded = [
+        e
+        for e in adaptive_rows
+        if e.control_steps > 0
+        and e.model_fallback_steps / e.control_steps > V20_GUARDED_STEP_FRACTION
+    ]
+    guarded_fraction = len(guarded) / len(adaptive_rows)
+    estimator_valid = guarded_fraction <= V20_GUARDED_EPISODE_FRACTION
+
     reasons = []
     if vetoes:
         decision = "no_go_safety"
@@ -294,12 +379,20 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
         not_shown = [s for s in V20_SCENARIOS if not non_inferior[s]]
         if not_shown:
             reasons.append("unsafe-episode non-inferiority not shown in " + ", ".join(not_shown))
+        if not estimator_valid:
+            reasons.append(
+                f"estimate guarded in more than {V20_GUARDED_STEP_FRACTION:.0%} of steps in "
+                f"{guarded_fraction:.1%} of adaptive decision episodes"
+            )
         decision = "go" if not reasons else "inconclusive"
 
-    adaptive_rows = [
-        e for (arm, _), rows in decision_block.items() if arm == "adaptive_hocbf" for e in rows
-    ]
     estimator = {
+        "guarded_episode_fraction": guarded_fraction,
+        "guarded_step_fraction_mean": float(
+            np.mean([e.model_fallback_steps / max(e.control_steps, 1) for e in adaptive_rows])
+        ),
+        "estimator_valid": estimator_valid,
+        "prediction_error_oracle": "analytical_parameters_in_command_coordinates",
         "time_constant_abs_error_mean_s": float(
             np.mean([abs(e.selected_time_constant - e.true_time_constant) for e in adaptive_rows])
         ),
@@ -317,6 +410,7 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
         "safety_vetoes": vetoes,
         "unsafe_non_inferior_at_margin": non_inferior,
         "primary_met": primary_met,
+        "estimator_valid": estimator_valid,
         "contrasts": contrasts,
         "estimator": estimator,
         "decision_summary": {
