@@ -18,7 +18,7 @@ The reference platform is a reproducible **2-DoF planar arm**, available as an a
 
 On the randomized planar held-out benchmark:
 
-| Controller | v1.2 held-out | v1.3 compound OOD | v1.3 motor fault |
+| Controller | In distribution (v1.2 held-out) | Compound OOD (v1.3) | Motor fault (v1.3) |
 |---|---:|---:|---:|
 | Computed torque | 11.0% | 0.0% | 3.0% |
 | Direct SAC | 6.0% ± 3.7 pp | n/a | n/a |
@@ -28,6 +28,8 @@ On the randomized planar held-out benchmark:
 | Residual SAC + HOCBF | 49.2% ± 7.9 pp | 3.0% ± 0.7 pp | 16.4% ± 1.1 pp |
 | Full adaptive stack | 17.0% ± 2.3 pp | 0.0% | 2.8% ± 0.4 pp |
 | **Identified nominal + HOCBF (v1.9, no learning)** | **91.0%** | **85.0%** | **92.0%** |
+| Fixed nominal + HOCBF, MuJoCo plant (v2.0) | 11.7% | 0.1% | 3.7% |
+| **Identified nominal + HOCBF, MuJoCo plant (v2.0, no learning)** | **90.9%** | **78.9%** | **90.9%** |
 
 The v1.2 campaign established the benefit of residual learning over Direct SAC. The v1.3 campaign reused the frozen policies on new paired seeds: every learned controller degraded sharply under compound OOD dynamics and abrupt motor loss. Learned context retained the highest success, but did not solve robustness. The gate stayed near minimum authority, and hard-HOCBF stacks explicitly rejected 86/3,000 episodes when projection became infeasible.
 
@@ -102,7 +104,7 @@ decision is **go**. Without noise or actuator effects the MuJoCo plant
 reproduces the analytical outcomes on the v1.3 seeds in 99..100% of episodes,
 so the plant port alone does not move the baseline.
 
-Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. The v1.9 row is a single deterministic controller on the same 100 seeds per scenario (the v1.3 `50000..50099` seeds, run as the reproduction block of the v1.9 campaign); its decision rests on 1,900 further paired seeds per scenario. Evidence remains limited to the analytical planar benchmark.
+Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. The v1.9 row is a single deterministic controller on the same 100 seeds per scenario (the v1.3 `50000..50099` seeds, run as the reproduction block of the v1.9 campaign); its decision rests on 1,900 further paired seeds per scenario. The two v2.0 rows are the decision block of that campaign: 1,900 paired seeds per scenario (`52200..54099`) on the MuJoCo plant with per-episode armature, first-order actuator lag and a noisy measured state, so they are not seed-matched to the rows above. Evidence remains limited to the planar benchmark, analytical and MuJoCo.
 
 ### Safety
 
