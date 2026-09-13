@@ -136,6 +136,8 @@ class PilotEpisode:
     model_fallbacks: int = 0
     prediction_fallbacks: int = 0
     selected_time_constant: float | None = None
+    true_time_constant: float | None = None
+    true_armature: float | None = None
 
 
 def build_arm(arm: str, config: AdaptiveNominalConfig):
@@ -189,6 +191,8 @@ class PlantOptions:
     sensor_noise_std: float = 0.0
     armature: float = 0.0
     actuator_time_constant: float = 0.0
+    armature_range: tuple[float, float] | None = None
+    actuator_time_constant_range: tuple[float, float] | None = None
 
 
 def make_env(plant: str, spec, options: PlantOptions | None = None):
@@ -196,7 +200,12 @@ def make_env(plant: str, spec, options: PlantOptions | None = None):
     options = options or PlantOptions()
     randomization = replace(spec.randomization, sensor_noise_std=options.sensor_noise_std)
     if plant == "analytical":
-        if options.armature or options.actuator_time_constant:
+        if (
+            options.armature
+            or options.actuator_time_constant
+            or options.armature_range
+            or options.actuator_time_constant_range
+        ):
             raise ValueError("armature and actuator dynamics need the mujoco plant")
         return PlanarReachEnv(mode="torque", randomization=randomization, fault=spec.fault)
     if plant == "mujoco":
@@ -208,6 +217,8 @@ def make_env(plant: str, spec, options: PlantOptions | None = None):
             fault=spec.fault,
             armature=options.armature,
             actuator_time_constant=options.actuator_time_constant,
+            armature_range=options.armature_range,
+            actuator_time_constant_range=options.actuator_time_constant_range,
         )
     raise ValueError(f"unknown plant {plant}")
 
@@ -302,6 +313,8 @@ def run_case(
         model_fallbacks=int(controller.model_fallbacks) if adaptive else 0,
         prediction_fallbacks=int(controller.prediction_fallbacks) if adaptive else 0,
         selected_time_constant=float(controller.time_constant) if adaptive else None,
+        true_time_constant=float(getattr(env, "actuator_time_constant", 0.0)),
+        true_armature=float(getattr(env, "armature", 0.0)),
     )
 
 

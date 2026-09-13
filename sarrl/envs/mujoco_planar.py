@@ -86,6 +86,8 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         integrator: str = "implicitfast",
         armature: float = 0.0,
         actuator_time_constant: float = 0.0,
+        armature_range: tuple[float, float] | None = None,
+        actuator_time_constant_range: tuple[float, float] | None = None,
     ):
         if mujoco is None:
             raise ImportError("MujocoPlanarReachEnv needs the 'mujoco' package")
@@ -112,6 +114,22 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         # part of the controller's parametrisation.
         self.armature = float(armature)
         self.actuator_time_constant = float(actuator_time_constant)
+        # Optional per-episode randomisation of the actuator, drawn from a generator
+        # seeded apart from the benchmark's so that targets and plant draws stay
+        # identical to the analytical environment for the same seed.
+        for name, bounds in (
+            ("armature_range", armature_range),
+            ("actuator_time_constant_range", actuator_time_constant_range),
+        ):
+            if bounds is not None:
+                low, high = bounds
+                if not (0.0 <= low <= high) or not np.isfinite(high):
+                    raise ValueError(f"{name} must be finite, non-negative and ordered")
+        self.armature_range = tuple(armature_range) if armature_range else None
+        self.actuator_time_constant_range = (
+            tuple(actuator_time_constant_range) if actuator_time_constant_range else None
+        )
+        self._actuator_rng = np.random.default_rng(0)
         self._actuator_torque = np.zeros(2, dtype=np.float64)
         self.model = mujoco.MjModel.from_xml_string(
             planar_arm_xml(self.nominal_arm.params, self.timestep, integrator, self.armature)
@@ -139,6 +157,7 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
             model.body_inertia[body] = (inertia, inertia, inertia)
         model.dof_damping[:] = p.viscous
         model.dof_frictionloss[:] = p.coulomb
+        model.dof_armature[:] = self.armature
         mujoco.mj_setConst(model, self.data)
         self.data.qpos[:] = self.state[:2]
         self.data.qvel[:] = self.state[2:]
@@ -148,6 +167,14 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
 
     def reset(self, seed: int | None = None, target=None):
         result = super().reset(seed=seed, target=target)
+        if seed is not None:
+            self._actuator_rng = np.random.default_rng(seed ^ 0x5A5A5A5A)
+        if self.armature_range is not None:
+            self.armature = float(self._actuator_rng.uniform(*self.armature_range))
+        if self.actuator_time_constant_range is not None:
+            self.actuator_time_constant = float(
+                self._actuator_rng.uniform(*self.actuator_time_constant_range)
+            )
         self._actuator_torque = np.zeros(2, dtype=np.float64)
         self._sync_plant()
         return result
@@ -230,6 +257,8 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
                 "pre_step_state": pre_step_state,
                 "pre_step_acceleration": pre_step_acceleration,
                 "delivered_torque": self._actuator_torque.copy(),
+                "armature": self.armature,
+                "actuator_time_constant": self.actuator_time_constant,
                 "plant": "mujoco",
             }
         )
@@ -243,6 +272,8 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
                 "integrator": self.integrator,
                 "armature": self.armature,
                 "actuator_time_constant": self.actuator_time_constant,
+                "armature_range": self.armature_range,
+                "actuator_time_constant_range": self.actuator_time_constant_range,
             }
         )
         return config

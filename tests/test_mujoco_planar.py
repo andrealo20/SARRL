@@ -124,3 +124,32 @@ def test_armature_and_actuator_lag_change_the_plant_response():
     assert heavy.constructor_config()["armature"] == 0.05
     with pytest.raises(ValueError):
         MujocoPlanarReachEnv(armature=-1.0)
+
+
+def test_randomised_actuator_is_seeded_apart_from_the_benchmark_draws():
+    spec = _scenario("id_reference")
+    fixed = MujocoPlanarReachEnv(mode="torque", randomization=spec.randomization)
+    random_actuator = MujocoPlanarReachEnv(
+        mode="torque",
+        randomization=spec.randomization,
+        armature_range=(0.02, 0.08),
+        actuator_time_constant_range=(0.01, 0.05),
+    )
+    fixed.reset(seed=9803007)
+    random_actuator.reset(seed=9803007)
+    np.testing.assert_array_equal(fixed.state, random_actuator.state)
+    np.testing.assert_array_equal(fixed.target, random_actuator.target)
+    assert fixed.arm.params == random_actuator.arm.params
+    assert 0.02 <= random_actuator.armature <= 0.08
+    assert 0.01 <= random_actuator.actuator_time_constant <= 0.05
+    np.testing.assert_allclose(random_actuator.model.dof_armature, random_actuator.armature)
+    again = MujocoPlanarReachEnv(
+        mode="torque",
+        randomization=spec.randomization,
+        armature_range=(0.02, 0.08),
+        actuator_time_constant_range=(0.01, 0.05),
+    )
+    again.reset(seed=9803007)
+    assert again.actuator_time_constant == random_actuator.actuator_time_constant
+    with pytest.raises(ValueError):
+        MujocoPlanarReachEnv(armature_range=(0.1, 0.05))

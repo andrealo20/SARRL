@@ -127,6 +127,8 @@ def main() -> int:
     )
     parser.add_argument("--armature", type=float, default=0.0)
     parser.add_argument("--actuator-tau", type=float, default=0.0)
+    parser.add_argument("--armature-range", type=float, nargs=2, default=None)
+    parser.add_argument("--actuator-tau-range", type=float, nargs=2, default=None)
     args = parser.parse_args()
     assert_repository_import_root(ROOT)
     output = args.output.resolve()
@@ -157,6 +159,10 @@ def main() -> int:
         sensor_noise_std=args.sensor_noise,
         armature=args.armature,
         actuator_time_constant=args.actuator_tau,
+        armature_range=tuple(args.armature_range) if args.armature_range else None,
+        actuator_time_constant_range=(
+            tuple(args.actuator_tau_range) if args.actuator_tau_range else None
+        ),
     )
     cases = pilot_cases(args.fresh, historical=args.historical)
     started = time.time()
