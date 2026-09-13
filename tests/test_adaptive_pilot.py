@@ -92,3 +92,53 @@ def test_measured_state_is_sampled_once_per_step_and_noisy():
     with pytest.raises(ValueError):
         make_env("analytical", spec, PlantOptions(armature=0.05))
     assert replace(spec.randomization, sensor_noise_std=0.0) == spec.randomization
+
+
+class _ZeroPolicy:
+    def act(self, observation, deterministic=True):
+        return np.zeros(2)
+
+
+class _ConstantPolicy:
+    def act(self, observation, deterministic=True):
+        return np.array([0.5, -0.5])
+
+
+def test_residual_arm_with_a_zero_policy_matches_the_nominal_arm():
+    config = AdaptiveNominalConfig()
+    nominal = run_case("adaptive_hocbf", "id_reference", 9801800, "historical", config, True)
+    residual = run_case(
+        "adaptive_hocbf_residual",
+        "id_reference",
+        9801800,
+        "historical",
+        config,
+        True,
+        policy=_ZeroPolicy(),
+    )
+    assert residual.arm == "adaptive_hocbf_residual"
+    assert residual.residual_rms == 0.0 and nominal.residual_rms is None
+    assert residual.steps == nominal.steps and residual.outcome == nominal.outcome
+    assert residual.final_distance == nominal.final_distance
+
+
+def test_residual_arm_records_the_residual_and_needs_a_policy():
+    config = AdaptiveNominalConfig()
+    episode = run_case(
+        "fixed_hocbf_residual",
+        "id_reference",
+        9801800,
+        "historical",
+        config,
+        policy=_ConstantPolicy(),
+    )
+    assert episode.residual_rms == pytest.approx(np.sqrt(2 * 4.0**2))
+    assert summarize([episode])["all/id_reference/fixed_hocbf_residual"][
+        "mean_residual_rms"
+    ] == pytest.approx(episode.residual_rms)
+    with pytest.raises(ValueError, match="residual arm"):
+        run_case("adaptive_hocbf_residual", "id_reference", 9801800, "historical", config)
+    with pytest.raises(ValueError, match="residual arm"):
+        run_case(
+            "adaptive_hocbf", "id_reference", 9801800, "historical", config, policy=_ZeroPolicy()
+        )

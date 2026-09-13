@@ -33,6 +33,8 @@ from sarrl.runtime import ControlStackConfig, ControlStackResult
 from sarrl.safety import HOCBFSafetyFilter
 
 ARMS = ("fixed", "fixed_hocbf", "adaptive", "adaptive_hocbf")
+# Arms that add a trained bounded residual to the filtered nominal command.
+RESIDUAL_ARMS = ("fixed_hocbf_residual", "adaptive_hocbf_residual")
 HISTORICAL_CASES = {
     "id_reference": (9801800, 9801801),
     "ood_compound": (9801900, 9801901),
@@ -380,7 +382,7 @@ def summarize(episodes: list[PilotEpisode]) -> dict:
     table: dict = {}
     for origin in ("historical", "fresh", "all"):
         for scenario in ("id_reference", "ood_compound", "motor_fault"):
-            for arm in ARMS:
+            for arm in ARMS + RESIDUAL_ARMS:
                 rows = [
                     e
                     for e in episodes
@@ -408,6 +410,11 @@ def summarize(episodes: list[PilotEpisode]) -> dict:
                     "episodes_with_model_fallback": sum(e.model_fallbacks > 0 for e in rows),
                     "episodes_with_prediction_fallback": sum(
                         e.prediction_fallbacks > 0 for e in rows
+                    ),
+                    "mean_residual_rms": (
+                        float(np.mean([e.residual_rms for e in rows]))
+                        if rows[0].residual_rms is not None
+                        else None
                     ),
                 }
     return table

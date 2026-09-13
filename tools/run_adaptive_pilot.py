@@ -26,6 +26,7 @@ from sarrl.controllers import AdaptiveNominalConfig
 from sarrl.evaluation import assert_repository_import_root
 from sarrl.evaluation.adaptive_pilot import (
     ARMS,
+    RESIDUAL_ARMS,
     PlantOptions,
     episodes_to_records,
     pilot_cases,
@@ -33,6 +34,7 @@ from sarrl.evaluation.adaptive_pilot import (
     summarize,
 )
 from sarrl.evaluation.provenance import runtime_metadata
+from sarrl.rl import SACAgent
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCES = (
@@ -107,7 +109,13 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--fresh", type=int, default=20, help="fresh seeds per scenario")
-    parser.add_argument("--arms", nargs="+", default=list(ARMS), choices=ARMS)
+    parser.add_argument("--arms", nargs="+", default=list(ARMS), choices=ARMS + RESIDUAL_ARMS)
+    parser.add_argument(
+        "--policy",
+        type=Path,
+        default=None,
+        help="selected SAC checkpoint for the residual arms; evaluated deterministically",
+    )
     parser.add_argument("--process-noise", type=float, default=None)
     parser.add_argument("--forgetting", type=float, default=None)
     parser.add_argument("--max-lag", type=int, default=None)
@@ -136,6 +144,12 @@ def main() -> int:
         raise ValueError("pilot output must be inside repository results")
     if output.exists() and any(output.iterdir()):
         raise FileExistsError(f"{output} is not empty; use a new directory")
+    residual_arms = [arm for arm in args.arms if arm in RESIDUAL_ARMS]
+    if bool(residual_arms) != (args.policy is not None):
+        raise ValueError("residual arms need --policy, and --policy needs a residual arm")
+    policy = None
+    if args.policy is not None:
+        policy = SACAgent.from_checkpoint(args.policy, seed=0, load_optimizers=False)
     output.mkdir(parents=True, exist_ok=True)
 
     overrides = {
@@ -179,6 +193,7 @@ def main() -> int:
                     args.delay_compensation,
                     args.plant,
                     options,
+                    policy if arm in RESIDUAL_ARMS else None,
                 )
             )
         print(f"[{index}/{len(cases)}] {scenario} {seed} done", flush=True)
@@ -197,6 +212,8 @@ def main() -> int:
         "delay_compensation": bool(args.delay_compensation),
         "plant": args.plant,
         "plant_options": asdict(options),
+        "policy": None if args.policy is None else str(args.policy),
+        "policy_sha256": None if args.policy is None else sha(args.policy),
         "source_hashes": {name: sha(ROOT / name) for name in SOURCES},
         "runtime": runtime_metadata(ROOT),
         "elapsed_seconds": time.time() - started,
