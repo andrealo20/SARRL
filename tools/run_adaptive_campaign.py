@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""Execute the preregistered v1.9 adaptive-nominal campaign and apply its decision rule.
+"""Execute the preregistered v1.9 adaptive-nominal campaign once and apply its decision rule.
 
 The protocol is frozen in ``sarrl.evaluation.adaptive_campaign`` and in
-``docs/experiments.md`` at the source commit recorded in the manifest. The
-runner writes the manifest before the first episode, appends every episode
-to a JSON-lines log as it completes, and closes the campaign with the
-analysis and a completion marker that hashes every output.
+``docs/experiments.md``. The runner refuses to start unless the frozen source
+paths of HEAD are identical to the sealed commit and carry no local change,
+unless the official seed range is absent from every retained artifact, and
+unless the canonical output directory does not exist. It writes the manifest
+before the first episode, appends every episode to a JSON-lines log, reloads
+that log for the analysis, and closes with a completion marker hashing every
+output. The output path is fixed so that the official seeds are opened once.
 """
 
 # Numerical thread limits precede all numerical imports.
@@ -18,8 +21,11 @@ import hashlib
 import json
 import os
 import subprocess
+import sys
 import time
+from concurrent.futures import ProcessPoolExecutor
 from dataclasses import asdict, fields
+from importlib import metadata
 from pathlib import Path
 
 for variable in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
@@ -28,29 +34,21 @@ for variable in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
 from sarrl.evaluation import assert_repository_import_root
 from sarrl.evaluation.adaptive_campaign import (
     V19_COMPENSATE_DELAY,
+    V19_FROZEN_PATHS,
+    V19_FROZEN_SOURCE_COMMIT,
+    V19_UNOPENED_SEED_RANGE,
     analyze,
+    load_episodes,
     v19_cells,
     v19_config,
     v19_protocol_dict,
 )
 from sarrl.evaluation.adaptive_pilot import PilotEpisode, run_case
 from sarrl.evaluation.provenance import runtime_metadata
+from tools.scan_seed_usage import scan_tracked
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = (
-    "sarrl/controllers/adaptive_nominal.py",
-    "sarrl/controllers/computed_torque.py",
-    "sarrl/dynamics/planar_arm.py",
-    "sarrl/envs/planar_reach.py",
-    "sarrl/evaluation/adaptive_campaign.py",
-    "sarrl/evaluation/adaptive_pilot.py",
-    "sarrl/evaluation/safety_audit.py",
-    "sarrl/evaluation/planar_v12.py",
-    "sarrl/evaluation/planar_v13.py",
-    "sarrl/safety/filter.py",
-    "tools/run_adaptive_campaign.py",
-    "docs/experiments.md",
-)
+OUTPUT = ROOT / "results" / "adaptive_nominal_v19"
 
 
 def sha(path: Path) -> str:
@@ -61,62 +59,106 @@ def write_json(path: Path, payload) -> None:
     path.write_text(json.dumps(payload, indent=1, sort_keys=True) + "\n")
 
 
-def working_tree_status() -> list[str]:
-    result = subprocess.run(
-        ["git", "status", "--porcelain"], cwd=ROOT, capture_output=True, text=True, check=False
+def git(*args: str) -> str:
+    return subprocess.run(
+        ["git", *args], cwd=ROOT, capture_output=True, text=True, check=True
+    ).stdout.strip()
+
+
+def verify_frozen_sources() -> dict:
+    """HEAD's frozen paths must equal the sealed commit and carry no local change."""
+    if V19_FROZEN_SOURCE_COMMIT is None:
+        raise RuntimeError("the protocol has not been sealed: V19_FROZEN_SOURCE_COMMIT is unset")
+    head = git("rev-parse", "HEAD")
+    diff = subprocess.run(
+        ["git", "diff", "--quiet", V19_FROZEN_SOURCE_COMMIT, "HEAD", "--", *V19_FROZEN_PATHS],
+        cwd=ROOT,
+        check=False,
     )
-    return [line for line in result.stdout.splitlines() if line.strip()]
+    if diff.returncode != 0:
+        raise RuntimeError(
+            f"frozen paths differ between HEAD {head[:12]} and the sealed commit "
+            f"{V19_FROZEN_SOURCE_COMMIT[:12]}"
+        )
+    status = git("status", "--porcelain", "--untracked-files=all", "--", *V19_FROZEN_PATHS)
+    if status:
+        raise RuntimeError("frozen paths carry local modifications or untracked files:\n" + status)
+    return {
+        "head": head,
+        "sealed_commit": V19_FROZEN_SOURCE_COMMIT,
+        "frozen_paths": list(V19_FROZEN_PATHS),
+        "tree": git("rev-parse", "HEAD^{tree}"),
+        "path_trees": {path: git("rev-parse", f"HEAD:{path}") for path in V19_FROZEN_PATHS},
+    }
+
+
+def installed_distributions() -> dict:
+    return {
+        dist.metadata["Name"]: dist.version
+        for dist in sorted(metadata.distributions(), key=lambda d: d.metadata["Name"].lower())
+    }
+
+
+def run_cell(cell):
+    arm, scenario, seed = cell
+    return asdict(run_case(arm, scenario, seed, "official", v19_config(), V19_COMPENSATE_DELAY))
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--output", type=Path, default=Path("results/adaptive_nominal_v19"))
-    parser.add_argument(
-        "--allow-dirty",
-        action="store_true",
-        help="run even when tracked sources differ from the recorded commit",
-    )
+    parser.add_argument("--workers", type=int, default=1)
     args = parser.parse_args()
+    if args.workers < 1:
+        raise ValueError("workers must be positive")
     assert_repository_import_root(ROOT)
-    output = args.output if args.output.is_absolute() else ROOT / args.output
-    if not output.resolve().is_relative_to(ROOT / "results"):
-        raise ValueError("campaign output must be inside repository results")
-    if output.exists() and any(output.iterdir()):
-        raise FileExistsError(f"{output} is not empty; the campaign runs once into a new directory")
-    output.mkdir(parents=True, exist_ok=True)
+    if OUTPUT.exists():
+        raise FileExistsError(f"{OUTPUT} exists; the official campaign runs once")
+    frozen = verify_frozen_sources()
+    scan = scan_tracked(ROOT, *V19_UNOPENED_SEED_RANGE)
+    if scan["hits"]:
+        raise RuntimeError(f"official seed range already used: {scan['files_with_hits']}")
 
-    dirty = [line for line in working_tree_status() if not line.startswith("??")]
-    if dirty and not args.allow_dirty:
-        raise RuntimeError("tracked files are modified; commit them so the manifest is exact")
-
+    OUTPUT.mkdir(parents=True)
     manifest = {
         "protocol": v19_protocol_dict(),
-        "source_hashes": {name: sha(ROOT / name) for name in SOURCES},
+        "frozen_sources": frozen,
+        "seed_scan": scan,
         "runtime": runtime_metadata(ROOT),
-        "tracked_modifications": dirty,
+        "python_executable": sys.executable,
+        "installed_distributions": installed_distributions(),
+        "workers": args.workers,
         "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
     }
-    write_json(output / "manifest.json", manifest)
+    write_json(OUTPUT / "manifest.json", manifest)
 
-    config = v19_config()
     cells = list(v19_cells())
-    episodes: list[PilotEpisode] = []
     started = time.time()
-    with (output / "episodes.jsonl").open("w") as log:
-        for index, (arm, scenario, seed) in enumerate(cells, start=1):
-            episode = run_case(arm, scenario, seed, "official", config, V19_COMPENSATE_DELAY)
-            episodes.append(episode)
-            log.write(json.dumps(asdict(episode)) + "\n")
+    log_path = OUTPUT / "episodes.jsonl"
+    with log_path.open("w") as log:
+        if args.workers == 1:
+            results = map(run_cell, cells)
+        else:
+            pool = ProcessPoolExecutor(max_workers=args.workers)
+            results = pool.map(run_cell, cells, chunksize=8)
+        for index, record in enumerate(results, start=1):
+            log.write(json.dumps(record) + "\n")
             log.flush()
-            if index % 40 == 0 or index == len(cells):
-                print(f"[{index}/{len(cells)}] {arm} {scenario} {seed}", flush=True)
+            if index % 200 == 0 or index == len(cells):
+                print(f"[{index}/{len(cells)}]", flush=True)
+        if args.workers > 1:
+            pool.shutdown()
+
+    # The decision is computed from the serialised log, not from in-memory objects.
+    episodes = load_episodes(log_path)
+    if [(e.arm, e.scenario, e.seed) for e in episodes] != cells:
+        raise RuntimeError("reloaded episode log does not match the planned cells")
 
     columns = [
         f.name
         for f in fields(PilotEpisode)
         if f.name not in ("estimated_parameters", "true_parameters", "prediction_error_rms")
     ]
-    with (output / "episodes.csv").open("w", newline="") as handle:
+    with (OUTPUT / "episodes.csv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
         for episode in episodes:
@@ -126,16 +168,18 @@ def main() -> int:
     report = analyze(episodes)
     report["elapsed_seconds"] = time.time() - started
     report["physical_steps"] = int(sum(e.steps for e in episodes))
-    write_json(output / "decision.json", report)
+    write_json(OUTPUT / "decision.json", report)
     hashes = {
-        name: sha(output / name)
+        name: sha(OUTPUT / name)
         for name in ("manifest.json", "episodes.jsonl", "episodes.csv", "decision.json")
     }
     write_json(
-        output / "complete.json",
+        OUTPUT / "complete.json",
         {"episodes": len(episodes), "decision": report["decision"], "hashes": hashes},
     )
     print(f"v1.9 decision: {report['decision']}")
+    for reason in report["inconclusive_reasons"]:
+        print(f"  {reason}")
     for scenario, contrast in report["contrasts"].items():
         success = contrast["success"]
         unsafe = contrast["unsafe_episode"]

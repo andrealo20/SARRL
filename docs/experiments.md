@@ -762,7 +762,11 @@ this section is committed.
 
 The estimator consumes only joint positions, velocities and its own sent
 commands. Plant parameters, motor gains and the true delay are read from the
-environment for diagnostics only and never enter the control path.
+environment for diagnostics only, after the episode, and never enter the
+control path. Both arms receive the same input: the benchmark has provided
+full-state, noise-free feedback to every controller since v1.2, and the
+adaptive arm inherits that convention rather than a separate measured-state
+interface. The study therefore says nothing about sensor noise.
 
 ### Design
 
@@ -774,15 +778,19 @@ Four arms run on identical episode seeds, plant draws and targets:
 - `adaptive_hocbf`: the adaptive nominal behind the HOCBF on the identified
   model, with delay compensation.
 
-The two filtered arms run on seeds `50000..50999` in each of the three v1.3
-scenarios (`id_reference`, `ood_compound`, `motor_fault`), 1,000 paired
+The two filtered arms run on seeds `50000..51999` in each of the three v1.3
+scenarios (`id_reference`, `ood_compound`, `motor_fault`), 2,000 paired
 episodes per scenario. The first 100 seeds are those of the v1.3 and v1.4
 campaigns, so `fixed` reproduces the retained A0 rows and the adaptive arms
-are scored on the population the learned policies were scored on; the
-remaining 900 have not been opened by any retained campaign. The two
-unfiltered arms run on the first 100 seeds only. None of the official seeds
-was opened by the pilot, which used `9801800..9802001` and
-`9803000..9803219`. The campaign totals 6,600 episodes.
+are scored on the population the learned policies were scored on. The
+remaining 1,900 have not been used as episode seeds by any retained
+artifact: `tools/scan_seed_usage.py` scans every tracked CSV, JSON and
+JSON-lines file for values of seed-named columns and keys in `50100..51999`
+(step counters and rewards are not seeds), finds none, and the runner repeats
+that scan and records its result in the manifest before the first episode.
+The two unfiltered arms run on the first 100 seeds only. None of the official
+seeds was opened by the pilot, which used `9801800..9802001` and
+`9803000..9803219`. The campaign totals 12,600 episodes.
 
 The primary contrast is `adaptive_hocbf` minus `fixed_hocbf`. The two
 unfiltered arms are descriptive: they separate the effect of the model from
@@ -790,7 +798,7 @@ the effect of the filter but carry no decision weight.
 
 ### Endpoints and decision rule
 
-All contrasts are paired over the 1,000 episode seeds with a 10,000-draw
+All contrasts are paired over the 2,000 episode seeds with a 10,000-draw
 percentile bootstrap seeded at `190000`. The rule is applied in this order:
 
 1. **Safety veto.** For each of the three scenarios, the paired difference in
@@ -799,17 +807,21 @@ percentile bootstrap seeded at `190000`. The rule is applied in this order:
    scenario vetoed yields `no_go_safety`, whatever the task result.
 2. **Primary endpoint.** The paired success difference must be at least
    `+20 pp` with a 95% lower bound above zero in both `id_reference` and
-   `motor_fault`. Both met yields `go`.
-3. Otherwise `inconclusive`.
+   `motor_fault`.
+3. **Non-inferiority.** In every scenario the unsafe-episode difference must
+   have a 95% upper bound at or below `+3 pp`.
+4. `go` requires 2 and 3 together. Anything else without a veto is
+   `inconclusive`, and the decision file names which of the two failed.
 
-The veto is sized to the precision the sample affords. At the unsafe-episode
-rates the fixed filtered arm showed in the pilot (roughly 5..15%), 1,000
-paired episodes give a 95% interval half-width of about 1.5..3 pp, so the
-campaign can detect a worsening of about 4 pp or more per scenario; a smaller
-worsening is not excluded by the absence of a veto. Non-inferiority at the
-same `+3 pp` margin (95% upper bound at or below it) is reported per scenario
-as a labelled secondary and carries no decision weight, because two arms with
-identical rates would fail it about half the time at this sample size.
+The margins are sized to the precision the sample affords. At the
+unsafe-episode rates the fixed filtered arm showed in the pilot (roughly
+5..15%), 2,000 paired episodes give a 95% interval half-width of about
+1.4..2.2 pp, so two arms with identical rates show non-inferiority at `+3 pp`
+in most draws, a worsening of about 3 pp or more is detected by the veto, and
+a worsening between those sizes leaves the safety claim open and the decision
+`inconclusive`. A `go` therefore supports the claim "recovers success without
+weakening the safety envelope by more than 3 pp in any scenario"; it does not
+exclude a smaller weakening.
 
 Secondary, reported without decision weight: the success contrast under
 `ood_compound`; abort rates and their paired differences; intervention
@@ -842,12 +854,20 @@ model being adequate over at most three steps.
 ### Commands and retained evidence
 
 ```bash
-python tools/run_adaptive_campaign.py --output results/adaptive_nominal_v19
+python tools/run_adaptive_campaign.py --workers 4
 ```
 
-The runner refuses a non-empty output directory and a working tree with
-modified tracked files, writes `manifest.json` (protocol, source hashes, the
-hash of this document, runtime and commit) before the first episode, appends
-every episode to `episodes.jsonl`, and closes with `episodes.csv`,
-`decision.json` carrying the full analysis, and `complete.json` hashing every
-output. All of these are retained.
+The output path is fixed to `results/adaptive_nominal_v19` and the runner
+refuses to start if it exists, so the official seeds are opened once. The
+protocol is sealed in two commits: the freeze commit fixes this section and
+the code, and a sealing commit records the freeze commit's hash in
+`V19_FROZEN_SOURCE_COMMIT`. Before the first episode the runner checks that
+`sarrl/`, `tools/`, `tests/`, `docs/experiments.md` and `pyproject.toml` at
+`HEAD` are identical to the sealed commit and carry no modification or
+untracked file, repeats the seed scan, and writes `manifest.json` with the
+protocol, the commit, the tree hashes of the frozen paths, the installed
+Python distributions and the runtime. Episodes are appended to
+`episodes.jsonl` as they complete; the analysis reloads that file rather than
+in-memory objects, checks that it holds exactly the planned cells, and writes
+`episodes.csv`, `decision.json` with the full analysis, and `complete.json`
+hashing every output. All of these are retained.

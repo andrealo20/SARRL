@@ -1,3 +1,6 @@
+import json
+from dataclasses import asdict
+
 import numpy as np
 import pytest
 
@@ -8,6 +11,7 @@ from sarrl.evaluation.adaptive_campaign import (
     V19_SCENARIOS,
     V19_SEED_START,
     analyze,
+    load_episodes,
     paired_difference,
     v19_cells,
     v19_episodes,
@@ -61,7 +65,7 @@ def _campaign(adaptive_success, fixed_success, adaptive_unsafe=0.0, fixed_unsafe
 def test_cells_enumerate_every_arm_scenario_and_seed_once():
     cells = list(v19_cells())
     expected = sum(v19_episodes(arm) for arm in V19_ARMS) * len(V19_SCENARIOS)
-    assert len(cells) == expected == (2 * 1000 + 2 * 100) * 3
+    assert len(cells) == expected == (2 * 2000 + 2 * 100) * 3
     assert len(set(cells)) == len(cells)
     seeds = {seed for _, _, seed in cells}
     assert min(seeds) == V19_SEED_START and len(seeds) == V19_PRIMARY_EPISODES
@@ -130,3 +134,36 @@ def test_incomplete_campaign_is_rejected():
     duplicated = episodes[:-1] + [episodes[0]]
     with pytest.raises(ValueError):
         analyze(duplicated)
+
+
+def test_go_needs_non_inferiority_not_only_the_absence_of_harm():
+    # Deterministic: adaptive unsafe on 250 of 2,000 seeds, fixed on 220 disjoint seeds
+    # (+1.5 pp). At this size the paired interval spans roughly [-0.5, +3.5] pp, so
+    # no harm is detected and non-inferiority at +3 pp is not shown either.
+    episodes = []
+    for arm, scenario, seed in v19_cells():
+        offset = seed - V19_SEED_START
+        if arm == "adaptive_hocbf":
+            unsafe = offset < 250
+        elif arm == "fixed_hocbf":
+            unsafe = 1000 <= offset < 1220
+        else:
+            unsafe = False
+        success = arm.startswith("adaptive")
+        episodes.append(_episode(arm, scenario, seed, success=success, unsafe=unsafe))
+    report = analyze(episodes)
+    assert report["safety_vetoes"] == []
+    assert report["primary_met"] is True
+    assert report["decision"] == "inconclusive"
+    assert any("non-inferiority" in reason for reason in report["inconclusive_reasons"])
+
+
+def test_episode_log_round_trips_through_the_loader(tmp_path):
+    episodes = _campaign(0.9, 0.1)[:5]
+    episodes[0] = PilotEpisode(**{**asdict(episodes[0]), "prediction_error_rms": (0.1, 0.2)})
+    path = tmp_path / "episodes.jsonl"
+    path.write_text("".join(json.dumps(asdict(e)) + "\n" for e in episodes))
+    assert load_episodes(path) == episodes
+    path.write_text(json.dumps({"arm": "fixed"}) + "\n")
+    with pytest.raises(ValueError):
+        load_episodes(path)

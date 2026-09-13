@@ -8,6 +8,9 @@ orchestrates episodes and writes the files; the analysis reads them back.
 
 from __future__ import annotations
 
+import json
+from pathlib import Path
+
 import numpy as np
 
 from sarrl.controllers import AdaptiveNominalConfig
@@ -18,8 +21,14 @@ V19_PRIMARY_ARMS = ("fixed_hocbf", "adaptive_hocbf")
 V19_SCENARIOS = ("id_reference", "ood_compound", "motor_fault")
 V19_PRIMARY_SCENARIOS = ("id_reference", "motor_fault")
 V19_SEED_START = 50000
-V19_PRIMARY_EPISODES = 1000
+V19_PRIMARY_EPISODES = 2000
 V19_DESCRIPTIVE_EPISODES = 100
+# Seeds above the v1.3/v1.4 range must be unused in every retained artifact.
+V19_UNOPENED_SEED_RANGE = (50100, 51999)
+# Set by the sealing commit after the protocol freeze; the runner compares the
+# frozen source paths of HEAD against it and refuses any difference.
+V19_FROZEN_SOURCE_COMMIT: str | None = None
+V19_FROZEN_PATHS = ("sarrl", "tools", "tests", "docs/experiments.md", "pyproject.toml")
 V19_BOOTSTRAP_DRAWS = 10_000
 V19_BOOTSTRAP_SEED = 190_000
 V19_SUCCESS_GAIN = 0.20
@@ -76,7 +85,12 @@ def v19_protocol_dict() -> dict:
                 "lower_95_above": 0.0,
                 "scenarios": list(V19_PRIMARY_SCENARIOS),
             },
+            "go_requires": ["no_safety_veto", "primary_success", "non_inferiority_all_scenarios"],
         },
+        "unopened_seed_range": list(V19_UNOPENED_SEED_RANGE),
+        "frozen_source_commit": V19_FROZEN_SOURCE_COMMIT,
+        "frozen_paths": list(V19_FROZEN_PATHS),
+        "state_interface": "full_state_feedback_noise_free_same_for_every_arm",
         "estimator": {
             "process_noise": config.process_noise,
             "forgetting": config.forgetting,
@@ -120,6 +134,22 @@ def paired_difference(rows_treatment, rows_reference, metric, rng):
         "reference_rate": float(np.mean(list(reference.values()))),
         "pairs": len(seeds),
     }
+
+
+def load_episodes(path: Path) -> list[PilotEpisode]:
+    """Reload the serialised episode log into validated records for the analysis."""
+    episodes = []
+    names = set(PilotEpisode.__dataclass_fields__)
+    for line_number, line in enumerate(path.read_text().splitlines(), start=1):
+        if not line.strip():
+            continue
+        record = json.loads(line)
+        if set(record) != names:
+            raise ValueError(f"episode record {line_number} has unexpected fields")
+        if record["prediction_error_rms"] is not None:
+            record["prediction_error_rms"] = tuple(record["prediction_error_rms"])
+        episodes.append(PilotEpisode(**record))
+    return episodes
 
 
 def cell_summary(rows: list[PilotEpisode]) -> dict:
@@ -185,14 +215,19 @@ def analyze(episodes: list[PilotEpisode]) -> dict:
         and contrasts[s]["success"]["ci95_low"] > 0.0
         for s in V19_PRIMARY_SCENARIOS
     )
+    reasons = []
     if vetoes:
         decision = "no_go_safety"
-    elif primary_met:
-        decision = "go"
     else:
-        decision = "inconclusive"
+        if not primary_met:
+            reasons.append("success gain not established in every primary scenario")
+        not_shown = [s for s in V19_SCENARIOS if not non_inferior[s]]
+        if not_shown:
+            reasons.append("unsafe-episode non-inferiority not shown in " + ", ".join(not_shown))
+        decision = "go" if not reasons else "inconclusive"
     return {
         "decision": decision,
+        "inconclusive_reasons": reasons,
         "safety_vetoes": vetoes,
         "unsafe_non_inferior_at_margin": non_inferior,
         "primary_met": primary_met,
