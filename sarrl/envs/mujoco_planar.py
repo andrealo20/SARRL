@@ -20,7 +20,7 @@ from __future__ import annotations
 import numpy as np
 
 from sarrl.dynamics import PlanarArmParams
-from sarrl.envs.planar_reach import DomainRandomization, FaultSpec, PlanarReachEnv
+from sarrl.envs.planar_reach import DomainRandomization, FaultSpec, ObstacleSpec, PlanarReachEnv
 
 try:  # MuJoCo is an optional dependency of the repository.
     import mujoco
@@ -29,38 +29,63 @@ except ImportError:  # pragma: no cover - exercised only without the extra insta
 
 PAYLOAD_INERTIA_FLOOR = 1e-9
 PAYLOAD_MASS_FLOOR = 1e-9
+# Where the obstacle geom rests in episodes that carry no obstacle.
+OBSTACLE_PARKING = (100.0, 100.0, 0.0)
 
 
 def planar_arm_xml(
-    params: PlanarArmParams, timestep: float, integrator: str, armature: float = 0.0
+    params: PlanarArmParams,
+    timestep: float,
+    integrator: str,
+    armature: float = 0.0,
+    obstacle: ObstacleSpec | None = None,
 ) -> str:
     """MuJoCo model of the two-link arm with the analytical benchmark's geometry.
 
     Gravity acts along -y in the plane of motion and joint angles are measured
     from the +x axis, matching `PlanarArm.gravity_vector`. Inertias are given
     about each link's centre of mass, as in `PlanarArmParams`.
+
+    Without an obstacle nothing collides, as in every retained campaign. With
+    one, the link capsules and a tip sphere collide with a static cylinder
+    whose position is set per episode; the arm never collides with itself.
     """
     p = params
     payload = max(p.payload_mass, PAYLOAD_MASS_FLOOR)
     floor = PAYLOAD_INERTIA_FLOOR
+    arm_collision = 'contype="2" conaffinity="1"' if obstacle else 'contype="0" conaffinity="0"'
+    tip = (
+        f'<geom name="tip" type="sphere" size="{obstacle.tip_radius}" mass="0" {arm_collision}/>'
+        if obstacle
+        else ""
+    )
+    parking = f"{OBSTACLE_PARKING[0]} {OBSTACLE_PARKING[1]}"
+    cylinder = (
+        f'<geom name="obstacle" type="cylinder" pos="{parking} 0" '
+        f'size="{obstacle.radius} 0.2" contype="1" conaffinity="2"/>'
+        if obstacle
+        else ""
+    )
     return f"""
 <mujoco model="sarrl_planar_arm">
   <option timestep="{timestep}" gravity="0 {-p.gravity} 0" integrator="{integrator}"/>
   <worldbody>
+    {cylinder}
     <body name="link1" pos="0 0 0">
       <joint name="joint1" type="hinge" axis="0 0 1" damping="{p.viscous[0]}"
              frictionloss="{p.coulomb[0]}" armature="{armature}" limited="false"/>
       <inertial pos="{p.lc1} 0 0" mass="{p.m1}" diaginertia="{p.i1} {p.i1} {p.i1}"/>
-      <geom type="capsule" fromto="0 0 0 {p.l1} 0 0" size="0.03" mass="0"
-            contype="0" conaffinity="0"/>
+      <geom name="link1" type="capsule" fromto="0 0 0 {p.l1} 0 0" size="0.03" mass="0"
+            {arm_collision}/>
       <body name="link2" pos="{p.l1} 0 0">
         <joint name="joint2" type="hinge" axis="0 0 1" damping="{p.viscous[1]}"
                frictionloss="{p.coulomb[1]}" armature="{armature}" limited="false"/>
         <inertial pos="{p.lc2} 0 0" mass="{p.m2}" diaginertia="{p.i2} {p.i2} {p.i2}"/>
-        <geom type="capsule" fromto="0 0 0 {p.l2} 0 0" size="0.03" mass="0"
-              contype="0" conaffinity="0"/>
+        <geom name="link2" type="capsule" fromto="0 0 0 {p.l2} 0 0" size="0.03" mass="0"
+              {arm_collision}/>
         <body name="payload" pos="{p.l2} 0 0">
           <inertial pos="0 0 0" mass="{payload}" diaginertia="{floor} {floor} {floor}"/>
+          {tip}
         </body>
       </body>
     </body>
@@ -88,6 +113,7 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         actuator_time_constant: float = 0.0,
         armature_range: tuple[float, float] | None = None,
         actuator_time_constant_range: tuple[float, float] | None = None,
+        obstacle: ObstacleSpec | None = None,
     ):
         if mujoco is None:
             raise ImportError("MujocoPlanarReachEnv needs the 'mujoco' package")
@@ -100,6 +126,7 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
             success_radius=success_radius,
             randomization=randomization,
             fault=fault,
+            obstacle=obstacle,
         )
         substeps = self.dt / timestep
         if abs(substeps - round(substeps)) > 1e-9 or round(substeps) < 1:
@@ -136,13 +163,21 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         self._actuator_rng = np.random.default_rng(0)
         self._actuator_torque = np.zeros(2, dtype=np.float64)
         self.model = mujoco.MjModel.from_xml_string(
-            planar_arm_xml(self.nominal_arm.params, self.timestep, integrator, self.armature)
+            planar_arm_xml(
+                self.nominal_arm.params, self.timestep, integrator, self.armature, self.obstacle
+            )
         )
         self.data = mujoco.MjData(self.model)
         self._body = {
             name: mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_BODY, name)
             for name in ("link1", "link2", "payload")
         }
+        self._obstacle_geom = (
+            mujoco.mj_name2id(self.model, mujoco.mjtObj.mjOBJ_GEOM, "obstacle")
+            if self.obstacle is not None
+            else None
+        )
+        self._contact_geoms: set[str] = set()
         self._sync_plant()
 
     # Plant synchronisation ---------------------------------------------------
@@ -162,6 +197,9 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         model.dof_damping[:] = p.viscous
         model.dof_frictionloss[:] = p.coulomb
         model.dof_armature[:] = self.armature
+        if self._obstacle_geom is not None:
+            position = self.obstacles[0].center if self.obstacles else OBSTACLE_PARKING[:2]
+            model.geom_pos[self._obstacle_geom] = (position[0], position[1], 0.0)
         mujoco.mj_setConst(model, self.data)
         self.data.qpos[:] = self.state[:2]
         self.data.qvel[:] = self.state[2:]
@@ -226,6 +264,27 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
 
     # Plant step --------------------------------------------------------------
 
+    def _record_contacts(self) -> None:
+        """Note which arm geoms the engine reports in contact with the obstacle."""
+        if self._obstacle_geom is None:
+            return
+        for index in range(self.data.ncon):
+            contact = self.data.contact[index]
+            if self._obstacle_geom in (contact.geom1, contact.geom2):
+                other = contact.geom2 if contact.geom1 == self._obstacle_geom else contact.geom1
+                self._contact_geoms.add(
+                    mujoco.mj_id2name(self.model, mujoco.mjtObj.mjOBJ_GEOM, other)
+                )
+
+    def _obstacle_info(self) -> dict:
+        info = super()._obstacle_info()
+        if self._obstacle_geom is not None:
+            # The engine's contacts replace the geometric tip test, and can
+            # involve the links, which the barrier does not cover.
+            info["obstacle_contact"] = bool(self._contact_geoms)
+            info["obstacle_contact_geoms"] = tuple(sorted(self._contact_geoms))
+        return info
+
     def plant_acceleration(self, applied) -> np.ndarray:
         """Joint acceleration MuJoCo attributes to the current state and torque."""
         self.data.qfrc_applied[:] = applied
@@ -249,9 +308,11 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         applied = delayed * self.motor_gain
         pre_step_state = self.state.copy()
         pre_step_acceleration = self.plant_acceleration(self._actuator_torque)
+        self._contact_geoms = set()
         for _ in range(self.substeps):
             self.data.qfrc_applied[:] = self._deliver(applied)
             mujoco.mj_step(self.model, self.data)
+            self._record_contacts()
         self.state = np.concatenate([self.data.qpos, self.data.qvel]).astype(np.float64)
         self.steps += 1
 
@@ -266,6 +327,7 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
             reward += 10.0
 
         info = self._info_base()
+        info.update(self._obstacle_info())
         info.update(
             {
                 "distance": distance,

@@ -23,6 +23,7 @@ for variable in ("OMP_NUM_THREADS", "MKL_NUM_THREADS", "OPENBLAS_NUM_THREADS"):
     os.environ[variable] = "1"
 
 from sarrl.controllers import AdaptiveNominalConfig
+from sarrl.envs.planar_reach import ObstacleSpec
 from sarrl.evaluation import assert_repository_import_root
 from sarrl.evaluation.adaptive_pilot import (
     ARMS,
@@ -67,9 +68,12 @@ def markdown_summary(table: dict, config: AdaptiveNominalConfig, records: list[d
         lines += [f"## {origin.capitalize()} cases", ""]
         lines.append(
             "| Scenario | Arm | Episodes | Success | Timeout | Abort | Unsafe "
-            "| Median final distance, m | Max normalized violation | Lag correct |"
+            "| Median final distance, m | Max normalized violation | Lag correct "
+            "| Obstacle violations | Contacts (tip / link) |"
         )
-        lines.append("| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
+        lines.append(
+            "| --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |"
+        )
         for key, row in table.items():
             key_origin, scenario, arm = key.split("/")
             if key_origin != origin:
@@ -79,7 +83,10 @@ def markdown_summary(table: dict, config: AdaptiveNominalConfig, records: list[d
                 f"| {scenario} | {arm} | {row['episodes']} | {row['success']} | "
                 f"{row['timeout']} | {row['abort']} | {row['unsafe_episodes']} | "
                 f"{row['median_final_distance_m']:.3f} | "
-                f"{row['max_normalized_violation']:.4f} | {lag} |"
+                f"{row['max_normalized_violation']:.4f} | {lag} | "
+                f"{row['obstacle_violation_episodes']} | {row['obstacle_contact_episodes']} "
+                f"({row['obstacle_tip_contact_episodes']} / "
+                f"{row['obstacle_link_contact_episodes']}) |"
             )
         lines.append("")
     lines += ["## Historical cases, one row per episode", ""]
@@ -137,6 +144,11 @@ def main() -> int:
     parser.add_argument("--actuator-tau", type=float, default=0.0)
     parser.add_argument("--armature-range", type=float, nargs=2, default=None)
     parser.add_argument("--actuator-tau-range", type=float, nargs=2, default=None)
+    parser.add_argument(
+        "--obstacle", action="store_true", help="one circular obstacle per episode across the path"
+    )
+    parser.add_argument("--obstacle-radius", type=float, default=None)
+    parser.add_argument("--obstacle-margin", type=float, default=None)
     args = parser.parse_args()
     assert_repository_import_root(ROOT)
     output = args.output.resolve()
@@ -169,7 +181,20 @@ def main() -> int:
         if value is not None
     }
     config = AdaptiveNominalConfig(**overrides)
+    obstacle = None
+    if args.obstacle:
+        obstacle = ObstacleSpec(
+            **{
+                key: value
+                for key, value in (
+                    ("radius", args.obstacle_radius),
+                    ("margin", args.obstacle_margin),
+                )
+                if value is not None
+            }
+        )
     options = PlantOptions(
+        obstacle=obstacle,
         sensor_noise_std=args.sensor_noise,
         armature=args.armature,
         actuator_time_constant=args.actuator_tau,

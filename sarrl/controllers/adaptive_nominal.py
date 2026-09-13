@@ -439,11 +439,16 @@ class AdaptiveNominalController:
         start = x.copy()
         tau = self.time_constant
         delivered = self._delivered[self.hypothesis].copy()
-        for offset in range(lag, 0, -1):
-            index = history - offset
-            queued = self._sent[index] if index >= 0 else np.zeros(2)
-            applied, delivered = self._delivered_mean(delivered, queued, tau)
-            x = _rk4(model, x, applied, self.config.dt)
+        try:
+            for offset in range(lag, 0, -1):
+                index = history - offset
+                queued = self._sent[index] if index >= 0 else np.zeros(2)
+                applied, delivered = self._delivered_mean(delivered, queued, tau)
+                x = _rk4(model, x, applied, self.config.dt)
+        except ValueError:
+            # An intermediate RK4 stage left the finite range: same fallback as
+            # a non-finite result, counted the same way.
+            x = np.full(4, np.nan)
         if not np.all(np.isfinite(x)) or np.max(np.abs(x - start)) > self.config.prediction_limit:
             # A degenerate estimate must not propagate; no compensation is safer
             # than a wild prediction.

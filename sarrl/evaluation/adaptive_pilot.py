@@ -26,13 +26,25 @@ from sarrl.controllers import (
 )
 from sarrl.dynamics import PlanarArm
 from sarrl.envs import PlanarReachEnv
+from sarrl.envs.planar_reach import ObstacleSpec
 from sarrl.evaluation.planar_v12 import planar_safety_config
 from sarrl.evaluation.planar_v13 import v13_scenarios
 from sarrl.evaluation.safety_audit import evaluate_safety_episodes
 from sarrl.runtime import ControlStackConfig, ControlStackResult
 from sarrl.safety import HOCBFSafetyFilter
 
-ARMS = ("fixed", "fixed_hocbf", "adaptive", "adaptive_hocbf")
+# The two crossed arms separate the controller's model from the certificate's:
+# `adaptive_hocbf_fixedmodel` drives the identified nominal but certifies with
+# the fixed nominal model; `fixed_hocbf_adaptivemodel` drives the fixed nominal
+# while an estimator that only observes supplies the certificate's model.
+ARMS = (
+    "fixed",
+    "fixed_hocbf",
+    "adaptive",
+    "adaptive_hocbf",
+    "adaptive_hocbf_fixedmodel",
+    "fixed_hocbf_adaptivemodel",
+)
 # Arms that add a trained bounded residual to the filtered nominal command.
 RESIDUAL_ARMS = ("fixed_hocbf_residual", "adaptive_hocbf_residual")
 HISTORICAL_CASES = {
@@ -63,11 +75,19 @@ class NominalStack:
     """Nominal command, optional bounded residual policy, optional hard projection."""
 
     def __init__(
-        self, baseline, safety_filter=None, config=None, compensate_delay=False, policy=None
+        self,
+        baseline,
+        safety_filter=None,
+        config=None,
+        compensate_delay=False,
+        policy=None,
+        estimator=None,
     ):
         self.baseline = baseline
         self.safety_filter = safety_filter
         self.policy = policy
+        # An estimator that is not the baseline still takes its per-step guard decision.
+        self.estimator = estimator if estimator is not baseline else None
         self.config = config or ControlStackConfig(require_safety=safety_filter is not None)
         self.config.validate()
         if compensate_delay and not hasattr(baseline, "predict_state"):
@@ -79,6 +99,8 @@ class NominalStack:
         if hasattr(self.baseline, "begin_step"):
             # One guard decision per control step, before any model query.
             self.baseline.begin_step(state[:2])
+        if self.estimator is not None:
+            self.estimator.begin_step(state[:2])
         if self.compensate_delay:
             # Evaluate control law and certificate where the new command will act.
             state = self.baseline.predict_state(state)
@@ -162,25 +184,39 @@ class PilotEpisode:
     true_time_constant: float | None = None
     true_armature: float | None = None
     residual_rms: float | None = None
+    obstacle_present: bool = False
+    obstacle_violation_max_m: float = 0.0
+    obstacle_contact: bool = False
+    obstacle_contact_steps: int = 0
+    obstacle_contact_geoms: tuple[str, ...] = ()
 
 
 RESIDUAL_SUFFIX = "_residual"
 
 
 def build_arm(arm: str, config: AdaptiveNominalConfig):
+    """Return (controller, safety filter, estimator); the estimator may be the controller."""
     if arm.endswith(RESIDUAL_SUFFIX):
         arm = arm[: -len(RESIDUAL_SUFFIX)]
     nominal = PlanarArm()
     safety_config = planar_safety_config()
     if arm == "fixed":
-        return ComputedTorqueController(nominal), None
+        return ComputedTorqueController(nominal), None, None
     if arm == "fixed_hocbf":
-        return ComputedTorqueController(nominal), HOCBFSafetyFilter(nominal, safety_config)
-    controller = AdaptiveNominalController(nominal, config)
+        return ComputedTorqueController(nominal), HOCBFSafetyFilter(nominal, safety_config), None
+    estimator = AdaptiveNominalController(nominal, config)
+    if arm == "fixed_hocbf_adaptivemodel":
+        return (
+            ComputedTorqueController(nominal),
+            HOCBFSafetyFilter(estimator.estimated_model(), safety_config),
+            estimator,
+        )
     if arm == "adaptive":
-        return controller, None
+        return estimator, None, estimator
     if arm == "adaptive_hocbf":
-        return controller, HOCBFSafetyFilter(controller.estimated_model(), safety_config)
+        return estimator, HOCBFSafetyFilter(estimator.estimated_model(), safety_config), estimator
+    if arm == "adaptive_hocbf_fixedmodel":
+        return estimator, HOCBFSafetyFilter(nominal, safety_config), estimator
     raise ValueError(f"unknown arm {arm}")
 
 
@@ -190,13 +226,14 @@ def build_stack(
     """Arms ending in `_residual` add a bounded policy residual to the nominal command."""
     if arm.endswith(RESIDUAL_SUFFIX) != (policy is not None):
         raise ValueError("a residual arm needs a policy and a nominal arm must not carry one")
-    controller, safety_filter = build_arm(arm, config)
+    controller, safety_filter, estimator = build_arm(arm, config)
     adaptive = isinstance(controller, AdaptiveNominalController)
     stack = NominalStack(
         controller,
         safety_filter,
         compensate_delay=compensate_delay and adaptive,
         policy=policy,
+        estimator=estimator,
     )
     return controller, stack
 
@@ -240,6 +277,7 @@ class PlantOptions:
     actuator_time_constant: float = 0.0
     armature_range: tuple[float, float] | None = None
     actuator_time_constant_range: tuple[float, float] | None = None
+    obstacle: ObstacleSpec | None = None
 
 
 def make_env(plant: str, spec, options: PlantOptions | None = None):
@@ -254,7 +292,9 @@ def make_env(plant: str, spec, options: PlantOptions | None = None):
             or options.actuator_time_constant_range
         ):
             raise ValueError("armature and actuator dynamics need the mujoco plant")
-        return PlanarReachEnv(mode="torque", randomization=randomization, fault=spec.fault)
+        return PlanarReachEnv(
+            mode="torque", randomization=randomization, fault=spec.fault, obstacle=options.obstacle
+        )
     if plant == "mujoco":
         from sarrl.envs.mujoco_planar import MujocoPlanarReachEnv
 
@@ -266,6 +306,7 @@ def make_env(plant: str, spec, options: PlantOptions | None = None):
             actuator_time_constant=options.actuator_time_constant,
             armature_range=options.armature_range,
             actuator_time_constant_range=options.actuator_time_constant_range,
+            obstacle=options.obstacle,
         )
     raise ValueError(f"unknown plant {plant}")
 
@@ -305,8 +346,11 @@ def run_case(
     options = options or PlantOptions()
     env = make_env(plant, spec, options)
     controller, stack = build_stack(arm, config, compensate_delay, policy)
-    adaptive = isinstance(controller, AdaptiveNominalController)
+    # Estimator fields describe whichever estimator ran, the controller or an observer.
+    estimator = stack.estimator if stack.estimator is not None else controller
+    adaptive = isinstance(estimator, AdaptiveNominalController)
     if adaptive:
+        controller = estimator
         controller.reset()
     converged_at = {"step": None}
     measured = MeasuredState(env) if options.sensor_noise_std > 0.0 else None
@@ -374,6 +418,11 @@ def run_case(
         true_time_constant=float(getattr(env, "actuator_time_constant", 0.0)),
         true_armature=float(getattr(env, "armature", 0.0)),
         residual_rms=float(np.sqrt(np.mean(residual_squares))) if residual_squares else None,
+        obstacle_present=bool(env.obstacles),
+        obstacle_violation_max_m=float(safety.obstacle_violation_max_m),
+        obstacle_contact=bool(safety.obstacle_contact_episode),
+        obstacle_contact_steps=int(safety.obstacle_contact_steps),
+        obstacle_contact_geoms=tuple(safety.obstacle_contact_geoms),
     )
 
 
@@ -415,6 +464,17 @@ def summarize(episodes: list[PilotEpisode]) -> dict:
                         float(np.mean([e.residual_rms for e in rows]))
                         if rows[0].residual_rms is not None
                         else None
+                    ),
+                    "obstacle_episodes": sum(e.obstacle_present for e in rows),
+                    "obstacle_violation_episodes": sum(
+                        e.obstacle_violation_max_m > 0.0 for e in rows
+                    ),
+                    "obstacle_contact_episodes": sum(e.obstacle_contact for e in rows),
+                    "obstacle_tip_contact_episodes": sum(
+                        "tip" in e.obstacle_contact_geoms for e in rows
+                    ),
+                    "obstacle_link_contact_episodes": sum(
+                        any(g.startswith("link") for g in e.obstacle_contact_geoms) for e in rows
                     ),
                 }
     return table

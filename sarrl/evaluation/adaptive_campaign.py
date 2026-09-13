@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import csv
 import json
+from dataclasses import MISSING
 from pathlib import Path
 
 import numpy as np
@@ -183,15 +184,20 @@ def paired_difference(rows_treatment, rows_reference, metric, rng):
 def load_episodes(path: Path) -> list[PilotEpisode]:
     """Reload the serialised episode log into validated records for the analysis."""
     episodes = []
-    names = set(PilotEpisode.__dataclass_fields__)
+    declared = PilotEpisode.__dataclass_fields__
+    names = set(declared)
+    # Fields added after a campaign keep their defaults when its log predates them.
+    required = {name for name, field in declared.items() if field.default is MISSING}
     for line_number, line in enumerate(path.read_text().splitlines(), start=1):
         if not line.strip():
             continue
         record = json.loads(line)
-        if set(record) != names:
+        if not required <= set(record) <= names:
             raise ValueError(f"episode record {line_number} has unexpected fields")
         if record["prediction_error_rms"] is not None:
             record["prediction_error_rms"] = tuple(record["prediction_error_rms"])
+        if "obstacle_contact_geoms" in record:
+            record["obstacle_contact_geoms"] = tuple(record["obstacle_contact_geoms"])
         episodes.append(PilotEpisode(**record))
     return episodes
 

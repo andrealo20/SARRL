@@ -45,6 +45,12 @@ class SafetyEpisodeDiagnostics:
     safety_correction_max: float
     fault_seen: bool
     success: bool
+    # Obstacle envelope, zero and empty on obstacle-free episodes. The barrier
+    # covers the end-effector point; engine contacts may involve the links.
+    obstacle_violation_max_m: float = 0.0
+    obstacle_contact_steps: int = 0
+    obstacle_contact_episode: bool = False
+    obstacle_contact_geoms: tuple[str, ...] = ()
 
 
 def _physical_env(env):
@@ -57,9 +63,7 @@ def _distance(env) -> float:
     return float(np.linalg.norm(base.target - position))
 
 
-def safety_envelope_violation(
-    state, config: SafetyConfig
-) -> tuple[bool, float, float, float]:
+def safety_envelope_violation(state, config: SafetyConfig) -> tuple[bool, float, float, float]:
     """Return unsafe, position excess, velocity excess and normalized excess."""
     state = np.asarray(state, dtype=np.float64)
     if state.shape != (4,) or not np.all(np.isfinite(state)):
@@ -84,6 +88,26 @@ def safety_envelope_violation(
     velocity_normalized = float(np.max(np.maximum(np.abs(qd) / velocity - 1.0, 0.0)))
     normalized = max(position_normalized, velocity_normalized)
     return normalized > 0.0, position_excess, velocity_excess, normalized
+
+
+def obstacle_violation(q, model, obstacles) -> tuple[float, float]:
+    """Largest excess of the end-effector inside any obstacle barrier, in metres and normalised.
+
+    The barrier radius is the obstacle radius plus its margin; the normalised
+    excess divides by that radius, so 1.0 means the point sits at the centre.
+    """
+    if not obstacles:
+        return 0.0, 0.0
+    position = model.forward_kinematics(np.asarray(q, dtype=np.float64))
+    excess = 0.0
+    normalized = 0.0
+    for obstacle in obstacles:
+        barrier = obstacle.radius + obstacle.margin
+        gap = barrier - float(np.linalg.norm(position - np.asarray(obstacle.center)))
+        if gap > excess:
+            excess = gap
+            normalized = gap / barrier
+    return excess, normalized
 
 
 def paired_diagnostic_difference(
@@ -124,8 +148,18 @@ def _append_state_violation(
     position_violations: list[float],
     velocity_violations: list[float],
     normalized_violations: list[float],
+    obstacle_violations: list[float] | None = None,
+    model=None,
+    obstacles=(),
 ) -> None:
     unsafe, position, velocity, normalized = safety_envelope_violation(state, config)
+    if obstacles:
+        excess, obstacle_normalized = obstacle_violation(state[:2], model, obstacles)
+        unsafe = unsafe or excess > 0.0
+        normalized = max(normalized, obstacle_normalized)
+        obstacle_violations.append(excess)
+    elif obstacle_violations is not None:
+        obstacle_violations.append(0.0)
     unsafe_flags.append(unsafe)
     position_violations.append(position)
     velocity_violations.append(velocity)
@@ -184,7 +218,13 @@ def evaluate_safety_episodes(
         position_violations: list[float] = []
         velocity_violations: list[float] = []
         normalized_violations: list[float] = []
+        obstacle_violations: list[float] = []
+        contact_steps = 0
+        contact_geoms: set[str] = set()
         final_info = None
+        # Episode obstacles reach the stack, the observer and the envelope alike.
+        obstacles = tuple(getattr(_physical_env(env), "obstacles", ()))
+        stack_kwargs = {"obstacles": obstacles} if obstacles else {}
 
         _append_state_violation(
             env.state,
@@ -193,12 +233,15 @@ def evaluate_safety_episodes(
             position_violations,
             velocity_violations,
             normalized_violations,
+            obstacle_violations,
+            observer.model,
+            obstacles,
         )
         while True:
             true_state = np.asarray(env.state, dtype=np.float64)
             state = true_state if state_source is None else np.asarray(state_source(env))
-            constraints, bounds, _ = observer.constraints(true_state)
-            command = stack.command(obs, state, env.q_des, deterministic=True)
+            constraints, bounds, _ = observer.constraints(true_state, obstacles)
+            command = stack.command(obs, state, env.q_des, deterministic=True, **stack_kwargs)
             attempts += 1
 
             candidate = command.baseline_torque + command.gated_residual
@@ -265,6 +308,9 @@ def evaluate_safety_episodes(
             )
             fault_seen = fault_seen or bool(info.get("fault_active", False))
             final_info = info
+            if info.get("obstacle_contact", False):
+                contact_steps += 1
+                contact_geoms.update(info.get("obstacle_contact_geoms", ("tip",)))
             _append_state_violation(
                 env.state,
                 config,
@@ -272,14 +318,15 @@ def evaluate_safety_episodes(
                 position_violations,
                 velocity_violations,
                 normalized_violations,
+                obstacle_violations,
+                observer.model,
+                obstacles,
             )
             if terminated or truncated:
                 break
 
         success = (
-            bool(final_info["success"])
-            if final_info is not None and not infeasible
-            else False
+            bool(final_info["success"]) if final_info is not None and not infeasible else False
         )
         final_distance = (
             float(final_info["distance"])
@@ -306,9 +353,7 @@ def evaluate_safety_episodes(
             current and (index == 0 or not unsafe_flags[index - 1])
             for index, current in enumerate(unsafe_flags)
         )
-        first_unsafe = next(
-            (index for index, current in enumerate(unsafe_flags) if current), -1
-        )
+        first_unsafe = next((index for index, current in enumerate(unsafe_flags) if current), -1)
         diagnostics.append(
             SafetyEpisodeDiagnostics(
                 scenario=scenario,
@@ -343,6 +388,10 @@ def evaluate_safety_episodes(
                 safety_correction_mean=float(np.mean(corrections)),
                 safety_correction_max=float(np.max(corrections)),
                 fault_seen=fault_seen,
+                obstacle_violation_max_m=float(np.max(obstacle_violations)),
+                obstacle_contact_steps=contact_steps,
+                obstacle_contact_episode=contact_steps > 0,
+                obstacle_contact_geoms=tuple(sorted(contact_geoms)),
                 success=success,
             )
         )

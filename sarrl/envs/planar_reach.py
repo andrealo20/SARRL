@@ -8,7 +8,10 @@ import numpy as np
 
 from sarrl.controllers import ComputedTorqueController
 from sarrl.dynamics import PlanarArm, PlanarArmParams
+from sarrl.safety import CircularObstacle
 from sarrl.utils.spaces import BoxSpace
+
+OBSTACLE_SEED_MASK = 0x0B57AC1E
 
 
 @dataclass(frozen=True)
@@ -51,6 +54,85 @@ class FaultSpec:
             raise ValueError("fault payload_delta must be finite")
 
 
+@dataclass(frozen=True)
+class ObstacleSpec:
+    """One circular obstacle per episode, protruding into the nominal end-effector path.
+
+    The nominal path is the end-effector trajectory of the fixed computed
+    torque controller on the nominal arm from the episode's initial state,
+    without delay, gain error or noise: the route a designer would expect the
+    arm to take. The obstacle centre sits at a point of that path drawn at a
+    fraction of its length in `fraction_range`, pushed radially away from the
+    base so that the barrier circle (radius plus margin) protrudes into the
+    path by a distance drawn in `overlap_range`. Outward placement keeps the
+    obstacle away from the links, which the barrier does not cover. Draws
+    whose barrier comes within `clearance` of the start or the target are
+    rejected up to `attempts` times, after which the episode carries no
+    obstacle. The generator is seeded apart from the benchmark's so that
+    plant draws and targets stay identical to the obstacle-free environment
+    for the same seed.
+    """
+
+    radius: float = 0.08
+    margin: float = 0.05
+    fraction_range: tuple[float, float] = (0.3, 0.7)
+    overlap_range: tuple[float, float] = (0.02, 0.10)
+    clearance: float = 0.05
+    attempts: int = 20
+    gamma1: float = 4.0
+    gamma2: float = 4.0
+    tip_radius: float = 0.03
+
+    def validate(self) -> None:
+        if self.radius <= 0.0 or self.margin < 0.0 or self.clearance < 0.0:
+            raise ValueError("obstacle radius must be positive, margin and clearance non-negative")
+        if self.tip_radius < 0.0 or self.attempts < 1:
+            raise ValueError("tip radius must be non-negative and attempts positive")
+        for name in ("fraction_range", "overlap_range"):
+            low, high = getattr(self, name)
+            if not (np.isfinite(low) and np.isfinite(high) and 0.0 <= low <= high):
+                raise ValueError(f"{name} must be a finite ordered non-negative pair")
+        if self.overlap_range[1] > self.radius + self.margin:
+            raise ValueError("overlap cannot exceed the barrier radius")
+        if self.gamma1 <= 0.0 or self.gamma2 <= 0.0:
+            raise ValueError("barrier gains must be positive")
+
+    def sample(self, rng, path, start, target) -> CircularObstacle | None:
+        path = np.asarray(path, dtype=np.float64)
+        start = np.asarray(start, dtype=np.float64)
+        target = np.asarray(target, dtype=np.float64)
+        if path.ndim != 2 or path.shape[0] < 2:
+            return None
+        segments = np.linalg.norm(np.diff(path, axis=0), axis=1)
+        cumulative = np.concatenate([[0.0], np.cumsum(segments)])
+        length = float(cumulative[-1])
+        if length < 1e-6:
+            return None
+        barrier = self.radius + self.margin
+        keep_out = barrier + self.clearance
+        for _ in range(self.attempts):
+            fraction = rng.uniform(*self.fraction_range)
+            overlap = rng.uniform(*self.overlap_range)
+            index = int(np.searchsorted(cumulative, fraction * length))
+            point = path[min(index, len(path) - 1)]
+            radial = float(np.linalg.norm(point))
+            if radial < 1e-6:
+                continue
+            center = point + (barrier - overlap) * point / radial
+            if (
+                np.linalg.norm(center - start) > keep_out
+                and np.linalg.norm(center - target) > keep_out
+            ):
+                return CircularObstacle(
+                    center=(float(center[0]), float(center[1])),
+                    radius=self.radius,
+                    margin=self.margin,
+                    gamma1=self.gamma1,
+                    gamma2=self.gamma2,
+                )
+        return None
+
+
 class PlanarReachEnv:
     """Torque or residual-torque reaching task with deterministic seeded resets."""
 
@@ -64,6 +146,7 @@ class PlanarReachEnv:
         success_radius: float = 0.05,
         randomization: DomainRandomization | None = None,
         fault: FaultSpec | None = None,
+        obstacle: ObstacleSpec | None = None,
     ):
         if mode not in {"torque", "residual"}:
             raise ValueError("mode must be 'torque' or 'residual'")
@@ -80,6 +163,11 @@ class PlanarReachEnv:
         self.fault = fault
         if self.fault is not None:
             self.fault.validate()
+        self.obstacle = obstacle
+        if self.obstacle is not None:
+            self.obstacle.validate()
+        self.obstacles: list[CircularObstacle] = []
+        self._obstacle_rng = np.random.default_rng(0)
 
         self.nominal_arm = PlanarArm()
         self.arm = self.nominal_arm
@@ -105,9 +193,7 @@ class PlanarReachEnv:
     def _sample_arm(self) -> PlanarArm:
         r = self.randomization
         p = PlanarArmParams()
-        self.mass_scale = self._rng.uniform(
-            1.0 - r.mass_fraction, 1.0 + r.mass_fraction, size=2
-        )
+        self.mass_scale = self._rng.uniform(1.0 - r.mass_fraction, 1.0 + r.mass_fraction, size=2)
         self.friction_scale = self._rng.uniform(
             1.0 - r.friction_fraction, 1.0 + r.friction_fraction, size=2
         )
@@ -163,6 +249,14 @@ class PlanarReachEnv:
         if self.target.shape != (2,) or not np.all(np.isfinite(self.target)):
             raise ValueError("target must be a finite vector of shape (2,)")
         self.q_des = self.nominal_arm.inverse_kinematics(self.target)
+        if seed is not None:
+            self._obstacle_rng = np.random.default_rng(seed ^ OBSTACLE_SEED_MASK)
+        self.obstacles = []
+        if self.obstacle is not None:
+            path = self.nominal_path()
+            sampled = self.obstacle.sample(self._obstacle_rng, path, path[0], self.target)
+            if sampled is not None:
+                self.obstacles = [sampled]
         self._command_queue = [np.zeros(2, dtype=np.float64) for _ in range(self.action_delay)]
         self._fault_active = False
         self.steps = 0
@@ -234,6 +328,49 @@ class PlanarReachEnv:
         self._command_queue.append(commanded.copy())
         return self._command_queue.pop(0)
 
+    def nominal_path(self) -> np.ndarray:
+        """End-effector path of the fixed nominal controller on the nominal arm.
+
+        Rolled out from the current state with the exact nominal dynamics,
+        no delay, unit gains and no noise, until success or the step budget:
+        the reference route the obstacle is placed against.
+        """
+        arm = self.nominal_arm
+        state = self.state.copy()
+        points = [arm.forward_kinematics(state[:2])]
+        for _ in range(self.max_steps):
+            torque = self.controller.command(state[:2], state[2:], self.q_des)
+            state = arm.step_rk4(state, torque, self.dt)
+            position = arm.forward_kinematics(state[:2])
+            points.append(position)
+            if np.linalg.norm(self.target - position) <= self.success_radius:
+                break
+        return np.asarray(points)
+
+    def obstacle_clearance(self, q=None) -> float:
+        """Signed distance from the end-effector point to the nearest obstacle surface.
+
+        Positive outside; `inf` without obstacles. The barrier the filter
+        certifies is this distance minus the obstacle margin.
+        """
+        if not self.obstacles:
+            return float("inf")
+        position = self.arm.forward_kinematics(self.state[:2] if q is None else q)
+        return float(
+            min(np.linalg.norm(position - np.asarray(o.center)) - o.radius for o in self.obstacles)
+        )
+
+    def _obstacle_info(self) -> dict:
+        clearance = self.obstacle_clearance()
+        if not self.obstacles:
+            return {"obstacle_clearance": clearance, "obstacle_contact": False}
+        spec = self.obstacle
+        return {
+            "obstacle_clearance": clearance,
+            # Geometric contact of the tip sphere; the MuJoCo plant reports the engine's.
+            "obstacle_contact": bool(clearance < spec.tip_radius),
+        }
+
     def _info_base(self) -> dict:
         return {
             "target": self.target.copy(),
@@ -243,6 +380,10 @@ class PlanarReachEnv:
             "payload_mass": float(self.payload_mass),
             "action_delay": int(self.action_delay),
             "fault_active": bool(self._fault_active),
+            "obstacles": [
+                {"center": list(o.center), "radius": o.radius, "margin": o.margin}
+                for o in self.obstacles
+            ],
         }
 
     def dynamics_context(self) -> np.ndarray:
@@ -259,7 +400,7 @@ class PlanarReachEnv:
         )
 
     def constructor_config(self) -> dict:
-        return {
+        config = {
             "mode": self.mode,
             "dt": self.dt,
             "max_steps": self.max_steps,
@@ -269,6 +410,11 @@ class PlanarReachEnv:
             "randomization": asdict(self.randomization),
             "fault": asdict(self.fault) if self.fault is not None else None,
         }
+        # Absent rather than null, so obstacle-free configurations keep the
+        # exact dictionary every retained manifest was checked against.
+        if self.obstacle is not None:
+            config["obstacle"] = asdict(self.obstacle)
+        return config
 
     def state_dict(self) -> dict:
         return {
@@ -291,6 +437,8 @@ class PlanarReachEnv:
             "rng_state": self._rng.bit_generator.state,
             "noise_rng_state": self._noise_rng.bit_generator.state,
             "episode_counter": int(getattr(self, "_episode_counter", 0)),
+            "obstacles": [asdict(o) for o in self.obstacles],
+            "obstacle_rng_state": self._obstacle_rng.bit_generator.state,
             "sensed_key": getattr(self, "_sensed_key", None),
             "sensed_cache": (
                 None if getattr(self, "_sensed_key", None) is None else self._sensed_cache.copy()
@@ -306,7 +454,15 @@ class PlanarReachEnv:
         randomization = DomainRandomization(**dict(cfg.pop("randomization")))
         fault_data = cfg.pop("fault")
         fault = FaultSpec(**dict(fault_data)) if fault_data is not None else None
-        env = cls(randomization=randomization, fault=fault, **cfg)
+        obstacle_data = cfg.pop("obstacle", None)
+        obstacle = None
+        if obstacle_data is not None:
+            obstacle_data = {
+                key: tuple(value) if isinstance(value, list) else value
+                for key, value in dict(obstacle_data).items()
+            }
+            obstacle = ObstacleSpec(**obstacle_data)
+        env = cls(randomization=randomization, fault=fault, obstacle=obstacle, **cfg)
         env.load_state_dict(state)
         return env
 
@@ -345,6 +501,12 @@ class PlanarReachEnv:
         # The cached sensor sample continues the noise stream exactly; older
         # checkpoints without it start a fresh sample at the next read.
         self._episode_counter = int(state.get("episode_counter", 0))
+        self.obstacles = [
+            CircularObstacle(**{**o, "center": tuple(o["center"])})
+            for o in state.get("obstacles", [])
+        ]
+        if "obstacle_rng_state" in state:
+            self._obstacle_rng.bit_generator.state = state["obstacle_rng_state"]
         key = state.get("sensed_key")
         self._sensed_key = None if key is None else tuple(int(k) for k in key)
         if self._sensed_key is not None:
@@ -389,6 +551,7 @@ class PlanarReachEnv:
             reward += 10.0
 
         info = self._info_base()
+        info.update(self._obstacle_info())
         info.update(
             {
                 "distance": distance,
