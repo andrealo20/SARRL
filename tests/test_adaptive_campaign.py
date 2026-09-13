@@ -33,6 +33,7 @@ def _episode(arm, scenario, seed, success, unsafe=False, abort=False, distance=N
         scenario=scenario,
         seed=seed,
         origin="official",
+        plant="analytical",
         outcome="abort" if abort else ("success" if success else "timeout"),
         steps=100,
         final_distance=distance,

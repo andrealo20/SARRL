@@ -115,6 +115,7 @@ def main() -> int:
     parser.add_argument("--gate-threshold", type=float, default=None)
     parser.add_argument("--historical", action="store_true", help="include the historical cases")
     parser.add_argument("--delay-compensation", action="store_true")
+    parser.add_argument("--plant", choices=("analytical", "mujoco"), default="analytical")
     args = parser.parse_args()
     assert_repository_import_root(ROOT)
     output = args.output.resolve()
@@ -143,7 +144,9 @@ def main() -> int:
     for index, (scenario, seed, origin) in enumerate(cases, start=1):
         for arm in args.arms:
             episodes.append(
-                run_case(arm, scenario, seed, origin, config, args.delay_compensation)
+                run_case(
+                    arm, scenario, seed, origin, config, args.delay_compensation, args.plant
+                )
             )
         print(f"[{index}/{len(cases)}] {scenario} {seed} done", flush=True)
     records = episodes_to_records(episodes)
@@ -159,6 +162,7 @@ def main() -> int:
         "cases": [list(case) for case in cases],
         "estimator": asdict(config),
         "delay_compensation": bool(args.delay_compensation),
+        "plant": args.plant,
         "source_hashes": {name: sha(ROOT / name) for name in SOURCES},
         "runtime": runtime_metadata(ROOT),
         "elapsed_seconds": time.time() - started,

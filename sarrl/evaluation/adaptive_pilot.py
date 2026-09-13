@@ -118,6 +118,7 @@ class PilotEpisode:
     scenario: str
     seed: int
     origin: str
+    plant: str
     outcome: str
     steps: int
     final_distance: float
@@ -178,6 +179,19 @@ def _prediction_error(controller, env, probes):
     return tuple(float(v) for v in np.sqrt(np.mean(errors**2, axis=0)))
 
 
+def make_env(plant: str, spec):
+    """Analytical plant by default; MuJoCo when requested and installed."""
+    if plant == "analytical":
+        return PlanarReachEnv(mode="torque", randomization=spec.randomization, fault=spec.fault)
+    if plant == "mujoco":
+        from sarrl.envs.mujoco_planar import MujocoPlanarReachEnv
+
+        return MujocoPlanarReachEnv(
+            mode="torque", randomization=spec.randomization, fault=spec.fault
+        )
+    raise ValueError(f"unknown plant {plant}")
+
+
 def run_case(
     arm: str,
     scenario: str,
@@ -185,9 +199,10 @@ def run_case(
     origin: str,
     config: AdaptiveNominalConfig,
     compensate_delay: bool = False,
+    plant: str = "analytical",
 ):
     spec = {s.key: s for s in v13_scenarios()}[scenario]
-    env = PlanarReachEnv(mode="torque", randomization=spec.randomization, fault=spec.fault)
+    env = make_env(plant, spec)
     controller, stack = build_stack(arm, config, compensate_delay)
     adaptive = isinstance(controller, AdaptiveNominalController)
     if adaptive:
@@ -224,6 +239,7 @@ def run_case(
         scenario=scenario,
         seed=seed,
         origin=origin,
+        plant=plant,
         outcome=label,
         steps=int(outcome.steps),
         final_distance=float(outcome.final_distance),
