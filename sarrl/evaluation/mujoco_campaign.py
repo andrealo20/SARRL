@@ -231,6 +231,17 @@ REFERENCE_FIELDS = (
 )
 
 
+REPRODUCTION_RELATIVE_TOLERANCE = 1e-9
+REPRODUCTION_ZERO_TOLERANCE = 1e-12
+
+
+def _float_matches(ours: float, retained: float) -> bool:
+    """Relative tolerance against the retained value; absolute only when it is zero."""
+    if retained == 0.0:
+        return abs(ours) <= REPRODUCTION_ZERO_TOLERANCE
+    return abs(ours - retained) <= REPRODUCTION_RELATIVE_TOLERANCE * abs(retained)
+
+
 def strict_reproduction_check(rows: list[PilotEpisode], reference_path: Path) -> dict:
     """Every retained A0 field must match the analytical transfer rows exactly."""
     if not reference_path.exists():
@@ -258,7 +269,7 @@ def strict_reproduction_check(rows: list[PilotEpisode], reference_path: Path) ->
         for name, kind in REFERENCE_FIELDS:
             ours = getattr(episode, name)
             if kind is float:
-                same = abs(ours - retained[name]) <= 1e-9 * max(1.0, abs(retained[name]))
+                same = _float_matches(ours, retained[name])
             else:
                 same = ours == retained[name]
             if not same:
@@ -267,6 +278,8 @@ def strict_reproduction_check(rows: list[PilotEpisode], reference_path: Path) ->
         "reference": reference_path.name,
         "reference_controller": V19_REPRODUCTION_CONTROLLER,
         "fields": [name for name, _ in REFERENCE_FIELDS],
+        "relative_tolerance": REPRODUCTION_RELATIVE_TOLERANCE,
+        "zero_tolerance": REPRODUCTION_ZERO_TOLERANCE,
         "compared": len(rows),
         "matched": len(rows) - len({(m[0], m[1]) for m in mismatches}),
         "mismatches": mismatches[:20],

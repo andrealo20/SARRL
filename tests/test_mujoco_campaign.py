@@ -162,3 +162,14 @@ def test_guarded_estimates_force_inconclusive(reference):
     assert report["decision"] == "inconclusive"
     assert any("guarded" in reason for reason in report["inconclusive_reasons"])
     assert report["estimator"]["guarded_episode_fraction"] == pytest.approx(0.25, abs=0.01)
+
+
+def test_reproduction_tolerance_is_relative_with_zero_handling():
+    from sarrl.evaluation.mujoco_campaign import _float_matches
+
+    assert _float_matches(0.5 * (1 + 5e-10), 0.5)
+    assert not _float_matches(0.5 * (1 + 2e-9), 0.5)
+    assert _float_matches(0.03 * (1 + 5e-10), 0.03)
+    assert not _float_matches(0.03 * (1 + 2.15e-8), 0.03)
+    assert _float_matches(5e-13, 0.0)
+    assert not _float_matches(2e-12, 0.0)

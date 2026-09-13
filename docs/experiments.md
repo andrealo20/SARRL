@@ -1030,7 +1030,9 @@ The **transfer block** runs the unfiltered `fixed` arm on seeds
 `50000..50099` on both plants, with no sensor noise and no actuator options.
 Its analytical rows must reproduce every retained field of the v1.3
 `A0_computed_torque` rows (reward, steps, success, final distance, maximum
-speed, maximum command torque, fault seen; floats within a relative `1e-9`);
+speed, maximum command torque, fault seen; floats within a relative `1e-9`
+of the retained value, or within an absolute `1e-12` when the retained value
+is zero);
 the analysis refuses to run, and no completion marker is written, if any of
 the 300 rows differs. Its MuJoCo rows, paired with the analytical ones seed by
 seed, report how far the engine alone moves outcomes and final distances
