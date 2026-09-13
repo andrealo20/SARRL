@@ -2,10 +2,10 @@
 """Execute the preregistered v2.1 factorial campaign once and apply its decision rule.
 
 Same guarantees as the v1.9 and v2.0 runners, whose checks it reuses: sealed
-source state, committed-artifact seed scan (HEAD and every release tag) plus
-the seed registry, exclusive lock, session-tagged at-least-once journal,
-canonical log reloaded for the analysis, atomic output files, completion
-marker hashing every output. The campaign runs in two phases: the
+source state, committed-artifact seed scan over every reachable commit plus
+the seed registry, exclusive lock, session-tagged at-least-once journal that
+survives a truncated final record, canonical log reloaded for the analysis,
+atomic output files, completion marker hashing every output. The campaign runs in two phases: the
 reproduction block (the two v2.0 arms on the first hundred v2.0 decision
 seeds per scenario) is executed, reloaded and checked field by field
 against the retained v2.0 log before the first decision seed is opened;
@@ -20,7 +20,6 @@ import argparse
 import csv
 import json
 import os
-import subprocess
 import time
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, fields
@@ -53,6 +52,12 @@ from sarrl.evaluation.factorial_campaign import (
     v21_reproduction_cells,
 )
 from sarrl.evaluation.provenance import runtime_metadata
+from tools.campaign_guards import (
+    journal_records,
+    run_two_phases,
+    seed_range_is_unopened,
+    valid_completion_marker,
+)
 from tools.run_adaptive_campaign import (
     CampaignLock,
     execution_fingerprint,
@@ -60,7 +65,6 @@ from tools.run_adaptive_campaign import (
     verify_frozen_sources,
     write_json,
 )
-from tools.scan_seed_usage import scan_revision
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / V21_OUTPUT
@@ -84,69 +88,6 @@ def cell_key(record: dict) -> tuple:
 
 
 JOURNAL_FIELDS = set(PilotEpisode.__dataclass_fields__) | {"session"}
-
-
-def journal_records(journal: Path, planned: set) -> dict:
-    done = {}
-    if not journal.exists():
-        return done
-    for line_number, line in enumerate(journal.read_text().splitlines(), start=1):
-        if not line.strip():
-            continue
-        record = json.loads(line)
-        if set(record) != JOURNAL_FIELDS:
-            raise RuntimeError(f"journal record {line_number} has unexpected fields")
-        record.pop("session")
-        key = cell_key(record)
-        if key not in planned or key in done:
-            raise RuntimeError(f"journal record {line_number} is not a planned, unique cell")
-        done[key] = record
-    return done
-
-
-def seed_range_is_unopened(root: Path, low: int, high: int) -> dict:
-    """Scan HEAD and every release tag, then the registry; raise on any collision."""
-    revisions = ["HEAD"] + subprocess.run(
-        ["git", "tag", "--list", "v*"], cwd=root, capture_output=True, text=True, check=True
-    ).stdout.split()
-    scans = {}
-    seen: dict = {}
-    for revision in revisions:
-        scan = scan_revision(root, low, high, revision, seen)
-        scans[revision] = {"files_scanned": scan["files_scanned"], "hits": scan["hits"]}
-        if scan["hits"]:
-            raise RuntimeError(
-                f"decision seed range already used in {revision}: {scan['files_with_hits']}"
-            )
-    registry = json.loads((root / V21_SEED_REGISTRY).read_text())
-    overlaps = [
-        entry
-        for entry in registry["ranges"]
-        if entry["low"] <= high and low <= entry["high"] and entry["status"] != "reserved"
-    ]
-    if overlaps:
-        raise RuntimeError(f"decision seed range overlaps registered ranges: {overlaps}")
-    reserved = [
-        entry
-        for entry in registry["ranges"]
-        if entry["status"] == "reserved" and entry["low"] == low and entry["high"] == high
-    ]
-    if len(reserved) != 1:
-        raise RuntimeError("decision seed range is not reserved exactly once in the registry")
-    return {"revisions": scans, "registry": V21_SEED_REGISTRY, "reserved_entry": reserved[0]}
-
-
-def valid_completion_marker(path: Path) -> bool:
-    """A completion marker counts only if it parses and its hashes match the outputs."""
-    try:
-        record = json.loads(path.read_text())
-        hashes = record["hashes"]
-    except (ValueError, KeyError, OSError):
-        return False
-    return set(hashes) == set(OUTPUT_FILES) and all(
-        (path.parent / name).exists() and sha(path.parent / name) == digest
-        for name, digest in hashes.items()
-    )
 
 
 def execute(cells, done, journal, session, workers, total):
@@ -178,7 +119,10 @@ def main() -> int:
     assert_repository_import_root(ROOT)
     frozen = verify_frozen_sources(ROOT, V21_SEAL_FILE, V21_FROZEN_PATHS)
     scan = seed_range_is_unopened(
-        ROOT, V21_DECISION_SEED_START, V21_DECISION_SEED_START + V21_DECISION_EPISODES - 1
+        ROOT,
+        V21_DECISION_SEED_START,
+        V21_DECISION_SEED_START + V21_DECISION_EPISODES - 1,
+        V21_SEED_REGISTRY,
     )
     reference = ROOT / V21_REPRODUCTION_REFERENCE
     fingerprint = execution_fingerprint(args.workers)
@@ -194,7 +138,7 @@ def main() -> int:
     with CampaignLock(OUTPUT):
         marker = OUTPUT / "complete.json"
         if marker.exists():
-            if valid_completion_marker(marker):
+            if valid_completion_marker(marker, OUTPUT_FILES):
                 raise FileExistsError(f"{OUTPUT} is complete; the official campaign runs once")
             raise RuntimeError(f"{marker} exists but is invalid; inspect it before anything else")
         session = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -206,7 +150,7 @@ def main() -> int:
                 raise RuntimeError("existing manifest was written from a different source tree")
             if previous["execution"] != fingerprint:
                 raise RuntimeError("execution fingerprint differs from the manifest; refused")
-            done = journal_records(journal, planned)
+            done = journal_records(journal, planned, JOURNAL_FIELDS, cell_key)
             previous["sessions"] = previous.get("sessions", []) + [session]
             write_json(manifest_path, previous)
             print(f"resuming with {len(done)} completed cells", flush=True)
@@ -229,21 +173,23 @@ def main() -> int:
             done = {}
 
         started = time.time()
-        # Phase 1: the reproduction block, checked before any decision seed is opened.
-        execute(reproduction_cells, done, journal, session, args.workers, len(cells))
-        done = journal_records(journal, planned)
-        reproduced = load_episodes_from_records([done[cell] for cell in reproduction_cells])
-        check = reproduction_check(reproduced, reference)
-        if check["mismatches"]:
-            raise RuntimeError(
-                "reproduction block does not match the retained v2.0 rows; "
-                f"no decision seed opened: {check['mismatches'][:3]}"
-            )
-        print(f"reproduction block: {check['matched']}/{check['compared']} rows match", flush=True)
 
-        # Phase 2: the decision block and the descriptive arm.
-        execute(decision_cells, done, journal, session, args.workers, len(cells))
-        done = journal_records(journal, planned)
+        def run_block(block):
+            execute(block, done, journal, session, args.workers, len(cells))
+
+        def check_reproduction():
+            reloaded = journal_records(journal, planned, JOURNAL_FIELDS, cell_key)
+            reproduced = load_episodes_from_records([reloaded[c] for c in reproduction_cells])
+            report = reproduction_check(reproduced, reference)
+            print(
+                f"reproduction block: {report['matched']}/{report['compared']} rows match",
+                flush=True,
+            )
+            return report
+
+        # Phase 1 runs and is checked before phase 2 opens a decision seed.
+        run_two_phases(reproduction_cells, decision_cells, run_block, check_reproduction)
+        done = journal_records(journal, planned, JOURNAL_FIELDS, cell_key)
         if set(done) != planned:
             raise RuntimeError("journal does not cover the planned cells")
         log_path = OUTPUT / "episodes.jsonl"

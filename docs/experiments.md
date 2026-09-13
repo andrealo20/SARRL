@@ -1277,8 +1277,12 @@ estimator configuration is the v2.0 one, grid `{0, 10, 30, 60} ms` included.
 
 One descriptive arm, `adaptive_hocbf_nocompensation`, runs the
 `identified/identified` stack with the delay prediction switched off on the
-first hundred decision seeds per scenario. It carries no decision weight; it
-shows how much of the controller effect the prediction accounts for.
+first hundred decision seeds per scenario. It carries no decision weight.
+The analysis reports the seed-paired contrast `identified/identified` minus
+this arm on those seeds (success, unsafe episodes, aborts, with intervals):
+the prediction's effect within the identified stack, which is not a share
+of the controller effect, since the fixed stack has no prediction to
+remove.
 
 ### Plant and scenarios
 
@@ -1308,8 +1312,10 @@ every arm on every seed, 22,800 episodes, plus the descriptive arm on the
 first hundred of those seeds per scenario, 300 episodes. The block starts
 after the v2.0 decision block (`52200..54099`) and a guard band. Before the
 first episode the runner scans every committed CSV, JSON and JSONL blob of
-`HEAD` and of every release tag for seed-named values in the range, and
-checks the range against `docs/seed_registry.json`, an append-only registry
+every commit reachable from any ref (one scan per distinct tree, one read
+per distinct blob) for seed-named values in the range, records the trees
+scanned in the manifest, and checks the range against
+`docs/seed_registry.json`, an append-only registry
 of every seed range the project has opened, official or local (pilots,
 training validation, smoke runs), where the block must be reserved exactly
 once and overlap nothing used. Either failure refuses the launch.
@@ -1411,6 +1417,12 @@ prediction from the estimate inside the identified controller stack (the
 descriptive arm only indicates the share); and it says nothing about the
 analytical plant, the learned policies or an obstacle.
 
+The certificate-only estimator's behaviour is fixed by tests that spy on
+the stack with sensor noise on: one guard decision per step with the
+measured position, an `observe` call per executed step receiving the
+cached measurement before and after the step and the torque the filter
+returned, and a pre-filter candidate equal to the fixed computed torque.
+
 ### Commands and retained evidence
 
 The protocol section and its implementation
@@ -1421,10 +1433,15 @@ once: a valid completion marker refuses a second launch, an invalid one
 (truncated or with hashes that do not match the outputs) stops the runner
 and asks for inspection. Manifest, decision, completion marker, episode log
 and table are written through fsynced temporary files and atomic
-replacement. The official invocation is
+replacement; the append-only journal is fsynced per record, and a resume
+drops a truncated final record (the cell runs again) while any other
+malformed, unplanned or duplicate record stops it. The launch guards live
+in `tools/campaign_guards.py` and are tested without the simulator. The
+retained directory is exempt from the repository's `results/` ignore rule,
+apart from the lock file. The official invocation is
 `python -m tools.run_factorial_campaign --workers 6` from the repository
 root. Retained under `results/certificate_factorial_v21/`: `manifest.json`
-(protocol, frozen-source hashes, seed scan over every revision, registry
-entry, reference hash, runtime, execution fingerprint), `journal.jsonl`,
+(protocol, frozen-source hashes, seed scan over every reachable commit,
+registry entry, reference hash, runtime, execution fingerprint), `journal.jsonl`,
 `episodes.jsonl`, `episodes.csv`, `decision.json` and `complete.json`.
 

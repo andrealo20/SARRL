@@ -165,22 +165,54 @@ def test_certificate_only_estimator_guards_once_per_step_and_learns_from_the_exe
     expected = controller.command(state[:2], state[2:], np.array([0.5, 0.5]))
     np.testing.assert_allclose(result.baseline_torque, expected)
     from sarrl.controllers import AdaptiveNominalController
+    from sarrl.evaluation.adaptive_pilot import MeasuredState, PlantOptions
+    from sarrl.safety import HOCBFSafetyFilter
 
-    calls = []
-    original = AdaptiveNominalController.observe
+    # With sensor noise on, the estimator must see the cached noisy measurement
+    # before and after each step (the same sample every consumer sees) and the
+    # torque the filter returned, which is what the plant executed.
+    calls, measured, executed = [], [], []
+    observe = AdaptiveNominalController.observe
+    measure = MeasuredState.__call__
+    project = HOCBFSafetyFilter.filter
 
-    def spy(self, before, after, torque):
+    def spy_observe(self, before, after, torque):
         calls.append((np.array(before), np.array(after), np.array(torque)))
-        return original(self, before, after, torque)
+        return observe(self, before, after, torque)
 
-    with patch.object(AdaptiveNominalController, "observe", spy):
+    def spy_measure(self, env=None):
+        value = measure(self, env)
+        if not measured or not np.array_equal(measured[-1], value):
+            measured.append(value.copy())
+        return value
+
+    def spy_filter(self, state, candidate, obstacles=()):
+        result = project(self, state, candidate, obstacles)
+        executed.append(np.array(result.torque))
+        return result
+
+    with (
+        patch.object(AdaptiveNominalController, "observe", spy_observe),
+        patch.object(MeasuredState, "__call__", spy_measure),
+        patch.object(HOCBFSafetyFilter, "filter", spy_filter),
+    ):
         episode = run_case(
-            "fixed_hocbf_adaptivemodel", "id_reference", 9801800, "historical", config, True
+            "fixed_hocbf_adaptivemodel",
+            "id_reference",
+            9801800,
+            "historical",
+            config,
+            True,
+            options=PlantOptions(sensor_noise_std=1e-3),
         )
     assert episode.selected_lag is not None and len(calls) == episode.steps
-    # Each update sees the measured state before and after the step and the executed torque.
-    assert all(b.shape == (4,) and a.shape == (4,) and t.shape == (2,) for b, a, t in calls)
-    assert all(np.all(np.abs(t) <= 40.0) for _, _, t in calls)
+    assert len(measured) == episode.steps + 1 and len(executed) == episode.steps
+    for step, (before, after, torque) in enumerate(calls):
+        np.testing.assert_array_equal(before, measured[step])
+        np.testing.assert_array_equal(after, measured[step + 1])
+        np.testing.assert_array_equal(torque, executed[step])
+    # The measurements are noisy, so they differ from any exact plant state.
+    assert not np.array_equal(measured[0], measured[1])
 
 
 def test_fixed_certificate_arm_drives_the_identified_command_with_a_nominal_certificate():

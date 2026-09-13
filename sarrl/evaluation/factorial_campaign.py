@@ -127,6 +127,9 @@ def v21_protocol_dict() -> dict:
             "stack": "identified/identified without delay prediction",
             "episodes_per_scenario": V21_DESCRIPTIVE_EPISODES,
             "seeds": "first decision seeds",
+            "contrast": "identified/identified minus the same stack without prediction, "
+            "seed-paired on those seeds: the prediction's effect within the identified "
+            "stack, not a share of the controller effect",
             "decision_weight": False,
         },
         "seeds": {
@@ -147,7 +150,7 @@ def v21_protocol_dict() -> dict:
             },
             "scenarios": list(V21_SCENARIOS),
             "unopened_range_checked_against": [
-                "committed CSV/JSON/JSONL blobs of HEAD and of every release tag",
+                "committed CSV/JSON/JSONL blobs of every commit reachable from any ref",
                 V21_SEED_REGISTRY,
             ],
             "unopened_range": [
@@ -488,6 +491,22 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
         for scenario in V21_SCENARIOS
     }
     rng = np.random.default_rng(V21_BOOTSTRAP_SEED)
+    prediction_effect = {
+        scenario: {
+            name: paired_difference(
+                _select(episodes, "adaptive_hocbf", scenario, v21_seeds("descriptive")),
+                descriptive[scenario],
+                metric,
+                rng,
+            )
+            for name, metric in (
+                ("success", lambda r: r.success),
+                ("unsafe_episode", lambda r: r.unsafe_episode),
+                ("abort", lambda r: r.outcome == "abort"),
+            )
+        }
+        for scenario in V21_SCENARIOS
+    }
 
     def contrast(treatment, reference, scenario, metric):
         return paired_difference(
@@ -590,6 +609,7 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
             f"{V21_DESCRIPTIVE_ARM}/{scenario}": cell_summary(rows)
             for scenario, rows in descriptive.items()
         },
+        "prediction_effect_within_identified_stack": prediction_effect,
         "reproduction_check": reproduction,
         "protocol": v21_protocol_dict(),
     }
