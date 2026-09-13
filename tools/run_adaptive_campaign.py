@@ -67,7 +67,13 @@ def sha(path: Path) -> str:
 
 
 def write_json(path: Path, payload) -> None:
-    path.write_text(json.dumps(payload, indent=1, sort_keys=True) + "\n")
+    """Write through a temporary file, fsync it and replace, so a crash leaves no partial file."""
+    temporary = path.with_name(path.name + ".tmp")
+    with temporary.open("w") as handle:
+        handle.write(json.dumps(payload, indent=1, sort_keys=True) + "\n")
+        handle.flush()
+        os.fsync(handle.fileno())
+    temporary.replace(path)
 
 
 def git(root: Path, *args: str) -> str:

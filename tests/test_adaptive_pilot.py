@@ -142,3 +142,53 @@ def test_residual_arm_records_the_residual_and_needs_a_policy():
         run_case(
             "adaptive_hocbf", "id_reference", 9801800, "historical", config, policy=_ZeroPolicy()
         )
+
+
+def test_certificate_only_estimator_guards_once_per_step_and_learns_from_the_executed_command():
+    from unittest.mock import patch
+
+    from sarrl.evaluation.adaptive_pilot import build_stack
+
+    config = AdaptiveNominalConfig()
+    controller, stack = build_stack("fixed_hocbf_adaptivemodel", config, True)
+    assert isinstance(controller, ComputedTorqueController)
+    assert stack.estimator is not None and stack.estimator is not controller
+    assert stack.safety_filter.model.controller is stack.estimator
+    assert stack.compensate_delay is False
+    state = np.array([0.1, -0.2, 0.3, 0.4])
+    with patch.object(stack.estimator, "begin_step", wraps=stack.estimator.begin_step) as guard:
+        result = stack.command(None, state, np.array([0.5, 0.5]))
+    assert guard.call_count == 1
+    np.testing.assert_array_equal(guard.call_args[0][0], state[:2])
+    # The pre-filter candidate is the fixed computed torque at the current state,
+    # untouched by the estimate; the executed command may differ through the filter.
+    expected = controller.command(state[:2], state[2:], np.array([0.5, 0.5]))
+    np.testing.assert_allclose(result.baseline_torque, expected)
+    from sarrl.controllers import AdaptiveNominalController
+
+    calls = []
+    original = AdaptiveNominalController.observe
+
+    def spy(self, before, after, torque):
+        calls.append((np.array(before), np.array(after), np.array(torque)))
+        return original(self, before, after, torque)
+
+    with patch.object(AdaptiveNominalController, "observe", spy):
+        episode = run_case(
+            "fixed_hocbf_adaptivemodel", "id_reference", 9801800, "historical", config, True
+        )
+    assert episode.selected_lag is not None and len(calls) == episode.steps
+    # Each update sees the measured state before and after the step and the executed torque.
+    assert all(b.shape == (4,) and a.shape == (4,) and t.shape == (2,) for b, a, t in calls)
+    assert all(np.all(np.abs(t) <= 40.0) for _, _, t in calls)
+
+
+def test_fixed_certificate_arm_drives_the_identified_command_with_a_nominal_certificate():
+    from sarrl.evaluation.adaptive_pilot import build_stack
+
+    controller, stack = build_stack("adaptive_hocbf_fixedmodel", AdaptiveNominalConfig(), True)
+    assert stack.estimator is None  # the controller is the estimator
+    assert stack.compensate_delay is True
+    assert isinstance(stack.safety_filter.model, PlanarArm)
+    identified, identified_stack = build_stack("adaptive_hocbf", AdaptiveNominalConfig(), True)
+    assert identified_stack.safety_filter.model.controller is identified

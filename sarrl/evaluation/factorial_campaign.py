@@ -1,25 +1,25 @@
 """Preregistered v2.1 campaign: which model matters, the controller's or the certificate's.
 
 v2.0 compared two stacks that differed in both places at once: the fixed
-nominal certified with the fixed model against the identified nominal
-certified with its own estimate. This campaign crosses the two factors on
-the v2.0 benchmark (MuJoCo plant, actuator options, measured state) and
-fresh paired seeds: controller model in {fixed, identified} by certificate
-model in {fixed, identified}, four filtered arms on every seed. The two
-corner arms are the v2.0 arms unchanged, and a reproduction block reruns
-them on the first hundred v2.0 decision seeds per scenario, where every
-retained field must match.
+nominal certified with the fixed model against the identified controller
+stack (estimate-driven computed torque with delay prediction) certified
+with its own estimate. This campaign crosses the two factors on the v2.0
+benchmark (MuJoCo plant, actuator options, measured state) and fresh paired
+seeds: controller stack in {fixed, identified} by certificate model in
+{fixed, identified}, four filtered arms on every seed. The controller
+factor is the whole v2.0 controller stack, model and delay prediction
+together; the certificate factor is the model behind the HOCBF rows alone.
+The corner arms use the v2.0 configuration, and a reproduction block reruns
+them on the first hundred v2.0 decision seeds per scenario before any
+decision seed is opened: every retained field of the v2.0 rows must match.
 
 The decision rule tests three preregistered statements about task success
-with seed-paired percentile bootstraps: the controller's model carries a
-large gain at a fixed certificate in every scenario; the certificate's
-model adds a gain under motor fault and compound OOD given the identified
-controller; and in distribution the certificate's model makes no difference
-beyond an equivalence margin. Safety endpoints (rate and severity of
-envelope violations, aborts, intervention) are preregistered with their
-expected directions but carry no decision weight: the pilot showed the two
-certificates trading rate against severity, and the campaign estimates that
-trade rather than adjudicating it.
+with seed-paired percentile bootstraps, each requiring the lower 95% bound
+to clear its margin. Safety endpoints (operational outcomes, violation
+rates at zero and at a physical tolerance, violation severity paired and
+conditional on violating) are preregistered with their expected directions
+but carry no decision weight: the pilot showed the two certificates trading
+rate against severity, and the campaign estimates that trade.
 """
 
 from __future__ import annotations
@@ -50,7 +50,7 @@ from sarrl.evaluation.mujoco_campaign import (
     _float_matches,
 )
 
-# Arms named controller/certificate; the labels are the pilot's arm names.
+# Arms named controller stack / certificate model; the values are the pilot's arm names.
 V21_ARMS = {
     "fixed/fixed": "fixed_hocbf",
     "fixed/identified": "fixed_hocbf_adaptivemodel",
@@ -58,6 +58,11 @@ V21_ARMS = {
     "identified/identified": "adaptive_hocbf",
 }
 V21_ARM_LABELS = tuple(V21_ARMS.values())
+V21_ESTIMATOR_ARMS = tuple(label for label in V21_ARM_LABELS if label != "fixed_hocbf")
+# Descriptive arm: the identified stack without delay prediction, so that the
+# share of the controller effect owed to the prediction can be seen.
+V21_NO_COMPENSATION_SUFFIX = "_nocompensation"
+V21_DESCRIPTIVE_ARM = "adaptive_hocbf" + V21_NO_COMPENSATION_SUFFIX
 V21_SCENARIOS = ("id_reference", "ood_compound", "motor_fault")
 V21_MISMATCH_SCENARIOS = ("motor_fault", "ood_compound")
 V21_PLANT = V20_PLANT
@@ -66,16 +71,22 @@ V21_COMPENSATE_DELAY = V20_COMPENSATE_DELAY
 # Decision seeds: fresh block after the v2.0 block (52200..54099) and a guard band.
 V21_DECISION_SEED_START = 54200
 V21_DECISION_EPISODES = 1900
+V21_DESCRIPTIVE_EPISODES = 100
 # Reproduction block: the first hundred v2.0 decision seeds per scenario, corner arms only.
 V21_REPRODUCTION_SEED_START = V20_PRIMARY_SEED_START
 V21_REPRODUCTION_EPISODES = 100
 V21_REPRODUCTION_ARMS = ("fixed_hocbf", "adaptive_hocbf")
 V21_REPRODUCTION_REFERENCE = f"{V20_OUTPUT}/episodes.jsonl"
 V21_BOOTSTRAP_SEED = 210_000
-# Statements about success, in percentage points of paired difference.
+# Statements about success: the lower 95% bound of the paired difference must clear the margin.
 V21_CONTROLLER_GAIN = 0.20
 V21_CERTIFICATE_GAIN = 0.10
 V21_EQUIVALENCE_MARGIN = 0.03
+# Physical tolerances for the second violation rate: excesses at or below
+# these are counted as within tolerance.
+V21_POSITION_TOLERANCE_RAD = 0.05
+V21_VELOCITY_TOLERANCE_RAD_S = 0.5
+V21_SEED_REGISTRY = "docs/seed_registry.json"
 V21_FROZEN_PATHS = (
     "sarrl",
     "tools",
@@ -83,31 +94,10 @@ V21_FROZEN_PATHS = (
     "docs/experiments.md",
     "pyproject.toml",
     V21_REPRODUCTION_REFERENCE,
+    V21_SEED_REGISTRY,
 )
 V21_SEAL_FILE = "docs/v21_seal.json"
 V21_OUTPUT = "results/certificate_factorial_v21"
-
-# Fields of a retained v2.0 row that the reproduction must match; fields added
-# to the record after v2.0 are not in the reference and are not compared.
-REPRODUCTION_FIELDS = (
-    ("outcome", str),
-    ("steps", int),
-    ("final_distance", float),
-    ("reward", float),
-    ("max_speed", float),
-    ("max_command_torque", float),
-    ("fault_seen", bool),
-    ("success", bool),
-    ("unsafe_episode", bool),
-    ("normalized_violation_max", float),
-    ("safety_infeasible", bool),
-    ("safety_intervention_fraction", float),
-    ("true_delay", int),
-    ("selected_lag", int),
-    ("selected_time_constant", float),
-    ("model_fallback_steps", int),
-    ("control_steps", int),
-)
 
 
 def v21_config() -> AdaptiveNominalConfig:
@@ -124,27 +114,43 @@ def v21_protocol_dict() -> dict:
         "plant": V21_PLANT,
         "plant_options": asdict(V21_PLANT_OPTIONS),
         "factors": {
-            "controller_model": ["fixed", "identified"],
-            "certificate_model": ["fixed", "identified"],
+            "controller_stack": {
+                "levels": ["fixed", "identified"],
+                "identified_means": "estimate-driven computed torque with delay prediction, "
+                "the v2.0 controller stack; the two are not separated",
+            },
+            "certificate_model": {"levels": ["fixed", "identified"]},
         },
         "arms": dict(V21_ARMS),
+        "descriptive_arm": {
+            "label": V21_DESCRIPTIVE_ARM,
+            "stack": "identified/identified without delay prediction",
+            "episodes_per_scenario": V21_DESCRIPTIVE_EPISODES,
+            "seeds": "first decision seeds",
+            "decision_weight": False,
+        },
         "seeds": {
+            "reproduction": {
+                "arms": list(V21_REPRODUCTION_ARMS),
+                "start": V21_REPRODUCTION_SEED_START,
+                "episodes_per_scenario": V21_REPRODUCTION_EPISODES,
+                "reference": V21_REPRODUCTION_REFERENCE,
+                "rows_must_match_reference": "every retained field",
+                "runs_and_is_checked_before_any_decision_seed": True,
+                "decision_weight": False,
+            },
             "decision": {
                 "arms": list(V21_ARM_LABELS),
                 "start": V21_DECISION_SEED_START,
                 "episodes_per_scenario": V21_DECISION_EPISODES,
                 "plant": V21_PLANT,
             },
-            "reproduction": {
-                "arms": list(V21_REPRODUCTION_ARMS),
-                "start": V21_REPRODUCTION_SEED_START,
-                "episodes_per_scenario": V21_REPRODUCTION_EPISODES,
-                "reference": V21_REPRODUCTION_REFERENCE,
-                "rows_must_match_reference": [name for name, _ in REPRODUCTION_FIELDS],
-                "decision_weight": False,
-            },
             "scenarios": list(V21_SCENARIOS),
-            "unopened_range_scanned": [
+            "unopened_range_checked_against": [
+                "committed CSV/JSON/JSONL blobs of HEAD and of every release tag",
+                V21_SEED_REGISTRY,
+            ],
+            "unopened_range": [
                 V21_DECISION_SEED_START,
                 V21_DECISION_SEED_START + V21_DECISION_EPISODES - 1,
             ],
@@ -158,55 +164,66 @@ def v21_protocol_dict() -> dict:
             "controller_gain_at_fixed_certificate": {
                 "contrast": "identified/fixed minus fixed/fixed",
                 "scenarios": list(V21_SCENARIOS),
-                "minimum_difference": V21_CONTROLLER_GAIN,
-                "lower_95_above": 0.0,
+                "lower_95_above": V21_CONTROLLER_GAIN,
             },
             "certificate_gain_under_mismatch": {
                 "contrast": "identified/identified minus identified/fixed",
                 "scenarios": list(V21_MISMATCH_SCENARIOS),
-                "minimum_difference": V21_CERTIFICATE_GAIN,
-                "lower_95_above": 0.0,
+                "lower_95_above": V21_CERTIFICATE_GAIN,
             },
             "certificate_equivalence_in_distribution": {
                 "contrast": "identified/identified minus identified/fixed",
                 "scenarios": ["id_reference"],
                 "interval_within": [-V21_EQUIVALENCE_MARGIN, V21_EQUIVALENCE_MARGIN],
             },
-            "interaction": {
-                "contrast": "(identified/identified minus identified/fixed) minus "
+            "reported_without_threshold": [
+                "interaction: (identified/identified minus identified/fixed) minus "
                 "(fixed/identified minus fixed/fixed)",
-                "scenarios": list(V21_SCENARIOS),
-                "reported": "estimate and interval, no threshold",
-            },
+                "controller at identified certificate",
+                "certificate at fixed controller",
+            ],
         },
         "safety_endpoints": {
-            "contrast": "identified/identified minus identified/fixed, per scenario",
-            "metrics": [
-                "unsafe_episode",
-                "abort",
-                "timeout",
-                "normalized_violation_max",
-                "joint_position_violation_max_rad",
-                "joint_velocity_violation_max_rad_s",
-                "safety_intervention_fraction",
-            ],
+            "contrast": "identified/identified minus identified/fixed, per scenario, "
+            "seed-paired unless stated",
+            "families": {
+                "operational": ["abort", "timeout"],
+                "violation_rate": [
+                    "unsafe_episode (any positive excess, the v2.0 definition)",
+                    "unsafe_beyond_tolerance (position excess above "
+                    f"{V21_POSITION_TOLERANCE_RAD} rad or velocity excess above "
+                    f"{V21_VELOCITY_TOLERANCE_RAD_S} rad/s)",
+                ],
+                "severity_paired": [
+                    "normalized_violation_max",
+                    "joint_position_violation_max_rad",
+                    "joint_velocity_violation_max_rad_s",
+                    "safety_intervention_fraction",
+                    "steps (observed prefix length; aborts end the prefix)",
+                ],
+                "severity_conditional": [
+                    "mean of joint_position_violation_max_rad over unsafe episodes, per arm",
+                    "mean of joint_velocity_violation_max_rad_s over unsafe episodes, per arm",
+                    "with unpaired percentile bootstrap intervals per arm",
+                ],
+            },
+            "censoring": "maxima are taken over the observed prefix of each episode, which "
+            "an abort shortens; the prefix length is reported alongside",
             "expected_from_pilot": {
                 "unsafe_episode": "more frequent with the identified certificate in "
                 "id_reference and ood_compound, less frequent under motor_fault",
-                "severity": "smaller position and velocity excesses with the identified "
-                "certificate in every scenario",
+                "severity_conditional": "smaller position and velocity excesses with the "
+                "identified certificate in every scenario",
                 "safety_intervention_fraction": "lower with the identified certificate",
+                "timeout": "fewer with the identified certificate under mismatch",
             },
             "decision_weight": False,
         },
         "decision": {
             "order": ["estimator_validity", "success_statements", "otherwise"],
             "estimator_validity": {
-                "arms_with_estimator": [
-                    "fixed_hocbf_adaptivemodel",
-                    "adaptive_hocbf_fixedmodel",
-                    "adaptive_hocbf",
-                ],
+                "arms_with_estimator": list(V21_ESTIMATOR_ARMS),
+                "applied_per": "arm and scenario",
                 "guarded_step_fraction_per_episode": V20_GUARDED_STEP_FRACTION,
                 "max_guarded_episode_fraction": V20_GUARDED_EPISODE_FRACTION,
                 "failure_outcome": "inconclusive",
@@ -214,7 +231,7 @@ def v21_protocol_dict() -> dict:
             "outcomes": {
                 "confirmed": "all three success statements hold",
                 "partial": "at least one success statement fails; each is reported",
-                "inconclusive": "estimator validity fails",
+                "inconclusive": "estimator validity fails in any estimator cell",
             },
         },
         "seal_file": V21_SEAL_FILE,
@@ -236,7 +253,7 @@ def v21_protocol_dict() -> dict:
             "lower": list(config.lower),
             "upper": list(config.upper),
             "compensate_delay": V21_COMPENSATE_DELAY,
-            "compensation_applies_to": "identified controller only, as in v2.0",
+            "compensation_applies_to": "identified controller stack only, as in v2.0",
         },
     }
 
@@ -244,6 +261,8 @@ def v21_protocol_dict() -> dict:
 def v21_seeds(block: str) -> range:
     if block == "decision":
         return range(V21_DECISION_SEED_START, V21_DECISION_SEED_START + V21_DECISION_EPISODES)
+    if block == "descriptive":
+        return range(V21_DECISION_SEED_START, V21_DECISION_SEED_START + V21_DESCRIPTIVE_EPISODES)
     if block == "reproduction":
         return range(
             V21_REPRODUCTION_SEED_START,
@@ -252,15 +271,35 @@ def v21_seeds(block: str) -> range:
     raise ValueError(f"unknown seed block {block}")
 
 
-def v21_cells():
-    """Every (arm, scenario, seed, plant) in the fixed order the runner executes."""
+def v21_reproduction_cells():
+    """The reproduction block, executed and checked before any decision seed."""
     for scenario in V21_SCENARIOS:
         for seed in v21_seeds("reproduction"):
             for arm in V21_REPRODUCTION_ARMS:
                 yield arm, scenario, seed, V21_PLANT
+
+
+def v21_decision_cells():
+    """The decision block and the descriptive arm, executed after the reproduction check."""
+    for scenario in V21_SCENARIOS:
         for seed in v21_seeds("decision"):
             for arm in V21_ARM_LABELS:
                 yield arm, scenario, seed, V21_PLANT
+            if seed in v21_seeds("descriptive"):
+                yield V21_DESCRIPTIVE_ARM, scenario, seed, V21_PLANT
+
+
+def v21_cells():
+    """Every (arm, scenario, seed, plant) in the fixed order the runner executes."""
+    yield from v21_reproduction_cells()
+    yield from v21_decision_cells()
+
+
+def arm_stack_and_compensation(arm: str) -> tuple[str, bool]:
+    """Map a campaign arm label to the pilot stack name and its delay-compensation flag."""
+    if arm.endswith(V21_NO_COMPENSATION_SUFFIX):
+        return arm[: -len(V21_NO_COMPENSATION_SUFFIX)], False
+    return arm, V21_COMPENSATE_DELAY
 
 
 def cell_key(episode: PilotEpisode) -> tuple:
@@ -298,8 +337,25 @@ def load_reference(reference_path: Path) -> dict:
     return reference
 
 
+def _values_match(ours, theirs) -> bool:
+    """Recursive equality with the reproduction tolerance on floats."""
+    if isinstance(theirs, bool) or isinstance(ours, bool):
+        return ours == theirs
+    if theirs is None or ours is None:
+        return ours is None and theirs is None
+    if isinstance(theirs, (int, float)) and isinstance(ours, (int, float)):
+        if isinstance(theirs, int) and isinstance(ours, int):
+            return ours == theirs
+        return _float_matches(float(ours), float(theirs))
+    if isinstance(theirs, (list, tuple)) and isinstance(ours, (list, tuple)):
+        return len(ours) == len(theirs) and all(
+            _values_match(a, b) for a, b in zip(ours, theirs, strict=True)
+        )
+    return ours == theirs
+
+
 def reproduction_check(episodes: list[PilotEpisode], reference_path: Path) -> dict:
-    """Every retained field of the corner arms must match on the reproduction seeds."""
+    """Every field of every retained corner row must match on the reproduction seeds."""
     reference = load_reference(Path(reference_path))
     rows = [
         e
@@ -309,23 +365,26 @@ def reproduction_check(episodes: list[PilotEpisode], reference_path: Path) -> di
     ]
     if {(e.arm, e.scenario, e.seed) for e in rows} != set(reference):
         raise ValueError("reproduction rows do not cover the reference keys")
+    fields = sorted(next(iter(reference.values())))
     mismatches = []
     for episode in rows:
         retained = reference[(episode.arm, episode.scenario, episode.seed)]
-        for name, kind in REPRODUCTION_FIELDS:
-            ours = getattr(episode, name)
-            theirs = retained[name]
-            if ours is None or theirs is None:
-                same = ours is theirs
-            elif kind is float:
-                same = _float_matches(float(ours), float(theirs))
-            else:
-                same = ours == theirs
-            if not same:
-                mismatches.append([episode.arm, episode.scenario, episode.seed, name, ours, theirs])
+        ours_record = asdict(episode)
+        for name in fields:
+            if not _values_match(ours_record[name], retained[name]):
+                mismatches.append(
+                    [
+                        episode.arm,
+                        episode.scenario,
+                        episode.seed,
+                        name,
+                        ours_record[name],
+                        retained[name],
+                    ]
+                )
     return {
         "reference": str(reference_path),
-        "fields": [name for name, _ in REPRODUCTION_FIELDS],
+        "fields": fields,
         "compared": len(rows),
         "matched": len(rows) - len({(m[0], m[1], m[2]) for m in mismatches}),
         "mismatches": mismatches[:20],
@@ -357,31 +416,61 @@ def paired_interaction(cells: dict, scenario: str, rng) -> dict:
     }
 
 
-def estimator_validity(cells: dict) -> dict:
-    rows = [e for (label, _), block in cells.items() if label != "fixed_hocbf" for e in block]
-    guarded = [
-        e
-        for e in rows
-        if e.control_steps > 0
-        and e.model_fallback_steps / e.control_steps > V20_GUARDED_STEP_FRACTION
-    ]
-    fraction = len(guarded) / len(rows)
-    identified = [e for e in rows if e.arm == "adaptive_hocbf"]
+def conditional_mean(rows, metric, rng) -> dict:
+    """Mean of a metric over unsafe episodes with an unpaired percentile bootstrap."""
+    values = np.asarray([float(metric(r)) for r in rows if r.unsafe_episode])
+    if values.size == 0:
+        return {"mean": None, "ci95_low": None, "ci95_high": None, "episodes": 0}
+    draws = rng.integers(0, values.size, size=(V19_BOOTSTRAP_DRAWS, values.size))
+    distribution = values[draws].mean(axis=1)
     return {
-        "guarded_episode_fraction": fraction,
-        "estimator_valid": fraction <= V20_GUARDED_EPISODE_FRACTION,
-        "episodes_with_estimator": len(rows),
-        "lag_identified_fraction_identified_arm": float(
-            np.mean([e.selected_lag == e.true_delay for e in identified])
-        ),
-        "time_constant_abs_error_mean_s_identified_arm": float(
-            np.mean([abs(e.selected_time_constant - e.true_time_constant) for e in identified])
-        ),
+        "mean": float(values.mean()),
+        "ci95_low": float(np.quantile(distribution, 0.025)),
+        "ci95_high": float(np.quantile(distribution, 0.975)),
+        "episodes": int(values.size),
+    }
+
+
+def beyond_tolerance(row: PilotEpisode) -> bool:
+    return (
+        row.joint_position_violation_max_rad > V21_POSITION_TOLERANCE_RAD
+        or row.joint_velocity_violation_max_rad_s > V21_VELOCITY_TOLERANCE_RAD_S
+    )
+
+
+def estimator_validity(cells: dict) -> dict:
+    """The v2.0 guard condition, applied to every estimator arm in every scenario."""
+    per_cell = {}
+    for (label, scenario), rows in cells.items():
+        if label not in V21_ESTIMATOR_ARMS:
+            continue
+        guarded = [
+            e
+            for e in rows
+            if e.control_steps > 0
+            and e.model_fallback_steps / e.control_steps > V20_GUARDED_STEP_FRACTION
+        ]
+        fraction = len(guarded) / len(rows)
+        per_cell[f"{label}/{scenario}"] = {
+            "guarded_episode_fraction": fraction,
+            "valid": fraction <= V20_GUARDED_EPISODE_FRACTION,
+            "lag_identified_fraction": float(
+                np.mean([e.selected_lag == e.true_delay for e in rows])
+            ),
+            "time_constant_abs_error_mean_s": float(
+                np.mean([abs(e.selected_time_constant - e.true_time_constant) for e in rows])
+            ),
+            "episodes_with_prediction_fallback": int(sum(e.prediction_fallbacks > 0 for e in rows)),
+        }
+    return {
+        "estimator_valid": all(cell["valid"] for cell in per_cell.values()),
+        "invalid_cells": [name for name, cell in per_cell.items() if not cell["valid"]],
+        "cells": per_cell,
     }
 
 
 def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
-    """Apply the frozen rule: validity first, then the three success statements."""
+    """Apply the frozen rule: reproduction, validity, then the three success statements."""
     if [cell_key(e) for e in episodes] != list(v21_cells()):
         raise ValueError("episodes do not match the planned cells exactly, in order")
     reproduction = reproduction_check(episodes, Path(reference_path))
@@ -392,6 +481,10 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
     cells = {
         (label, scenario): _select(episodes, label, scenario, v21_seeds("decision"))
         for label in V21_ARM_LABELS
+        for scenario in V21_SCENARIOS
+    }
+    descriptive = {
+        scenario: _select(episodes, V21_DESCRIPTIVE_ARM, scenario, v21_seeds("descriptive"))
         for scenario in V21_SCENARIOS
     }
     rng = np.random.default_rng(V21_BOOTSTRAP_SEED)
@@ -419,32 +512,52 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
             "interaction": paired_interaction(cells, scenario, rng),
         }
 
-    safety_metrics = {
-        "unsafe_episode": lambda r: r.unsafe_episode,
-        "abort": lambda r: r.outcome == "abort",
-        "timeout": lambda r: r.outcome == "timeout",
-        "normalized_violation_max": lambda r: r.normalized_violation_max,
+    paired_metrics = {
+        "operational": {
+            "abort": lambda r: r.outcome == "abort",
+            "timeout": lambda r: r.outcome == "timeout",
+        },
+        "violation_rate": {
+            "unsafe_episode": lambda r: r.unsafe_episode,
+            "unsafe_beyond_tolerance": beyond_tolerance,
+        },
+        "severity_paired": {
+            "normalized_violation_max": lambda r: r.normalized_violation_max,
+            "joint_position_violation_max_rad": lambda r: r.joint_position_violation_max_rad,
+            "joint_velocity_violation_max_rad_s": lambda r: r.joint_velocity_violation_max_rad_s,
+            "safety_intervention_fraction": lambda r: r.safety_intervention_fraction,
+            "steps": lambda r: r.steps,
+        },
+    }
+    conditional_metrics = {
         "joint_position_violation_max_rad": lambda r: r.joint_position_violation_max_rad,
         "joint_velocity_violation_max_rad_s": lambda r: r.joint_velocity_violation_max_rad_s,
-        "safety_intervention_fraction": lambda r: r.safety_intervention_fraction,
     }
-    safety = {
-        scenario: {
-            name: contrast("adaptive_hocbf", "adaptive_hocbf_fixedmodel", scenario, metric)
-            for name, metric in safety_metrics.items()
+    safety = {}
+    for scenario in V21_SCENARIOS:
+        families = {
+            family: {
+                name: contrast("adaptive_hocbf", "adaptive_hocbf_fixedmodel", scenario, metric)
+                for name, metric in metrics.items()
+            }
+            for family, metrics in paired_metrics.items()
         }
-        for scenario in V21_SCENARIOS
-    }
+        families["severity_conditional"] = {
+            label: {
+                name: conditional_mean(cells[(label, scenario)], metric, rng)
+                for name, metric in conditional_metrics.items()
+            }
+            for label in ("adaptive_hocbf", "adaptive_hocbf_fixedmodel")
+        }
+        safety[scenario] = families
 
     statements = {
         "controller_gain_at_fixed_certificate": all(
-            success[s]["controller_at_fixed_certificate"]["difference"] >= V21_CONTROLLER_GAIN
-            and success[s]["controller_at_fixed_certificate"]["ci95_low"] > 0.0
+            success[s]["controller_at_fixed_certificate"]["ci95_low"] > V21_CONTROLLER_GAIN
             for s in V21_SCENARIOS
         ),
         "certificate_gain_under_mismatch": all(
-            success[s]["certificate_at_identified_controller"]["difference"] >= V21_CERTIFICATE_GAIN
-            and success[s]["certificate_at_identified_controller"]["ci95_low"] > 0.0
+            success[s]["certificate_at_identified_controller"]["ci95_low"] > V21_CERTIFICATE_GAIN
             for s in V21_MISMATCH_SCENARIOS
         ),
         "certificate_equivalence_in_distribution": (
@@ -466,11 +579,16 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
         "statements": statements,
         "failed_statements": [name for name, held in statements.items() if not held],
         "estimator_valid": validity["estimator_valid"],
+        "invalid_estimator_cells": validity["invalid_cells"],
         "success": success,
         "safety": safety,
-        "estimator": validity,
+        "estimator": validity["cells"],
         "cell_summary": {
             f"{label}/{scenario}": cell_summary(rows) for (label, scenario), rows in cells.items()
+        },
+        "descriptive_summary": {
+            f"{V21_DESCRIPTIVE_ARM}/{scenario}": cell_summary(rows)
+            for scenario, rows in descriptive.items()
         },
         "reproduction_check": reproduction,
         "protocol": v21_protocol_dict(),
@@ -479,9 +597,12 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
 
 __all__ = [
     "analyze",
+    "arm_stack_and_compensation",
     "load_episodes",
     "v21_cells",
     "v21_config",
+    "v21_decision_cells",
     "v21_protocol_dict",
+    "v21_reproduction_cells",
     "v21_seeds",
 ]

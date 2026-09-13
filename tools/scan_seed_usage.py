@@ -128,18 +128,36 @@ def committed_blobs(root: Path, revision: str) -> list[tuple[str, str]]:
     return entries
 
 
-def scan_revision(root: Path, low: int, high: int, revision: str = "HEAD") -> dict:
-    """Scan the committed CSV/JSON/JSONL blobs of a revision for seeds in [low, high]."""
+def scan_blobs(root: Path, entries, low: int, high: int, seen: dict) -> list:
+    """Scan (path, blob) entries; `seen` maps blob ids to their hits so shared blobs scan once."""
     hits: list[tuple[str, str, int]] = []
-    entries = committed_blobs(root, revision)
     for path, blob in entries:
+        if blob in seen:
+            hits.extend((path, where, number) for _, where, number in seen[blob])
+            continue
         text = subprocess.run(
             ["git", "cat-file", "-p", blob], cwd=root, capture_output=True, check=True
         ).stdout.decode("utf-8", errors="replace")
+        found: list[tuple[str, str, int]] = []
         if path.endswith(".csv"):
-            scan_csv_text(text, path, low, high, hits)
+            scan_csv_text(text, path, low, high, found)
         else:
-            scan_json_text(text, path, low, high, hits)
+            scan_json_text(text, path, low, high, found)
+        seen[blob] = found
+        hits.extend(found)
+    return hits
+
+
+def scan_revision(
+    root: Path, low: int, high: int, revision: str = "HEAD", seen: dict | None = None
+) -> dict:
+    """Scan the committed CSV/JSON/JSONL blobs of a revision for seeds in [low, high].
+
+    Pass one `seen` dictionary across calls to scan several revisions without
+    reading a blob they share more than once.
+    """
+    entries = committed_blobs(root, revision)
+    hits = scan_blobs(root, entries, low, high, {} if seen is None else seen)
     tree = subprocess.run(
         ["git", "rev-parse", f"{revision}^{{tree}}"], cwd=root, capture_output=True, check=True
     ).stdout.decode().strip()

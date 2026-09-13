@@ -1,0 +1,27 @@
+{
+  "purpose": "Append-only registry of every episode-seed range the project has opened, official or local, so that a new decision block can be checked against ranges that no committed artifact records (local pilots, training validation, smoke runs). Entries are never removed or narrowed; a new block is appended with status reserved before it is opened.",
+  "ranges": [
+    {"label": "v1.1 validation", "low": 20000, "high": 20029, "status": "used", "kind": "validation"},
+    {"label": "v1.1 to v1.5 held-out policy evaluation", "low": 40000, "high": 40099, "status": "used", "kind": "evaluation"},
+    {"label": "v1.3 to v1.5 OOD and fault evaluation, v1.9 and v2.0 reproduction and transfer blocks", "low": 50000, "high": 50099, "status": "used", "kind": "evaluation"},
+    {"label": "v1.9 guard band, opened once by a runner unit test", "low": 50100, "high": 50199, "status": "used", "kind": "guard"},
+    {"label": "v1.9 decision block", "low": 50200, "high": 52099, "status": "used", "kind": "decision"},
+    {"label": "v2.0 guard band", "low": 52100, "high": 52199, "status": "unused_guard", "kind": "guard"},
+    {"label": "v2.0 decision block; first hundred per scenario reused by the v2.1 reproduction block", "low": 52200, "high": 54099, "status": "used", "kind": "decision"},
+    {"label": "v2.1 guard band", "low": 54100, "high": 54199, "status": "unused_guard", "kind": "guard"},
+    {"label": "v2.1 decision block", "low": 54200, "high": 56099, "status": "reserved", "kind": "decision"},
+    {"label": "v1.5 phase A disagreement population", "low": 60000, "high": 60099, "status": "used", "kind": "evaluation"},
+    {"label": "v1.5 bootstrap generators", "low": 150000, "high": 150001, "status": "used", "kind": "generator"},
+    {"label": "v1.8 bootstrap generators", "low": 180000, "high": 180002, "status": "used", "kind": "generator"},
+    {"label": "adaptive pilot probe bank generator", "low": 190001, "high": 190001, "status": "used", "kind": "generator"},
+    {"label": "v2.0 bootstrap generator", "low": 200000, "high": 200000, "status": "used", "kind": "generator"},
+    {"label": "v2.1 bootstrap generator", "low": 210000, "high": 210000, "status": "reserved", "kind": "generator"},
+    {"label": "v1.7 engineering smoke validation", "low": 610000, "high": 610999, "status": "used", "kind": "local"},
+    {"label": "v1.7 held-out evaluation", "low": 620000, "high": 622099, "status": "used", "kind": "evaluation"},
+    {"label": "v1.7 training validation", "low": 630000, "high": 630029, "status": "used", "kind": "validation"},
+    {"label": "v1.8 training validation", "low": 640000, "high": 640029, "status": "used", "kind": "validation"},
+    {"label": "v1.8 held-out evaluation", "low": 650000, "high": 652099, "status": "used", "kind": "evaluation"},
+    {"label": "failure diagnosis historical cases", "low": 9801800, "high": 9802001, "status": "used", "kind": "local"},
+    {"label": "adaptive, MuJoCo, residual and obstacle pilots and unit tests", "low": 9803000, "high": 9803499, "status": "used", "kind": "local"}
+  ]
+}

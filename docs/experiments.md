@@ -1229,35 +1229,56 @@ python tools/run_adaptive_pilot.py --output results/adaptive_residual_pilot/resi
 v2.0 established that identifying the plant online recovers task success
 on a MuJoCo arm with unmodelled actuator dynamics. Its two arms differed in
 two places at once: the fixed nominal certified with the fixed model, and
-the identified nominal certified with its own estimate. The same estimate
-feeds the computed-torque command and the HOCBF rows, so v2.0 cannot say
-which of the two uses of the model carries the result, nor whether the
-certificate's model affects the safety envelope on its own. v2.1 crosses the
-two factors on the v2.0 benchmark and measures each effect with the other
-factor held.
+the identified controller stack certified with its own estimate. The same
+estimate feeds the computed-torque command, the delay prediction and the
+HOCBF rows, so v2.0 cannot say which use of the model carries the result,
+nor whether the certificate's model affects the safety envelope on its own.
+v2.1 crosses two factors on the v2.0 benchmark and measures each effect
+with the other factor held.
+
+The first factor is the controller stack, fixed or identified, where
+"identified" is the v2.0 controller stack as a whole: the estimate-driven
+computed torque together with the delay prediction that evaluates the
+command and the certificate at the state where the command will act. The
+campaign does not separate the model from the prediction inside that
+stack; the controller effect is the effect of the stack. The second factor
+is the model behind the HOCBF rows alone, fixed nominal or online estimate.
 
 ### Arms
 
-Four filtered stacks, named controller model / certificate model:
+Four filtered stacks, named controller stack / certificate model:
 
-| Arm | Controller command | Certificate rows | Delay compensation |
+| Arm | Controller command | Certificate rows | Delay prediction |
 |---|---|---|---|
 | `fixed/fixed` (`fixed_hocbf`) | fixed nominal model | fixed nominal model | none |
 | `fixed/identified` (`fixed_hocbf_adaptivemodel`) | fixed nominal model | online estimate | none |
 | `identified/fixed` (`adaptive_hocbf_fixedmodel`) | online estimate | fixed nominal model | on |
 | `identified/identified` (`adaptive_hocbf`) | online estimate | online estimate | on |
 
-The corner arms are the v2.0 arms, unchanged in code and configuration. In
-`fixed/identified` the estimator runs as an observer: it takes the same
-per-step guard decision and regresses on the executed command exactly as in
-the identified controller, and the filter reads its model, but the command
-comes from the fixed computed torque at the current measured state, as in
-v2.0's fixed arm. In `identified/fixed` the controller and its delay
-prediction use the estimate while the HOCBF rows are built from the nominal
-`PlanarArm` at the predicted state. Delay compensation follows the
-controller, as in v2.0: the fixed controller never had it. Every arm sees the
-same measured state with sensor noise; the estimator configuration is the
-v2.0 one, grid `{0, 10, 30, 60} ms` included.
+The corner arms run with the v2.0 configuration (plant, options, estimator,
+filter, compensation) and their rows are checked against the retained v2.0
+log before any decision seed is opened, as described below; that check, not
+an identity of source code, is what the campaign relies on, since shared
+code has changed since v2.0 (checkpoint methods, the inactive obstacle
+machinery, a guard in the delay prediction against overflow inside an RK4
+stage that previously raised).
+
+In `fixed/identified` the estimator is certificate-only: it takes the same
+per-step guard decision and regresses on the executed command with the
+measured states exactly as in the identified arms, and the filter reads its
+model, but the pre-filter candidate is the fixed computed torque at the
+current measured state and never reads the estimate. The estimate does
+shape the executed command through the projection, and then learns from
+that command, as every estimator in this campaign does. In
+`identified/fixed` the controller and its delay prediction use the estimate
+while the HOCBF rows are built from the nominal `PlanarArm` at the predicted
+state. Every arm sees the same measured state with sensor noise; the
+estimator configuration is the v2.0 one, grid `{0, 10, 30, 60} ms` included.
+
+One descriptive arm, `adaptive_hocbf_nocompensation`, runs the
+`identified/identified` stack with the delay prediction switched off on the
+first hundred decision seeds per scenario. It carries no decision weight; it
+shows how much of the controller effect the prediction accounts for.
 
 ### Plant and scenarios
 
@@ -1270,67 +1291,84 @@ part of the campaign; see the pilot notes below.
 
 ### Design
 
-Decision block: seeds `54200..56099`, 1,900 per scenario, every arm on every
-seed, 22,800 episodes. The block starts after the v2.0 decision block
-(`52200..54099`) and a guard band; the runner scans every committed CSV and
-JSON artifact for seed-named values in the range before the first episode
-and refuses to start on a hit.
+The campaign runs in two phases. Phase one is the reproduction block: the
+two corner arms on the first hundred v2.0 decision seeds per scenario
+(`52200..52299`), 600 episodes, executed, journaled, reloaded and compared
+with the retained `results/adaptive_mujoco_v20/episodes.jsonl` on every
+field a retained row holds (all thirty, including `true_parameters`,
+`estimated_parameters`, `prediction_error_rms`, the fallback counters and
+the identification fields), floats at relative tolerance `1e-9` (absolute
+`1e-12` at zero), lists element by element. A mismatch stops the runner
+before the first decision seed is opened. Fields added to the episode
+record after v2.0 are not in the reference and are not compared. The
+reference file is a frozen path and its hash is in the manifest.
 
-Reproduction block: the two corner arms on the first hundred v2.0 decision
-seeds per scenario (`52200..52299`), 600 episodes. Every retained field of
-the v2.0 rows (`outcome`, `steps`, `final_distance`, `reward`, `max_speed`,
-`max_command_torque`, `fault_seen`, `success`, `unsafe_episode`,
-`normalized_violation_max`, `safety_infeasible`,
-`safety_intervention_fraction`, `true_delay`, `selected_lag`,
-`selected_time_constant`, `model_fallback_steps`, `control_steps`) must
-match the retained `results/adaptive_mujoco_v20/episodes.jsonl` at relative
-tolerance `1e-9` (absolute `1e-12` at zero); a mismatch stops the analysis.
-Fields added to the episode record after v2.0 are not in the reference and
-are not compared. The reference file is a frozen path and its hash is in
-the manifest.
+Phase two is the decision block: seeds `54200..56099`, 1,900 per scenario,
+every arm on every seed, 22,800 episodes, plus the descriptive arm on the
+first hundred of those seeds per scenario, 300 episodes. The block starts
+after the v2.0 decision block (`52200..54099`) and a guard band. Before the
+first episode the runner scans every committed CSV, JSON and JSONL blob of
+`HEAD` and of every release tag for seed-named values in the range, and
+checks the range against `docs/seed_registry.json`, an append-only registry
+of every seed range the project has opened, official or local (pilots,
+training validation, smoke runs), where the block must be reserved exactly
+once and overlap nothing used. Either failure refuses the launch.
 
 Uncertainty: seed-paired percentile bootstrap, 10,000 draws, generator seed
 `210000`, over the 1,900 pairs of a scenario. Every contrast pairs the four
 arms on the same seed, so the interaction is bootstrapped from its per-seed
-value `(y_II - y_IF) - (y_FI - y_FF)`.
+value `(y_II - y_IF) - (y_FI - y_FF)`. Conditional severity means use an
+unpaired bootstrap over the violating episodes of one arm.
 
 ### Endpoints and decision rule
 
-Three preregistered statements about task success, checked in order after
-estimator validity:
+Estimator validity first: the v2.0 condition, an episode spending more than
+10% of its control steps on the nominal model is guarded and at most 10% of
+episodes may be, applied separately to every arm that runs an estimator in
+every scenario. Any failing cell makes the outcome `inconclusive`.
+
+Then three preregistered statements about task success, each requiring the
+lower 95% bound of the paired difference to clear its margin:
 
 1. Controller gain at a fixed certificate: `identified/fixed` minus
-   `fixed/fixed` at least `+20 pp` with a lower 95% bound above zero, in
-   every scenario.
+   `fixed/fixed`, lower bound above `+20 pp`, in every scenario.
 2. Certificate gain under mismatch: `identified/identified` minus
-   `identified/fixed` at least `+10 pp` with a lower 95% bound above zero,
-   in `motor_fault` and `ood_compound`.
+   `identified/fixed`, lower bound above `+10 pp`, in `motor_fault` and
+   `ood_compound`.
 3. Certificate equivalence in distribution: the 95% interval of the same
    contrast in `id_reference` lies within `[-3, +3] pp`.
 
 Outcome `confirmed` when the three hold, `partial` otherwise with each
-failed statement named; `inconclusive` if estimator validity fails, which
-is the v2.0 condition applied to the three arms that run an estimator: an
-episode spending more than 10% of its control steps on the nominal model is
-guarded, and at most 10% of those episodes may be. The interaction and the
-two remaining simple effects (controller at the identified certificate,
-certificate at the fixed controller) are reported with intervals and carry
-no threshold.
+failed statement named. The interaction and the two remaining simple
+effects (controller at the identified certificate, certificate at the fixed
+controller) are reported with intervals and carry no threshold.
 
-Safety endpoints, reported for `identified/identified` minus
-`identified/fixed` in every scenario with 95% intervals and no decision
-weight: unsafe-episode rate, abort rate, timeout rate, mean of the maximum
-normalised violation, mean of the maximum joint-position excess, mean of the
-maximum joint-velocity excess, mean filter intervention fraction. The pilot
-fixed the expected directions before the campaign: more unsafe episodes
-with the identified certificate in `id_reference` and `ood_compound`, fewer
-under `motor_fault`; smaller position and velocity excesses with the
-identified certificate everywhere; lower intervention fraction with the
-identified certificate. These are predictions to be checked, not
-conditions: the campaign estimates how the two certificates trade violation
-rate against violation severity, and the result is reported in whichever
-direction it falls. No safety veto applies, because the campaign chooses
-nothing; the stacks it compares are the v2.0 ones and their two crossings.
+Safety endpoints are reported for `identified/identified` minus
+`identified/fixed` in every scenario, seed-paired with 95% intervals unless
+stated, in four families and with no decision weight:
+
+- operational: abort rate, timeout rate;
+- violation rate: the unsafe-episode rate as v2.0 defines it (any positive
+  excess of a joint-position or joint-velocity limit at any observed
+  state), and the rate of episodes whose excess exceeds a physical
+  tolerance, `0.05 rad` in position or `0.5 rad/s` in velocity;
+- severity, paired: the per-episode maximum normalised violation, maximum
+  position excess, maximum velocity excess, the filter intervention
+  fraction, and the observed prefix length in steps, because an abort ends
+  the prefix over which maxima are taken;
+- severity, conditional: the mean maximum position and velocity excess over
+  the violating episodes of each arm, with unpaired intervals.
+
+The pilot fixed the expected directions before the campaign: more unsafe
+episodes with the identified certificate in `id_reference` and
+`ood_compound`, fewer under `motor_fault`; smaller conditional excesses
+with the identified certificate in every scenario; lower intervention
+fraction and fewer timeouts under mismatch with the identified
+certificate. These are predictions to be checked, not conditions: the
+campaign estimates how the two certificates trade violation rate against
+violation severity, and the result is reported in whichever direction it
+falls. No safety veto applies, because the campaign chooses nothing; the
+stacks it compares are the v2.0 ones and their two crossings.
 
 ### What the pilot showed and what it did not
 
@@ -1344,7 +1382,7 @@ unsafe-episode counts per 100:
 | `motor_fault` | 8, 47 | 5, 35 | 64, 27 | 91, 15 |
 | `ood_compound` | 0, 28 | 0, 45 | 29, 11 | 79, 23 |
 
-The controller's model carries the bulk of the success; the certificate's
+The controller stack carries the bulk of the success; the certificate's
 model adds 27 points under motor fault and 50 under compound OOD and none in
 distribution, which fixed the three statements and their margins. On
 safety the pilot showed the trade the endpoints are written for: with the
@@ -1369,8 +1407,9 @@ routes around, and is not part of v2.1.
 What the campaign cannot show: it does not decide which certificate a
 deployment should use, because the two trade rate against severity and
 that weighing is outside the benchmark; it does not separate the delay
-prediction from the estimate inside the identified controller; and it says
-nothing about the analytical plant, the learned policies or an obstacle.
+prediction from the estimate inside the identified controller stack (the
+descriptive arm only indicates the share); and it says nothing about the
+analytical plant, the learned policies or an obstacle.
 
 ### Commands and retained evidence
 
@@ -1378,10 +1417,14 @@ The protocol section and its implementation
 (`sarrl/evaluation/factorial_campaign.py`, `tools/run_factorial_campaign.py`)
 are frozen by a seal file naming the commit; the runner refuses to start
 unless the working tree matches the sealed sources and is clean, and runs
-once. The official invocation is
+once: a valid completion marker refuses a second launch, an invalid one
+(truncated or with hashes that do not match the outputs) stops the runner
+and asks for inspection. Manifest, decision, completion marker, episode log
+and table are written through fsynced temporary files and atomic
+replacement. The official invocation is
 `python -m tools.run_factorial_campaign --workers 6` from the repository
 root. Retained under `results/certificate_factorial_v21/`: `manifest.json`
-(protocol, frozen-source hashes, seed scan, reference hash, runtime,
-execution fingerprint), `journal.jsonl`, `episodes.jsonl`, `episodes.csv`,
-`decision.json` and `complete.json`.
+(protocol, frozen-source hashes, seed scan over every revision, registry
+entry, reference hash, runtime, execution fingerprint), `journal.jsonl`,
+`episodes.jsonl`, `episodes.csv`, `decision.json` and `complete.json`.
 
