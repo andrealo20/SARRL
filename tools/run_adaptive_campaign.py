@@ -23,7 +23,6 @@ from __future__ import annotations
 
 import argparse
 import csv
-import fcntl
 import hashlib
 import json
 import os
@@ -179,7 +178,11 @@ def journal_records(journal: Path, planned: set) -> dict:
 
 
 class CampaignLock:
-    """Exclusive advisory lock on the output directory for the whole run."""
+    """Exclusive lock on the output directory for the whole run, released by the OS on exit.
+
+    POSIX uses flock; Windows uses msvcrt byte-range locking. Both are
+    non-blocking and both are dropped automatically if the process dies.
+    """
 
     def __init__(self, output: Path):
         self.path = output / "campaign.lock"
@@ -188,13 +191,30 @@ class CampaignLock:
     def __enter__(self):
         self.handle = self.path.open("a+")
         try:
-            fcntl.flock(self.handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+            if os.name == "nt":
+                import msvcrt
+
+                self.handle.seek(0)
+                msvcrt.locking(self.handle.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+
+                fcntl.flock(self.handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
         except OSError as exc:
+            self.handle.close()
             raise RuntimeError("another runner holds the campaign lock") from exc
         return self
 
     def __exit__(self, *exc_info):
-        fcntl.flock(self.handle.fileno(), fcntl.LOCK_UN)
+        if os.name == "nt":
+            import msvcrt
+
+            self.handle.seek(0)
+            msvcrt.locking(self.handle.fileno(), msvcrt.LK_UNLCK, 1)
+        else:
+            import fcntl
+
+            fcntl.flock(self.handle.fileno(), fcntl.LOCK_UN)
         self.handle.close()
 
 
@@ -205,8 +225,6 @@ def main() -> int:
     if args.workers < 1:
         raise ValueError("workers must be positive")
     assert_repository_import_root(ROOT)
-    if (OUTPUT / "complete.json").exists():
-        raise FileExistsError(f"{OUTPUT} is complete; the official campaign runs once")
     frozen = verify_frozen_sources()
     scan = scan_revision(
         ROOT, V19_PRIMARY_SEED_START, V19_PRIMARY_SEED_START + V19_PRIMARY_EPISODES - 1
@@ -228,6 +246,10 @@ def main() -> int:
 
 
 def _run_locked(args, frozen, scan, reference, fingerprint, cells, planned, journal, manifest_path):
+    # Checked under the lock: a runner that waited for the lock must not rewrite
+    # the outputs of a run that completed in the meantime.
+    if (OUTPUT / "complete.json").exists():
+        raise FileExistsError(f"{OUTPUT} is complete; the official campaign runs once")
     session = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     if manifest_path.exists():
         # Resume: same protocol, same source tree, same execution fingerprint.
