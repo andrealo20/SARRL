@@ -109,9 +109,9 @@ so the plant port alone does not move the baseline.
 Left and centre: one motor-fault decision episode on the MuJoCo plant, the
 first seed on which the retained log records a timeout for the fixed nominal
 and a clean success for the identified one. The joint 2 gain drops to 0.55 at
-0.4 s while both arms are mid-motion; the identified nominal re-estimates the
-gain within a few steps and reaches the target at 0.9 s, the fixed nominal
-drifts and settles about two metres from it. Right:
+0.4 s while both arms are mid-motion; the identified nominal reaches the
+target at 0.9 s, the fixed nominal drifts and settles about two metres from
+it. Right:
 the actuator time constant selected by the hypothesis bank against the true
 one for all 5,700 adaptive decision episodes; the grid is `{0, 10, 30, 60} ms`
 and the selection favours the slower hypothesis from about 38 ms. The figure

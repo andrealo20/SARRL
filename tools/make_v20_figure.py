@@ -140,33 +140,36 @@ def main() -> int:
     plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.right": False})
     fig, axes = plt.subplots(1, 3, figsize=(12.0, 3.4), constrained_layout=True)
 
+    dt = traces["fixed_hocbf"]["dt"]
+    fault_time = FAULT_STEP * dt
+
+    # Distances are read after each step, so sample i sits at (i + 1) dt; the
+    # command of step i is applied over [i dt, (i + 1) dt) and is drawn as a
+    # step. The fault multiplies the joint 2 gain from step 20 onwards.
     ax = axes[0]
     for arm, trace in traces.items():
-        t = np.arange(len(trace["distance"])) * trace["dt"]
+        t = (np.arange(len(trace["distance"])) + 1) * dt
         ax.plot(t, trace["distance"], color=COLORS[arm], lw=1.6, label=LABELS[arm])
-    ax.axvline(FAULT_STEP * traces["fixed_hocbf"]["dt"], color="0.5", ls="--", lw=0.9)
+    ax.axvline(fault_time, color="0.5", ls="--", lw=0.9)
     ax.axhline(0.05, color="0.7", ls=":", lw=0.9)
     ax.set_xlabel("time [s]")
     ax.set_ylabel("distance to target [m]")
     ax.set_title(f"motor fault, seed {seed}", loc="left")
+    top = 1.15 * max(float(np.max(t["distance"])) for t in traces.values())
+    ax.set_ylim(-0.05, top)
     ax.text(
-        FAULT_STEP * traces["fixed_hocbf"]["dt"],
-        ax.get_ylim()[1] * 0.97,
-        " joint 2 gain drops to 0.55",
-        color="0.35",
-        va="top",
-        fontsize=8,
+        fault_time + 0.05, top * 0.985, "joint 2 gain x 0.55", color="0.35", fontsize=8, va="top"
     )
-    ax.legend(frameon=False, loc="center right")
+    ax.legend(frameon=False, loc="lower right", bbox_to_anchor=(1.0, 0.07))
 
     ax = axes[1]
     for arm, trace in traces.items():
-        t = np.arange(len(trace["torque"])) * trace["dt"]
-        ax.plot(t, trace["torque"][:, 1], color=COLORS[arm], lw=1.4, label=LABELS[arm])
-    ax.axvline(FAULT_STEP * traces["fixed_hocbf"]["dt"], color="0.5", ls="--", lw=0.9)
+        t = np.arange(len(trace["torque"])) * dt
+        ax.step(t, trace["torque"][:, 1], where="post", color=COLORS[arm], lw=1.4)
+    ax.axvline(fault_time, color="0.5", ls="--", lw=0.9)
     ax.set_xlabel("time [s]")
-    ax.set_ylabel("joint 2 torque after filter [N m]")
-    ax.set_title("executed command", loc="left")
+    ax.set_ylabel("torque [N m]")
+    ax.set_title("filtered command, joint 2", loc="left")
 
     ax = axes[2]
     rng = np.random.default_rng(0)
@@ -179,8 +182,8 @@ def main() -> int:
         color=COLORS["adaptive_hocbf"],
         edgecolors="none",
     )
-    ax.plot([10, 50], [10, 50], color="0.3", lw=0.9, ls="--", label="exact")
-    ax.legend(frameon=False, loc="upper left")
+    ax.plot([10, 50], [10, 50], color="0.3", lw=0.9, ls="--")
+    ax.text(45.5, 40.5, "exact", color="0.3", fontsize=8, rotation=32, ha="center", va="top")
     ax.set_yticks(grid * 1e3)
     ax.set_xlabel("true actuator time constant [ms]")
     ax.set_ylabel("selected hypothesis [ms]")
