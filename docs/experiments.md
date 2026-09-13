@@ -950,3 +950,145 @@ before any check because `tools` is a namespace package, which the module
 form resolves. No source changed between the two attempts and the first
 opened no seed.
 
+
+## v2.0 adaptive nominal control on a MuJoCo plant
+
+v1.9 established, on the analytical plant, that identifying the arm online and
+handing the identified model to both the nominal controller and the HOCBF
+certificate recovers task success without weakening the safety envelope. The
+analytical plant shares its equations with the controller's regressor, so
+that result says nothing about effects the regressor does not contain. v2.0
+asks the same question on a plant the controller does not share equations
+with: MuJoCo, with reflected motor inertia and first-order actuator dynamics
+drawn per episode, and a measured state with sensor noise handed to both arms.
+Nothing is trained.
+
+### Plant
+
+`MujocoPlanarReachEnv` inherits every episode-defining element of the
+analytical benchmark (seeded randomisation of masses, friction, payload,
+motor gain and delay; target sampling; observation, reward and success; fault
+injection; the command chain of clipping, delay and gain) and replaces the
+plant with MuJoCo (`implicitfast`, 2 ms internal step, ten sub-steps per
+control step). Without dry friction the engine reproduces the analytical
+accelerations within `1e-6 rad/s^2`; MuJoCo's constraint-based `frictionloss`
+replaces the smoothed Coulomb term and is the one rigid-body modelling
+difference, up to `0.3 rad/s^2` on joint 2.
+
+Two actuator effects absent from the controller's parametrisation are drawn
+per episode from a generator seeded apart from the benchmark's
+(`seed XOR 0x5A5A5A5A`), so that targets and plant draws stay identical to the
+analytical environment for the same seed: joint `armature` uniform in
+`[0.02, 0.08] kg m^2` on both joints, and a first-order lag between the torque
+the actuator is asked for and the torque it delivers, time constant uniform in
+`[10, 50] ms`, advanced on every sub-step. Sensor noise with standard deviation
+`1e-3` is added independently to each joint position (rad) and velocity
+(rad/s); one measurement per control step is drawn and the same measurement is
+handed to the controller, to the filter and to the estimator. The safety
+envelope and the outcome are scored on the exact state.
+
+### Controller under test
+
+The adaptive arm is the v1.9 controller with one extension. Every candidate
+lag `0..3` is paired with a candidate actuator time constant from the grid
+`{0, 10, 30, 60} ms`; each of the 16 hypotheses regresses on the torque an
+actuator with that lag and time constant would deliver from the sent
+commands, and the hypothesis with the smallest squared innovation accumulated
+over the episode supplies the parameters, the filter model and the state
+prediction. The true time constant never lies on the grid except by chance;
+the armature is not in the regressor at all. Two guards are part of the frozen
+controller and are counted per episode: when the estimated command-space mass
+matrix has a determinant below 5% of the nominal one, the filter and the
+prediction use the nominal model for that step; when the predicted state is
+not finite or moves more than 5 units from the current one, the command is
+evaluated at the current state. All other settings are the v1.9 defaults with
+delay compensation on; the estimator still differentiates the measured
+velocity by finite differences.
+
+### Design
+
+Four arms on the MuJoCo plant with the options above, identical draws per
+seed: `fixed`, `fixed_hocbf`, `adaptive`, `adaptive_hocbf`. The primary
+contrast is `adaptive_hocbf` minus `fixed_hocbf`; the unfiltered arms are
+descriptive.
+
+The **decision block** runs the two filtered arms on seeds `52200..54099`,
+1,900 paired episodes per scenario. The v1.9 block ended at `52099` and
+`52100..52199` are left unused as a guard band. The committed-blob seed scan
+of `tools/scan_seed_usage.py` finds no seed-named value in `52200..54099`;
+the runner repeats it and refuses to start on a hit. The pilot that informed
+this design used `9801800..9802001` and `9803000..9803219`.
+
+The **descriptive block** runs the two unfiltered arms on the first 100
+decision seeds, with no decision weight.
+
+The **transfer block** runs the unfiltered `fixed` arm on seeds
+`50000..50099` on both plants, with no sensor noise and no actuator options.
+Its analytical rows must reproduce the retained v1.3 `A0_computed_torque`
+rows exactly, which ties the campaign to earlier evidence; its MuJoCo rows,
+paired with the analytical ones seed by seed, report how far the engine alone
+moves outcomes and final distances before any actuator effect is added. It
+carries no decision weight. The campaign totals 12,600 episodes.
+
+### Endpoints and decision rule
+
+Identical to v1.9, on the decision block, paired over its 1,900 seeds with a
+10,000-draw percentile bootstrap seeded at `200000`:
+
+1. **Safety veto.** In any scenario, an unsafe-episode difference (adaptive
+   minus fixed) with a 95% lower bound above zero, or a point value above
+   `+3 pp`, yields `no_go_safety`.
+2. **Primary endpoint.** Success difference at least `+20 pp` with a 95%
+   lower bound above zero in both `id_reference` and `motor_fault`.
+3. **Non-inferiority.** Unsafe-episode difference with a 95% upper bound at
+   or below `+3 pp` in every scenario.
+4. `go` requires 2 and 3; anything else without a veto is `inconclusive`,
+   with the failed condition named.
+
+Secondary, without decision weight: the OOD success contrast; abort rates;
+intervention fractions; median final distances; maximum normalised
+violations; the fraction of adaptive episodes whose selected lag equals the
+true delay; the mean absolute difference between the selected and the true
+time constant; the number of episodes with a model or a prediction fallback;
+the per-joint RMS prediction error of the final estimate on the shared probe
+bank (seed `190001`).
+
+### What the pilot showed and what it did not
+
+On 60 fresh seeds per variant, sensor noise up to `1e-2` and reflected inertia
+alone left the v1.9 controller intact, while a 30 ms actuator lag pushed
+unsafe episodes to 5, 6 and 6 of 20 with 1, 3 and 4 aborts and a degenerate
+estimate in 17 of 60 episodes; before the guards existed one such estimate
+produced a non-finite prediction. The time-constant hypothesis bank
+identified the 30 ms constant in 60 of 60 episodes and brought the combined
+variant with noise `1e-3` to 20, 17 and 19 successes with 0, 4 and 3 unsafe
+episodes. With armature and time constant drawn from the ranges above and
+noise `1e-3`, the grid reached 20, 16 and 19 successes with 0, 5 and 1 unsafe
+against 4, 0 and 1 for the fixed filtered arm, with a mean time-constant
+selection error of 8 ms. Those seeds are not reused. The grid values and the
+guards were chosen on that pilot and are frozen here.
+
+Declared limits: the armature has no column in the regressor; the time
+constant is resolved only to the grid; the PD gains are not retuned for
+either; the estimator differentiates a noisy measured velocity; targets near
+a joint limit remain unreachable through the filter; the analytical and
+MuJoCo plants still share geometry, mass parametrisation and the absence of
+contacts, so this is a test of unmodelled actuator effects and measurement
+noise, not of a different robot.
+
+### Commands and retained evidence
+
+```bash
+python -m tools.run_mujoco_campaign --workers 6
+```
+
+The runner reuses the v1.9 checks: fixed output path
+`results/adaptive_mujoco_v20`, seal in `docs/v20_seal.json` outside the
+compared paths and required to name a full commit id that is an ancestor of
+`HEAD`, frozen paths (`sarrl/`, `tools/`, `tests/`, `docs/experiments.md`,
+`pyproject.toml`, the reproduction reference) identical to the sealed commit
+and clean, committed-tree seed scan, exclusive lock, manifest with protocol,
+tree hashes, seed scan, reference hash, runtime, MuJoCo version and execution
+fingerprint, session-tagged at-least-once journal, canonical ordered log
+reloaded for the analysis, `episodes.csv`, `decision.json` and
+`complete.json` hashing every output. All of these are retained.

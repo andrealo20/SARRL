@@ -76,7 +76,9 @@ def git(root: Path, *args: str) -> str:
     ).stdout.strip()
 
 
-def verify_frozen_sources(root: Path = ROOT, seal_file: str = V19_SEAL_FILE) -> dict:
+def verify_frozen_sources(
+    root: Path = ROOT, seal_file: str = V19_SEAL_FILE, frozen_paths=V19_FROZEN_PATHS
+) -> dict:
     """HEAD's frozen paths must equal the sealed commit and carry no local change.
 
     The seal lives outside the frozen paths, so the sealing commit can follow
@@ -105,7 +107,7 @@ def verify_frozen_sources(root: Path = ROOT, seal_file: str = V19_SEAL_FILE) -> 
         raise RuntimeError(f"{seal_file} is modified or not committed")
     head = git(root, "rev-parse", "HEAD")
     diff = subprocess.run(
-        ["git", "diff", "--quiet", frozen_commit, "HEAD", "--", *V19_FROZEN_PATHS],
+        ["git", "diff", "--quiet", frozen_commit, "HEAD", "--", *frozen_paths],
         cwd=root,
         check=False,
     )
@@ -114,16 +116,16 @@ def verify_frozen_sources(root: Path = ROOT, seal_file: str = V19_SEAL_FILE) -> 
             f"frozen paths differ between HEAD {head[:12]} and the sealed commit "
             f"{frozen_commit[:12]}"
         )
-    status = git(root, "status", "--porcelain", "--untracked-files=all", "--", *V19_FROZEN_PATHS)
+    status = git(root, "status", "--porcelain", "--untracked-files=all", "--", *frozen_paths)
     if status:
         raise RuntimeError("frozen paths carry local modifications or untracked files:\n" + status)
     return {
         "head": head,
         "sealed_commit": frozen_commit,
         "seal": seal,
-        "frozen_paths": list(V19_FROZEN_PATHS),
+        "frozen_paths": list(frozen_paths),
         "tree": git(root, "rev-parse", "HEAD^{tree}"),
-        "path_trees": {path: git(root, "rev-parse", f"HEAD:{path}") for path in V19_FROZEN_PATHS},
+        "path_trees": {path: git(root, "rev-parse", f"HEAD:{path}") for path in frozen_paths},
     }
 
 
