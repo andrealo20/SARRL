@@ -58,11 +58,14 @@ def pilot_cases(fresh_per_scenario: int, historical: bool = True) -> list[tuple[
 
 
 class NominalStack:
-    """Policy-free stack: nominal command, optional hard projection, no residual."""
+    """Nominal command, optional bounded residual policy, optional hard projection."""
 
-    def __init__(self, baseline, safety_filter=None, config=None, compensate_delay=False):
+    def __init__(
+        self, baseline, safety_filter=None, config=None, compensate_delay=False, policy=None
+    ):
         self.baseline = baseline
         self.safety_filter = safety_filter
+        self.policy = policy
         self.config = config or ControlStackConfig(require_safety=safety_filter is not None)
         self.config.validate()
         if compensate_delay and not hasattr(baseline, "predict_state"):
@@ -80,27 +83,36 @@ class NominalStack:
         baseline = self.baseline.command(state[:2], state[2:], q_des)
         zeros = np.zeros(2, dtype=np.float64)
         limit = np.asarray(self.config.torque_limit)
+        residual = zeros
+        if self.policy is not None:
+            action = np.asarray(
+                self.policy.act(observation, deterministic=deterministic), dtype=np.float64
+            )
+            if action.shape != (2,) or not np.all(np.isfinite(action)):
+                raise ValueError("policy must return a finite 2-vector")
+            residual = np.clip(action, -1.0, 1.0) * np.asarray(self.config.residual_limit)
+        candidate = baseline + residual
         common = {
             "baseline_torque": baseline,
-            "raw_residual": zeros,
-            "gated_residual": zeros,
+            "raw_residual": residual,
+            "gated_residual": residual,
             "uncertainty": zeros,
             "uncertainty_scale": 1.0,
             "ensemble_mean": zeros,
-            "ensemble_query_torque": baseline,
+            "ensemble_query_torque": candidate,
         }
         if self.safety_filter is None:
             return ControlStackResult(
-                torque=np.clip(baseline, -limit, limit),
+                torque=np.clip(candidate, -limit, limit),
                 safety_correction=0.0,
                 safety_certified=False,
                 executable=True,
                 **common,
             )
-        safety = self.safety_filter.filter(state, baseline, obstacles)
+        safety = self.safety_filter.filter(state, candidate, obstacles)
         if not safety.success:
             return ControlStackResult(
-                torque=np.clip(baseline, -limit, limit),
+                torque=np.clip(candidate, -limit, limit),
                 safety_correction=safety.correction_norm,
                 safety_certified=False,
                 executable=not self.config.require_safety,
@@ -147,9 +159,15 @@ class PilotEpisode:
     selected_time_constant: float | None = None
     true_time_constant: float | None = None
     true_armature: float | None = None
+    residual_rms: float | None = None
+
+
+RESIDUAL_SUFFIX = "_residual"
 
 
 def build_arm(arm: str, config: AdaptiveNominalConfig):
+    if arm.endswith(RESIDUAL_SUFFIX):
+        arm = arm[: -len(RESIDUAL_SUFFIX)]
     nominal = PlanarArm()
     safety_config = planar_safety_config()
     if arm == "fixed":
@@ -164,10 +182,20 @@ def build_arm(arm: str, config: AdaptiveNominalConfig):
     raise ValueError(f"unknown arm {arm}")
 
 
-def build_stack(arm: str, config: AdaptiveNominalConfig, compensate_delay: bool = False):
+def build_stack(
+    arm: str, config: AdaptiveNominalConfig, compensate_delay: bool = False, policy=None
+):
+    """Arms ending in `_residual` add a bounded policy residual to the nominal command."""
+    if arm.endswith(RESIDUAL_SUFFIX) != (policy is not None):
+        raise ValueError("a residual arm needs a policy and a nominal arm must not carry one")
     controller, safety_filter = build_arm(arm, config)
     adaptive = isinstance(controller, AdaptiveNominalController)
-    stack = NominalStack(controller, safety_filter, compensate_delay=compensate_delay and adaptive)
+    stack = NominalStack(
+        controller,
+        safety_filter,
+        compensate_delay=compensate_delay and adaptive,
+        policy=policy,
+    )
     return controller, stack
 
 
@@ -269,18 +297,23 @@ def run_case(
     compensate_delay: bool = False,
     plant: str = "analytical",
     options: PlantOptions | None = None,
+    policy=None,
 ):
     spec = {s.key: s for s in v13_scenarios()}[scenario]
     options = options or PlantOptions()
     env = make_env(plant, spec, options)
-    controller, stack = build_stack(arm, config, compensate_delay)
+    controller, stack = build_stack(arm, config, compensate_delay, policy)
     adaptive = isinstance(controller, AdaptiveNominalController)
     if adaptive:
         controller.reset()
     converged_at = {"step": None}
     measured = MeasuredState(env) if options.sensor_noise_std > 0.0 else None
+    residual_squares = []
 
     def observe(event):
+        if policy is not None:
+            residual = np.asarray(event["command"].raw_residual, dtype=np.float64)
+            residual_squares.append(float(residual @ residual))
         if adaptive and event["info"] is not None:
             after = measured() if measured is not None else env.state
             controller.observe(event["state"], after, event["command"].torque)
@@ -338,6 +371,7 @@ def run_case(
         selected_time_constant=float(controller.time_constant) if adaptive else None,
         true_time_constant=float(getattr(env, "actuator_time_constant", 0.0)),
         true_armature=float(getattr(env, "armature", 0.0)),
+        residual_rms=float(np.sqrt(np.mean(residual_squares))) if residual_squares else None,
     )
 
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Train from-scratch SAC on the analytical SARRL reaching environment."""
+"""Train from-scratch SAC on the planar reaching environment, analytical or MuJoCo."""
 
 from __future__ import annotations
 
@@ -14,11 +14,13 @@ import numpy as np
 import torch
 
 from sarrl.adaptation import AdaptiveContextEnv, DynamicsContextEncoder
+from sarrl.controllers.adaptive_nominal import AdaptiveNominalConfig
 from sarrl.envs import (
     DomainRandomization,
     PlanarReachEnv,
     SafetyProjectedEnv,
 )
+from sarrl.envs.adaptive_projected import AdaptiveProjectedEnv
 from sarrl.evaluation import (
     assert_repository_import_root,
     evaluate_policy,
@@ -64,13 +66,41 @@ def _write_json_atomically(path: Path, payload: dict) -> None:
 
 
 def _base_env(env):
-    while isinstance(env, (AdaptiveContextEnv, SafetyProjectedEnv)):
+    while isinstance(env, (AdaptiveContextEnv, SafetyProjectedEnv, AdaptiveProjectedEnv)):
         env = env.env
     return env
 
 
 def _environment_mode(env) -> str:
-    return _base_env(env).mode
+    return env.mode if isinstance(env, AdaptiveProjectedEnv) else _base_env(env).mode
+
+
+def _make_plant(plant: str, mode: str, randomization, plant_options: dict):
+    """Construct the plant; MuJoCo carries the actuator options, the analytical plant none."""
+    if plant == "analytical":
+        if any(value for value in plant_options.values()):
+            raise SystemExit("armature and actuator options need --plant mujoco")
+        return PlanarReachEnv(mode=mode, randomization=randomization)
+    if plant == "mujoco":
+        from sarrl.envs.mujoco_planar import MujocoPlanarReachEnv
+
+        return MujocoPlanarReachEnv(mode=mode, randomization=randomization, **plant_options)
+    raise SystemExit(f"unknown plant {plant}")
+
+
+def _plant_options(env) -> dict:
+    config = env.constructor_config()
+    names = ("armature", "actuator_time_constant", "armature_range", "actuator_time_constant_range")
+    return {name: config[name] for name in names if name in config}
+
+
+def _plain(value):
+    """Tuples become lists so that a stored configuration compares to a fresh one."""
+    if isinstance(value, dict):
+        return {key: _plain(item) for key, item in value.items()}
+    if isinstance(value, (list, tuple)):
+        return [_plain(item) for item in value]
+    return value
 
 
 def _validation_env(
@@ -81,6 +111,16 @@ def _validation_env(
 ):
     """Construct an independent deterministic validation environment."""
     base = _base_env(env)
+
+    if isinstance(env, AdaptiveProjectedEnv):
+        val_base = _make_plant(env.plant, "torque", base.randomization, _plant_options(base))
+        return AdaptiveProjectedEnv(
+            val_base,
+            env.config,
+            safety_config=env.safety_config,
+            infeasible_reward=infeasible_reward,
+            compensate_delay=env.compensate_delay,
+        )
 
     val_base = PlanarReachEnv(
         mode=base.mode,
@@ -165,6 +205,29 @@ def main() -> int:
         help="Evaluate validation checkpoints through the required HOCBF.",
     )
     p.add_argument("--infeasible-reward", type=float, default=-500.0)
+    p.add_argument("--plant", choices=["analytical", "mujoco"], default="analytical")
+    p.add_argument(
+        "--nominal",
+        choices=["fixed", "adaptive"],
+        default="fixed",
+        help=(
+            "Baseline inside the residual composition: the fixed computed torque, or the "
+            "identified nominal with the HOCBF on its estimate (requires --training-hocbf)."
+        ),
+    )
+    p.add_argument("--sensor-noise", type=float, default=0.0)
+    p.add_argument("--armature-range", type=float, nargs=2, default=None, metavar=("LOW", "HIGH"))
+    p.add_argument(
+        "--actuator-tau-range", type=float, nargs=2, default=None, metavar=("LOW", "HIGH")
+    )
+    p.add_argument(
+        "--actuator-grid",
+        type=float,
+        nargs="+",
+        default=(0.0,),
+        help="Actuator time-constant hypotheses of the identified nominal, in seconds.",
+    )
+    p.add_argument("--no-delay-compensation", action="store_true")
     p.add_argument("--validation-infeasible-reward", type=float, default=None)
     p.add_argument(
         "--context-checkpoint",
@@ -201,6 +264,26 @@ def main() -> int:
         raise SystemExit("HOCBF training is not combined with adaptive context")
     if not np.isfinite(args.infeasible_reward) or args.infeasible_reward >= 0.0:
         raise SystemExit("--infeasible-reward must be finite and negative")
+    if args.nominal == "adaptive" and not (args.training_hocbf and args.mode == "residual"):
+        raise SystemExit("--nominal adaptive requires --mode residual and --training-hocbf")
+    if args.nominal == "adaptive" and args.context_checkpoint is not None:
+        raise SystemExit("--nominal adaptive is not combined with adaptive context")
+    if args.sensor_noise < 0.0 or not np.isfinite(args.sensor_noise):
+        raise SystemExit("--sensor-noise must be finite and non-negative")
+    plant_options = {
+        "armature_range": None if args.armature_range is None else tuple(args.armature_range),
+        "actuator_time_constant_range": (
+            None if args.actuator_tau_range is None else tuple(args.actuator_tau_range)
+        ),
+    }
+    plant_config = {
+        "plant": args.plant,
+        "nominal": args.nominal,
+        "sensor_noise": args.sensor_noise,
+        "plant_options": plant_options,
+        "actuator_grid": tuple(args.actuator_grid),
+        "compensate_delay": not args.no_delay_compensation,
+    }
     validation_reward = _validation_reward(
         args.infeasible_reward, args.validation_infeasible_reward
     )
@@ -260,6 +343,13 @@ def main() -> int:
         explicit_validation = explicit_validation or "validation_infeasible_reward" in trainer_cfg
         if "training_seed" in trainer_cfg and trainer_cfg["training_seed"] != args.seed:
             raise SystemExit("resume training seed does not match the checkpoint")
+        stored_plant = trainer_cfg.get("plant_config")
+        if stored_plant is not None and _plain(stored_plant) != _plain(plant_config):
+            raise SystemExit("resume plant or nominal configuration does not match the checkpoint")
+        if stored_plant is None and (
+            args.plant != "analytical" or args.nominal != "fixed" or args.sensor_noise != 0.0
+        ):
+            raise SystemExit("cannot change plant or nominal while resuming an older session")
         if (
             "validation_config" in trainer_cfg
             and trainer_cfg["validation_config"] != validation_config
@@ -314,13 +404,18 @@ def main() -> int:
                 motor_gain_fraction=0.15,
                 payload_range=(0.0, 1.0),
                 action_delay_max=2,
+                sensor_noise_std=args.sensor_noise,
             )
             if args.randomize
-            else DomainRandomization()
+            else DomainRandomization(sensor_noise_std=args.sensor_noise)
         )
-        base_env = PlanarReachEnv(
-            mode=args.mode,
-            randomization=dr,
+        # The identified nominal drives a torque-mode plant and composes the
+        # residual itself; every other configuration keeps the plant's own mode.
+        base_env = _make_plant(
+            args.plant,
+            "torque" if args.nominal == "adaptive" else args.mode,
+            dr,
+            plant_options,
         )
 
         context_checkpoint_path = None
@@ -340,6 +435,13 @@ def main() -> int:
                 base_env,
                 encoder,
                 device="cpu",
+            )
+        elif args.nominal == "adaptive":
+            env = AdaptiveProjectedEnv(
+                base_env,
+                AdaptiveNominalConfig(actuator_time_constants=tuple(args.actuator_grid)),
+                infeasible_reward=infeasible_reward,
+                compensate_delay=not args.no_delay_compensation,
             )
         elif training_hocbf:
             env = SafetyProjectedEnv(
@@ -385,6 +487,7 @@ def main() -> int:
         "training_hocbf": training_hocbf,
         "validation_hocbf": validation_hocbf,
         "infeasible_reward": infeasible_reward,
+        "plant_config": plant_config,
     }
     if explicit_validation:
         trainer_config["training_seed"] = args.seed

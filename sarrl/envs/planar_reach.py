@@ -290,6 +290,11 @@ class PlanarReachEnv:
             "arm_params": asdict(self.arm.params),
             "rng_state": self._rng.bit_generator.state,
             "noise_rng_state": self._noise_rng.bit_generator.state,
+            "episode_counter": int(getattr(self, "_episode_counter", 0)),
+            "sensed_key": getattr(self, "_sensed_key", None),
+            "sensed_cache": (
+                None if getattr(self, "_sensed_key", None) is None else self._sensed_cache.copy()
+            ),
         }
 
     @classmethod
@@ -337,6 +342,13 @@ class PlanarReachEnv:
         self.arm = PlanarArm(PlanarArmParams(**state["arm_params"]))
         self._rng.bit_generator.state = state["rng_state"]
         self._noise_rng.bit_generator.state = state["noise_rng_state"]
+        # The cached sensor sample continues the noise stream exactly; older
+        # checkpoints without it start a fresh sample at the next read.
+        self._episode_counter = int(state.get("episode_counter", 0))
+        key = state.get("sensed_key")
+        self._sensed_key = None if key is None else tuple(int(k) for k in key)
+        if self._sensed_key is not None:
+            self._sensed_cache = np.asarray(state["sensed_cache"], dtype=np.float64).copy()
 
     def step_torque(self, commanded, baseline=None):
         """Advance the plant with a physical torque command in N m.

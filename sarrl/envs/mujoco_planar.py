@@ -114,6 +114,10 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         # part of the controller's parametrisation.
         self.armature = float(armature)
         self.actuator_time_constant = float(actuator_time_constant)
+        # Constructor values, kept apart from the per-episode draws so that the
+        # constructor configuration stays constant across episodes.
+        self._armature_base = float(armature)
+        self._actuator_time_constant_base = float(actuator_time_constant)
         # Optional per-episode randomisation of the actuator, drawn from a generator
         # seeded apart from the benchmark's so that targets and plant draws stay
         # identical to the analytical environment for the same seed.
@@ -190,8 +194,28 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
             )
         return self._actuator_torque
 
+    def state_dict(self) -> dict:
+        state = super().state_dict()
+        state.update(
+            {
+                "armature_value": self.armature,
+                "actuator_time_constant_value": self.actuator_time_constant,
+                "actuator_torque": self._actuator_torque.copy(),
+                "actuator_rng_state": self._actuator_rng.bit_generator.state,
+            }
+        )
+        return state
+
     def load_state_dict(self, state: dict) -> None:
         super().load_state_dict(state)
+        if "armature_value" in state:
+            self.armature = float(state["armature_value"])
+            self.actuator_time_constant = float(state["actuator_time_constant_value"])
+            torque = np.asarray(state["actuator_torque"], dtype=np.float64)
+            if torque.shape != (2,) or not np.all(np.isfinite(torque)):
+                raise ValueError("invalid actuator torque state")
+            self._actuator_torque = torque.copy()
+            self._actuator_rng.bit_generator.state = state["actuator_rng_state"]
         self._sync_plant()
 
     def _activate_fault_if_due(self) -> None:
@@ -270,8 +294,8 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
             {
                 "timestep": self.timestep,
                 "integrator": self.integrator,
-                "armature": self.armature,
-                "actuator_time_constant": self.actuator_time_constant,
+                "armature": self._armature_base,
+                "actuator_time_constant": self._actuator_time_constant_base,
                 "armature_range": self.armature_range,
                 "actuator_time_constant_range": self.actuator_time_constant_range,
             }

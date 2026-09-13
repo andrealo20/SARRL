@@ -94,6 +94,10 @@ def load_training_session(path):
         from sarrl.adaptation import AdaptiveContextEnv
 
         env = AdaptiveContextEnv.from_state_dict(env_state)
+    elif env_state.get("environment_type") == "adaptive_projected":
+        from sarrl.envs.adaptive_projected import AdaptiveProjectedEnv
+
+        env = AdaptiveProjectedEnv.from_state_dict(env_state)
     else:
         env = PlanarReachEnv.from_state_dict(env_state)
 

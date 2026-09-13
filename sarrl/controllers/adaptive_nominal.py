@@ -216,6 +216,56 @@ class AdaptiveNominalController:
         self._step_uses_nominal = False
         self._sent: list[np.ndarray] = []
 
+    def state_dict(self) -> dict:
+        """Every mutable field, so a training session can checkpoint mid-episode."""
+        return {
+            "theta": self.theta.copy(),
+            "covariance": self.covariance.copy(),
+            "error_score": self.error_score.copy(),
+            "recent_score": self.recent_score.copy(),
+            "delivered": self._delivered.copy(),
+            "updates": int(self.updates),
+            "converged": bool(self._converged),
+            "prediction_fallbacks": int(self.prediction_fallbacks),
+            "model_fallbacks": int(self.model_fallbacks),
+            "model_fallback_steps": int(self.model_fallback_steps),
+            "control_steps": int(self.control_steps),
+            "step_uses_nominal": bool(self._step_uses_nominal),
+            "sent": [x.copy() for x in self._sent],
+        }
+
+    def load_state_dict(self, state: dict) -> None:
+        count = len(self.hypotheses)
+        shapes = {
+            "theta": (count, 2, 7),
+            "covariance": (count, 2, 7, 7),
+            "error_score": (count,),
+            "recent_score": (count,),
+            "delivered": (count, 2),
+        }
+        values = {}
+        for name, shape in shapes.items():
+            value = np.asarray(state[name], dtype=np.float64)
+            if value.shape != shape or not np.all(np.isfinite(value)):
+                raise ValueError(f"invalid estimator checkpoint field {name}")
+            values[name] = value.copy()
+        sent = [np.asarray(x, dtype=np.float64).copy() for x in state["sent"]]
+        if any(x.shape != (2,) or not np.all(np.isfinite(x)) for x in sent):
+            raise ValueError("invalid estimator command history")
+        self.theta = values["theta"]
+        self.covariance = values["covariance"]
+        self.error_score = values["error_score"]
+        self.recent_score = values["recent_score"]
+        self._delivered = values["delivered"]
+        self.updates = int(state["updates"])
+        self._converged = bool(state["converged"])
+        self.prediction_fallbacks = int(state["prediction_fallbacks"])
+        self.model_fallbacks = int(state["model_fallbacks"])
+        self.model_fallback_steps = int(state["model_fallback_steps"])
+        self.control_steps = int(state["control_steps"])
+        self._step_uses_nominal = bool(state["step_uses_nominal"])
+        self._sent = sent
+
     @property
     def hypothesis(self) -> int:
         """Index of the (lag, time constant) hypothesis that explains the data best."""
