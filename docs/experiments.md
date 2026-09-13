@@ -1313,8 +1313,9 @@ first hundred of those seeds per scenario, 300 episodes. The block starts
 after the v2.0 decision block (`52200..54099`) and a guard band. Before the
 first episode the runner scans every committed CSV, JSON and JSONL blob of
 every commit reachable from any ref (one scan per distinct tree, one read
-per distinct blob) for seed-named values in the range, records the trees
-scanned in the manifest, and checks the range against
+per distinct blob) for seed-named values in the range, records the
+reachable-commit count and the representative commit and tree of every
+distinct tree in the manifest, and checks the range against
 `docs/seed_registry.json`, an append-only registry
 of every seed range the project has opened, official or local (pilots,
 training validation, smoke runs), where the block must be reserved exactly
@@ -1414,7 +1415,8 @@ What the campaign cannot show: it does not decide which certificate a
 deployment should use, because the two trade rate against severity and
 that weighing is outside the benchmark; it does not separate the delay
 prediction from the estimate inside the identified controller stack (the
-descriptive arm only indicates the share); and it says nothing about the
+descriptive arm measures the prediction's effect within that stack only);
+and it says nothing about the
 analytical plant, the learned policies or an obstacle.
 
 The certificate-only estimator's behaviour is fixed by tests that spy on
@@ -1438,7 +1440,8 @@ drops a truncated final record (the cell runs again) while any other
 malformed, unplanned or duplicate record stops it. The launch guards live
 in `tools/campaign_guards.py` and are tested without the simulator. The
 retained directory is exempt from the repository's `results/` ignore rule,
-apart from the lock file. The official invocation is
+apart from the lock file, and `.gitignore` is a frozen path. The official
+invocation is
 `python -m tools.run_factorial_campaign --workers 6` from the repository
 root. Retained under `results/certificate_factorial_v21/`: `manifest.json`
 (protocol, frozen-source hashes, seed scan over every reachable commit,

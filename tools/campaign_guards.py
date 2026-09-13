@@ -22,8 +22,8 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def reachable_trees(root: Path) -> list[tuple[str, str]]:
-    """(commit, tree) of every commit reachable from any ref, one entry per distinct tree."""
+def reachable_trees(root: Path) -> tuple[list[tuple[str, str]], int]:
+    """One (commit, tree) per distinct tree over every reachable commit, and the commit count."""
     output = subprocess.run(
         ["git", "rev-list", "--all", "--format=%H %T", "--no-commit-header"],
         cwd=root,
@@ -33,19 +33,21 @@ def reachable_trees(root: Path) -> list[tuple[str, str]]:
     ).stdout.split("\n")
     seen = set()
     trees = []
+    commits = 0
     for line in output:
         if not line.strip():
             continue
         commit, tree = line.split()
+        commits += 1
         if tree not in seen:
             seen.add(tree)
             trees.append((commit, tree))
-    return trees
+    return trees, commits
 
 
 def seed_range_is_unopened(root: Path, low: int, high: int, registry_path: str) -> dict:
     """Scan every reachable commit's tree and the registry; raise on any collision."""
-    trees = reachable_trees(root)
+    trees, commits = reachable_trees(root)
     seen: dict = {}
     scanned = []
     for commit, tree in trees:
@@ -74,8 +76,9 @@ def seed_range_is_unopened(root: Path, low: int, high: int, registry_path: str) 
         raise RuntimeError("decision seed range is not reserved exactly once in the registry")
     return {
         "range": [low, high],
-        "commits_scanned": len(scanned),
-        "distinct_trees": [item["tree"] for item in scanned],
+        "reachable_commits": commits,
+        "distinct_trees_scanned": len(scanned),
+        "trees": scanned,
         "blobs_read": len(seen),
         "registry": registry_path,
         "reserved_entry": reserved[0],
@@ -96,26 +99,36 @@ def valid_completion_marker(path: Path, output_files: tuple[str, ...]) -> bool:
 
 
 def journal_records(journal: Path, planned: set, fields: set, cell_key: Callable) -> dict:
-    """Reload complete journal records; a truncated final record is dropped, nothing else.
+    """Reload complete journal records and repair a torn tail before any append.
 
-    An interrupted append can leave a partial last line. Every earlier line
-    must parse and validate; the last line may fail to parse, in which case
-    it is discarded and its cell runs again. A malformed line anywhere else,
-    an unplanned cell or a duplicate cell stops the resume.
+    An interrupted append can leave a partial last line, or a complete last
+    record without its newline. Every earlier line must parse and validate.
+    A partial last line is discarded and physically truncated from the file
+    (its cell runs again); a complete last record missing its newline gets
+    the newline written back. A malformed line anywhere else, an unplanned
+    cell or a duplicate cell stops the resume. Callers hold the campaign
+    lock, so the repair races with nothing.
     """
     done = {}
     if not journal.exists():
         return done
-    lines = journal.read_text().split("\n")
-    if lines and lines[-1] == "":
+    data = journal.read_bytes()
+    lines = data.split(b"\n")
+    terminated = data.endswith(b"\n")
+    if lines and lines[-1] == b"":
         lines.pop()
-    for index, line in enumerate(lines):
+    for index, raw in enumerate(lines):
+        line = raw.decode("utf-8", errors="replace")
         if not line.strip():
             continue
+        last = index == len(lines) - 1
         try:
             record = json.loads(line)
         except ValueError:
-            if index == len(lines) - 1:
+            if last and not terminated:
+                with journal.open("r+b") as handle:
+                    handle.truncate(len(data) - len(raw))
+                    handle.flush()
                 break
             raise RuntimeError(f"journal record {index + 1} is malformed") from None
         if set(record) != fields:
@@ -125,6 +138,10 @@ def journal_records(journal: Path, planned: set, fields: set, cell_key: Callable
         if key not in planned or key in done:
             raise RuntimeError(f"journal record {index + 1} is not a planned, unique cell")
         done[key] = record
+        if last and not terminated:
+            with journal.open("ab") as handle:
+                handle.write(b"\n")
+                handle.flush()
     return done
 
 

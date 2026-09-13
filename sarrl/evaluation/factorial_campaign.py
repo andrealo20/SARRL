@@ -59,8 +59,8 @@ V21_ARMS = {
 }
 V21_ARM_LABELS = tuple(V21_ARMS.values())
 V21_ESTIMATOR_ARMS = tuple(label for label in V21_ARM_LABELS if label != "fixed_hocbf")
-# Descriptive arm: the identified stack without delay prediction, so that the
-# share of the controller effect owed to the prediction can be seen.
+# Descriptive arm: the identified stack without delay prediction; its paired
+# contrast with the full stack is the prediction's effect within that stack.
 V21_NO_COMPENSATION_SUFFIX = "_nocompensation"
 V21_DESCRIPTIVE_ARM = "adaptive_hocbf" + V21_NO_COMPENSATION_SUFFIX
 V21_SCENARIOS = ("id_reference", "ood_compound", "motor_fault")
@@ -93,6 +93,7 @@ V21_FROZEN_PATHS = (
     "tests",
     "docs/experiments.md",
     "pyproject.toml",
+    ".gitignore",
     V21_REPRODUCTION_REFERENCE,
     V21_SEED_REGISTRY,
 )

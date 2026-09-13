@@ -32,14 +32,25 @@ def _key(record):
     return (record["arm"], record["seed"])
 
 
-def test_journal_drops_only_a_truncated_final_record(tmp_path):
+def test_journal_repairs_a_torn_tail_so_that_appends_stay_well_formed(tmp_path):
     journal = tmp_path / "journal.jsonl"
     fields = {"arm", "seed", "value", "session"}
     planned = {("a", 1), ("a", 2), ("a", 3)}
-    good = [json.dumps({"arm": "a", "seed": s, "value": s, "session": "x"}) for s in (1, 2)]
-    journal.write_text("\n".join(good) + "\n" + '{"arm": "a", "seed": 3, "val')
+    good = [json.dumps({"arm": "a", "seed": s, "value": s, "session": "x"}) for s in (1, 2, 3)]
+    # A partial last line is truncated from the file; the next append is clean.
+    journal.write_text("\n".join(good[:2]) + "\n" + '{"arm": "a", "seed": 3, "val')
     done = guards.journal_records(journal, planned, fields, _key)
     assert set(done) == {("a", 1), ("a", 2)}
+    with journal.open("a") as handle:
+        handle.write(good[2] + "\n")
+    assert set(guards.journal_records(journal, planned, fields, _key)) == planned
+    # A complete last record without its newline gets the newline back.
+    journal.write_text("\n".join(good[:2]))
+    assert set(guards.journal_records(journal, planned, fields, _key)) == {("a", 1), ("a", 2)}
+    assert journal.read_bytes().endswith(b"\n")
+    with journal.open("a") as handle:
+        handle.write(good[2] + "\n")
+    assert set(guards.journal_records(journal, planned, fields, _key)) == planned
     # A malformed record that is not the last one stops the resume.
     journal.write_text(good[0] + "\n" + '{"arm": "a"' + "\n" + good[1] + "\n")
     with pytest.raises(RuntimeError, match="malformed"):
@@ -87,11 +98,12 @@ def test_decision_range_is_checked_against_history_and_registry(monkeypatch, tmp
         )
     )
     trees = [("c1", "t1"), ("c2", "t2")]
-    monkeypatch.setattr(guards, "reachable_trees", lambda root: trees)
+    monkeypatch.setattr(guards, "reachable_trees", lambda root: (trees, 3))
     monkeypatch.setattr(guards, "committed_blobs", lambda root, tree: [("x.csv", tree)])
     monkeypatch.setattr(guards, "scan_blobs", lambda root, entries, low, high, seen: [])
     report = guards.seed_range_is_unopened(tmp_path, 200, 299, "registry.json")
-    assert report["commits_scanned"] == 2 and report["distinct_trees"] == ["t1", "t2"]
+    assert report["reachable_commits"] == 3 and report["distinct_trees_scanned"] == 2
+    assert [item["commit"] for item in report["trees"]] == ["c1", "c2"]
     assert report["reserved_entry"]["label"] == "new"
     with pytest.raises(RuntimeError, match="registered"):
         guards.seed_range_is_unopened(tmp_path, 150, 250, "registry.json")
@@ -107,7 +119,25 @@ def test_decision_range_is_checked_against_history_and_registry(monkeypatch, tmp
 def test_reachable_trees_lists_distinct_trees_of_the_real_repository():
     if not (ROOT / ".git").exists():
         pytest.skip("needs the git repository")
-    trees = guards.reachable_trees(ROOT)
-    assert len(trees) > 50
+    trees, commits = guards.reachable_trees(ROOT)
+    assert commits >= len(trees) > 50
     assert len({tree for _, tree in trees}) == len(trees)
     assert all(len(commit) == 40 and len(tree) == 40 for commit, tree in trees)
+
+
+def test_retained_v21_outputs_are_not_ignored_while_the_lock_is():
+    import subprocess
+
+    if not (ROOT / ".git").exists():
+        pytest.skip("needs the git repository")
+    from sarrl.evaluation.factorial_campaign import V21_FROZEN_PATHS, V21_OUTPUT
+
+    assert ".gitignore" in V21_FROZEN_PATHS
+    names = ["manifest.json", "journal.jsonl", "episodes.jsonl", "episodes.csv", "decision.json"]
+    names += ["complete.json", "campaign.lock"]
+    paths = [f"{V21_OUTPUT}/{name}" for name in names]
+    result = subprocess.run(
+        ["git", "check-ignore", "--no-index", *paths], cwd=ROOT, capture_output=True, text=True
+    )
+    ignored = set(result.stdout.split())
+    assert ignored == {f"{V21_OUTPUT}/campaign.lock"}
