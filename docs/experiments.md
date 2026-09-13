@@ -1166,3 +1166,10 @@ learned residual policies were not evaluated on this plant. The official
 invocation was `python -m tools.run_mujoco_campaign --workers 6` from the
 repository root.
 
+`tools/make_v20_figure.py` draws the README figure for this release: a replay
+of the first motor-fault decision seed on which the fixed arm timed out and
+the identified arm succeeded without an unsafe step, and the selected against
+true actuator time constant over the adaptive decision episodes read from
+`results/adaptive_mujoco_v20/episodes.csv`. The replay reruns two episodes
+with the frozen configuration and writes nothing under `results/`.
+
