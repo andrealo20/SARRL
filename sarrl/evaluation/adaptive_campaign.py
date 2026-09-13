@@ -3,11 +3,12 @@
 Everything that defines the decision lives in this module and is frozen at the
 source commit that runs the campaign: arms, seeds, endpoints, bootstrap,
 thresholds and the order in which the rule is applied. The runner only
-orchestrates episodes and writes the files; the analysis reads them back.
+orchestrates episodes and writes the files; the analysis reloads them.
 """
 
 from __future__ import annotations
 
+import csv
 import json
 from pathlib import Path
 
@@ -20,24 +21,23 @@ V19_ARMS = ("fixed", "fixed_hocbf", "adaptive", "adaptive_hocbf")
 V19_PRIMARY_ARMS = ("fixed_hocbf", "adaptive_hocbf")
 V19_SCENARIOS = ("id_reference", "ood_compound", "motor_fault")
 V19_PRIMARY_SCENARIOS = ("id_reference", "motor_fault")
-V19_SEED_START = 50000
-V19_PRIMARY_EPISODES = 2000
-V19_DESCRIPTIVE_EPISODES = 100
-# Seeds above the v1.3/v1.4 range must be unused in every retained artifact.
-V19_UNOPENED_SEED_RANGE = (50100, 51999)
-# Set by the sealing commit after the protocol freeze; the runner compares the
-# frozen source paths of HEAD against it and refuses any difference.
-V19_FROZEN_SOURCE_COMMIT: str | None = None
-V19_FROZEN_PATHS = ("sarrl", "tools", "tests", "docs/experiments.md", "pyproject.toml")
+# Decision seeds: never used as episode seeds by any retained artifact.
+V19_PRIMARY_SEED_START = 50100
+V19_PRIMARY_EPISODES = 1900
+# Reproduction seeds: the v1.3/v1.4 evaluation seeds, run by every arm and
+# reported apart; the unfiltered fixed arm must reproduce the retained A0 rows.
+V19_REPRODUCTION_SEED_START = 50000
+V19_REPRODUCTION_EPISODES = 100
+V19_REPRODUCTION_REFERENCE = "results/ood_fault_robustness/heldout_episodes.csv"
+V19_REPRODUCTION_CONTROLLER = "A0_computed_torque"
 V19_BOOTSTRAP_DRAWS = 10_000
 V19_BOOTSTRAP_SEED = 190_000
 V19_SUCCESS_GAIN = 0.20
 V19_UNSAFE_MARGIN = 0.03
 V19_COMPENSATE_DELAY = True
-
-
-def v19_episodes(arm: str) -> int:
-    return V19_PRIMARY_EPISODES if arm in V19_PRIMARY_ARMS else V19_DESCRIPTIVE_EPISODES
+# Paths compared against the sealed commit. The seal itself lives outside them.
+V19_FROZEN_PATHS = ("sarrl", "tools", "tests", "docs/experiments.md", "pyproject.toml")
+V19_SEAL_FILE = "docs/v19_seal.json"
 
 
 def v19_config() -> AdaptiveNominalConfig:
@@ -60,8 +60,24 @@ def v19_protocol_dict() -> dict:
             "metric": "success",
         },
         "seeds": {
-            arm: {scenario: [V19_SEED_START, v19_episodes(arm)] for scenario in V19_SCENARIOS}
-            for arm in V19_ARMS
+            "decision": {
+                "arms": list(V19_PRIMARY_ARMS),
+                "start": V19_PRIMARY_SEED_START,
+                "episodes_per_scenario": V19_PRIMARY_EPISODES,
+            },
+            "reproduction": {
+                "arms": list(V19_ARMS),
+                "start": V19_REPRODUCTION_SEED_START,
+                "episodes_per_scenario": V19_REPRODUCTION_EPISODES,
+                "reference": V19_REPRODUCTION_REFERENCE,
+                "reference_controller": V19_REPRODUCTION_CONTROLLER,
+                "decision_weight": False,
+            },
+            "scenarios": list(V19_SCENARIOS),
+            "unopened_range_scanned": [
+                V19_PRIMARY_SEED_START,
+                V19_PRIMARY_SEED_START + V19_PRIMARY_EPISODES - 1,
+            ],
         },
         "bootstrap": {
             "type": "paired_over_episode_seeds",
@@ -69,26 +85,33 @@ def v19_protocol_dict() -> dict:
             "seed": V19_BOOTSTRAP_SEED,
         },
         "decision": {
-            "order": ["safety_veto", "primary_success", "otherwise_inconclusive"],
+            "order": [
+                "safety_veto",
+                "primary_success",
+                "non_inferiority",
+                "otherwise_inconclusive",
+            ],
             "safety_veto": {
                 "metric": "unsafe_episode",
                 "scenarios": list(V19_SCENARIOS),
                 "veto_if": "lower_95_above_zero_or_difference_above_margin",
                 "margin": V19_UNSAFE_MARGIN,
-            },
-            "non_inferiority_secondary": {
-                "metric": "unsafe_episode",
-                "upper_95_at_or_below": V19_UNSAFE_MARGIN,
+                "outcome": "no_go_safety",
             },
             "primary_success": {
                 "minimum_gain": V19_SUCCESS_GAIN,
                 "lower_95_above": 0.0,
                 "scenarios": list(V19_PRIMARY_SCENARIOS),
             },
+            "non_inferiority": {
+                "metric": "unsafe_episode",
+                "scenarios": list(V19_SCENARIOS),
+                "upper_95_at_or_below": V19_UNSAFE_MARGIN,
+                "decision_weight": True,
+            },
             "go_requires": ["no_safety_veto", "primary_success", "non_inferiority_all_scenarios"],
         },
-        "unopened_seed_range": list(V19_UNOPENED_SEED_RANGE),
-        "frozen_source_commit": V19_FROZEN_SOURCE_COMMIT,
+        "seal_file": V19_SEAL_FILE,
         "frozen_paths": list(V19_FROZEN_PATHS),
         "state_interface": "full_state_feedback_noise_free_same_for_every_arm",
         "estimator": {
@@ -107,13 +130,24 @@ def v19_protocol_dict() -> dict:
     }
 
 
+def v19_seeds(block: str) -> range:
+    if block == "reproduction":
+        start = V19_REPRODUCTION_SEED_START
+        return range(start, start + V19_REPRODUCTION_EPISODES)
+    if block == "decision":
+        return range(V19_PRIMARY_SEED_START, V19_PRIMARY_SEED_START + V19_PRIMARY_EPISODES)
+    raise ValueError(f"unknown seed block {block}")
+
+
 def v19_cells():
     """Every (arm, scenario, seed) in the fixed order the runner executes."""
     for scenario in V19_SCENARIOS:
-        for offset in range(V19_PRIMARY_EPISODES):
+        for seed in v19_seeds("reproduction"):
             for arm in V19_ARMS:
-                if offset < v19_episodes(arm):
-                    yield arm, scenario, V19_SEED_START + offset
+                yield arm, scenario, seed
+        for seed in v19_seeds("decision"):
+            for arm in V19_PRIMARY_ARMS:
+                yield arm, scenario, seed
 
 
 def paired_difference(rows_treatment, rows_reference, metric, rng):
@@ -171,25 +205,60 @@ def cell_summary(rows: list[PilotEpisode]) -> dict:
     }
 
 
-def analyze(episodes: list[PilotEpisode]) -> dict:
+def reproduction_check(rows: list[PilotEpisode], reference_path: Path) -> dict:
+    """Compare the unfiltered fixed arm on the v1.3 seeds with the retained A0 rows."""
+    reference = {}
+    with reference_path.open(newline="") as handle:
+        for row in csv.DictReader(handle):
+            if row["controller"] == V19_REPRODUCTION_CONTROLLER:
+                reference[(row["scenario"], int(row["seed"]))] = (
+                    row["success"] == "True",
+                    float(row["final_distance"]),
+                )
+    compared = matched = 0
+    mismatches = []
+    for episode in rows:
+        key = (episode.scenario, episode.seed)
+        if key not in reference:
+            continue
+        compared += 1
+        success, distance = reference[key]
+        if episode.success == success and abs(episode.final_distance - distance) <= 1e-9:
+            matched += 1
+        else:
+            mismatches.append([episode.scenario, episode.seed])
+    return {
+        "reference": reference_path.name,
+        "reference_controller": V19_REPRODUCTION_CONTROLLER,
+        "compared": compared,
+        "matched": matched,
+        "mismatches": mismatches[:20],
+    }
+
+
+def _block(episodes, arms, block):
+    seeds = set(v19_seeds(block))
+    return {
+        (arm, scenario): [
+            e for e in episodes if e.arm == arm and e.scenario == scenario and e.seed in seeds
+        ]
+        for arm in arms
+        for scenario in V19_SCENARIOS
+    }
+
+
+def analyze(episodes: list[PilotEpisode], reference_path: Path | None = None) -> dict:
     """Apply the frozen rule. Vetoes are checked before the primary endpoint."""
-    by_cell: dict[tuple[str, str], list[PilotEpisode]] = {}
-    for episode in episodes:
-        by_cell.setdefault((episode.arm, episode.scenario), []).append(episode)
-    expected = {(arm, scenario) for arm in V19_ARMS for scenario in V19_SCENARIOS}
-    if set(by_cell) != expected:
-        raise ValueError("campaign is incomplete: missing cells")
-    for (arm, scenario), rows in by_cell.items():
-        wanted = {V19_SEED_START + offset for offset in range(v19_episodes(arm))}
-        if {r.seed for r in rows} != wanted or len(rows) != len(wanted):
-            raise ValueError(f"cell {(arm, scenario)} does not hold its {len(wanted)} seeds once")
+    if [(e.arm, e.scenario, e.seed) for e in episodes] != list(v19_cells()):
+        raise ValueError("episodes do not match the planned cells exactly, in order")
+    decision_block = _block(episodes, V19_PRIMARY_ARMS, "decision")
+    reproduction_block = _block(episodes, V19_ARMS, "reproduction")
 
     rng = np.random.default_rng(V19_BOOTSTRAP_SEED)
-    summary = {f"{arm}/{scenario}": cell_summary(rows) for (arm, scenario), rows in by_cell.items()}
     contrasts = {}
     for scenario in V19_SCENARIOS:
-        treatment = by_cell[("adaptive_hocbf", scenario)]
-        reference = by_cell[("fixed_hocbf", scenario)]
+        treatment = decision_block[("adaptive_hocbf", scenario)]
+        reference = decision_block[("fixed_hocbf", scenario)]
         contrasts[scenario] = {
             "success": paired_difference(treatment, reference, lambda r: r.success, rng),
             "unsafe_episode": paired_difference(
@@ -225,13 +294,27 @@ def analyze(episodes: list[PilotEpisode]) -> dict:
         if not_shown:
             reasons.append("unsafe-episode non-inferiority not shown in " + ", ".join(not_shown))
         decision = "go" if not reasons else "inconclusive"
-    return {
+
+    report = {
         "decision": decision,
         "inconclusive_reasons": reasons,
         "safety_vetoes": vetoes,
         "unsafe_non_inferior_at_margin": non_inferior,
         "primary_met": primary_met,
         "contrasts": contrasts,
-        "summary": summary,
+        "decision_summary": {
+            f"{arm}/{scenario}": cell_summary(rows)
+            for (arm, scenario), rows in decision_block.items()
+        },
+        "reproduction_summary": {
+            f"{arm}/{scenario}": cell_summary(rows)
+            for (arm, scenario), rows in reproduction_block.items()
+        },
         "protocol": v19_protocol_dict(),
     }
+    if reference_path is not None and reference_path.exists():
+        fixed_rows = [
+            e for (arm, _), rows in reproduction_block.items() if arm == "fixed" for e in rows
+        ]
+        report["reproduction_check"] = reproduction_check(fixed_rows, reference_path)
+    return report

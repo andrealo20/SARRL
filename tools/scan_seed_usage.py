@@ -1,26 +1,32 @@
 #!/usr/bin/env python3
 """Report every retained artifact that uses an episode seed inside a given range.
 
-Seed columns are recognised by name (`seed`, `episode_seed`, `*_seed`,
-`seed_*`), in CSV headers and JSON keys, so step counters and rewards that
-happen to fall in the range are not counted. Prints one line per hit and a
-final summary; exit status 1 when any hit exists.
+The scan reads the committed blobs of a revision (default ``HEAD``), not the
+working tree, so a local edit cannot hide a collision. Seed fields are
+recognised conservatively: any CSV column or JSON key whose name contains
+``seed`` (case-insensitive) counts, which covers ``seed``, ``episode_seed``,
+``training_seeds``, ``common_episode_seeds`` and also a few non-seed fields
+such as ``steps_per_seed``; the latter only matter if their values fall inside
+the range. Keys ending in ``start`` are expanded into a range when a sibling
+key gives the matching ``end`` or a count. Step counters and rewards are never
+seeds. Exit status 1 when any hit exists.
 """
 
 from __future__ import annotations
 
 import argparse
 import csv
+import io
 import json
 import subprocess
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+COUNT_KEYS = ("episodes", "count", "n", "num", "size", "samples", "length")
 
 
 def is_seed_key(name: str) -> bool:
-    lower = name.lower()
-    return lower == "seed" or lower.endswith("_seed") or lower.startswith("seed")
+    return "seed" in name.lower()
 
 
 def numbers(value):
@@ -40,8 +46,36 @@ def numbers(value):
             yield from numbers(item)
 
 
+def expand_ranges(node: dict):
+    """Yield (key, start, end) for seed keys ending in start with a sibling end or count."""
+    for key, value in node.items():
+        lower = key.lower()
+        if not is_seed_key(key) or not lower.endswith("start"):
+            continue
+        starts = list(numbers(value))
+        if len(starts) != 1:
+            continue
+        prefix = key[: -len("start")]
+        end_key = next((k for k in node if k.lower() == (prefix + "end").lower()), None)
+        if end_key is not None:
+            ends = list(numbers(node[end_key]))
+            if len(ends) == 1:
+                yield key, starts[0], ends[0]
+                continue
+        count_key = next(
+            (k for k in node if k.lower() in COUNT_KEYS or k.lower().endswith("episodes")), None
+        )
+        if count_key is not None:
+            counts = list(numbers(node[count_key]))
+            if len(counts) == 1 and 0 < counts[0] <= 1_000_000:
+                yield key, starts[0], starts[0] + counts[0] - 1
+
+
 def walk_json(node, path, low, high, hits, source):
     if isinstance(node, dict):
+        for key, start, end in expand_ranges(node):
+            if start <= high and end >= low:
+                hits.append((source, f"{path}/{key} range {start}..{end}", max(start, low)))
         for key, value in node.items():
             if is_seed_key(str(key)):
                 for number in numbers(value):
@@ -53,27 +87,24 @@ def walk_json(node, path, low, high, hits, source):
             walk_json(item, f"{path}[{index}]", low, high, hits, source)
 
 
-def scan_csv(path: Path, low, high, hits):
-    with path.open(newline="") as handle:
-        reader = csv.reader(handle)
-        header = next(reader, None)
-        if not header:
-            return
-        columns = [i for i, name in enumerate(header) if is_seed_key(name)]
-        if not columns:
-            return
-        for row_index, row in enumerate(reader, start=2):
-            for column in columns:
-                if column < len(row):
-                    for number in numbers(row[column]):
-                        if low <= number <= high:
-                            hits.append((str(path.relative_to(ROOT)), f"row {row_index}", number))
+def scan_csv_text(text: str, source: str, low, high, hits):
+    reader = csv.reader(io.StringIO(text))
+    header = next(reader, None)
+    if not header:
+        return
+    columns = [i for i, name in enumerate(header) if is_seed_key(name)]
+    if not columns:
+        return
+    for row_index, row in enumerate(reader, start=2):
+        for column in columns:
+            if column < len(row):
+                for number in numbers(row[column]):
+                    if low <= number <= high:
+                        hits.append((source, f"row {row_index}", number))
 
 
-def scan_json(path: Path, low, high, hits):
-    text = path.read_text()
-    source = str(path.relative_to(ROOT))
-    if path.suffix == ".jsonl":
+def scan_json_text(text: str, source: str, low, high, hits):
+    if source.endswith(".jsonl"):
         for line_number, line in enumerate(text.splitlines(), start=1):
             if line.strip():
                 walk_json(json.loads(line), f"line {line_number}", low, high, hits, source)
@@ -81,29 +112,42 @@ def scan_json(path: Path, low, high, hits):
         walk_json(json.loads(text), "", low, high, hits, source)
 
 
-def tracked_files(root: Path) -> list[Path]:
+def committed_blobs(root: Path, revision: str) -> list[tuple[str, str]]:
+    """(path, blob id) of every CSV/JSON/JSONL file in the revision's tree."""
     output = subprocess.run(
-        ["git", "ls-files", "-z"], cwd=root, capture_output=True, check=True
-    ).stdout
-    return [root / name for name in output.decode().split("\0") if name]
+        ["git", "ls-tree", "-r", "-z", revision], cwd=root, capture_output=True, check=True
+    ).stdout.decode()
+    entries = []
+    for record in output.split("\0"):
+        if not record:
+            continue
+        meta, path = record.split("\t", 1)
+        _, kind, blob = meta.split(" ")
+        if kind == "blob" and path.endswith((".csv", ".json", ".jsonl")):
+            entries.append((path, blob))
+    return entries
 
 
-def scan_tracked(root: Path, low: int, high: int) -> dict:
-    """Scan every tracked CSV/JSON/JSONL file for seed values in [low, high]."""
-    global ROOT
-    ROOT = root
+def scan_revision(root: Path, low: int, high: int, revision: str = "HEAD") -> dict:
+    """Scan the committed CSV/JSON/JSONL blobs of a revision for seeds in [low, high]."""
     hits: list[tuple[str, str, int]] = []
-    scanned = 0
-    for path in tracked_files(root):
-        if path.suffix == ".csv":
-            scan_csv(path, low, high, hits)
-            scanned += 1
-        elif path.suffix in (".json", ".jsonl"):
-            scan_json(path, low, high, hits)
-            scanned += 1
+    entries = committed_blobs(root, revision)
+    for path, blob in entries:
+        text = subprocess.run(
+            ["git", "cat-file", "-p", blob], cwd=root, capture_output=True, check=True
+        ).stdout.decode("utf-8", errors="replace")
+        if path.endswith(".csv"):
+            scan_csv_text(text, path, low, high, hits)
+        else:
+            scan_json_text(text, path, low, high, hits)
+    tree = subprocess.run(
+        ["git", "rev-parse", f"{revision}^{{tree}}"], cwd=root, capture_output=True, check=True
+    ).stdout.decode().strip()
     return {
+        "revision": revision,
+        "tree": tree,
         "range": [low, high],
-        "files_scanned": scanned,
+        "files_scanned": len(entries),
         "hits": len(hits),
         "distinct_seeds": sorted({number for _, _, number in hits}),
         "files_with_hits": sorted({source for source, _, _ in hits}),
@@ -115,17 +159,19 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--low", type=int, required=True)
     parser.add_argument("--high", type=int, required=True)
+    parser.add_argument("--revision", default="HEAD")
     parser.add_argument("--json", action="store_true", help="print the summary as JSON")
     args = parser.parse_args()
-    summary = scan_tracked(ROOT, args.low, args.high)
+    summary = scan_revision(ROOT, args.low, args.high, args.revision)
     if args.json:
         print(json.dumps(summary, indent=1))
     else:
         for source, where, number in summary["examples"]:
             print(f"{source}: {where}: {number}")
         print(
-            f"scanned {summary['files_scanned']} tracked CSV/JSON files; {summary['hits']} "
-            f"seed hits in {args.low}..{args.high} across {len(summary['files_with_hits'])} files"
+            f"scanned {summary['files_scanned']} committed CSV/JSON files at {args.revision}; "
+            f"{summary['hits']} seed hits in {args.low}..{args.high} across "
+            f"{len(summary['files_with_hits'])} files"
         )
     return 1 if summary["hits"] else 0
 

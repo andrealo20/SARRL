@@ -778,19 +778,29 @@ Four arms run on identical episode seeds, plant draws and targets:
 - `adaptive_hocbf`: the adaptive nominal behind the HOCBF on the identified
   model, with delay compensation.
 
-The two filtered arms run on seeds `50000..51999` in each of the three v1.3
-scenarios (`id_reference`, `ood_compound`, `motor_fault`), 2,000 paired
-episodes per scenario. The first 100 seeds are those of the v1.3 and v1.4
-campaigns, so `fixed` reproduces the retained A0 rows and the adaptive arms
-are scored on the population the learned policies were scored on. The
-remaining 1,900 have not been used as episode seeds by any retained
-artifact: `tools/scan_seed_usage.py` scans every tracked CSV, JSON and
-JSON-lines file for values of seed-named columns and keys in `50100..51999`
-(step counters and rewards are not seeds), finds none, and the runner repeats
-that scan and records its result in the manifest before the first episode.
-The two unfiltered arms run on the first 100 seeds only. None of the official
-seeds was opened by the pilot, which used `9801800..9802001` and
-`9803000..9803219`. The campaign totals 12,600 episodes.
+Episodes fall into two blocks in each of the three v1.3 scenarios
+(`id_reference`, `ood_compound`, `motor_fault`).
+
+The **decision block** runs the two filtered arms on seeds `50100..51999`,
+1,900 paired episodes per scenario. These seeds have never been used as
+episode seeds by any retained artifact: `tools/scan_seed_usage.py` reads the
+committed CSV, JSON and JSON-lines blobs of `HEAD` (432 files), recognises any
+column or key whose name contains `seed`, expands `*_start` keys into ranges
+with their sibling end or count, and finds no value in `50100..51999`. Step
+counters and rewards are not seeds. The runner repeats that scan against the
+committed tree, refuses to start on a hit, and records the result in the
+manifest. None of these seeds was opened by the pilot, which used
+`9801800..9802001` and `9803000..9803219`.
+
+The **reproduction block** runs all four arms on seeds `50000..50099`, the
+v1.3 and v1.4 evaluation seeds, and carries no decision weight. It links the
+campaign to retained evidence: the unfiltered `fixed` arm must reproduce the
+retained `A0_computed_torque` rows of `results/ood_fault_robustness/heldout_episodes.csv`
+on success and final distance, and the analysis records how many of the 300
+rows match. Those seeds were opened by earlier campaigns after which the
+adaptive controller was designed, so they do not enter the decision.
+
+The campaign totals 12,600 episodes.
 
 The primary contrast is `adaptive_hocbf` minus `fixed_hocbf`. The two
 unfiltered arms are descriptive: they separate the effect of the model from
@@ -798,8 +808,9 @@ the effect of the filter but carry no decision weight.
 
 ### Endpoints and decision rule
 
-All contrasts are paired over the 2,000 episode seeds with a 10,000-draw
-percentile bootstrap seeded at `190000`. The rule is applied in this order:
+All contrasts are computed on the decision block, paired over its 1,900
+episode seeds, with a 10,000-draw percentile bootstrap seeded at `190000`.
+The rule is applied in this order:
 
 1. **Safety veto.** For each of the three scenarios, the paired difference in
    unsafe-episode rate (adaptive minus fixed) triggers the veto if its 95%
@@ -815,8 +826,8 @@ percentile bootstrap seeded at `190000`. The rule is applied in this order:
 
 The margins are sized to the precision the sample affords. At the
 unsafe-episode rates the fixed filtered arm showed in the pilot (roughly
-5..15%), 2,000 paired episodes give a 95% interval half-width of about
-1.4..2.2 pp, so two arms with identical rates show non-inferiority at `+3 pp`
+5..15%), 1,900 paired episodes give a 95% interval half-width of about
+1.4..2.3 pp, so two arms with identical rates show non-inferiority at `+3 pp`
 in most draws, a worsening of about 3 pp or more is detected by the veto, and
 a worsening between those sizes leaves the safety claim open and the decision
 `inconclusive`. A `go` therefore supports the claim "recovers success without
@@ -857,17 +868,21 @@ model being adequate over at most three steps.
 python tools/run_adaptive_campaign.py --workers 4
 ```
 
-The output path is fixed to `results/adaptive_nominal_v19` and the runner
-refuses to start if it exists, so the official seeds are opened once. The
-protocol is sealed in two commits: the freeze commit fixes this section and
-the code, and a sealing commit records the freeze commit's hash in
-`V19_FROZEN_SOURCE_COMMIT`. Before the first episode the runner checks that
-`sarrl/`, `tools/`, `tests/`, `docs/experiments.md` and `pyproject.toml` at
-`HEAD` are identical to the sealed commit and carry no modification or
-untracked file, repeats the seed scan, and writes `manifest.json` with the
-protocol, the commit, the tree hashes of the frozen paths, the installed
-Python distributions and the runtime. Episodes are appended to
-`episodes.jsonl` as they complete; the analysis reloads that file rather than
-in-memory objects, checks that it holds exactly the planned cells, and writes
-`episodes.csv`, `decision.json` with the full analysis, and `complete.json`
-hashing every output. All of these are retained.
+The output path is fixed to `results/adaptive_nominal_v19`. The protocol is
+sealed in two commits: the freeze commit fixes this section and the code, and
+a sealing commit writes the freeze commit's hash to `docs/v19_seal.json`,
+which lies outside the compared paths so that the seal does not invalidate
+itself. Before the first episode the runner checks that `sarrl/`, `tools/`,
+`tests/`, `docs/experiments.md` and `pyproject.toml` at `HEAD` are identical
+to the sealed commit and carry no modification or untracked file, that the
+seal file is committed and unmodified, repeats the seed scan against the
+committed tree, and writes `manifest.json` with the protocol, the commit, the
+tree hashes of the frozen paths, the seed scan, the installed Python
+distributions and the runtime. Episodes are appended to `episodes.jsonl` as
+they complete. An interrupted run resumes only if the existing manifest
+carries the same protocol and source tree and the log is an exact ordered
+prefix of the planned cells; a run with `complete.json` is never repeated. The
+analysis reloads the log rather than in-memory objects, checks that it holds
+exactly the planned cells, and writes `episodes.csv`, `decision.json` with
+the full analysis and the reproduction check, and `complete.json` hashing
+every output. All of these are retained.
