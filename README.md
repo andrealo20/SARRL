@@ -27,6 +27,7 @@ On the randomized planar held-out benchmark:
 | Residual SAC + uncertainty gate | 15.2% ± 1.6 pp | 0.0% | 3.2% ± 0.8 pp |
 | Residual SAC + HOCBF | 49.2% ± 7.9 pp | 3.0% ± 0.7 pp | 16.4% ± 1.1 pp |
 | Full adaptive stack | 17.0% ± 2.3 pp | 0.0% | 2.8% ± 0.4 pp |
+| **Identified nominal + HOCBF (v1.9, no learning)** | **91.0%** | **85.0%** | **92.0%** |
 
 The v1.2 campaign established the benefit of residual learning over Direct SAC. The v1.3 campaign reused the frozen policies on new paired seeds: every learned controller degraded sharply under compound OOD dynamics and abrupt motor loss. Learned context retained the highest success, but did not solve robustness. The gate stayed near minimum authority, and hard-HOCBF stacks explicitly rejected 86/3,000 episodes when projection became infeasible.
 
@@ -72,7 +73,23 @@ candidate was vetoed on safety. The nominal controller and the safety
 certificate share one model, and both are wrong by the same amount when the
 plant departs from it.
 
-Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. Evidence remains limited to the analytical planar benchmark.
+v1.9 replaced that fixed model with one identified online. Each joint's
+torque equation, divided by its motor gain, is linear in seven parameters
+and has the sent command on its left-hand side, so recursive least squares on
+the measured velocity identifies masses, inertias, payload, friction and gain
+together; one estimator per candidate actuator lag runs in parallel and the
+best-fitting lag is used to predict the state at which the next command will
+act. The identified model drives both the computed-torque nominal and the
+HOCBF certificate. On 1,900 fresh paired episodes per scenario, behind the
+same filter, success rose from **12.6% to 90.0%** in distribution, from
+**3.1% to 90.2%** under motor fault and from **0.1% to 81.6%** under compound
+OOD, while unsafe episodes fell in every scenario (`-4.7`, `-24.3` and
+`-10.8 pp`, all intervals excluding zero). The preregistered decision is
+**go**. On the v1.3 seeds the adaptive filtered stack reaches 91%, 92% and 85%
+success, against 62%, 33% and 12% for the best learned policy on the same
+seeds. No learning is involved in this result.
+
+Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. The v1.9 row is a single deterministic controller on the same 100 seeds per scenario (the v1.3 `50000..50099` seeds, run as the reproduction block of the v1.9 campaign); its decision rests on 1,900 further paired seeds per scenario. Evidence remains limited to the analytical planar benchmark.
 
 ### Safety
 
@@ -122,7 +139,7 @@ The planar stack requires NumPy, SciPy and PyTorch; MuJoCo and Gymnasium are not
 
 ## Limitations
 
-The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training and v1.8 penalty-ablation campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation and v1.9 adaptive-nominal campaigns are complete; MuJoCo, Franka, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 
@@ -133,7 +150,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {1.8.0},
+  version = {1.9.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```

@@ -1,0 +1,11 @@
+{
+ "decision": "go",
+ "episodes": 12600,
+ "hashes": {
+  "decision.json": "da19eaccc82a7edae62d56623a15a6500e12f9a4fa67c9671a9eebf12fad208e",
+  "episodes.csv": "7f1fe86ca429ee2c52587166a4e6305afc15dece063d39c5d731f211f3afacd5",
+  "episodes.jsonl": "2a7abf95aaff91c88742791639ade966671b81ea1402cb8063425733741ce454",
+  "journal.jsonl": "848317fe4af514601f967e9cb62de504c50bbed9212363bbae288f2ffc332bc0",
+  "manifest.json": "05d72a47345686ab9620ed8aff156f9cae3c8aa8f3d1ab1c0dc97af1a5890382"
+ }
+}

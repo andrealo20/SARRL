@@ -1,0 +1,250 @@
+{
+ "execution": {
+  "installed_distributions": {
+   "Jinja2": "3.1.6",
+   "MarkupSafe": "3.0.3",
+   "Pygments": "2.21.0",
+   "cuda-bindings": "13.3.1",
+   "cuda-pathfinder": "1.6.0",
+   "cuda-toolkit": "13.0.2",
+   "filelock": "3.32.3",
+   "fsspec": "2026.7.0",
+   "iniconfig": "2.3.0",
+   "mpmath": "1.3.0",
+   "networkx": "3.6.1",
+   "numpy": "2.5.2",
+   "nvidia-cublas": "13.1.1.3",
+   "nvidia-cuda-cupti": "13.0.85",
+   "nvidia-cuda-nvrtc": "13.0.88",
+   "nvidia-cuda-runtime": "13.0.96",
+   "nvidia-cudnn-cu13": "9.20.0.48",
+   "nvidia-cufft": "12.0.0.61",
+   "nvidia-cufile": "1.15.1.6",
+   "nvidia-curand": "10.4.0.35",
+   "nvidia-cusolver": "12.0.4.66",
+   "nvidia-cusparse": "12.6.3.3",
+   "nvidia-cusparselt-cu13": "0.8.1",
+   "nvidia-nccl-cu13": "2.29.7",
+   "nvidia-nvjitlink": "13.0.88",
+   "nvidia-nvshmem-cu13": "3.4.5",
+   "nvidia-nvtx": "13.0.85",
+   "packaging": "26.3",
+   "pip": "26.2.1",
+   "pluggy": "1.6.0",
+   "pytest": "9.1.1",
+   "ruff": "0.16.5",
+   "sarrl": "1.1.0",
+   "scipy": "1.18.1",
+   "setuptools": "78.1.0",
+   "sympy": "1.14.0",
+   "torch": "2.12.0+cu130",
+   "triton": "3.7.0",
+   "typing_extensions": "4.16.0",
+   "wheel": "0.48.0"
+  },
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "python_executable": "/home/andrea/projects/SARRL/.venv/bin/python",
+  "workers": 6
+ },
+ "frozen_sources": {
+  "frozen_paths": [
+   "sarrl",
+   "tools",
+   "tests",
+   "docs/experiments.md",
+   "pyproject.toml",
+   "results/ood_fault_robustness/heldout_episodes.csv"
+  ],
+  "head": "2570afbf01e540e87ce3695e328391ff1095e7fd",
+  "path_trees": {
+   "docs/experiments.md": "3909c8958bf4cfef2f07f0e033f31e8fc6335e85",
+   "pyproject.toml": "27219e0baaac2a110af33acab2859fd80e65b3ff",
+   "results/ood_fault_robustness/heldout_episodes.csv": "2b7cb1db6b9fe30bcd75c37e517b451b43ea2f43",
+   "sarrl": "fc7b8e5f7819b6b33f2a6c23201b9d0728553a80",
+   "tests": "3db7dbbabf3255f77898c49509bda3d952924411",
+   "tools": "729c45888330c8b514fcfb42e3af5bcddab0fcce"
+  },
+  "seal": {
+   "frozen_source_commit": "7b18c68b080736e930970b7d47d299b9019fc87e",
+   "protocol": "v1.9 adaptive nominal control",
+   "sealed_utc": "2026-09-13T09:27:42Z"
+  },
+  "sealed_commit": "7b18c68b080736e930970b7d47d299b9019fc87e",
+  "tree": "4d1449dce6af66c4bc5af10d43745d4d3b5d704a"
+ },
+ "protocol": {
+  "arms": [
+   "fixed",
+   "fixed_hocbf",
+   "adaptive",
+   "adaptive_hocbf"
+  ],
+  "bootstrap": {
+   "draws": 10000,
+   "seed": 190000,
+   "type": "paired_over_episode_seeds"
+  },
+  "campaign": "adaptive_nominal_v19",
+  "decision": {
+   "go_requires": [
+    "no_safety_veto",
+    "primary_success",
+    "non_inferiority_all_scenarios"
+   ],
+   "non_inferiority": {
+    "decision_weight": true,
+    "metric": "unsafe_episode",
+    "scenarios": [
+     "id_reference",
+     "ood_compound",
+     "motor_fault"
+    ],
+    "upper_95_at_or_below": 0.03
+   },
+   "order": [
+    "safety_veto",
+    "primary_success",
+    "non_inferiority",
+    "otherwise_inconclusive"
+   ],
+   "primary_success": {
+    "lower_95_above": 0.0,
+    "minimum_gain": 0.2,
+    "scenarios": [
+     "id_reference",
+     "motor_fault"
+    ]
+   },
+   "safety_veto": {
+    "margin": 0.03,
+    "metric": "unsafe_episode",
+    "outcome": "no_go_safety",
+    "scenarios": [
+     "id_reference",
+     "ood_compound",
+     "motor_fault"
+    ],
+    "veto_if": "lower_95_above_zero_or_difference_above_margin"
+   }
+  },
+  "estimator": {
+   "compensate_delay": true,
+   "filter_gate": false,
+   "forgetting": 1.0,
+   "lag_min_updates": 10,
+   "lower": [
+    0.2,
+    0.2,
+    0.01,
+    0.01,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "max_lag": 3,
+   "payload_prior": 0.0,
+   "prior_std": [
+    1.0,
+    1.0,
+    0.1,
+    0.1,
+    2.0,
+    0.1,
+    0.04
+   ],
+   "process_noise": 0.02,
+   "selection_memory": 1.0,
+   "upper": [
+    5.0,
+    5.0,
+    0.5,
+    0.5,
+    6.0,
+    0.5,
+    0.2
+   ]
+  },
+  "frozen_paths": [
+   "sarrl",
+   "tools",
+   "tests",
+   "docs/experiments.md",
+   "pyproject.toml",
+   "results/ood_fault_robustness/heldout_episodes.csv"
+  ],
+  "primary_contrast": {
+   "metric": "success",
+   "reference": "fixed_hocbf",
+   "scenarios": [
+    "id_reference",
+    "motor_fault"
+   ],
+   "treatment": "adaptive_hocbf"
+  },
+  "release_target": "v1.9.0",
+  "seal_file": "docs/v19_seal.json",
+  "seeds": {
+   "decision": {
+    "arms": [
+     "fixed_hocbf",
+     "adaptive_hocbf"
+    ],
+    "episodes_per_scenario": 1900,
+    "start": 50200
+   },
+   "reproduction": {
+    "arms": [
+     "fixed",
+     "fixed_hocbf",
+     "adaptive",
+     "adaptive_hocbf"
+    ],
+    "decision_weight": false,
+    "episodes_per_scenario": 100,
+    "reference": "results/ood_fault_robustness/heldout_episodes.csv",
+    "reference_controller": "A0_computed_torque",
+    "start": 50000
+   },
+   "scenarios": [
+    "id_reference",
+    "ood_compound",
+    "motor_fault"
+   ],
+   "unopened_range_scanned": [
+    50200,
+    52099
+   ]
+  },
+  "state_interface": "full_state_feedback_noise_free_same_for_every_arm",
+  "training": false
+ },
+ "reproduction_reference_sha256": "3eb5ef9aa750dc48654998d98aa003e9b41d2b424f8cadb76c7d5d4307c658ec",
+ "runtime": {
+  "cuda_available": true,
+  "git_commit": "2570afbf01e540e87ce3695e328391ff1095e7fd",
+  "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+  "numpy": "2.5.2",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "scipy": "1.18.1",
+  "torch": "2.12.0+cu130"
+ },
+ "seed_scan": {
+  "distinct_seeds": [],
+  "examples": [],
+  "files_scanned": 433,
+  "files_with_hits": [],
+  "hits": 0,
+  "range": [
+   50200,
+   52099
+  ],
+  "revision": "HEAD",
+  "tree": "4d1449dce6af66c4bc5af10d43745d4d3b5d704a"
+ },
+ "sessions": [
+  "2026-09-13T09:29:33Z"
+ ],
+ "started_utc": "2026-09-13T09:29:33Z"
+}

@@ -40,7 +40,47 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
-## v1.7.0 and v1.8.0 training campaigns and diagnosis evidence
+## v1.9.0 adaptive nominal control evidence
+
+The campaign trained nothing. The protocol section of `docs/experiments.md`
+and the code that implements it were committed before any decision seed was
+opened (freeze commit `7b18c68`) and sealed by a later commit that records
+that hash in `docs/v19_seal.json` (`2570afb`). The design went through five
+rounds of external adversarial review before the freeze; the reviewer's
+findings and their outcomes are summarised in `docs/experiments.md` and led,
+among other changes, to the non-inferiority condition, the move of the
+decision seeds to a range no retained artifact had used, the committed-blob
+seed scan, the at-least-once journal with an exclusive lock and the mandatory
+reproduction check.
+
+Before the first episode the runner verified that the frozen paths of `HEAD`
+equalled the sealed commit with no local change, that the seal named an
+existing ancestor commit, that 433 committed CSV/JSON artifacts held no
+seed-named value in `50200..52099`, and recorded the reproduction reference
+hash, the runtime (Python 3.12.3, torch 2.12.0, numpy 2.5.2 under WSL2), the
+installed distributions and the six-worker fingerprint in `manifest.json`.
+
+Retained under `results/adaptive_nominal_v19/`: `manifest.json`,
+`journal.jsonl` (12,600 cell records in completion order, each tagged with
+its session), `episodes.jsonl` (the same records in the planned order),
+`episodes.csv`, `decision.json` with contrasts, per-cell summaries for both
+blocks, the reproduction check and the protocol, and `complete.json` hashing
+the five files. The decision file records `go`, no veto, non-inferiority in
+all three scenarios and the reproduction check at 300/300.
+
+The reproduction block is the integrity link to earlier evidence: the
+unfiltered fixed arm on seeds `50000..50099` matched every retained v1.3
+`A0_computed_torque` row on success and final distance, so the environment,
+the nominal controller and the evaluator are byte-for-byte the ones that
+produced the v1.3 and v1.4 tables.
+
+Limits carried into the claim: full-state noise-free feedback, identical for
+both arms; no compensation of the identified delay in the PD gains; targets
+whose shorter angular path crosses a joint limit stay blocked by the filter;
+the learned policies were not re-evaluated on the adaptive nominal. The
+first launch failed at import and opened no seed; the official run used the
+module invocation. At the v1.9.0 release the suite collects 362 tests.
+
 
 Both campaigns trained new policies; the diagnosis that follows them did not.
 At the v1.8.0 freeze the suite collects 315 tests across the matrix and passes

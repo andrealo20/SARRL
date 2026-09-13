@@ -2,7 +2,19 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## v1.8.0: terminal-penalty ablation and failure diagnosis
+## v1.9.0: adaptive nominal control
+
+- Replaced the fixed-model computed-torque nominal with one that identifies the plant online in command coordinates: seven parameters per joint (masses, inertias, payload, friction, all scaled by the motor gain) from recursive least squares on the finite-difference acceleration, one estimator per candidate actuator lag `0..3`, the lag with the smallest accumulated innovation selected, and a random-walk covariance term so an in-episode fault is tracked.
+- Handed the identified model to the HOCBF filter through a command-space view, and evaluated both the control law and the certificate at the state predicted through the commands still queued in the actuator, using the identified lag.
+- Preregistered the campaign and committed it before any decision seed was opened, then sealed it in a separate commit; the runner verifies the sealed source state, scans every committed artifact for the decision seeds, holds an exclusive lock, journals each cell and reloads the log for the analysis. The protocol went through five rounds of external adversarial review; every finding was addressed and is recorded with the outcome.
+- Compared `adaptive_hocbf` with `fixed_hocbf` on 1,900 paired episodes per scenario (seeds `50200..52099`, never used before), with a seed-paired percentile bootstrap of 10,000 draws.
+- Measured success **12.6% → 90.0%** in distribution (`+77.4 pp` `[+75.5, +79.3]`), **3.1% → 90.2%** under motor fault (`+87.1 pp` `[+85.5, +88.6]`) and **0.1% → 81.6%** under compound OOD (`+81.5 pp` `[+79.7, +83.3]`).
+- Measured fewer unsafe episodes in every scenario: 11.3% → 6.6% ID (`-4.7 pp` `[-6.3, -3.2]`), 33.3% → 8.9% fault (`-24.3 pp` `[-26.5, -22.2]`), 24.2% → 13.4% OOD (`-10.8 pp` `[-13.1, -8.6]`). No veto fired and non-inferiority at `+3 pp` held in all three scenarios. Abort rates 3.2%, 2.5% and 4.6% against 4.2%, 3.8% and 4.2%.
+- **Decision: go.** The identified model recovers task success without weakening the safety envelope; on these scenarios it tightens it.
+- Identified the actuator lag correctly in 100% of adaptive episodes. Final-estimate prediction error on the shared probe bank: 0.31, 0.31 and 0.53 N m RMS on joint 1 and 0.05, 0.91 and 0.06 N m on joint 2 for ID, fault and OOD.
+- Reproduced all 300 retained v1.3 `A0_computed_torque` rows exactly (success and final distance) with the unfiltered fixed arm on seeds `50000..50099`. On those seeds the adaptive filtered arm reaches 91%, 92% and 85% success, against 62.4%, 32.6% and 11.6% for the best learned policy of v1.3 on the same seeds.
+- Retained the campaign manifest, the per-cell journal, the ordered episode log, the episode table, the decision with the full analysis and the completion marker under `results/adaptive_nominal_v19/`; 12,600 episodes, 1,982,359 physical steps, no training.
+
 
 - Asked whether the `-500` terminal penalty on HOCBF-infeasible aborts explains the v1.7 in-loop training loss, by training five paired seeds `30..34` with `P0_inloop_reference` (`-500`) and `P1_inloop_half_penalty` (`-250`); both arms train, validate and evaluate through the required HOCBF filter.
 - Evaluated the ten selected checkpoints on 7,000 fresh held-out episodes (500 ID, 100 compound-OOD and 100 motor-fault episodes per model) with a crossed paired bootstrap of 20,000 replicates over training-seed pairs and shared episode seeds.

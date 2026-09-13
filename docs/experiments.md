@@ -904,3 +904,49 @@ checks that it holds exactly the planned cells, requires the reproduction
 reference, and writes `episodes.csv`, `decision.json` with the full analysis
 and the reproduction check, and `complete.json` hashing every output. All of
 these are retained.
+
+### Result
+
+The campaign ran once on 13 September 2026 from the sealed state (freeze
+commit `7b18c68`, seal commit `2570afb`), 12,600 episodes and 1,982,359
+physical steps in 15 minutes 46 seconds on six workers. The decision is
+**go**: no safety veto, the success gain established in both primary
+scenarios, and non-inferiority of the unsafe-episode rate shown in all three.
+
+| Scenario | Success, fixed → adaptive | Unsafe episodes, fixed → adaptive | Aborts, fixed → adaptive |
+|---|---:|---:|---:|
+| `id_reference` | 12.6% → 90.0%, `+77.4 pp` `[+75.5, +79.3]` | 11.3% → 6.6%, `-4.7 pp` `[-6.3, -3.2]` | 4.2% → 3.2%, `[-2.2, +0.2]` |
+| `motor_fault` | 3.1% → 90.2%, `+87.1 pp` `[+85.5, +88.6]` | 33.3% → 8.9%, `-24.3 pp` `[-26.5, -22.2]` | 3.8% → 2.5%, `[-2.4, -0.3]` |
+| `ood_compound` | 0.1% → 81.6%, `+81.5 pp` `[+79.7, +83.3]` | 24.2% → 13.4%, `-10.8 pp` `[-13.1, -8.6]` | 4.2% → 4.6%, `[-0.9, +1.7]` |
+
+Intervals are 95% seed-paired percentile bootstraps over 1,900 pairs. The
+fixed filtered arm fails almost entirely by timeout (83%, 93% and 96%),
+stopping at median final distances of 0.31, 0.77 and 0.98 m; the adaptive
+filtered arm times out in 6.8%, 7.3% and 13.8% of episodes. The maximum
+normalised violation over each cell fell from 0.68, 0.73 and 0.98 to 0.33,
+0.33 and 0.50. The filter intervened on 34%, 32% and 40% of adaptive steps
+against 21%, 34% and 57% of fixed ones. The lag was identified in every
+adaptive episode. Mean final-estimate prediction error on the shared probe
+bank was 0.31, 0.31 and 0.53 N m RMS on joint 1 and 0.05, 0.91 and 0.06 N m
+on joint 2; the larger joint-2 error under the fault reflects the gain change
+at step 20 that the estimate keeps tracking.
+
+The reproduction block matched all 300 retained `A0_computed_torque` rows of
+v1.3 exactly on success and final distance. On those same seeds the adaptive
+filtered arm reached 91%, 92% and 85% success with 7%, 9% and 10% unsafe
+episodes. The unfiltered adaptive arm reached 100%, 100% and 98% success but
+83%, 83% and 82% unsafe episodes, against 64%, 70% and 76% for the unfiltered
+fixed arm: the identified model makes the task solvable, and the filter is
+what keeps the trajectory inside the envelope.
+
+What the result does not say: the benchmark provides full-state noise-free
+feedback; the delay is identified but the PD is not retuned for it; targets
+near a joint limit remain unreachable through the filter; the learned
+residual policies were never re-evaluated on the adaptive nominal, so
+nothing here ranks learning against identification on equal terms. The
+official invocation was `python -m tools.run_adaptive_campaign --workers 6`
+from the repository root; the script form named above fails at import
+before any check because `tools` is a namespace package, which the module
+form resolves. No source changed between the two attempts and the first
+opened no seed.
+
