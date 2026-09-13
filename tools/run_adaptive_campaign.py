@@ -11,7 +11,10 @@ as an atomic record, assembles the canonical ordered log from the journal,
 reloads that log for the analysis, and closes with a completion marker
 hashing every output. The output path is fixed. An interrupted run resumes
 from the validated journal under the same protocol, source tree and
-execution fingerprint; a completed run is never rerun.
+execution fingerprint; a completed run is never rerun. Resume is at least
+once: a cell that finished after the last journal write is executed again,
+and every record carries the session that produced it. An exclusive lock on
+the output directory keeps a second runner out.
 """
 
 # Numerical thread limits precede all numerical imports.
@@ -20,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import fcntl
 import hashlib
 import json
 import os
@@ -147,23 +151,51 @@ def cell_key(record: dict) -> tuple:
     return (record["arm"], record["scenario"], record["seed"])
 
 
+EPISODE_FIELDS = set(PilotEpisode.__dataclass_fields__)
+JOURNAL_FIELDS = EPISODE_FIELDS | {"session"}
+
+
 def journal_records(journal: Path, planned: set) -> dict:
-    """Completed cells from the unordered journal, validated against the plan."""
+    """Completed cells from the unordered journal, validated against the plan.
+
+    Each line is an episode record plus the session that wrote it. The
+    session tag is stripped from the returned records.
+    """
     done = {}
     if not journal.exists():
         return done
-    names = set(PilotEpisode.__dataclass_fields__)
     for line_number, line in enumerate(journal.read_text().splitlines(), start=1):
         if not line.strip():
             continue
         record = json.loads(line)
-        if set(record) != names:
+        if set(record) != JOURNAL_FIELDS:
             raise RuntimeError(f"journal record {line_number} has unexpected fields")
+        record.pop("session")
         key = cell_key(record)
         if key not in planned or key in done:
             raise RuntimeError(f"journal record {line_number} is not a planned, unique cell")
         done[key] = record
     return done
+
+
+class CampaignLock:
+    """Exclusive advisory lock on the output directory for the whole run."""
+
+    def __init__(self, output: Path):
+        self.path = output / "campaign.lock"
+        self.handle = None
+
+    def __enter__(self):
+        self.handle = self.path.open("a+")
+        try:
+            fcntl.flock(self.handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError as exc:
+            raise RuntimeError("another runner holds the campaign lock") from exc
+        return self
+
+    def __exit__(self, *exc_info):
+        fcntl.flock(self.handle.fileno(), fcntl.LOCK_UN)
+        self.handle.close()
 
 
 def main() -> int:
@@ -188,10 +220,17 @@ def main() -> int:
     planned = set(cells)
     journal = OUTPUT / "journal.jsonl"
     manifest_path = OUTPUT / "manifest.json"
-    if OUTPUT.exists():
+    OUTPUT.mkdir(parents=True, exist_ok=True)
+    with CampaignLock(OUTPUT):
+        return _run_locked(
+            args, frozen, scan, reference, fingerprint, cells, planned, journal, manifest_path
+        )
+
+
+def _run_locked(args, frozen, scan, reference, fingerprint, cells, planned, journal, manifest_path):
+    session = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    if manifest_path.exists():
         # Resume: same protocol, same source tree, same execution fingerprint.
-        if not manifest_path.exists():
-            raise RuntimeError(f"{OUTPUT} exists without a manifest; inspect it before continuing")
         previous = json.loads(manifest_path.read_text())
         if previous["protocol"] != v19_protocol_dict():
             raise RuntimeError("existing manifest was written under a different protocol")
@@ -200,13 +239,13 @@ def main() -> int:
         if previous["execution"] != fingerprint:
             raise RuntimeError("execution fingerprint differs from the manifest; resume refused")
         done = journal_records(journal, planned)
-        now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
-        previous["sessions"] = previous.get("sessions", []) + [now]
+        previous["sessions"] = previous.get("sessions", []) + [session]
         write_json(manifest_path, previous)
         print(f"resuming with {len(done)} completed cells", flush=True)
     else:
-        OUTPUT.mkdir(parents=True)
-        started_utc = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        if any(p.name != "campaign.lock" for p in OUTPUT.iterdir()):
+            raise RuntimeError(f"{OUTPUT} holds files but no manifest; inspect before continuing")
+        started_utc = session
         write_json(
             manifest_path,
             {
@@ -232,8 +271,10 @@ def main() -> int:
             futures = [pool.submit(run_cell, cell) for cell in pending]
             iterator = (future.result() for future in as_completed(futures))
         for record in iterator:
-            # One line per completed cell, flushed at once: nothing finished is lost.
-            log.write(json.dumps(record) + "\n")
+            # One line per completed cell, flushed and synced at once. A crash
+            # between a worker finishing and this write loses only that cell,
+            # which a resumed session executes again (at least once, never lost).
+            log.write(json.dumps({**record, "session": session}) + "\n")
             log.flush()
             os.fsync(log.fileno())
             done[cell_key(record)] = record
@@ -242,7 +283,9 @@ def main() -> int:
         if args.workers > 1:
             pool.shutdown()
 
-    # Canonical ordered log assembled from the journal, then reloaded for the analysis.
+    # Canonical ordered log assembled from the journal as it stands on disk,
+    # re-validated in full, then reloaded for the analysis.
+    done = journal_records(journal, planned)
     if set(done) != planned:
         raise RuntimeError("journal does not cover the planned cells")
     log_path = OUTPUT / "episodes.jsonl"

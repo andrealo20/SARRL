@@ -791,9 +791,9 @@ rewards are not seeds. The runner repeats that scan against the committed
 tree, refuses to start on a hit, and records the result in the manifest. None
 of these seeds was opened by the pilot, which used `9801800..9802001` and
 `9803000..9803219`. Seed `50100` was executed once by a unit test of the
-runner before the protocol was sealed, so the block starts at `50200` and
-`50100..50199` stay unused; the test suite now runs the runner's cell
-function on a pilot seed only.
+runner before the protocol was sealed, so `50100..50199` are excluded from
+the decision block; `50100` is known to have been opened once, and the test
+suite now runs the runner's cell function on a pilot seed only.
 
 The **reproduction block** runs all four arms on seeds `50000..50099`, the
 v1.3 and v1.4 evaluation seeds, and carries no decision weight. It links the
@@ -889,14 +889,18 @@ untracked file, repeats the seed scan against the committed tree, and writes
 `manifest.json` with the protocol, the commit, the tree hashes of the frozen
 paths, the seed scan, the reference hash, the runtime and an execution
 fingerprint (interpreter, platform, installed distributions, worker count).
-Every completed cell is appended to `journal.jsonl` as one flushed record, in
-completion order, so that nothing finished is lost and nothing is executed
-twice. An interrupted run resumes only if the existing manifest carries the
-same protocol, source tree and execution fingerprint; it re-validates the
-journal against the planned cells and runs the missing ones; each session is
-timestamped in the manifest; a run with `complete.json` is never repeated.
-At the end the canonical ordered `episodes.jsonl` is assembled from the
-journal and reloaded for the analysis, which checks that it holds exactly the
-planned cells and writes `episodes.csv`, `decision.json` with the full
-analysis and the reproduction check, and `complete.json` hashing every
-output. All of these are retained.
+The runner holds an exclusive lock on the output directory for the whole
+run. Every completed cell is appended to `journal.jsonl` as one flushed and
+synced record tagged with its session, in completion order. Resume is at
+least once: a cell that finished after the last journal write is executed
+again by the next session, and the journal records which session produced
+each row; a cell is never lost and never counted twice, because the journal
+is re-validated in full against the planned cells before the canonical
+ordered `episodes.jsonl` is assembled from it. An interrupted run resumes
+only if the existing manifest carries the same protocol, source tree and
+execution fingerprint; each session is timestamped in the manifest; a run
+with `complete.json` is never repeated. The analysis reloads `episodes.jsonl`,
+checks that it holds exactly the planned cells, requires the reproduction
+reference, and writes `episodes.csv`, `decision.json` with the full analysis
+and the reproduction check, and `complete.json` hashing every output. All of
+these are retained.

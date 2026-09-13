@@ -268,8 +268,13 @@ def _block(episodes, arms, block):
     }
 
 
-def analyze(episodes: list[PilotEpisode], reference_path: Path | None) -> dict:
-    """Apply the frozen rule. Vetoes are checked before the primary endpoint."""
+def analyze(episodes: list[PilotEpisode], reference_path: Path) -> dict:
+    """Apply the frozen rule. Vetoes are checked before the primary endpoint.
+
+    The reproduction reference is mandatory: the analysis refuses to run
+    without the retained A0 rows it compares the fixed arm against.
+    """
+    reference_path = Path(reference_path)
     if [(e.arm, e.scenario, e.seed) for e in episodes] != list(v19_cells()):
         raise ValueError("episodes do not match the planned cells exactly, in order")
     decision_block = _block(episodes, V19_PRIMARY_ARMS, "decision")
@@ -333,9 +338,8 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path | None) -> dict:
         },
         "protocol": v19_protocol_dict(),
     }
-    if reference_path is not None:
-        fixed_rows = [
-            e for (arm, _), rows in reproduction_block.items() if arm == "fixed" for e in rows
-        ]
-        report["reproduction_check"] = reproduction_check(fixed_rows, reference_path)
+    fixed_rows = [
+        e for (arm, _), rows in reproduction_block.items() if arm == "fixed" for e in rows
+    ]
+    report["reproduction_check"] = reproduction_check(fixed_rows, reference_path)
     return report

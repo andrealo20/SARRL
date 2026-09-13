@@ -50,6 +50,23 @@ def _episode(arm, scenario, seed, success, unsafe=False, abort=False, distance=N
     )
 
 
+def _reference_csv(path, lines=None):
+    if lines is None:
+        lines = ["scenario,controller,seed,reward,steps,success,final_distance"]
+        for scenario in V19_SCENARIOS:
+            for seed in v19_seeds("reproduction"):
+                lines.append(f"{scenario},A0_computed_torque,{seed},-1.0,250,False,0.5")
+        lines.append("id_reference,A3_other,50000,-1.0,250,True,0.01")
+    path.write_text("\n".join(lines) + "\n")
+
+
+@pytest.fixture
+def reference(tmp_path):
+    path = tmp_path / "heldout_episodes.csv"
+    _reference_csv(path)
+    return path
+
+
 def _campaign(adaptive_success, fixed_success, adaptive_unsafe=0.0, fixed_unsafe=0.0):
     rng = np.random.default_rng(0)
     episodes = []
@@ -106,49 +123,49 @@ def test_paired_difference_is_exact_on_deterministic_rows():
         paired_difference(treatment[:5], reference, lambda r: r.success, np.random.default_rng(1))
 
 
-def test_go_when_success_gain_is_large_and_safety_holds():
-    report = analyze(_campaign(adaptive_success=0.9, fixed_success=0.1), None)
+def test_go_when_success_gain_is_large_and_safety_holds(reference):
+    report = analyze(_campaign(adaptive_success=0.9, fixed_success=0.1), reference)
     assert report["decision"] == "go"
     assert report["safety_vetoes"] == []
     assert report["decision_summary"]["adaptive_hocbf/id_reference"]["episodes"] == 1900
     assert report["reproduction_summary"]["fixed/id_reference"]["episodes"] == 100
     assert all(report["unsafe_non_inferior_at_margin"].values())
-    assert "reproduction_check" not in report
+    assert report["reproduction_check"]["compared"] == 300
 
 
-def test_safety_veto_precedes_the_primary_endpoint():
+def test_safety_veto_precedes_the_primary_endpoint(reference):
     report = analyze(
         _campaign(adaptive_success=0.9, fixed_success=0.1, adaptive_unsafe=0.3, fixed_unsafe=0.0),
-        None,
+        reference,
     )
     assert report["decision"] == "no_go_safety"
     assert set(report["safety_vetoes"]) <= set(V19_SCENARIOS) and report["safety_vetoes"]
     assert report["primary_met"] is True
 
 
-def test_small_gain_is_inconclusive():
-    report = analyze(_campaign(adaptive_success=0.25, fixed_success=0.2), None)
+def test_small_gain_is_inconclusive(reference):
+    report = analyze(_campaign(adaptive_success=0.25, fixed_success=0.2), reference)
     assert report["decision"] == "inconclusive"
     assert report["inconclusive_reasons"]
 
 
-def test_equal_unsafe_rates_do_not_trigger_the_veto():
+def test_equal_unsafe_rates_do_not_trigger_the_veto(reference):
     report = analyze(
         _campaign(adaptive_success=0.9, fixed_success=0.1, adaptive_unsafe=0.1, fixed_unsafe=0.1),
-        None,
+        reference,
     )
     assert report["decision"] == "go" and report["safety_vetoes"] == []
 
 
-def test_moderate_unsafe_increase_triggers_the_veto():
+def test_moderate_unsafe_increase_triggers_the_veto(reference):
     report = analyze(
         _campaign(adaptive_success=0.9, fixed_success=0.1, adaptive_unsafe=0.16, fixed_unsafe=0.1),
-        None,
+        reference,
     )
     assert report["decision"] == "no_go_safety"
 
 
-def test_go_needs_non_inferiority_not_only_the_absence_of_harm():
+def test_go_needs_non_inferiority_not_only_the_absence_of_harm(reference):
     # Deterministic: adaptive unsafe on 240 of 1,900 decision seeds, fixed on 210
     # disjoint seeds (+1.6 pp). The paired interval spans roughly [-0.5, +3.6] pp,
     # so no harm is detected and non-inferiority at +3 pp is not shown either.
@@ -163,29 +180,19 @@ def test_go_needs_non_inferiority_not_only_the_absence_of_harm():
             unsafe = False
         success = arm.startswith("adaptive")
         episodes.append(_episode(arm, scenario, seed, success=success, unsafe=unsafe))
-    report = analyze(episodes, None)
+    report = analyze(episodes, reference)
     assert report["safety_vetoes"] == []
     assert report["primary_met"] is True
     assert report["decision"] == "inconclusive"
     assert any("non-inferiority" in reason for reason in report["inconclusive_reasons"])
 
 
-def test_incomplete_or_reordered_campaign_is_rejected():
+def test_incomplete_or_reordered_campaign_is_rejected(reference):
     episodes = _campaign(0.9, 0.1)
     with pytest.raises(ValueError):
-        analyze(episodes[:-1], None)
+        analyze(episodes[:-1], reference)
     with pytest.raises(ValueError):
-        analyze(episodes[1:] + episodes[:1], None)
-
-
-def _reference_csv(path, lines=None):
-    if lines is None:
-        lines = ["scenario,controller,seed,reward,steps,success,final_distance"]
-        for scenario in V19_SCENARIOS:
-            for seed in v19_seeds("reproduction"):
-                lines.append(f"{scenario},A0_computed_torque,{seed},-1.0,250,False,0.5")
-        lines.append("id_reference,A3_other,50000,-1.0,250,True,0.01")
-    path.write_text("\n".join(lines) + "\n")
+        analyze(episodes[1:] + episodes[:1], reference)
 
 
 def test_reproduction_check_matches_success_and_distance(tmp_path):
@@ -217,11 +224,16 @@ def test_reproduction_reference_must_hold_exactly_the_expected_rows(tmp_path):
 
 
 def test_analyze_with_the_retained_reference_reports_the_check():
-    reference = Path(V19_REPRODUCTION_REFERENCE)
-    if not reference.exists():
+    retained = Path(V19_REPRODUCTION_REFERENCE)
+    if not retained.exists():
         pytest.skip("retained v1.3 evidence unavailable")
-    report = analyze(_campaign(0.9, 0.1), reference)
+    report = analyze(_campaign(0.9, 0.1), retained)
     assert report["reproduction_check"]["compared"] == 300
+
+
+def test_analyze_refuses_a_missing_reference(tmp_path):
+    with pytest.raises(FileNotFoundError):
+        analyze(_campaign(0.9, 0.1), tmp_path / "missing.csv")
 
 
 def test_episode_log_round_trips_through_the_loader(tmp_path):

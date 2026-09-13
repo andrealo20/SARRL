@@ -93,6 +93,7 @@ def _journal_record(cell, seed_override=None):
     arm, scenario, seed = cell
     record = runner.run_cell((arm, scenario, 9803000))
     record["seed"] = seed if seed_override is None else seed_override
+    record["session"] = "test"
     return record
 
 
@@ -104,6 +105,7 @@ def test_journal_records_accept_unordered_planned_cells_and_reject_others(tmp_pa
     journal.write_text("".join(json.dumps(r) + "\n" for r in records))
     done = runner.journal_records(journal, planned)
     assert set(done) == {cells[0], cells[1]}
+    assert "session" not in done[cells[0]]
     journal.write_text(json.dumps(records[0]) + "\n" + json.dumps(records[0]) + "\n")
     with pytest.raises(RuntimeError, match="unique"):
         runner.journal_records(journal, planned)
@@ -111,6 +113,15 @@ def test_journal_records_accept_unordered_planned_cells_and_reject_others(tmp_pa
     with pytest.raises(RuntimeError, match="planned"):
         runner.journal_records(journal, planned)
     assert runner.journal_records(tmp_path / "missing.jsonl", planned) == {}
+
+
+def test_campaign_lock_is_exclusive(tmp_path):
+    with runner.CampaignLock(tmp_path):
+        with pytest.raises(RuntimeError, match="campaign lock"):
+            with runner.CampaignLock(tmp_path):
+                pass
+    with runner.CampaignLock(tmp_path):
+        pass
 
 
 def test_run_cell_on_a_pilot_seed_returns_an_official_record():
