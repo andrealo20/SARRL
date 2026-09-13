@@ -189,6 +189,10 @@ class PilotEpisode:
     obstacle_contact: bool = False
     obstacle_contact_steps: int = 0
     obstacle_contact_geoms: tuple[str, ...] = ()
+    # Severity of envelope violations, from the audit diagnostics.
+    joint_position_violation_max_rad: float = 0.0
+    joint_velocity_violation_max_rad_s: float = 0.0
+    first_unsafe_step: int = -1
 
 
 RESIDUAL_SUFFIX = "_residual"
@@ -423,6 +427,9 @@ def run_case(
         obstacle_contact=bool(safety.obstacle_contact_episode),
         obstacle_contact_steps=int(safety.obstacle_contact_steps),
         obstacle_contact_geoms=tuple(safety.obstacle_contact_geoms),
+        joint_position_violation_max_rad=float(safety.joint_position_violation_max_rad),
+        joint_velocity_violation_max_rad_s=float(safety.joint_velocity_violation_max_rad_s),
+        first_unsafe_step=int(safety.first_unsafe_observation),
     )
 
 
