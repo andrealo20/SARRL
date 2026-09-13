@@ -781,24 +781,30 @@ Four arms run on identical episode seeds, plant draws and targets:
 Episodes fall into two blocks in each of the three v1.3 scenarios
 (`id_reference`, `ood_compound`, `motor_fault`).
 
-The **decision block** runs the two filtered arms on seeds `50100..51999`,
+The **decision block** runs the two filtered arms on seeds `50200..52099`,
 1,900 paired episodes per scenario. These seeds have never been used as
 episode seeds by any retained artifact: `tools/scan_seed_usage.py` reads the
-committed CSV, JSON and JSON-lines blobs of `HEAD` (432 files), recognises any
-column or key whose name contains `seed`, expands `*_start` keys into ranges
-with their sibling end or count, and finds no value in `50100..51999`. Step
-counters and rewards are not seeds. The runner repeats that scan against the
-committed tree, refuses to start on a hit, and records the result in the
-manifest. None of these seeds was opened by the pilot, which used
-`9801800..9802001` and `9803000..9803219`.
+committed CSV, JSON and JSON-lines blobs of `HEAD`, recognises any column or
+key whose name contains `seed`, expands `*_start` keys into ranges with their
+sibling end or count, and finds no value in `50200..52099`. Step counters and
+rewards are not seeds. The runner repeats that scan against the committed
+tree, refuses to start on a hit, and records the result in the manifest. None
+of these seeds was opened by the pilot, which used `9801800..9802001` and
+`9803000..9803219`. Seed `50100` was executed once by a unit test of the
+runner before the protocol was sealed, so the block starts at `50200` and
+`50100..50199` stay unused; the test suite now runs the runner's cell
+function on a pilot seed only.
 
 The **reproduction block** runs all four arms on seeds `50000..50099`, the
 v1.3 and v1.4 evaluation seeds, and carries no decision weight. It links the
 campaign to retained evidence: the unfiltered `fixed` arm must reproduce the
 retained `A0_computed_torque` rows of `results/ood_fault_robustness/heldout_episodes.csv`
 on success and final distance, and the analysis records how many of the 300
-rows match. Those seeds were opened by earlier campaigns after which the
-adaptive controller was designed, so they do not enter the decision.
+rows match. The reference file is among the frozen paths, its SHA-256 is
+recorded in the manifest, and the analysis refuses to run if it is missing
+or does not hold exactly those 300 rows. Those seeds were opened by earlier
+campaigns after which the adaptive controller was designed, so they do not
+enter the decision.
 
 The campaign totals 12,600 episodes.
 
@@ -838,8 +844,10 @@ Secondary, reported without decision weight: the success contrast under
 `ood_compound`; abort rates and their paired differences; intervention
 fractions; median final distances; maximum normalised violations; the
 fraction of adaptive episodes whose selected lag equals the true delay; and
-the per-joint RMS prediction error of the final estimate on fixed probe
-states.
+the per-joint RMS prediction error of the final estimate on one preregistered
+bank of 50 probe states shared by every episode (drawn once from seed
+`190001`), reported per episode in `episodes.csv` and as a per-cell mean in
+`decision.json`.
 
 ### What the pilot showed and what it did not
 
@@ -870,19 +878,25 @@ python tools/run_adaptive_campaign.py --workers 4
 
 The output path is fixed to `results/adaptive_nominal_v19`. The protocol is
 sealed in two commits: the freeze commit fixes this section and the code, and
-a sealing commit writes the freeze commit's hash to `docs/v19_seal.json`,
+a sealing commit writes the freeze commit's full hash to `docs/v19_seal.json`,
 which lies outside the compared paths so that the seal does not invalidate
-itself. Before the first episode the runner checks that `sarrl/`, `tools/`,
-`tests/`, `docs/experiments.md` and `pyproject.toml` at `HEAD` are identical
-to the sealed commit and carry no modification or untracked file, that the
-seal file is committed and unmodified, repeats the seed scan against the
-committed tree, and writes `manifest.json` with the protocol, the commit, the
-tree hashes of the frozen paths, the seed scan, the installed Python
-distributions and the runtime. Episodes are appended to `episodes.jsonl` as
-they complete. An interrupted run resumes only if the existing manifest
-carries the same protocol and source tree and the log is an exact ordered
-prefix of the planned cells; a run with `complete.json` is never repeated. The
-analysis reloads the log rather than in-memory objects, checks that it holds
-exactly the planned cells, and writes `episodes.csv`, `decision.json` with
-the full analysis and the reproduction check, and `complete.json` hashing
-every output. All of these are retained.
+itself. Before the first episode the runner checks that the seal names a
+40-character commit id that exists and is an ancestor of `HEAD`, that the
+seal file is committed and unmodified, that `sarrl/`, `tools/`, `tests/`,
+`docs/experiments.md`, `pyproject.toml` and the reproduction reference at
+`HEAD` are identical to the sealed commit and carry no modification or
+untracked file, repeats the seed scan against the committed tree, and writes
+`manifest.json` with the protocol, the commit, the tree hashes of the frozen
+paths, the seed scan, the reference hash, the runtime and an execution
+fingerprint (interpreter, platform, installed distributions, worker count).
+Every completed cell is appended to `journal.jsonl` as one flushed record, in
+completion order, so that nothing finished is lost and nothing is executed
+twice. An interrupted run resumes only if the existing manifest carries the
+same protocol, source tree and execution fingerprint; it re-validates the
+journal against the planned cells and runs the missing ones; each session is
+timestamped in the manifest; a run with `complete.json` is never repeated.
+At the end the canonical ordered `episodes.jsonl` is assembled from the
+journal and reloaded for the analysis, which checks that it holds exactly the
+planned cells and writes `episodes.csv`, `decision.json` with the full
+analysis and the reproduction check, and `complete.json` hashing every
+output. All of these are retained.

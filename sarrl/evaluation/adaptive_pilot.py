@@ -39,6 +39,9 @@ HISTORICAL_CASES = {
     "motor_fault": (9802000, 9802001),
 }
 FRESH_SEED_BASE = {"id_reference": 9803000, "ood_compound": 9803100, "motor_fault": 9803200}
+# One preregistered probe bank shared by every episode, so prediction errors are comparable.
+PROBE_SEED = 190_001
+PROBE_COUNT = 50
 
 
 def pilot_cases(fresh_per_scenario: int, historical: bool = True) -> list[tuple[str, int, str]]:
@@ -153,6 +156,18 @@ def build_stack(arm: str, config: AdaptiveNominalConfig, compensate_delay: bool 
     return controller, stack
 
 
+def probe_bank():
+    probe_rng = np.random.default_rng(PROBE_SEED)
+    return [
+        (
+            probe_rng.uniform(-2.5, 2.5, 2),
+            probe_rng.uniform(-3.0, 3.0, 2),
+            probe_rng.uniform(-15.0, 15.0, 2),
+        )
+        for _ in range(PROBE_COUNT)
+    ]
+
+
 def _prediction_error(controller, env, probes):
     truth = CommandRegressor.parameters(env.arm.params, env.motor_gain)
     estimate = controller.parameters
@@ -202,15 +217,7 @@ def run_case(
         label = "success"
     else:
         label = "timeout"
-    probe_rng = np.random.default_rng(seed)
-    probes = [
-        (
-            probe_rng.uniform(-2.5, 2.5, 2),
-            probe_rng.uniform(-3.0, 3.0, 2),
-            probe_rng.uniform(-15.0, 15.0, 2),
-        )
-        for _ in range(50)
-    ]
+    probes = probe_bank()
     true_parameters = CommandRegressor.parameters(env.arm.params, env.motor_gain).tolist()
     return PilotEpisode(
         arm=arm,

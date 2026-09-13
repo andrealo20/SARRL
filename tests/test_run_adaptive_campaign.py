@@ -48,8 +48,9 @@ def test_missing_or_modified_seal_is_rejected(tmp_path):
     with pytest.raises(RuntimeError, match="not been sealed"):
         _sealed_repo_without_seal(tmp_path)
     (tmp_path / "b").mkdir()
-    _sealed_repo(tmp_path / "b")
-    (tmp_path / "b" / runner.V19_SEAL_FILE).write_text("{\"frozen_source_commit\": \"0\"}\n")
+    frozen = _sealed_repo(tmp_path / "b")
+    seal = tmp_path / "b" / runner.V19_SEAL_FILE
+    seal.write_text(json.dumps({"frozen_source_commit": frozen, "note": "edited"}) + "\n")
     with pytest.raises(RuntimeError, match="modified or not committed"):
         runner.verify_frozen_sources(tmp_path / "b")
 
@@ -76,20 +77,50 @@ def test_untracked_file_inside_frozen_paths_is_rejected(tmp_path):
         runner.verify_frozen_sources(tmp_path)
 
 
-def test_validated_prefix_accepts_ordered_logs_and_rejects_reordered_ones(tmp_path):
+def test_seal_must_be_a_full_commit_id_that_is_an_ancestor_of_head(tmp_path):
+    _sealed_repo(tmp_path)
+    seal = tmp_path / runner.V19_SEAL_FILE
+    for bad in ("HEAD", "abc123", "0" * 40):
+        seal.write_text(json.dumps({"frozen_source_commit": bad}) + "\n")
+        subprocess.run(["git", "commit", "-q", "-am", "reseal"], cwd=tmp_path, check=True)
+        with pytest.raises(RuntimeError, match="commit"):
+            runner.verify_frozen_sources(tmp_path)
+
+
+def _journal_record(cell, seed_override=None):
+    # A record with the planned shape, computed on a pilot seed so that no
+    # decision seed is ever executed by the test suite.
+    arm, scenario, seed = cell
+    record = runner.run_cell((arm, scenario, 9803000))
+    record["seed"] = seed if seed_override is None else seed_override
+    return record
+
+
+def test_journal_records_accept_unordered_planned_cells_and_reject_others(tmp_path):
     cells = list(adaptive_campaign.v19_cells())
-    log = tmp_path / "episodes.jsonl"
-    records = [runner.run_cell(cell) for cell in cells[:2]]
-    log.write_text("".join(json.dumps(r) + "\n" for r in records))
-    assert runner.validated_prefix(log, cells) == 2
-    log.write_text("".join(json.dumps(r) + "\n" for r in reversed(records)))
-    with pytest.raises(RuntimeError, match="planned cell order"):
-        runner.validated_prefix(log, cells)
-    assert runner.validated_prefix(tmp_path / "missing.jsonl", cells) == 0
+    planned = set(cells)
+    journal = tmp_path / "journal.jsonl"
+    records = [_journal_record(cells[1]), _journal_record(cells[0])]
+    journal.write_text("".join(json.dumps(r) + "\n" for r in records))
+    done = runner.journal_records(journal, planned)
+    assert set(done) == {cells[0], cells[1]}
+    journal.write_text(json.dumps(records[0]) + "\n" + json.dumps(records[0]) + "\n")
+    with pytest.raises(RuntimeError, match="unique"):
+        runner.journal_records(journal, planned)
+    journal.write_text(json.dumps(_journal_record(cells[0], seed_override=1)) + "\n")
+    with pytest.raises(RuntimeError, match="planned"):
+        runner.journal_records(journal, planned)
+    assert runner.journal_records(tmp_path / "missing.jsonl", planned) == {}
 
 
-def test_run_cell_returns_a_serialisable_official_record():
-    record = runner.run_cell(("fixed", "id_reference", adaptive_campaign.V19_PRIMARY_SEED_START))
+def test_run_cell_on_a_pilot_seed_returns_an_official_record():
+    record = runner.run_cell(("fixed", "id_reference", 9803000))
     assert record["origin"] == "official"
-    assert record["arm"] == "fixed" and record["seed"] == adaptive_campaign.V19_PRIMARY_SEED_START
+    assert record["arm"] == "fixed" and record["seed"] == 9803000
     assert record["selected_lag"] is None
+
+
+def test_decision_seed_range_is_the_documented_one():
+    start = adaptive_campaign.V19_PRIMARY_SEED_START
+    end = start + adaptive_campaign.V19_PRIMARY_EPISODES - 1
+    assert (start, end) == (50200, 52099)

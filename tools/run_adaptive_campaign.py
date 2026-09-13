@@ -6,11 +6,12 @@ The protocol is frozen in ``sarrl.evaluation.adaptive_campaign`` and in
 freeze commit. The runner refuses to start unless the frozen paths of HEAD are
 identical to the sealed commit and carry no local change, and unless the
 decision seed range is absent from every committed CSV/JSON artifact. It
-writes the manifest before the first episode, appends every episode to a
-JSON-lines log, reloads that log for the analysis, and closes with a
-completion marker hashing every output. The output path is fixed. An
-interrupted run resumes from its validated log prefix; a completed run is
-never rerun.
+writes the manifest before the first episode, journals every completed cell
+as an atomic record, assembles the canonical ordered log from the journal,
+reloads that log for the analysis, and closes with a completion marker
+hashing every output. The output path is fixed. An interrupted run resumes
+from the validated journal under the same protocol, source tree and
+execution fingerprint; a completed run is never rerun.
 """
 
 # Numerical thread limits precede all numerical imports.
@@ -22,10 +23,12 @@ import csv
 import hashlib
 import json
 import os
+import platform
+import re
 import subprocess
 import sys
 import time
-from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, fields
 from importlib import metadata
 from pathlib import Path
@@ -53,6 +56,7 @@ from tools.scan_seed_usage import scan_revision
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "results" / "adaptive_nominal_v19"
+CSV_EXCLUDED = ("estimated_parameters", "true_parameters", "prediction_error_rms")
 
 
 def sha(path: Path) -> str:
@@ -73,14 +77,27 @@ def verify_frozen_sources(root: Path = ROOT, seal_file: str = V19_SEAL_FILE) -> 
     """HEAD's frozen paths must equal the sealed commit and carry no local change.
 
     The seal lives outside the frozen paths, so the sealing commit can follow
-    the freeze commit without changing what is compared. The seal file itself
-    must be committed and unmodified.
+    the freeze commit without changing what is compared. The seal must name a
+    full commit id that is an ancestor of HEAD, and must itself be committed
+    and unmodified.
     """
     seal_path = root / seal_file
     if not seal_path.exists():
         raise RuntimeError(f"the protocol has not been sealed: {seal_file} is missing")
     seal = json.loads(seal_path.read_text())
-    frozen_commit = seal["frozen_source_commit"]
+    frozen_commit = str(seal.get("frozen_source_commit", ""))
+    if not re.fullmatch(r"[0-9a-f]{40}", frozen_commit):
+        raise RuntimeError("the seal must name a full 40-character commit id")
+    kind = subprocess.run(
+        ["git", "cat-file", "-t", frozen_commit], cwd=root, capture_output=True, text=True
+    )
+    if kind.returncode != 0 or kind.stdout.strip() != "commit":
+        raise RuntimeError("the sealed commit id does not name a commit in this repository")
+    ancestor = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", frozen_commit, "HEAD"], cwd=root, check=False
+    )
+    if ancestor.returncode != 0:
+        raise RuntimeError("the sealed commit is not an ancestor of HEAD")
     if git(root, "status", "--porcelain", "--untracked-files=all", "--", seal_file):
         raise RuntimeError(f"{seal_file} is modified or not committed")
     head = git(root, "rev-parse", "HEAD")
@@ -107,10 +124,17 @@ def verify_frozen_sources(root: Path = ROOT, seal_file: str = V19_SEAL_FILE) -> 
     }
 
 
-def installed_distributions() -> dict:
+def execution_fingerprint(workers: int) -> dict:
+    """Everything a resumed session must share with the first one."""
     return {
-        dist.metadata["Name"]: dist.version
-        for dist in sorted(metadata.distributions(), key=lambda d: d.metadata["Name"].lower())
+        "python_executable": sys.executable,
+        "python": platform.python_version(),
+        "platform": platform.platform(),
+        "workers": workers,
+        "installed_distributions": {
+            dist.metadata["Name"]: dist.version
+            for dist in sorted(metadata.distributions(), key=lambda d: d.metadata["Name"].lower())
+        },
     }
 
 
@@ -119,28 +143,27 @@ def run_cell(cell):
     return asdict(run_case(arm, scenario, seed, "official", v19_config(), V19_COMPENSATE_DELAY))
 
 
-def build_manifest(frozen: dict, scan: dict, workers: int) -> dict:
-    return {
-        "protocol": v19_protocol_dict(),
-        "frozen_sources": frozen,
-        "seed_scan": scan,
-        "runtime": runtime_metadata(ROOT),
-        "python_executable": sys.executable,
-        "installed_distributions": installed_distributions(),
-        "workers": workers,
-        "started_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-    }
+def cell_key(record: dict) -> tuple:
+    return (record["arm"], record["scenario"], record["seed"])
 
 
-def validated_prefix(log_path: Path, cells: list) -> int:
-    """Number of planned cells already present, in order, in an existing log."""
-    if not log_path.exists():
-        return 0
-    done = load_episodes(log_path)
-    keys = [(e.arm, e.scenario, e.seed) for e in done]
-    if keys != cells[: len(keys)]:
-        raise RuntimeError("existing episode log does not match the planned cell order")
-    return len(keys)
+def journal_records(journal: Path, planned: set) -> dict:
+    """Completed cells from the unordered journal, validated against the plan."""
+    done = {}
+    if not journal.exists():
+        return done
+    names = set(PilotEpisode.__dataclass_fields__)
+    for line_number, line in enumerate(journal.read_text().splitlines(), start=1):
+        if not line.strip():
+            continue
+        record = json.loads(line)
+        if set(record) != names:
+            raise RuntimeError(f"journal record {line_number} has unexpected fields")
+        key = cell_key(record)
+        if key not in planned or key in done:
+            raise RuntimeError(f"journal record {line_number} is not a planned, unique cell")
+        done[key] = record
+    return done
 
 
 def main() -> int:
@@ -158,12 +181,15 @@ def main() -> int:
     )
     if scan["hits"]:
         raise RuntimeError(f"decision seed range already used: {scan['files_with_hits']}")
+    reference = ROOT / V19_REPRODUCTION_REFERENCE
+    fingerprint = execution_fingerprint(args.workers)
 
     cells = list(v19_cells())
-    log_path = OUTPUT / "episodes.jsonl"
+    planned = set(cells)
+    journal = OUTPUT / "journal.jsonl"
     manifest_path = OUTPUT / "manifest.json"
     if OUTPUT.exists():
-        # Resume: the manifest must describe this protocol and this source state.
+        # Resume: same protocol, same source tree, same execution fingerprint.
         if not manifest_path.exists():
             raise RuntimeError(f"{OUTPUT} exists without a manifest; inspect it before continuing")
         previous = json.loads(manifest_path.read_text())
@@ -171,54 +197,77 @@ def main() -> int:
             raise RuntimeError("existing manifest was written under a different protocol")
         if previous["frozen_sources"]["tree"] != frozen["tree"]:
             raise RuntimeError("existing manifest was written from a different source tree")
-        start = validated_prefix(log_path, cells)
-        print(f"resuming after {start} validated episodes", flush=True)
+        if previous["execution"] != fingerprint:
+            raise RuntimeError("execution fingerprint differs from the manifest; resume refused")
+        done = journal_records(journal, planned)
+        now = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        previous["sessions"] = previous.get("sessions", []) + [now]
+        write_json(manifest_path, previous)
+        print(f"resuming with {len(done)} completed cells", flush=True)
     else:
         OUTPUT.mkdir(parents=True)
-        write_json(manifest_path, build_manifest(frozen, scan, args.workers))
-        start = 0
+        started_utc = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        write_json(
+            manifest_path,
+            {
+                "protocol": v19_protocol_dict(),
+                "frozen_sources": frozen,
+                "seed_scan": scan,
+                "reproduction_reference_sha256": sha(reference),
+                "runtime": runtime_metadata(ROOT),
+                "execution": fingerprint,
+                "started_utc": started_utc,
+                "sessions": [started_utc],
+            },
+        )
+        done = {}
 
     started = time.time()
-    pending = cells[start:]
-    with log_path.open("a") as log:
+    pending = [cell for cell in cells if cell not in done]
+    with journal.open("a") as log:
         if args.workers == 1:
-            results = map(run_cell, pending)
+            iterator = (run_cell(cell) for cell in pending)
         else:
             pool = ProcessPoolExecutor(max_workers=args.workers)
-            results = pool.map(run_cell, pending, chunksize=8)
-        for index, record in enumerate(results, start=start + 1):
+            futures = [pool.submit(run_cell, cell) for cell in pending]
+            iterator = (future.result() for future in as_completed(futures))
+        for record in iterator:
+            # One line per completed cell, flushed at once: nothing finished is lost.
             log.write(json.dumps(record) + "\n")
             log.flush()
-            if index % 200 == 0 or index == len(cells):
-                print(f"[{index}/{len(cells)}]", flush=True)
+            os.fsync(log.fileno())
+            done[cell_key(record)] = record
+            if len(done) % 200 == 0 or len(done) == len(cells):
+                print(f"[{len(done)}/{len(cells)}]", flush=True)
         if args.workers > 1:
             pool.shutdown()
 
-    # The decision is computed from the serialised log, not from in-memory objects.
+    # Canonical ordered log assembled from the journal, then reloaded for the analysis.
+    if set(done) != planned:
+        raise RuntimeError("journal does not cover the planned cells")
+    log_path = OUTPUT / "episodes.jsonl"
+    log_path.write_text("".join(json.dumps(done[cell]) + "\n" for cell in cells))
     episodes = load_episodes(log_path)
     if [(e.arm, e.scenario, e.seed) for e in episodes] != cells:
         raise RuntimeError("reloaded episode log does not match the planned cells")
 
-    columns = [
-        f.name
-        for f in fields(PilotEpisode)
-        if f.name not in ("estimated_parameters", "true_parameters", "prediction_error_rms")
-    ]
+    columns = [f.name for f in fields(PilotEpisode) if f.name not in CSV_EXCLUDED]
+    columns += ["prediction_error_rms_joint1", "prediction_error_rms_joint2"]
     with (OUTPUT / "episodes.csv").open("w", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=columns, lineterminator="\n")
         writer.writeheader()
         for episode in episodes:
             row = asdict(episode)
+            rms = row.pop("prediction_error_rms") or (None, None)
+            row["prediction_error_rms_joint1"], row["prediction_error_rms_joint2"] = rms
             writer.writerow({name: row[name] for name in columns})
 
-    report = analyze(episodes, ROOT / V19_REPRODUCTION_REFERENCE)
+    report = analyze(episodes, reference)
     report["elapsed_seconds_last_session"] = time.time() - started
     report["physical_steps"] = int(sum(e.steps for e in episodes))
     write_json(OUTPUT / "decision.json", report)
-    hashes = {
-        name: sha(OUTPUT / name)
-        for name in ("manifest.json", "episodes.jsonl", "episodes.csv", "decision.json")
-    }
+    outputs = ("manifest.json", "journal.jsonl", "episodes.jsonl", "episodes.csv", "decision.json")
+    hashes = {name: sha(OUTPUT / name) for name in outputs}
     write_json(
         OUTPUT / "complete.json",
         {"episodes": len(episodes), "decision": report["decision"], "hashes": hashes},
@@ -235,9 +284,8 @@ def main() -> int:
             f"unsafe {unsafe['difference']:+.3f} "
             f"[{unsafe['ci95_low']:+.3f}, {unsafe['ci95_high']:+.3f}]"
         )
-    check = report.get("reproduction_check")
-    if check:
-        print(f"  reproduction of retained A0 rows: {check['matched']}/{check['compared']}")
+    check = report["reproduction_check"]
+    print(f"  reproduction of retained A0 rows: {check['matched']}/{check['compared']}")
     return 0
 
 

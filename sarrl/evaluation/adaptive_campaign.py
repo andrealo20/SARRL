@@ -22,7 +22,9 @@ V19_PRIMARY_ARMS = ("fixed_hocbf", "adaptive_hocbf")
 V19_SCENARIOS = ("id_reference", "ood_compound", "motor_fault")
 V19_PRIMARY_SCENARIOS = ("id_reference", "motor_fault")
 # Decision seeds: never used as episode seeds by any retained artifact.
-V19_PRIMARY_SEED_START = 50100
+# 50100 was executed once by a test of the runner before the protocol was sealed,
+# so the decision block starts at 50200 and 50100..50199 stay unused.
+V19_PRIMARY_SEED_START = 50200
 V19_PRIMARY_EPISODES = 1900
 # Reproduction seeds: the v1.3/v1.4 evaluation seeds, run by every arm and
 # reported apart; the unfiltered fixed arm must reproduce the retained A0 rows.
@@ -30,13 +32,21 @@ V19_REPRODUCTION_SEED_START = 50000
 V19_REPRODUCTION_EPISODES = 100
 V19_REPRODUCTION_REFERENCE = "results/ood_fault_robustness/heldout_episodes.csv"
 V19_REPRODUCTION_CONTROLLER = "A0_computed_torque"
+V19_REPRODUCTION_ROWS = 300
 V19_BOOTSTRAP_DRAWS = 10_000
 V19_BOOTSTRAP_SEED = 190_000
 V19_SUCCESS_GAIN = 0.20
 V19_UNSAFE_MARGIN = 0.03
 V19_COMPENSATE_DELAY = True
 # Paths compared against the sealed commit. The seal itself lives outside them.
-V19_FROZEN_PATHS = ("sarrl", "tools", "tests", "docs/experiments.md", "pyproject.toml")
+V19_FROZEN_PATHS = (
+    "sarrl",
+    "tools",
+    "tests",
+    "docs/experiments.md",
+    "pyproject.toml",
+    V19_REPRODUCTION_REFERENCE,
+)
 V19_SEAL_FILE = "docs/v19_seal.json"
 
 
@@ -188,6 +198,7 @@ def load_episodes(path: Path) -> list[PilotEpisode]:
 
 def cell_summary(rows: list[PilotEpisode]) -> dict:
     lags = [r for r in rows if r.selected_lag is not None]
+    probed = [r for r in lags if r.prediction_error_rms is not None]
     return {
         "episodes": len(rows),
         "success_rate": float(np.mean([r.success for r in rows])),
@@ -202,19 +213,29 @@ def cell_summary(rows: list[PilotEpisode]) -> dict:
         "lag_identified_fraction": (
             float(np.mean([r.selected_lag == r.true_delay for r in lags])) if lags else None
         ),
+        "prediction_error_rms_mean": (
+            [float(v) for v in np.mean([r.prediction_error_rms for r in probed], axis=0)]
+            if probed
+            else None
+        ),
     }
 
 
 def reproduction_check(rows: list[PilotEpisode], reference_path: Path) -> dict:
     """Compare the unfiltered fixed arm on the v1.3 seeds with the retained A0 rows."""
+    if not reference_path.exists():
+        raise FileNotFoundError(f"reproduction reference missing: {reference_path}")
     reference = {}
     with reference_path.open(newline="") as handle:
         for row in csv.DictReader(handle):
             if row["controller"] == V19_REPRODUCTION_CONTROLLER:
-                reference[(row["scenario"], int(row["seed"]))] = (
-                    row["success"] == "True",
-                    float(row["final_distance"]),
-                )
+                key = (row["scenario"], int(row["seed"]))
+                if key in reference:
+                    raise ValueError(f"duplicate reference row {key}")
+                reference[key] = (row["success"] == "True", float(row["final_distance"]))
+    expected = {(s, seed) for s in V19_SCENARIOS for seed in v19_seeds("reproduction")}
+    if set(reference) != expected or len(reference) != V19_REPRODUCTION_ROWS:
+        raise ValueError("reproduction reference does not hold exactly the 300 expected rows")
     compared = matched = 0
     mismatches = []
     for episode in rows:
@@ -247,7 +268,7 @@ def _block(episodes, arms, block):
     }
 
 
-def analyze(episodes: list[PilotEpisode], reference_path: Path | None = None) -> dict:
+def analyze(episodes: list[PilotEpisode], reference_path: Path | None) -> dict:
     """Apply the frozen rule. Vetoes are checked before the primary endpoint."""
     if [(e.arm, e.scenario, e.seed) for e in episodes] != list(v19_cells()):
         raise ValueError("episodes do not match the planned cells exactly, in order")
@@ -312,7 +333,7 @@ def analyze(episodes: list[PilotEpisode], reference_path: Path | None = None) ->
         },
         "protocol": v19_protocol_dict(),
     }
-    if reference_path is not None and reference_path.exists():
+    if reference_path is not None:
         fixed_rows = [
             e for (arm, _), rows in reproduction_block.items() if arm == "fixed" for e in rows
         ]
