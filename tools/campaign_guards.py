@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 from collections.abc import Callable
 from pathlib import Path
@@ -129,6 +130,7 @@ def journal_records(journal: Path, planned: set, fields: set, cell_key: Callable
                 with journal.open("r+b") as handle:
                     handle.truncate(len(data) - len(raw))
                     handle.flush()
+                    os.fsync(handle.fileno())
                 break
             raise RuntimeError(f"journal record {index + 1} is malformed") from None
         if set(record) != fields:
@@ -142,6 +144,7 @@ def journal_records(journal: Path, planned: set, fields: set, cell_key: Callable
             with journal.open("ab") as handle:
                 handle.write(b"\n")
                 handle.flush()
+                os.fsync(handle.fileno())
     return done
 
 
