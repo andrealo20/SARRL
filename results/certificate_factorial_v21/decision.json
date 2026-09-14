@@ -1,0 +1,1113 @@
+{
+ "cell_summary": {
+  "adaptive_hocbf/id_reference": {
+   "abort_rate": 0.02157894736842105,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.3757082932085778,
+   "lag_identified_fraction": 0.9936842105263158,
+   "median_final_distance_m": 0.04797445526408069,
+   "normalized_violation_max": 0.46146837973799393,
+   "prediction_error_rms_mean": [
+    4.012504054667655,
+    1.4549421905445152
+   ],
+   "success_rate": 0.9,
+   "timeout_rate": 0.07842105263157895,
+   "unsafe_episode_rate": 0.12421052631578948
+  },
+  "adaptive_hocbf/motor_fault": {
+   "abort_rate": 0.01368421052631579,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.346822935680245,
+   "lag_identified_fraction": 0.9936842105263158,
+   "median_final_distance_m": 0.04801366653798109,
+   "normalized_violation_max": 0.45123779936556296,
+   "prediction_error_rms_mean": [
+    4.344541688468416,
+    2.241701979383148
+   ],
+   "success_rate": 0.9021052631578947,
+   "timeout_rate": 0.08421052631578947,
+   "unsafe_episode_rate": 0.1231578947368421
+  },
+  "adaptive_hocbf/ood_compound": {
+   "abort_rate": 0.08526315789473685,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.42029995173530027,
+   "lag_identified_fraction": 0.9910526315789474,
+   "median_final_distance_m": 0.04824929992532815,
+   "normalized_violation_max": 0.8714159728660158,
+   "prediction_error_rms_mean": [
+    8.428641372307641,
+    2.291750771150937
+   ],
+   "success_rate": 0.7936842105263158,
+   "timeout_rate": 0.12105263157894737,
+   "unsafe_episode_rate": 0.17789473684210527
+  },
+  "adaptive_hocbf_fixedmodel/id_reference": {
+   "abort_rate": 0.034736842105263156,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.530706163255,
+   "lag_identified_fraction": 0.991578947368421,
+   "median_final_distance_m": 0.048154113531850756,
+   "normalized_violation_max": 0.5408483189101856,
+   "prediction_error_rms_mean": [
+    5.417716669536514,
+    1.509716279218196
+   ],
+   "success_rate": 0.8573684210526316,
+   "timeout_rate": 0.10789473684210527,
+   "unsafe_episode_rate": 0.03894736842105263
+  },
+  "adaptive_hocbf_fixedmodel/motor_fault": {
+   "abort_rate": 0.039473684210526314,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.6963822373605375,
+   "lag_identified_fraction": 0.9894736842105263,
+   "median_final_distance_m": 0.04938416664045314,
+   "normalized_violation_max": 0.5798811081815771,
+   "prediction_error_rms_mean": [
+    6.5258965063860295,
+    2.41026147039464
+   ],
+   "success_rate": 0.5821052631578948,
+   "timeout_rate": 0.37842105263157894,
+   "unsafe_episode_rate": 0.27631578947368424
+  },
+  "adaptive_hocbf_fixedmodel/ood_compound": {
+   "abort_rate": 0.03105263157894737,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.8793831039519165,
+   "lag_identified_fraction": 0.9778947368421053,
+   "median_final_distance_m": 0.5491968598033425,
+   "normalized_violation_max": 0.8576539525317113,
+   "prediction_error_rms_mean": [
+    15.279753028140147,
+    3.08621187946106
+   ],
+   "success_rate": 0.3463157894736842,
+   "timeout_rate": 0.6226315789473684,
+   "unsafe_episode_rate": 0.13052631578947368
+  },
+  "fixed_hocbf/id_reference": {
+   "abort_rate": 0.04894736842105263,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.23543110592153835,
+   "lag_identified_fraction": null,
+   "median_final_distance_m": 0.3170740503859505,
+   "normalized_violation_max": 0.7058763049605556,
+   "prediction_error_rms_mean": null,
+   "success_rate": 0.11315789473684211,
+   "timeout_rate": 0.8378947368421052,
+   "unsafe_episode_rate": 0.13315789473684211
+  },
+  "fixed_hocbf/motor_fault": {
+   "abort_rate": 0.04894736842105263,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.38538724154918463,
+   "lag_identified_fraction": null,
+   "median_final_distance_m": 0.786417101289767,
+   "normalized_violation_max": 0.9677939594259674,
+   "prediction_error_rms_mean": null,
+   "success_rate": 0.034210526315789476,
+   "timeout_rate": 0.9168421052631579,
+   "unsafe_episode_rate": 0.3994736842105263
+  },
+  "fixed_hocbf/ood_compound": {
+   "abort_rate": 0.05263157894736842,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.6048955552842629,
+   "lag_identified_fraction": null,
+   "median_final_distance_m": 0.9933517543811576,
+   "normalized_violation_max": 0.9249658378418802,
+   "prediction_error_rms_mean": null,
+   "success_rate": 0.0005263157894736842,
+   "timeout_rate": 0.9468421052631579,
+   "unsafe_episode_rate": 0.2673684210526316
+  },
+  "fixed_hocbf_adaptivemodel/id_reference": {
+   "abort_rate": 0.039473684210526314,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.19768621906350495,
+   "lag_identified_fraction": 0.9873684210526316,
+   "median_final_distance_m": 0.31044618775372046,
+   "normalized_violation_max": 0.869200608762613,
+   "prediction_error_rms_mean": [
+    10.141236268278542,
+    1.5155330195085317
+   ],
+   "success_rate": 0.11210526315789474,
+   "timeout_rate": 0.848421052631579,
+   "unsafe_episode_rate": 0.1931578947368421
+  },
+  "fixed_hocbf_adaptivemodel/motor_fault": {
+   "abort_rate": 0.0431578947368421,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.2634813126414629,
+   "lag_identified_fraction": 0.9863157894736843,
+   "median_final_distance_m": 0.6872661869811509,
+   "normalized_violation_max": 0.8353796996020872,
+   "prediction_error_rms_mean": [
+    9.57976440335851,
+    2.4944103965663373
+   ],
+   "success_rate": 0.027894736842105264,
+   "timeout_rate": 0.9289473684210526,
+   "unsafe_episode_rate": 0.31
+  },
+  "fixed_hocbf_adaptivemodel/ood_compound": {
+   "abort_rate": 0.16894736842105262,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.31728585425255135,
+   "lag_identified_fraction": 0.9826315789473684,
+   "median_final_distance_m": 0.9005744110232423,
+   "normalized_violation_max": 1.0423953197935472,
+   "prediction_error_rms_mean": [
+    15.365822288336872,
+    2.6181113453970686
+   ],
+   "success_rate": 0.0,
+   "timeout_rate": 0.8310526315789474,
+   "unsafe_episode_rate": 0.4168421052631579
+  }
+ },
+ "decision": "partial",
+ "descriptive_summary": {
+  "adaptive_hocbf_nocompensation/id_reference": {
+   "abort_rate": 0.06,
+   "episodes": 100,
+   "intervention_fraction_mean": 0.34871883518250557,
+   "lag_identified_fraction": 1.0,
+   "median_final_distance_m": 0.04718038192972338,
+   "normalized_violation_max": 0.7693354976451112,
+   "prediction_error_rms_mean": [
+    3.2242436656657616,
+    1.4535564988710985
+   ],
+   "success_rate": 0.92,
+   "timeout_rate": 0.02,
+   "unsafe_episode_rate": 0.15
+  },
+  "adaptive_hocbf_nocompensation/motor_fault": {
+   "abort_rate": 0.03,
+   "episodes": 100,
+   "intervention_fraction_mean": 0.3101032862119982,
+   "lag_identified_fraction": 1.0,
+   "median_final_distance_m": 0.04715691552969071,
+   "normalized_violation_max": 0.7408883084783864,
+   "prediction_error_rms_mean": [
+    3.263935439906157,
+    2.3052794258652956
+   ],
+   "success_rate": 0.93,
+   "timeout_rate": 0.04,
+   "unsafe_episode_rate": 0.13
+  },
+  "adaptive_hocbf_nocompensation/ood_compound": {
+   "abort_rate": 0.16,
+   "episodes": 100,
+   "intervention_fraction_mean": 0.40644313549698036,
+   "lag_identified_fraction": 0.96,
+   "median_final_distance_m": 0.04786533699911881,
+   "normalized_violation_max": 0.7400632427961651,
+   "prediction_error_rms_mean": [
+    6.455437375329052,
+    2.8233663626562158
+   ],
+   "success_rate": 0.75,
+   "timeout_rate": 0.09,
+   "unsafe_episode_rate": 0.28
+  }
+ },
+ "elapsed_seconds_last_session": 3018.009244441986,
+ "estimator": {
+  "adaptive_hocbf/id_reference": {
+   "episodes_with_prediction_fallback": 5,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9936842105263158,
+   "time_constant_abs_error_mean_s": 0.008568123347882295,
+   "valid": true
+  },
+  "adaptive_hocbf/motor_fault": {
+   "episodes_with_prediction_fallback": 1,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9936842105263158,
+   "time_constant_abs_error_mean_s": 0.008968378598633754,
+   "valid": true
+  },
+  "adaptive_hocbf/ood_compound": {
+   "episodes_with_prediction_fallback": 55,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9910526315789474,
+   "time_constant_abs_error_mean_s": 0.00864889929275335,
+   "valid": true
+  },
+  "adaptive_hocbf_fixedmodel/id_reference": {
+   "episodes_with_prediction_fallback": 2,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.991578947368421,
+   "time_constant_abs_error_mean_s": 0.008879637076302915,
+   "valid": true
+  },
+  "adaptive_hocbf_fixedmodel/motor_fault": {
+   "episodes_with_prediction_fallback": 12,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9894736842105263,
+   "time_constant_abs_error_mean_s": 0.008516153136343862,
+   "valid": true
+  },
+  "adaptive_hocbf_fixedmodel/ood_compound": {
+   "episodes_with_prediction_fallback": 25,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9778947368421053,
+   "time_constant_abs_error_mean_s": 0.011758421508639995,
+   "valid": true
+  },
+  "fixed_hocbf_adaptivemodel/id_reference": {
+   "episodes_with_prediction_fallback": 0,
+   "guarded_episode_fraction": 0.0010526315789473684,
+   "lag_identified_fraction": 0.9873684210526316,
+   "time_constant_abs_error_mean_s": 0.009348880583645223,
+   "valid": true
+  },
+  "fixed_hocbf_adaptivemodel/motor_fault": {
+   "episodes_with_prediction_fallback": 0,
+   "guarded_episode_fraction": 0.004210526315789474,
+   "lag_identified_fraction": 0.9863157894736843,
+   "time_constant_abs_error_mean_s": 0.009530331208676905,
+   "valid": true
+  },
+  "fixed_hocbf_adaptivemodel/ood_compound": {
+   "episodes_with_prediction_fallback": 0,
+   "guarded_episode_fraction": 0.007368421052631579,
+   "lag_identified_fraction": 0.9826315789473684,
+   "time_constant_abs_error_mean_s": 0.010730260874343426,
+   "valid": true
+  }
+ },
+ "estimator_valid": true,
+ "failed_statements": [
+  "certificate_equivalence_in_distribution"
+ ],
+ "invalid_estimator_cells": [],
+ "physical_steps": 4085393,
+ "prediction_effect_within_identified_stack": {
+  "id_reference": {
+   "abort": {
+    "ci95_high": -0.02,
+    "ci95_low": -0.11,
+    "difference": -0.06,
+    "pairs": 100,
+    "reference_rate": 0.06,
+    "treatment_rate": 0.0
+   },
+   "success": {
+    "ci95_high": 0.05,
+    "ci95_low": 0.0,
+    "difference": 0.02,
+    "pairs": 100,
+    "reference_rate": 0.92,
+    "treatment_rate": 0.94
+   },
+   "unsafe_episode": {
+    "ci95_high": -0.02,
+    "ci95_low": -0.11,
+    "difference": -0.06,
+    "pairs": 100,
+    "reference_rate": 0.15,
+    "treatment_rate": 0.09
+   }
+  },
+  "motor_fault": {
+   "abort": {
+    "ci95_high": 0.0,
+    "ci95_low": -0.07,
+    "difference": -0.03,
+    "pairs": 100,
+    "reference_rate": 0.03,
+    "treatment_rate": 0.0
+   },
+   "success": {
+    "ci95_high": 0.03,
+    "ci95_low": 0.0,
+    "difference": 0.01,
+    "pairs": 100,
+    "reference_rate": 0.93,
+    "treatment_rate": 0.94
+   },
+   "unsafe_episode": {
+    "ci95_high": -0.01,
+    "ci95_low": -0.1,
+    "difference": -0.05,
+    "pairs": 100,
+    "reference_rate": 0.13,
+    "treatment_rate": 0.08
+   }
+  },
+  "ood_compound": {
+   "abort": {
+    "ci95_high": -0.04,
+    "ci95_low": -0.15,
+    "difference": -0.09,
+    "pairs": 100,
+    "reference_rate": 0.16,
+    "treatment_rate": 0.07
+   },
+   "success": {
+    "ci95_high": 0.12,
+    "ci95_low": 0.02,
+    "difference": 0.07,
+    "pairs": 100,
+    "reference_rate": 0.75,
+    "treatment_rate": 0.82
+   },
+   "unsafe_episode": {
+    "ci95_high": -0.04,
+    "ci95_low": -0.17,
+    "difference": -0.1,
+    "pairs": 100,
+    "reference_rate": 0.28,
+    "treatment_rate": 0.18
+   }
+  }
+ },
+ "protocol": {
+  "arms": {
+   "fixed/fixed": "fixed_hocbf",
+   "fixed/identified": "fixed_hocbf_adaptivemodel",
+   "identified/fixed": "adaptive_hocbf_fixedmodel",
+   "identified/identified": "adaptive_hocbf"
+  },
+  "bootstrap": {
+   "draws": 10000,
+   "seed": 210000,
+   "type": "paired_over_episode_seeds"
+  },
+  "campaign": "certificate_factorial_v21",
+  "decision": {
+   "estimator_validity": {
+    "applied_per": "arm and scenario",
+    "arms_with_estimator": [
+     "fixed_hocbf_adaptivemodel",
+     "adaptive_hocbf_fixedmodel",
+     "adaptive_hocbf"
+    ],
+    "failure_outcome": "inconclusive",
+    "guarded_step_fraction_per_episode": 0.1,
+    "max_guarded_episode_fraction": 0.1
+   },
+   "order": [
+    "estimator_validity",
+    "success_statements",
+    "otherwise"
+   ],
+   "outcomes": {
+    "confirmed": "all three success statements hold",
+    "inconclusive": "estimator validity fails in any estimator cell",
+    "partial": "at least one success statement fails; each is reported"
+   }
+  },
+  "descriptive_arm": {
+   "contrast": "identified/identified minus the same stack without prediction, seed-paired on those seeds: the prediction's effect within the identified stack, not a share of the controller effect",
+   "decision_weight": false,
+   "episodes_per_scenario": 100,
+   "label": "adaptive_hocbf_nocompensation",
+   "seeds": "first decision seeds",
+   "stack": "identified/identified without delay prediction"
+  },
+  "estimator": {
+   "actuator_substeps": 10,
+   "actuator_time_constants": [
+    0.0,
+    0.01,
+    0.03,
+    0.06
+   ],
+   "compensate_delay": true,
+   "compensation_applies_to": "identified controller stack only, as in v2.0",
+   "conditioning_floor": 0.05,
+   "filter_gate": false,
+   "forgetting": 1.0,
+   "lag_min_updates": 10,
+   "lower": [
+    0.2,
+    0.2,
+    0.01,
+    0.01,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "max_lag": 3,
+   "payload_prior": 0.0,
+   "prediction_limit": 5.0,
+   "prior_std": [
+    1.0,
+    1.0,
+    0.1,
+    0.1,
+    2.0,
+    0.1,
+    0.04
+   ],
+   "process_noise": 0.02,
+   "selection_memory": 1.0,
+   "upper": [
+    5.0,
+    5.0,
+    0.5,
+    0.5,
+    6.0,
+    0.5,
+    0.2
+   ]
+  },
+  "factors": {
+   "certificate_model": {
+    "levels": [
+     "fixed",
+     "identified"
+    ]
+   },
+   "controller_stack": {
+    "identified_means": "estimate-driven computed torque with delay prediction, the v2.0 controller stack; the two are not separated",
+    "levels": [
+     "fixed",
+     "identified"
+    ]
+   }
+  },
+  "frozen_paths": [
+   "sarrl",
+   "tools",
+   "tests",
+   "docs/experiments.md",
+   "pyproject.toml",
+   ".gitignore",
+   "results/adaptive_mujoco_v20/episodes.jsonl",
+   "docs/seed_registry.json"
+  ],
+  "plant": "mujoco",
+  "plant_options": {
+   "actuator_time_constant": 0.0,
+   "actuator_time_constant_range": [
+    0.01,
+    0.05
+   ],
+   "armature": 0.0,
+   "armature_range": [
+    0.02,
+    0.08
+   ],
+   "obstacle": null,
+   "sensor_noise_std": 0.001
+  },
+  "release_target": "v2.1.0",
+  "safety_endpoints": {
+   "censoring": "maxima are taken over the observed prefix of each episode, which an abort shortens; the prefix length is reported alongside",
+   "contrast": "identified/identified minus identified/fixed, per scenario, seed-paired unless stated",
+   "decision_weight": false,
+   "expected_from_pilot": {
+    "safety_intervention_fraction": "lower with the identified certificate",
+    "severity_conditional": "smaller position and velocity excesses with the identified certificate in every scenario",
+    "timeout": "fewer with the identified certificate under mismatch",
+    "unsafe_episode": "more frequent with the identified certificate in id_reference and ood_compound, less frequent under motor_fault"
+   },
+   "families": {
+    "operational": [
+     "abort",
+     "timeout"
+    ],
+    "severity_conditional": [
+     "mean of joint_position_violation_max_rad over unsafe episodes, per arm",
+     "mean of joint_velocity_violation_max_rad_s over unsafe episodes, per arm",
+     "with unpaired percentile bootstrap intervals per arm"
+    ],
+    "severity_paired": [
+     "normalized_violation_max",
+     "joint_position_violation_max_rad",
+     "joint_velocity_violation_max_rad_s",
+     "safety_intervention_fraction",
+     "steps (observed prefix length; aborts end the prefix)"
+    ],
+    "violation_rate": [
+     "unsafe_episode (any positive excess, the v2.0 definition)",
+     "unsafe_beyond_tolerance (position excess above 0.05 rad or velocity excess above 0.5 rad/s)"
+    ]
+   }
+  },
+  "seal_file": "docs/v21_seal.json",
+  "seeds": {
+   "decision": {
+    "arms": [
+     "fixed_hocbf",
+     "fixed_hocbf_adaptivemodel",
+     "adaptive_hocbf_fixedmodel",
+     "adaptive_hocbf"
+    ],
+    "episodes_per_scenario": 1900,
+    "plant": "mujoco",
+    "start": 54200
+   },
+   "reproduction": {
+    "arms": [
+     "fixed_hocbf",
+     "adaptive_hocbf"
+    ],
+    "decision_weight": false,
+    "episodes_per_scenario": 100,
+    "reference": "results/adaptive_mujoco_v20/episodes.jsonl",
+    "rows_must_match_reference": "every retained field",
+    "runs_and_is_checked_before_any_decision_seed": true,
+    "start": 52200
+   },
+   "scenarios": [
+    "id_reference",
+    "ood_compound",
+    "motor_fault"
+   ],
+   "unopened_range": [
+    54200,
+    56099
+   ],
+   "unopened_range_checked_against": [
+    "committed CSV/JSON/JSONL blobs of every commit reachable from any ref",
+    "docs/seed_registry.json"
+   ]
+  },
+  "state_interface": "measured_state_with_sensor_noise_same_for_every_arm",
+  "success_statements": {
+   "certificate_equivalence_in_distribution": {
+    "contrast": "identified/identified minus identified/fixed",
+    "interval_within": [
+     -0.03,
+     0.03
+    ],
+    "scenarios": [
+     "id_reference"
+    ]
+   },
+   "certificate_gain_under_mismatch": {
+    "contrast": "identified/identified minus identified/fixed",
+    "lower_95_above": 0.1,
+    "scenarios": [
+     "motor_fault",
+     "ood_compound"
+    ]
+   },
+   "controller_gain_at_fixed_certificate": {
+    "contrast": "identified/fixed minus fixed/fixed",
+    "lower_95_above": 0.2,
+    "scenarios": [
+     "id_reference",
+     "ood_compound",
+     "motor_fault"
+    ]
+   },
+   "reported_without_threshold": [
+    "interaction: (identified/identified minus identified/fixed) minus (fixed/identified minus fixed/fixed)",
+    "controller at identified certificate",
+    "certificate at fixed controller"
+   ]
+  },
+  "training": false
+ },
+ "reproduction_check": {
+  "compared": 600,
+  "fields": [
+   "arm",
+   "control_steps",
+   "converged_at_step",
+   "estimated_parameters",
+   "fault_seen",
+   "final_distance",
+   "max_command_torque",
+   "max_speed",
+   "model_fallback_steps",
+   "model_fallbacks",
+   "normalized_violation_max",
+   "origin",
+   "outcome",
+   "plant",
+   "prediction_error_rms",
+   "prediction_fallbacks",
+   "reward",
+   "safety_infeasible",
+   "safety_intervention_fraction",
+   "scenario",
+   "seed",
+   "selected_lag",
+   "selected_time_constant",
+   "steps",
+   "success",
+   "true_armature",
+   "true_delay",
+   "true_parameters",
+   "true_time_constant",
+   "unsafe_episode"
+  ],
+  "matched": 600,
+  "mismatches": [],
+  "reference": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL/results/adaptive_mujoco_v20/episodes.jsonl"
+ },
+ "safety": {
+  "id_reference": {
+   "operational": {
+    "abort": {
+     "ci95_high": -0.0036842105263157894,
+     "ci95_low": -0.022631578947368423,
+     "difference": -0.013157894736842105,
+     "pairs": 1900,
+     "reference_rate": 0.034736842105263156,
+     "treatment_rate": 0.02157894736842105
+    },
+    "timeout": {
+     "ci95_high": -0.016842105263157894,
+     "ci95_low": -0.042105263157894736,
+     "difference": -0.029473684210526315,
+     "pairs": 1900,
+     "reference_rate": 0.10789473684210527,
+     "treatment_rate": 0.07842105263157895
+    }
+   },
+   "severity_conditional": {
+    "adaptive_hocbf": {
+     "joint_position_violation_max_rad": {
+      "ci95_high": 0.004226334460064542,
+      "ci95_low": 0.002603417871710789,
+      "episodes": 236,
+      "mean": 0.0033249970266849217
+     },
+     "joint_velocity_violation_max_rad_s": {
+      "ci95_high": 0.8314228031654458,
+      "ci95_low": 0.6186972374362895,
+      "episodes": 236,
+      "mean": 0.7212026817405776
+     }
+    },
+    "adaptive_hocbf_fixedmodel": {
+     "joint_position_violation_max_rad": {
+      "ci95_high": 0.067999652663107,
+      "ci95_low": 0.02138602618414694,
+      "episodes": 74,
+      "mean": 0.0428007615919298
+     },
+     "joint_velocity_violation_max_rad_s": {
+      "ci95_high": 0.9998188235613191,
+      "ci95_low": 0.567953766690571,
+      "episodes": 74,
+      "mean": 0.7749384349450611
+     }
+    }
+   },
+   "severity_paired": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.0003855092380190792,
+     "ci95_low": -0.0023440073199861235,
+     "difference": -0.00125397739973956,
+     "pairs": 1900,
+     "reference_rate": 0.0016669770304225291,
+     "treatment_rate": 0.0004129996306829692
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.07559610851310763,
+     "ci95_low": 0.043691398076340475,
+     "difference": 0.05939915194991675,
+     "pairs": 1900,
+     "reference_rate": 0.030181812729439223,
+     "treatment_rate": 0.08958096467935596
+    },
+    "normalized_violation_max": {
+     "ci95_high": 0.01032587752195112,
+     "ci95_low": 0.005800372102110269,
+     "difference": 0.008030831487853737,
+     "pairs": 1900,
+     "reference_rate": 0.004828560353041283,
+     "treatment_rate": 0.012859391840895023
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": -0.1478856664791011,
+     "ci95_low": -0.16211821413556723,
+     "difference": -0.1549978700464222,
+     "pairs": 1900,
+     "reference_rate": 0.530706163255,
+     "treatment_rate": 0.3757082932085778
+    },
+    "steps": {
+     "ci95_high": -16.3803552631579,
+     "ci95_low": -21.10159210526316,
+     "difference": -18.721052631578946,
+     "pairs": 1900,
+     "reference_rate": 94.79368421052632,
+     "treatment_rate": 76.07263157894737
+    }
+   },
+   "violation_rate": {
+    "unsafe_beyond_tolerance": {
+     "ci95_high": 0.0431578947368421,
+     "ci95_low": 0.022631578947368423,
+     "difference": 0.03315789473684211,
+     "pairs": 1900,
+     "reference_rate": 0.02526315789473684,
+     "treatment_rate": 0.05842105263157895
+    },
+    "unsafe_episode": {
+     "ci95_high": 0.09947368421052631,
+     "ci95_low": 0.07157894736842105,
+     "difference": 0.08526315789473685,
+     "pairs": 1900,
+     "reference_rate": 0.03894736842105263,
+     "treatment_rate": 0.12421052631578948
+    }
+   }
+  },
+  "motor_fault": {
+   "operational": {
+    "abort": {
+     "ci95_high": -0.015789473684210527,
+     "ci95_low": -0.035789473684210524,
+     "difference": -0.025789473684210525,
+     "pairs": 1900,
+     "reference_rate": 0.039473684210526314,
+     "treatment_rate": 0.01368421052631579
+    },
+    "timeout": {
+     "ci95_high": -0.27052631578947367,
+     "ci95_low": -0.3178947368421053,
+     "difference": -0.2942105263157895,
+     "pairs": 1900,
+     "reference_rate": 0.37842105263157894,
+     "treatment_rate": 0.08421052631578947
+    }
+   },
+   "severity_conditional": {
+    "adaptive_hocbf": {
+     "joint_position_violation_max_rad": {
+      "ci95_high": 0.00490497885422976,
+      "ci95_low": 0.002890659744780914,
+      "episodes": 234,
+      "mean": 0.0037568989285760206
+     },
+     "joint_velocity_violation_max_rad_s": {
+      "ci95_high": 0.5654783495780494,
+      "ci95_low": 0.39235857544676844,
+      "episodes": 234,
+      "mean": 0.4781104232794043
+     }
+    },
+    "adaptive_hocbf_fixedmodel": {
+     "joint_position_violation_max_rad": {
+      "ci95_high": 0.20520794116655913,
+      "ci95_low": 0.15063624199483716,
+      "episodes": 525,
+      "mean": 0.17748012522127207
+     },
+     "joint_velocity_violation_max_rad_s": {
+      "ci95_high": 0.8484457234385977,
+      "ci95_low": 0.6946470693238753,
+      "episodes": 525,
+      "mean": 0.7696404828685757
+     }
+    }
+   },
+   "severity_paired": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.04064216855145579,
+     "ci95_low": -0.0570329682966315,
+     "difference": -0.048577869153621604,
+     "pairs": 1900,
+     "reference_rate": 0.04904056091640412,
+     "treatment_rate": 0.0004626917627825204
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.1259718998042847,
+     "ci95_low": -0.1831042015189348,
+     "difference": -0.15378074445190612,
+     "pairs": 1900,
+     "reference_rate": 0.21266381763473802,
+     "treatment_rate": 0.05888307318283189
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.032214312875122136,
+     "ci95_low": -0.041258813554528435,
+     "difference": -0.03675484577789898,
+     "pairs": 1900,
+     "reference_rate": 0.0452552600414349,
+     "treatment_rate": 0.008500414263535915
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": -0.3370639964615144,
+     "ci95_low": -0.36220741641742643,
+     "difference": -0.34955930168029237,
+     "pairs": 1900,
+     "reference_rate": 0.6963822373605375,
+     "treatment_rate": 0.346822935680245
+    },
+    "steps": {
+     "ci95_high": -64.34259210526315,
+     "ci95_low": -72.24738157894737,
+     "difference": -68.34789473684211,
+     "pairs": 1900,
+     "reference_rate": 147.91631578947369,
+     "treatment_rate": 79.56842105263158
+    }
+   },
+   "violation_rate": {
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.15,
+     "ci95_low": -0.1868421052631579,
+     "difference": -0.16842105263157894,
+     "pairs": 1900,
+     "reference_rate": 0.20894736842105263,
+     "treatment_rate": 0.04052631578947368
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.13315789473684211,
+     "ci95_low": -0.1731578947368421,
+     "difference": -0.1531578947368421,
+     "pairs": 1900,
+     "reference_rate": 0.27631578947368424,
+     "treatment_rate": 0.1231578947368421
+    }
+   }
+  },
+  "ood_compound": {
+   "operational": {
+    "abort": {
+     "ci95_high": 0.06736842105263158,
+     "ci95_low": 0.04105263157894737,
+     "difference": 0.05421052631578947,
+     "pairs": 1900,
+     "reference_rate": 0.03105263157894737,
+     "treatment_rate": 0.08526315789473685
+    },
+    "timeout": {
+     "ci95_high": -0.47736842105263155,
+     "ci95_low": -0.5252631578947369,
+     "difference": -0.501578947368421,
+     "pairs": 1900,
+     "reference_rate": 0.6226315789473684,
+     "treatment_rate": 0.12105263157894737
+    }
+   },
+   "severity_conditional": {
+    "adaptive_hocbf": {
+     "joint_position_violation_max_rad": {
+      "ci95_high": 0.0055856085946023185,
+      "ci95_low": 0.0027218818835684088,
+      "episodes": 338,
+      "mean": 0.004035854729854384
+     },
+     "joint_velocity_violation_max_rad_s": {
+      "ci95_high": 0.8997021377748884,
+      "ci95_low": 0.6731257595882096,
+      "episodes": 338,
+      "mean": 0.783497373329947
+     }
+    },
+    "adaptive_hocbf_fixedmodel": {
+     "joint_position_violation_max_rad": {
+      "ci95_high": 0.21848888496328683,
+      "ci95_low": 0.12016966577642599,
+      "episodes": 248,
+      "mean": 0.16704410248844223
+     },
+     "joint_velocity_violation_max_rad_s": {
+      "ci95_high": 1.210163926853062,
+      "ci95_low": 0.9304839660211593,
+      "episodes": 248,
+      "mean": 1.0682931002322944
+     }
+    }
+   },
+   "severity_paired": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.014466805045191279,
+     "ci95_low": -0.028536264964795794,
+     "difference": -0.02108569395707521,
+     "pairs": 1900,
+     "reference_rate": 0.021803651272175616,
+     "treatment_rate": 0.0007179573151004114
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.03247914543078374,
+     "ci95_low": -0.03194672888154534,
+     "difference": -6.030351162473629e-05,
+     "pairs": 1900,
+     "reference_rate": 0.13944036255663633,
+     "treatment_rate": 0.1393800590450116
+    },
+    "normalized_violation_max": {
+     "ci95_high": 0.0003033302525125952,
+     "ci95_low": -0.009321833968431325,
+     "difference": -0.004468623631266838,
+     "pairs": 1900,
+     "reference_rate": 0.024544883292955837,
+     "treatment_rate": 0.020076259661688994
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": -0.4475654927459421,
+     "ci95_low": -0.4699387252516681,
+     "difference": -0.45908315221661616,
+     "pairs": 1900,
+     "reference_rate": 0.8793831039519165,
+     "treatment_rate": 0.42029995173530027
+    },
+    "steps": {
+     "ci95_high": -99.56019736842106,
+     "ci95_low": -106.39077631578947,
+     "difference": -103.01842105263158,
+     "pairs": 1900,
+     "reference_rate": 210.06,
+     "treatment_rate": 107.04157894736842
+    }
+   },
+   "violation_rate": {
+    "unsafe_beyond_tolerance": {
+     "ci95_high": 0.002105263157894737,
+     "ci95_low": -0.03,
+     "difference": -0.01368421052631579,
+     "pairs": 1900,
+     "reference_rate": 0.09947368421052631,
+     "treatment_rate": 0.08578947368421053
+    },
+    "unsafe_episode": {
+     "ci95_high": 0.06526315789473684,
+     "ci95_low": 0.029473684210526315,
+     "difference": 0.04736842105263158,
+     "pairs": 1900,
+     "reference_rate": 0.13052631578947368,
+     "treatment_rate": 0.17789473684210527
+    }
+   }
+  }
+ },
+ "statements": {
+  "certificate_equivalence_in_distribution": false,
+  "certificate_gain_under_mismatch": true,
+  "controller_gain_at_fixed_certificate": true
+ },
+ "success": {
+  "id_reference": {
+   "certificate_at_fixed_controller": {
+    "ci95_high": 0.005263157894736842,
+    "ci95_low": -0.007368421052631579,
+    "difference": -0.0010526315789473684,
+    "pairs": 1900,
+    "reference_rate": 0.11315789473684211,
+    "treatment_rate": 0.11210526315789474
+   },
+   "certificate_at_identified_controller": {
+    "ci95_high": 0.05421052631578947,
+    "ci95_low": 0.03105263157894737,
+    "difference": 0.04263157894736842,
+    "pairs": 1900,
+    "reference_rate": 0.8573684210526316,
+    "treatment_rate": 0.9
+   },
+   "controller_at_fixed_certificate": {
+    "ci95_high": 0.7642105263157895,
+    "ci95_low": 0.7236842105263158,
+    "difference": 0.7442105263157894,
+    "pairs": 1900,
+    "reference_rate": 0.11315789473684211,
+    "treatment_rate": 0.8573684210526316
+   },
+   "controller_at_identified_certificate": {
+    "ci95_high": 0.8063157894736842,
+    "ci95_low": 0.7689473684210526,
+    "difference": 0.7878947368421053,
+    "pairs": 1900,
+    "reference_rate": 0.11210526315789474,
+    "treatment_rate": 0.9
+   },
+   "interaction": {
+    "ci95_high": 0.05578947368421053,
+    "ci95_low": 0.031578947368421054,
+    "difference": 0.04368421052631579,
+    "pairs": 1900
+   }
+  },
+  "motor_fault": {
+   "certificate_at_fixed_controller": {
+    "ci95_high": 0.0005263157894736842,
+    "ci95_low": -0.013157894736842105,
+    "difference": -0.00631578947368421,
+    "pairs": 1900,
+    "reference_rate": 0.034210526315789476,
+    "treatment_rate": 0.027894736842105264
+   },
+   "certificate_at_identified_controller": {
+    "ci95_high": 0.3426315789473684,
+    "ci95_low": 0.29735526315789473,
+    "difference": 0.32,
+    "pairs": 1900,
+    "reference_rate": 0.5821052631578948,
+    "treatment_rate": 0.9021052631578947
+   },
+   "controller_at_fixed_certificate": {
+    "ci95_high": 0.5705263157894737,
+    "ci95_low": 0.5252631578947369,
+    "difference": 0.5478947368421052,
+    "pairs": 1900,
+    "reference_rate": 0.034210526315789476,
+    "treatment_rate": 0.5821052631578948
+   },
+   "controller_at_identified_certificate": {
+    "ci95_high": 0.8889473684210526,
+    "ci95_low": 0.8589473684210527,
+    "difference": 0.8742105263157894,
+    "pairs": 1900,
+    "reference_rate": 0.027894736842105264,
+    "treatment_rate": 0.9021052631578947
+   },
+   "interaction": {
+    "ci95_high": 0.3494736842105263,
+    "ci95_low": 0.3026315789473684,
+    "difference": 0.3263157894736842,
+    "pairs": 1900
+   }
+  },
+  "ood_compound": {
+   "certificate_at_fixed_controller": {
+    "ci95_high": 0.0,
+    "ci95_low": -0.0015789473684210526,
+    "difference": -0.0005263157894736842,
+    "pairs": 1900,
+    "reference_rate": 0.0005263157894736842,
+    "treatment_rate": 0.0
+   },
+   "certificate_at_identified_controller": {
+    "ci95_high": 0.4710526315789474,
+    "ci95_low": 0.4242105263157895,
+    "difference": 0.4473684210526316,
+    "pairs": 1900,
+    "reference_rate": 0.3463157894736842,
+    "treatment_rate": 0.7936842105263158
+   },
+   "controller_at_fixed_certificate": {
+    "ci95_high": 0.36736842105263157,
+    "ci95_low": 0.32421052631578945,
+    "difference": 0.34578947368421054,
+    "pairs": 1900,
+    "reference_rate": 0.0005263157894736842,
+    "treatment_rate": 0.3463157894736842
+   },
+   "controller_at_identified_certificate": {
+    "ci95_high": 0.8115789473684211,
+    "ci95_low": 0.7757894736842105,
+    "difference": 0.7936842105263158,
+    "pairs": 1900,
+    "reference_rate": 0.0,
+    "treatment_rate": 0.7936842105263158
+   },
+   "interaction": {
+    "ci95_high": 0.47106578947368405,
+    "ci95_low": 0.4242105263157895,
+    "difference": 0.4478947368421053,
+    "pairs": 1900
+   }
+  }
+ }
+}

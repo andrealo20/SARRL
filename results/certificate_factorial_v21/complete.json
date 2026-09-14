@@ -1,0 +1,11 @@
+{
+ "decision": "partial",
+ "episodes": 23700,
+ "hashes": {
+  "decision.json": "364cecf5f8e30e1ab5c597302d002dbdf234a17a46f6ea28f1791cfd6d552332",
+  "episodes.csv": "a54163473e9fb0ad0827a0272f675d697aca5e106eea1f5168c3609ae1a9e5af",
+  "episodes.jsonl": "fdd8bc726549317991957e27635ed647c553271fb4b375ea25388a67c8018cea",
+  "journal.jsonl": "c4f21b40be001889801d4e18108ae2a3722391334419c80f1764865912cc32d7",
+  "manifest.json": "fb7dcb61c6030fc85201247682c5450fa4cee793cf3995da80dc9c8c262d31fe"
+ }
+}

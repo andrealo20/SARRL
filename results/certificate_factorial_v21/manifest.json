@@ -1,0 +1,1036 @@
+{
+ "execution": {
+  "installed_distributions": {
+   "Jinja2": "3.1.6",
+   "MarkupSafe": "3.0.3",
+   "PyOpenGL": "3.1.10",
+   "Pygments": "2.21.0",
+   "absl-py": "2.5.0",
+   "contourpy": "1.4.0",
+   "cuda-bindings": "13.3.1",
+   "cuda-pathfinder": "1.6.0",
+   "cuda-toolkit": "13.0.2",
+   "cycler": "0.12.1",
+   "etils": "1.14.0",
+   "filelock": "3.32.3",
+   "fonttools": "4.65.0",
+   "fsspec": "2026.7.0",
+   "glfw": "2.10.2",
+   "iniconfig": "2.3.0",
+   "kiwisolver": "1.5.1",
+   "matplotlib": "3.11.2",
+   "mpmath": "1.3.0",
+   "mujoco": "3.13.0",
+   "networkx": "3.6.1",
+   "numpy": "2.5.2",
+   "nvidia-cublas": "13.1.1.3",
+   "nvidia-cuda-cupti": "13.0.85",
+   "nvidia-cuda-nvrtc": "13.0.88",
+   "nvidia-cuda-runtime": "13.0.96",
+   "nvidia-cudnn-cu13": "9.20.0.48",
+   "nvidia-cufft": "12.0.0.61",
+   "nvidia-cufile": "1.15.1.6",
+   "nvidia-curand": "10.4.0.35",
+   "nvidia-cusolver": "12.0.4.66",
+   "nvidia-cusparse": "12.6.3.3",
+   "nvidia-cusparselt-cu13": "0.8.1",
+   "nvidia-nccl-cu13": "2.29.7",
+   "nvidia-nvjitlink": "13.0.88",
+   "nvidia-nvshmem-cu13": "3.4.5",
+   "nvidia-nvtx": "13.0.85",
+   "packaging": "26.3",
+   "pillow": "12.3.0",
+   "pip": "26.2.1",
+   "pluggy": "1.6.0",
+   "pyparsing": "3.3.2",
+   "pytest": "9.1.1",
+   "python-dateutil": "2.9.0.post0",
+   "ruff": "0.16.5",
+   "sarrl": "1.1.0",
+   "scipy": "1.18.1",
+   "setuptools": "78.1.0",
+   "six": "1.17.0",
+   "sympy": "1.14.0",
+   "torch": "2.12.0+cu130",
+   "triton": "3.7.0",
+   "typing_extensions": "4.16.0",
+   "wheel": "0.48.0",
+   "zipp": "4.1.0"
+  },
+  "mujoco": "3.13.0",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "python_executable": "/home/andrea/projects/SARRL/.venv/bin/python",
+  "workers": 6
+ },
+ "frozen_sources": {
+  "frozen_paths": [
+   "sarrl",
+   "tools",
+   "tests",
+   "docs/experiments.md",
+   "pyproject.toml",
+   ".gitignore",
+   "results/adaptive_mujoco_v20/episodes.jsonl",
+   "docs/seed_registry.json"
+  ],
+  "head": "992329ddef073753847e68318dd328c0128258fb",
+  "path_trees": {
+   ".gitignore": "232088f30345e2942f37cb94dd2245f697c6355b",
+   "docs/experiments.md": "595414bfcdb76798a92c6acbaa65f549387ef0a7",
+   "docs/seed_registry.json": "f108cc7e6da2fd6e05ec9e90b8316921aa5e3c3e",
+   "pyproject.toml": "99f9721e3f01695f21e86dbc73d047bfa0916799",
+   "results/adaptive_mujoco_v20/episodes.jsonl": "218f663182bc85c70c3cb6167dd3769d3d752e4e",
+   "sarrl": "5a0f0bef57aca0d39a45e1a98e2c0026412c454f",
+   "tests": "cd357a049296fef26be3763be92f134d13b8a012",
+   "tools": "4e31d851ce76b2ddb6a2afa47d337c55b7c45047"
+  },
+  "seal": {
+   "frozen_source_commit": "d7c20d67dfd6b6472ead365f2c9498087db4d261",
+   "protocol": "v2.1 controller stack by certificate model on the MuJoCo plant",
+   "sealed_utc": "2026-09-14T15:26:58Z"
+  },
+  "sealed_commit": "d7c20d67dfd6b6472ead365f2c9498087db4d261",
+  "tree": "d70b7e0e29cf6a6d0545bd0ffc84bfb914b6fbf1"
+ },
+ "protocol": {
+  "arms": {
+   "fixed/fixed": "fixed_hocbf",
+   "fixed/identified": "fixed_hocbf_adaptivemodel",
+   "identified/fixed": "adaptive_hocbf_fixedmodel",
+   "identified/identified": "adaptive_hocbf"
+  },
+  "bootstrap": {
+   "draws": 10000,
+   "seed": 210000,
+   "type": "paired_over_episode_seeds"
+  },
+  "campaign": "certificate_factorial_v21",
+  "decision": {
+   "estimator_validity": {
+    "applied_per": "arm and scenario",
+    "arms_with_estimator": [
+     "fixed_hocbf_adaptivemodel",
+     "adaptive_hocbf_fixedmodel",
+     "adaptive_hocbf"
+    ],
+    "failure_outcome": "inconclusive",
+    "guarded_step_fraction_per_episode": 0.1,
+    "max_guarded_episode_fraction": 0.1
+   },
+   "order": [
+    "estimator_validity",
+    "success_statements",
+    "otherwise"
+   ],
+   "outcomes": {
+    "confirmed": "all three success statements hold",
+    "inconclusive": "estimator validity fails in any estimator cell",
+    "partial": "at least one success statement fails; each is reported"
+   }
+  },
+  "descriptive_arm": {
+   "contrast": "identified/identified minus the same stack without prediction, seed-paired on those seeds: the prediction's effect within the identified stack, not a share of the controller effect",
+   "decision_weight": false,
+   "episodes_per_scenario": 100,
+   "label": "adaptive_hocbf_nocompensation",
+   "seeds": "first decision seeds",
+   "stack": "identified/identified without delay prediction"
+  },
+  "estimator": {
+   "actuator_substeps": 10,
+   "actuator_time_constants": [
+    0.0,
+    0.01,
+    0.03,
+    0.06
+   ],
+   "compensate_delay": true,
+   "compensation_applies_to": "identified controller stack only, as in v2.0",
+   "conditioning_floor": 0.05,
+   "filter_gate": false,
+   "forgetting": 1.0,
+   "lag_min_updates": 10,
+   "lower": [
+    0.2,
+    0.2,
+    0.01,
+    0.01,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "max_lag": 3,
+   "payload_prior": 0.0,
+   "prediction_limit": 5.0,
+   "prior_std": [
+    1.0,
+    1.0,
+    0.1,
+    0.1,
+    2.0,
+    0.1,
+    0.04
+   ],
+   "process_noise": 0.02,
+   "selection_memory": 1.0,
+   "upper": [
+    5.0,
+    5.0,
+    0.5,
+    0.5,
+    6.0,
+    0.5,
+    0.2
+   ]
+  },
+  "factors": {
+   "certificate_model": {
+    "levels": [
+     "fixed",
+     "identified"
+    ]
+   },
+   "controller_stack": {
+    "identified_means": "estimate-driven computed torque with delay prediction, the v2.0 controller stack; the two are not separated",
+    "levels": [
+     "fixed",
+     "identified"
+    ]
+   }
+  },
+  "frozen_paths": [
+   "sarrl",
+   "tools",
+   "tests",
+   "docs/experiments.md",
+   "pyproject.toml",
+   ".gitignore",
+   "results/adaptive_mujoco_v20/episodes.jsonl",
+   "docs/seed_registry.json"
+  ],
+  "plant": "mujoco",
+  "plant_options": {
+   "actuator_time_constant": 0.0,
+   "actuator_time_constant_range": [
+    0.01,
+    0.05
+   ],
+   "armature": 0.0,
+   "armature_range": [
+    0.02,
+    0.08
+   ],
+   "obstacle": null,
+   "sensor_noise_std": 0.001
+  },
+  "release_target": "v2.1.0",
+  "safety_endpoints": {
+   "censoring": "maxima are taken over the observed prefix of each episode, which an abort shortens; the prefix length is reported alongside",
+   "contrast": "identified/identified minus identified/fixed, per scenario, seed-paired unless stated",
+   "decision_weight": false,
+   "expected_from_pilot": {
+    "safety_intervention_fraction": "lower with the identified certificate",
+    "severity_conditional": "smaller position and velocity excesses with the identified certificate in every scenario",
+    "timeout": "fewer with the identified certificate under mismatch",
+    "unsafe_episode": "more frequent with the identified certificate in id_reference and ood_compound, less frequent under motor_fault"
+   },
+   "families": {
+    "operational": [
+     "abort",
+     "timeout"
+    ],
+    "severity_conditional": [
+     "mean of joint_position_violation_max_rad over unsafe episodes, per arm",
+     "mean of joint_velocity_violation_max_rad_s over unsafe episodes, per arm",
+     "with unpaired percentile bootstrap intervals per arm"
+    ],
+    "severity_paired": [
+     "normalized_violation_max",
+     "joint_position_violation_max_rad",
+     "joint_velocity_violation_max_rad_s",
+     "safety_intervention_fraction",
+     "steps (observed prefix length; aborts end the prefix)"
+    ],
+    "violation_rate": [
+     "unsafe_episode (any positive excess, the v2.0 definition)",
+     "unsafe_beyond_tolerance (position excess above 0.05 rad or velocity excess above 0.5 rad/s)"
+    ]
+   }
+  },
+  "seal_file": "docs/v21_seal.json",
+  "seeds": {
+   "decision": {
+    "arms": [
+     "fixed_hocbf",
+     "fixed_hocbf_adaptivemodel",
+     "adaptive_hocbf_fixedmodel",
+     "adaptive_hocbf"
+    ],
+    "episodes_per_scenario": 1900,
+    "plant": "mujoco",
+    "start": 54200
+   },
+   "reproduction": {
+    "arms": [
+     "fixed_hocbf",
+     "adaptive_hocbf"
+    ],
+    "decision_weight": false,
+    "episodes_per_scenario": 100,
+    "reference": "results/adaptive_mujoco_v20/episodes.jsonl",
+    "rows_must_match_reference": "every retained field",
+    "runs_and_is_checked_before_any_decision_seed": true,
+    "start": 52200
+   },
+   "scenarios": [
+    "id_reference",
+    "ood_compound",
+    "motor_fault"
+   ],
+   "unopened_range": [
+    54200,
+    56099
+   ],
+   "unopened_range_checked_against": [
+    "committed CSV/JSON/JSONL blobs of every commit reachable from any ref",
+    "docs/seed_registry.json"
+   ]
+  },
+  "state_interface": "measured_state_with_sensor_noise_same_for_every_arm",
+  "success_statements": {
+   "certificate_equivalence_in_distribution": {
+    "contrast": "identified/identified minus identified/fixed",
+    "interval_within": [
+     -0.03,
+     0.03
+    ],
+    "scenarios": [
+     "id_reference"
+    ]
+   },
+   "certificate_gain_under_mismatch": {
+    "contrast": "identified/identified minus identified/fixed",
+    "lower_95_above": 0.1,
+    "scenarios": [
+     "motor_fault",
+     "ood_compound"
+    ]
+   },
+   "controller_gain_at_fixed_certificate": {
+    "contrast": "identified/fixed minus fixed/fixed",
+    "lower_95_above": 0.2,
+    "scenarios": [
+     "id_reference",
+     "ood_compound",
+     "motor_fault"
+    ]
+   },
+   "reported_without_threshold": [
+    "interaction: (identified/identified minus identified/fixed) minus (fixed/identified minus fixed/fixed)",
+    "controller at identified certificate",
+    "certificate at fixed controller"
+   ]
+  },
+  "training": false
+ },
+ "reproduction_reference_sha256": "f273d201ff7b72a4e5948564cefde50f0495e28e6c02857825c21f37306fe00e",
+ "runtime": {
+  "cuda_available": true,
+  "git_commit": "992329ddef073753847e68318dd328c0128258fb",
+  "imported_repository_root": "/mnt/c/Users/Dummy Account/Documents/GitHub/SARRL",
+  "numpy": "2.5.2",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "scipy": "1.18.1",
+  "torch": "2.12.0+cu130"
+ },
+ "seed_scan": {
+  "blobs_read": 467,
+  "distinct_trees_scanned": 133,
+  "range": [
+   54200,
+   56099
+  ],
+  "reachable_commits": 138,
+  "registry": "docs/seed_registry.json",
+  "reserved_entry": {
+   "high": 56099,
+   "kind": "decision",
+   "label": "v2.1 decision block",
+   "low": 54200,
+   "status": "reserved"
+  },
+  "trees": [
+   {
+    "commit": "992329ddef073753847e68318dd328c0128258fb",
+    "files": 448,
+    "tree": "d70b7e0e29cf6a6d0545bd0ffc84bfb914b6fbf1"
+   },
+   {
+    "commit": "d7c20d67dfd6b6472ead365f2c9498087db4d261",
+    "files": 447,
+    "tree": "0d4947dc633fc8c29227b906655eebea9cdf55e2"
+   },
+   {
+    "commit": "ab121168a0f2cff876104787438b457b77476736",
+    "files": 447,
+    "tree": "eeb6a4b4e7d3ff718605d25ebcb5b9778616a704"
+   },
+   {
+    "commit": "0502ba0f85407ad0db93a26cc37b951bf0c3d268",
+    "files": 447,
+    "tree": "54ff75a0c59c665947dcfcadfe7364f564682a3f"
+   },
+   {
+    "commit": "0bd38bed2ed209324c3f886b0020e4d8e78e8d48",
+    "files": 447,
+    "tree": "256891e583d3ed430a449c24e9177033a5131a4c"
+   },
+   {
+    "commit": "5dc53e0676eed7fd6a8d6415dd9396d115c6a4c0",
+    "files": 446,
+    "tree": "96cc490cfd5967b444ee85270a9cf7caa603f595"
+   },
+   {
+    "commit": "063a10e6d9e608739be129923e38398d1788711d",
+    "files": 446,
+    "tree": "f4936bf459b282445e4c9e569e73f67143bf2685"
+   },
+   {
+    "commit": "4ba40078e2df9f1f6e161a089ed892a001ae46b8",
+    "files": 446,
+    "tree": "a35b39c5d91410ebd654bcae88c7d514b4b5dd00"
+   },
+   {
+    "commit": "191dd57d198101fb9c95c32c1021a1b9ade2d533",
+    "files": 446,
+    "tree": "a886156c24e8bd76e60f847a4b6c393ef8fa73e0"
+   },
+   {
+    "commit": "af53d1fd2ce23755c3284505415e3c0345e3a72e",
+    "files": 446,
+    "tree": "c2478a25e0706ddd9c3da1737e029b0aa0bbab88"
+   },
+   {
+    "commit": "932d6d493094564bd6ceccd6ae3ef2cbe29ca943",
+    "files": 446,
+    "tree": "30ecef135f32a3d6ff0a6a927ab1a469479eea49"
+   },
+   {
+    "commit": "cda5cdd15779177810c1bf6270accb78754d3944",
+    "files": 446,
+    "tree": "be5c82cc5bd2529e04520bb6393abe46f40b2067"
+   },
+   {
+    "commit": "d3797481da91d7a6f8943ff79a9104a74266aaf6",
+    "files": 446,
+    "tree": "7a04695564494d588677a4336d138ed0c3517ea3"
+   },
+   {
+    "commit": "d81947b08d01fe155576a0bdc5d2540a7ca5b688",
+    "files": 446,
+    "tree": "d72081466fdd91e673ac6078940c0a4b9c651985"
+   },
+   {
+    "commit": "c6fd964b36c1070ede8894b055543a97ec5624eb",
+    "files": 440,
+    "tree": "3c6922878c961dfd7741ab153ab17ec667d05230"
+   },
+   {
+    "commit": "e334eb1fbd8e409cf050ee6570ece0e3795b3597",
+    "files": 439,
+    "tree": "a932aa39b54a17512860fff2d2311ba0c1fbe243"
+   },
+   {
+    "commit": "b9e2df2c5d629f7ff8f56ad3c7d4756dad9556bf",
+    "files": 439,
+    "tree": "374059ead52548151f0f9b58db435d42889ce10b"
+   },
+   {
+    "commit": "3515965d9d33612f26b2b41fcd673a00c5c4e314",
+    "files": 439,
+    "tree": "16fa053a8938e043233a8d272aea8e08a77f6fcd"
+   },
+   {
+    "commit": "1f4030e7f39629819c1081b8902346524bb88eba",
+    "files": 439,
+    "tree": "f16c6c670b30381b9dc6dc2fbe1b16cdaae9dcf9"
+   },
+   {
+    "commit": "e5de583a8cbbe78b7b12b5f1eeacd10741c57342",
+    "files": 439,
+    "tree": "8623097fa75849e2eb1e3bc68253de857384a8f2"
+   },
+   {
+    "commit": "4783f97292a1a790581c2927a96af3653bd56673",
+    "files": 439,
+    "tree": "4ba704e1f65136b783c371b98573aacdedcad54b"
+   },
+   {
+    "commit": "dc2655277e69dfb9de1e918db44e52240c0ed802",
+    "files": 439,
+    "tree": "ddb99a349161ce13deb883520fb45cd8ed5dc8a6"
+   },
+   {
+    "commit": "2570afbf01e540e87ce3695e328391ff1095e7fd",
+    "files": 433,
+    "tree": "4d1449dce6af66c4bc5af10d43745d4d3b5d704a"
+   },
+   {
+    "commit": "7b18c68b080736e930970b7d47d299b9019fc87e",
+    "files": 432,
+    "tree": "44ea570909e341ee60abf3a546c0d3cc620cfc19"
+   },
+   {
+    "commit": "c3445e8aa84b0609c6f38b2ec1ded40acd279632",
+    "files": 432,
+    "tree": "84e06e5ec991390f35ba0ff3d4e8e89f7f809bfa"
+   },
+   {
+    "commit": "a5e6f449066f925e3da71bdb6e5cc75ef02aa43f",
+    "files": 432,
+    "tree": "beea7cd84ac309c3dc42c7581e9d170fa8b56bf4"
+   },
+   {
+    "commit": "af43f52d4f4c1574f482aa22240397eccfa432cd",
+    "files": 432,
+    "tree": "07ccd2429ab2d681728d632ee771a921345b7e6e"
+   },
+   {
+    "commit": "d4c8cb74832fec11748b3baf255330c25fd4688a",
+    "files": 432,
+    "tree": "607ac360dc0f2b568fcc28c6ca1eaa819dc7700b"
+   },
+   {
+    "commit": "ee1177057892e5e9ef4adac62a30dc45330c1c9d",
+    "files": 432,
+    "tree": "e1f9aabb840b6c5f0fa6f7437a38e39a5435a608"
+   },
+   {
+    "commit": "905ace9ba73aba0d8cdfe9594ce4a52cad3bf242",
+    "files": 432,
+    "tree": "3e06e27937d1b2927d86701979f56bbb8d07d31d"
+   },
+   {
+    "commit": "e66237310211f520251e770c89a15192c36b971e",
+    "files": 432,
+    "tree": "ee0ebe31c25ccec6035100d32c69ccb0d65489f6"
+   },
+   {
+    "commit": "ae31756a3b2308fef122475c47d1fdfc856d890f",
+    "files": 432,
+    "tree": "82d6ce80ad98599be4ba21eb3a1e5468761708fc"
+   },
+   {
+    "commit": "22164d273af64f818107bd538ba6886cd7f564aa",
+    "files": 432,
+    "tree": "ca72d7da429d0b689eb620cfb06490d75f8ab1c2"
+   },
+   {
+    "commit": "0faeb3a376bfc5bcc03fa71a6281633b86ac8a83",
+    "files": 303,
+    "tree": "8dc4fc30533ed95cdd3381fe5aa9ff5739497143"
+   },
+   {
+    "commit": "33351b618ad2cd2d392c09bf6ae6e2135ab49e13",
+    "files": 117,
+    "tree": "26246ae0abb1c7ffefba59d282be8e7081571f74"
+   },
+   {
+    "commit": "e43f48450e13020e3c1e7099503a64ba13de6a6a",
+    "files": 117,
+    "tree": "f89fc69049d6f627b62b3863245ef3b981b26470"
+   },
+   {
+    "commit": "c6f3f6c9588579c5ed0a67be33f27c814d166253",
+    "files": 117,
+    "tree": "e101785ead3ac67f8eb1f1d4750dc73e3ad0c26f"
+   },
+   {
+    "commit": "18289c361a9773cb52ea5231a5b3e49406cb1a61",
+    "files": 117,
+    "tree": "8f5d1ae70220425346c107e7dd7a073285db314b"
+   },
+   {
+    "commit": "08a623b4c6b268b222f81647519e103a4084fcbb",
+    "files": 117,
+    "tree": "102753b01c78a07c16064e919d1db5886085ff20"
+   },
+   {
+    "commit": "6dc641893411b06364c31296ec277e3645afce0c",
+    "files": 117,
+    "tree": "885ba9318d987e3d0523e54ebc6070200cf4c886"
+   },
+   {
+    "commit": "19e69e868f9b3d7eacc0c94a66715fa3524f6a12",
+    "files": 117,
+    "tree": "520014e0dbefd63ccd967c85ada8c10f17fdaf20"
+   },
+   {
+    "commit": "002e662056e0963e39c2411e322b443b5eb0d468",
+    "files": 117,
+    "tree": "c469025c374bf8e129acf1fd02affb8156f78182"
+   },
+   {
+    "commit": "7ade2e8752fbf10171c50caded921af7b390510f",
+    "files": 117,
+    "tree": "005afed0b922a77b2c6fa97976b15f12dc52d47c"
+   },
+   {
+    "commit": "7bebf22cbfcdaf1d2302bad72051d5149b8fbc48",
+    "files": 116,
+    "tree": "65ea9f49824ca8d3fd93d34b72801ef662318e1a"
+   },
+   {
+    "commit": "9e49f8800dbbb85891bcadc25efabaa36e65d296",
+    "files": 116,
+    "tree": "7a2789de59ade45eb7d85391cce5d62efe96b62e"
+   },
+   {
+    "commit": "899b0b0be449ff3a63ae6ab4bc9f6564a7faf893",
+    "files": 116,
+    "tree": "167a64dec47cf77c2942051aab0c5dc11a93eadf"
+   },
+   {
+    "commit": "3190345db8eda594269156840633b3f471031352",
+    "files": 114,
+    "tree": "5260886d37d94edc7e79958fd449a95f8fed59a5"
+   },
+   {
+    "commit": "3ea4dec928bdaa27064db8af47478f42d31c324b",
+    "files": 114,
+    "tree": "97356afaa8600a1bef08bc5fcbc94e66c228609c"
+   },
+   {
+    "commit": "adacd1a91f4e296afd7fb9d3df1d9c9c2f308e81",
+    "files": 114,
+    "tree": "6354e98464fe350ddc0d6c89414ec3a18d92fef8"
+   },
+   {
+    "commit": "16b94dffd88f27dcbed89c613e9306eadf7f289d",
+    "files": 114,
+    "tree": "7c392f29905e924e64bb8fc621e8f1a91ed913c6"
+   },
+   {
+    "commit": "b27cb823abfe5bb208c1a448e2a2eba63b5584b8",
+    "files": 113,
+    "tree": "7ea988edf4beca779646376a53952e640732e32c"
+   },
+   {
+    "commit": "d1e1c742b05de0a6d338f4c373837e3c2c5e8127",
+    "files": 113,
+    "tree": "c42fe2ac74287c00d9196b50ea4eced15681db69"
+   },
+   {
+    "commit": "d9855ccb87694e735d805cbebe4265c8c33a9481",
+    "files": 113,
+    "tree": "9594fb4e5691d0493fb7bf77a2b5854bcae74152"
+   },
+   {
+    "commit": "a970afc5de6ed4692e1374c0761f0f517d636138",
+    "files": 112,
+    "tree": "d57f74b4ce7b8efbac99c80c3ad12652a96afe30"
+   },
+   {
+    "commit": "926bd3e68bfb7c6666e77ec14a279ee2e2a98c8a",
+    "files": 112,
+    "tree": "96f035f411782a84fd8990ae340f8be50a0dc8d4"
+   },
+   {
+    "commit": "32aa7019d936b042e5f10e4c8fd8f3f6556ad7b9",
+    "files": 111,
+    "tree": "f5bbb2dfcd71470000f8d89bc54c7d35da14a32e"
+   },
+   {
+    "commit": "2b7785a06c11ab8fcbee8f4ef630d4671932acf1",
+    "files": 111,
+    "tree": "56cb4705075d24f83af3c0207edd4f78c08549e4"
+   },
+   {
+    "commit": "d7d14df899c508afa95ebd55d1adb35789f7bd02",
+    "files": 111,
+    "tree": "6838160b6721d8d30b521b9773eea625060e9dcd"
+   },
+   {
+    "commit": "de3e0135313f2290fff197144a1788b4aefa1069",
+    "files": 111,
+    "tree": "c935751fc06efb7f574326f6765d4d9b70afb97a"
+   },
+   {
+    "commit": "9921fbef0b84bfb5b50461f5a177c53b9b8dd342",
+    "files": 111,
+    "tree": "fdf43e484d43d36519d6b9b543b2a3395ffc46c5"
+   },
+   {
+    "commit": "82b8ae38aa5a70148ebd8ea57f7b0cfd439ccd7a",
+    "files": 111,
+    "tree": "0ddf1821ab5cfbb227a801e855204adda9eac843"
+   },
+   {
+    "commit": "78cc18f234858958dd27824f3918cc7f02471cff",
+    "files": 111,
+    "tree": "910707aa877cd3497c2a00ca41fc96ff6c85fcaa"
+   },
+   {
+    "commit": "724566eed0ca689b1ece6f1e6d55a406534d0561",
+    "files": 102,
+    "tree": "86a37f3fdd57207d53340bf6d20cfc89d9a08ad5"
+   },
+   {
+    "commit": "5526bdfa407267edd0767e1034803045e5fa106a",
+    "files": 102,
+    "tree": "e661537bb3280daa9e220a9129df7cf2a0abea8c"
+   },
+   {
+    "commit": "d4f19a9e4b23ea95a4bd48f42a22ce4d979af544",
+    "files": 102,
+    "tree": "3ff52483bf84ae3572f09561824f28789f17dce1"
+   },
+   {
+    "commit": "4168226291eae05e6466bb23ca8663d13998bac3",
+    "files": 102,
+    "tree": "35244d5f880980591af905d531515c397b19291a"
+   },
+   {
+    "commit": "08c912ba9e829491ff1d603cdaf5bd51389e489e",
+    "files": 99,
+    "tree": "17b2b648a0308ca09645d8efdf35c8cc13bf804d"
+   },
+   {
+    "commit": "e247b3671e0a815d48dcc93b7aa347e60e126cd5",
+    "files": 99,
+    "tree": "3cc929353d4dc7ba0a1a3f7de600d628919a3a40"
+   },
+   {
+    "commit": "58888f22e46a175b956b114a9d22a5c707da86c0",
+    "files": 95,
+    "tree": "19093d2508135fa88a2d4c7a58d3137fb9e9ece5"
+   },
+   {
+    "commit": "31f167394776fad99ec53bd9c5ce869acae55fb8",
+    "files": 95,
+    "tree": "f87bbf5cbe9c2658d927353b76761618a2c48565"
+   },
+   {
+    "commit": "e71fa2683eb8df565de38d234932f4875c56fb7a",
+    "files": 95,
+    "tree": "fc0b53ff5db9b25bb26537992314b6be41edca94"
+   },
+   {
+    "commit": "57bf2a40565357cc4cb77bd7bdb181556198986d",
+    "files": 95,
+    "tree": "560b8f03bebd5b015d8685bb00af1af793614b43"
+   },
+   {
+    "commit": "e024dda1f67f17386187a26c159ec50b6f69e6bd",
+    "files": 102,
+    "tree": "60afe8eb9cfd5c547369941fab0d95a011c38b95"
+   },
+   {
+    "commit": "afa9c827cd66c9df828ffbf6301c265055c7f8ec",
+    "files": 102,
+    "tree": "cd6da6a42d053d556f437eb467fd1e307b6d3a8e"
+   },
+   {
+    "commit": "f8bda33a1ab557739b7e13acf4eb2379d64009de",
+    "files": 0,
+    "tree": "88f551345715731421f06a0310e2cf5f5de8540b"
+   },
+   {
+    "commit": "80290f932a4ab138ef8382d3b56f75bdf10d1c0a",
+    "files": 99,
+    "tree": "d65172ec0454e79bda89ded7e00c7b6940976528"
+   },
+   {
+    "commit": "9bd3c67a5103a1a3ef52be994af0b2866c74b85d",
+    "files": 99,
+    "tree": "2b175af76225d957ad73070d6d12031557d279f7"
+   },
+   {
+    "commit": "013aecfbb96d2d444338acebc7f619f765008c0b",
+    "files": 95,
+    "tree": "854e078ef05ef3e0febef7d63501203ebf7b7f3e"
+   },
+   {
+    "commit": "84b24e3c3a72cbffe3dcbeee311b118fa9718a9d",
+    "files": 95,
+    "tree": "daaa34888a5fdb2ef1fa3372e7fbd47ee91e42f8"
+   },
+   {
+    "commit": "6f94fae93ae993beb32f92fd17470037185f56e9",
+    "files": 95,
+    "tree": "468621f24b1dd5b3bdb5d40d85129d9f0e538804"
+   },
+   {
+    "commit": "e5c577a8aaae6867c1f64ffa55b50a35b847441b",
+    "files": 95,
+    "tree": "65d49e4f8adf95c30af62b4bffee0575e011e651"
+   },
+   {
+    "commit": "3953eeed4677567f1f8e0b9a929f706a08085bbe",
+    "files": 95,
+    "tree": "52454f1dc1b8013fc14d6d01f3ae915c2f5761ec"
+   },
+   {
+    "commit": "0228b13d895c0155774762c2f8bcb488dfc39eaf",
+    "files": 95,
+    "tree": "eef156c46613f50d89a08c329b399dcc363174d3"
+   },
+   {
+    "commit": "29fa933717c921cab57fbe4023dd03b53267953a",
+    "files": 89,
+    "tree": "f3dfa03003abc4c8adeb0e0690c32fa3b35c4cbc"
+   },
+   {
+    "commit": "b408c74a9673dc34c214585d81378893f6379667",
+    "files": 89,
+    "tree": "70588d241c8d5952d8e4f0adbfdea602e39915e1"
+   },
+   {
+    "commit": "a477a2d43497c8434e7671cc0a3c565e918b5cb5",
+    "files": 89,
+    "tree": "8b313be87cf538a2a055b3443df4a233f658a9ef"
+   },
+   {
+    "commit": "571ea22d858322815c43928bfeed87a784af78f3",
+    "files": 82,
+    "tree": "444f56a7768ced26bc5ff1d9b206bba5d74e1e13"
+   },
+   {
+    "commit": "498ea877ec523fe5e0a3a54efe1ccaa7caa4c513",
+    "files": 82,
+    "tree": "04b360364c779cf42424a0f473b79e071372e072"
+   },
+   {
+    "commit": "d647984b93461756eb8b70a56c1e3ff6eb2290c5",
+    "files": 82,
+    "tree": "82e87067c697edd76fbca3c20b765284b8994eed"
+   },
+   {
+    "commit": "c029558a464d4ece02188dd4c5f0486387252762",
+    "files": 70,
+    "tree": "e303a6ffff056a91d1d014ce43eb7c13a14f34b3"
+   },
+   {
+    "commit": "7eb3e4ce7277039b555ddaea688f720f9ab4db50",
+    "files": 70,
+    "tree": "94d8d362e7fc3b5c70bfd169a00d5f2872918d7e"
+   },
+   {
+    "commit": "22fde136682013990157b9a11d42b923d20afa3e",
+    "files": 58,
+    "tree": "851a08bdea68bbb99018881b7eb74d140d493921"
+   },
+   {
+    "commit": "ad26cf76ee59044b78d6768e4d7bfc33e69e2463",
+    "files": 58,
+    "tree": "8cecb9632cb838670c2ad0ad70fc041f1cc2584c"
+   },
+   {
+    "commit": "3068a858ae46d55a43705963ede6e0d72b66492d",
+    "files": 34,
+    "tree": "cd93c9b11270170f1c7da5ffdc9e8bf252cb113c"
+   },
+   {
+    "commit": "f17b552aea9588ff21fe946f998a8672ca94009e",
+    "files": 34,
+    "tree": "118e09b3e156aab89556e9fb0d2f3a323f7aa020"
+   },
+   {
+    "commit": "67c943c6c408f437ca2e187f1ab637f133d01611",
+    "files": 34,
+    "tree": "d38af92957d6447f8174def6503a24278bb214f8"
+   },
+   {
+    "commit": "00814c1b1466a522dedc58ecb3155d04ea075fe4",
+    "files": 34,
+    "tree": "a325978d2118c8d7b0a12e6eac1893f943968b00"
+   },
+   {
+    "commit": "2e965b988210c64ccab25c0bbfacc65888d4d405",
+    "files": 34,
+    "tree": "15b3bcb6722d67c0d6cb8a3b379943ec82836af3"
+   },
+   {
+    "commit": "b228262ab1e2582d0e08da05337de38d17faa478",
+    "files": 34,
+    "tree": "f3bf7fc597bc4c00b9294002dada992cfe25bd52"
+   },
+   {
+    "commit": "d352a6cbcebf03ce45e81ff21c74744f6858cf99",
+    "files": 20,
+    "tree": "9b705ad4f46212ba3014a0c26cfbfe16980f0326"
+   },
+   {
+    "commit": "d6cd20c21709d67172c85a7f0a93759389e55b9d",
+    "files": 20,
+    "tree": "8bd7d17795a389decfdd693f38b42562bef53b8f"
+   },
+   {
+    "commit": "4a6577a215f5b47d73877357c06c12544acdf9b9",
+    "files": 20,
+    "tree": "d3cb1a847f5d63ad35d8c1083dd749408772c5a7"
+   },
+   {
+    "commit": "3cc012d01bee6281fce04b4ae11015bf8fdbcb62",
+    "files": 20,
+    "tree": "4785528809decc312adbf67d0edba7bf305e2b23"
+   },
+   {
+    "commit": "ec903a1cd647d57663d63d103b52330aee73fb47",
+    "files": 20,
+    "tree": "6290f2c272cfc573f902565b4e9923fda8580126"
+   },
+   {
+    "commit": "165b6de4209601cab99df27b4b409267687d2fd1",
+    "files": 20,
+    "tree": "456d527cb0aa99828d13dcc75d03a022e3bb6c61"
+   },
+   {
+    "commit": "c4f3270aae47c4450f1f08cf1459cbc8f6d06f81",
+    "files": 20,
+    "tree": "b73f7540be47edf00c780f87d0085542404a1035"
+   },
+   {
+    "commit": "f0555ff4111bf0f2c34b791cf80100c08b4f2240",
+    "files": 20,
+    "tree": "597b437c0d93cd5f792d01cad6aa9e6115411c0a"
+   },
+   {
+    "commit": "6930e99ad0645bedf7163a9867db8d86b29623fb",
+    "files": 20,
+    "tree": "6c57a6d306d44b8bbe6e634a709ae9bc1a64d4ef"
+   },
+   {
+    "commit": "c6e8392954fd5d968a1163d541c9b0621688ba7f",
+    "files": 20,
+    "tree": "2c7f80c50d91d2304558f1cf0a85c318394d22a3"
+   },
+   {
+    "commit": "af8667c41be93743d5d146681d0cf62aa8835ddb",
+    "files": 20,
+    "tree": "1a9f0c7e496a386854997e65ee9fced6b7211f4e"
+   },
+   {
+    "commit": "4d8897643c4568d0bc195b67f9fbb5ffd373a6e1",
+    "files": 20,
+    "tree": "eeefc2f58b99387e779af2ca6f91477d08077228"
+   },
+   {
+    "commit": "50b4bbc42a935b2af726789ff1fc800a9458e248",
+    "files": 20,
+    "tree": "8c470e8dde4a82c60256d282a6249a09bd9a2760"
+   },
+   {
+    "commit": "c398dd1d2dca5159ba38b3ab91711ad1827b81fb",
+    "files": 20,
+    "tree": "e19b314551a29b26b7da545fbbb440cc6de8c55e"
+   },
+   {
+    "commit": "eec5b45230f1b2d6a31aa693433a594fc8910123",
+    "files": 20,
+    "tree": "80c565263cd8d97d2fd2609bc210e4ed4ab01d7d"
+   },
+   {
+    "commit": "639d0fc19856ed23c9359876771b7f301109203a",
+    "files": 20,
+    "tree": "cbe15cb4d596b51483dd4fd68be0d02a68deeb87"
+   },
+   {
+    "commit": "9f832614ce8b51c207873ff4861986ab72903115",
+    "files": 4,
+    "tree": "8cc5a38c02c3bdabdc1ea8a8cf936f54e0541010"
+   },
+   {
+    "commit": "8eef323162249151fd2aec9d7dc41cb22a492925",
+    "files": 4,
+    "tree": "06da2458c8871c98dd7f3da502221882d916dbfa"
+   },
+   {
+    "commit": "78781307c46472455ace472fa1a1b9e7aed557fd",
+    "files": 4,
+    "tree": "569e7f28c3114b7775bc5d49313e4dde883f2a67"
+   },
+   {
+    "commit": "2cc3ede5a3bc79c4d772e4538e0e8ec61e8b35fb",
+    "files": 4,
+    "tree": "1708ed0a47f6456637483ef6f5fe5407f2de51da"
+   },
+   {
+    "commit": "648f2ea6c68af09fd6635fb6ad29b050c37ebede",
+    "files": 4,
+    "tree": "325292ba386923ef3f31cb4ff00f8d91a6124241"
+   },
+   {
+    "commit": "f6aba1bdca26e3881abefdef6f2b44d2ece6a63c",
+    "files": 4,
+    "tree": "ea372a46463afa1ccb516acea83223a51e4964a9"
+   },
+   {
+    "commit": "69a2fe2f8339a1ee4e83beabff2df38076108ce9",
+    "files": 2,
+    "tree": "6b82712cdaa3ca717ffcce9ad51d8d097441cf52"
+   },
+   {
+    "commit": "05fbcc4b6acfda0bb62cbe05975989a5136a2363",
+    "files": 2,
+    "tree": "5724af33b05f1c2bb6ddce510a345823fa431dec"
+   },
+   {
+    "commit": "d88175ad903eff975ee0c49e23a314cb97316744",
+    "files": 2,
+    "tree": "4a098e9b2f44771a746272ae7abcfd132268ef80"
+   },
+   {
+    "commit": "153fd80ae5476121b07e96b91dfddd71e8c6e2b7",
+    "files": 2,
+    "tree": "8bcd0f785db3d9a121b9847c95dd1d2333432580"
+   },
+   {
+    "commit": "6d04162863e143726568dbe49a109826ff8c73bd",
+    "files": 2,
+    "tree": "9a56d89a7c6691335a4694f47eb6dae351ab56ce"
+   },
+   {
+    "commit": "5ea3450dec87bfb60f2e7f1633619404c315e83e",
+    "files": 2,
+    "tree": "44edb8da3bed4557174307bbefee94a282258598"
+   },
+   {
+    "commit": "c924807d96ca0a2d3f19a4b77338cb292562667c",
+    "files": 2,
+    "tree": "e2625405e78957f0ec95b0306f312b675926c512"
+   },
+   {
+    "commit": "c645403b98d5ba723114751dffb29c3d8ac1324f",
+    "files": 2,
+    "tree": "8d2ad767c1f489ca0e15d0cc0d5f5ab3c62b4dec"
+   },
+   {
+    "commit": "f9930647018d4768e518e81967339bb51b9c06c4",
+    "files": 2,
+    "tree": "c887ac86abb10f5a3c00a2df75246afe798d1026"
+   },
+   {
+    "commit": "fa17ac0aa0046bfe005f7768f0e943f3470e47ba",
+    "files": 2,
+    "tree": "3e23742beeb6fa19709958c2a11ede85f3991ec8"
+   },
+   {
+    "commit": "0f1c9475716567459b5ce5155ad17a925fa1a450",
+    "files": 1,
+    "tree": "f977302d5f60c12deed0eae8d9b023abc30769fd"
+   },
+   {
+    "commit": "5a13c8b3d821fa3839724b014d2eb46ffbc268c1",
+    "files": 1,
+    "tree": "d939014f38156109e797ceaf1d8683d444f7c71c"
+   }
+  ]
+ },
+ "sessions": [
+  "2026-09-14T15:28:22Z"
+ ],
+ "started_utc": "2026-09-14T15:28:22Z"
+}
