@@ -117,10 +117,19 @@ def test_decision_range_is_checked_against_history_and_registry(monkeypatch, tmp
 
 
 def test_reachable_trees_lists_distinct_trees_of_the_real_repository():
+    import subprocess
+
     if not (ROOT / ".git").exists():
         pytest.skip("needs the git repository")
+    shallow = subprocess.run(
+        ["git", "rev-parse", "--is-shallow-repository"], cwd=ROOT, capture_output=True, text=True
+    ).stdout.strip()
     trees, commits = guards.reachable_trees(ROOT)
-    assert commits >= len(trees) > 50
+    if shallow == "true":
+        # A CI checkout holds one commit; the full history is checked locally.
+        assert commits >= len(trees) >= 1
+    else:
+        assert commits >= len(trees) > 50
     assert len({tree for _, tree in trees}) == len(trees)
     assert all(len(commit) == 40 and len(tree) == 40 for commit, tree in trees)
 
