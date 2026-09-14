@@ -40,6 +40,45 @@ tools` and `pytest`. Important regression and numerical tests cover:
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## v2.1.0 certificate factorial evidence
+
+The campaign trained nothing. The protocol section of `docs/experiments.md`
+and its implementation were committed before any decision seed was opened
+(freeze commit `d7c20d6`) and sealed by `992329d` in `docs/v21_seal.json`.
+The design went through four rounds of external adversarial review: the
+first produced ten changes (the controller factor scoped to the whole v2.0
+stack, a two-phase runner that checks the reproduction block before any
+decision seed, comparison of every retained field, spy tests on the
+certificate-only estimator, validity per cell, statements with the lower
+bound above the margin, safety endpoints in four families, a seed registry
+with a scan of every release tag, atomic outputs), the second six (a scan
+of every reachable commit, a journal that survives a truncated final
+record, simulator-free guard tests with a phase-gate test, the retained
+directory unignored, the prediction contrast reported, the estimator test
+run with noise on), the third four (the journal tail repaired on disk, the
+ignore rules frozen, wording, scan manifest fields), and the fourth
+returned approval with one non-blocking note, an `fsync` after the tail
+repair, applied in the freeze commit.
+
+Before the first episode the runner verified the sealed source state and a
+clean tree, scanned the CSV, JSON and JSONL blobs of 138 reachable commits
+(133 distinct trees, 467 blobs) for seed-named values in `54200..56099`
+(none), checked the registry, and recorded the reproduction reference hash,
+the runtime (Python 3.12.3, torch 2.12.0, numpy 2.5.2, MuJoCo 3.13.0 under
+WSL2), the installed distributions and the six-worker fingerprint in
+`manifest.json`. The reproduction block ran first and matched the retained
+v2.0 rows on 600 of 600 episodes and every field.
+
+Retained under `results/certificate_factorial_v21/`: `manifest.json`,
+`journal.jsonl` (23,700 session-tagged cell records in completion order),
+`episodes.jsonl` (the same records in the planned order), `episodes.csv`,
+`decision.json` with the success effects and interaction, the four safety
+families, the prediction contrast, per-cell estimator diagnostics and
+summaries, the reproduction check and the protocol, and `complete.json`
+hashing the five files. The decision file records `partial`, with the
+failed statement named, every estimator cell valid and the reproduction
+check at 600/600. At the v2.1.0 release the suite collects 421 tests.
+
 ## v2.0.0 MuJoCo campaign evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`

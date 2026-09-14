@@ -2,12 +2,17 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## Unreleased
+## v2.1.0: the certificate's model
 
+- Crossed the two uses of the online estimate on the v2.0 MuJoCo benchmark: controller stack in {fixed, identified} by certificate model in {fixed, identified}, four filtered arms on 1,900 fresh paired seeds per scenario (`54200..56099`), plus a reproduction block of the two v2.0 arms on the first hundred v2.0 decision seeds, executed and checked on every retained field before any decision seed was opened (600/600).
+- Preregistered, reviewed in four external rounds (three revisions, then approval), sealed and ran once. Outcome **partial**: the controller stack gains `+74.4`, `+54.8` and `+34.6 pp` at a fixed certificate (ID, fault, OOD; lower bounds above `+20 pp`); the certificate's model adds `+32.0 pp` under fault and `+44.7 pp` under OOD given the identified stack (lower bounds above `+10 pp`); in distribution it adds `+4.3 pp` `[+3.1, +5.4]`, above the preregistered `+-3 pp` equivalence margin, so the third statement fails in the direction of a gain. The certificate's model does nothing for the fixed controller (`-0.1`, `-0.6`, `-0.1 pp`).
+- Safety endpoints, no decision weight, `identified/identified` minus `identified/fixed`: the fixed-model certificate intervenes in 53% to 88% of steps and stalls the arm (timeouts 11%, 38%, 62%); the identified certificate intervenes in 35% to 42%, has more unsafe episodes in distribution (`+8.5 pp`, `+3.3 pp` beyond tolerance) and under OOD at zero tolerance (`+4.7 pp`), fewer under fault (`-15.3 pp`), and violates by 0.003 to 0.004 rad on average when it does, against 0.04 to 0.18 rad.
+- New evaluation arms `adaptive_hocbf_fixedmodel` and `fixed_hocbf_adaptivemodel` (a certificate-only estimator), severity fields on the episode record, `docs/seed_registry.json` as an append-only registry of every seed range opened, launch guards in `tools/campaign_guards.py` (history-wide seed scan, completion-marker validation, journal tail repair, two-phase schedule) tested without the simulator, atomic output files.
+- Added a circular obstacle across the nominal end-effector path with MuJoCo contacts (`ObstacleSpec`, obstacle rows in the safety audit); explored in a pilot and parked, not part of any campaign.
 - Added `AdaptiveProjectedEnv`, a residual training environment that composes the identified nominal, the bounded policy residual and the HOCBF projection against the estimate inside every transition, on the analytical or the MuJoCo plant; `tools/train_sac.py` gained `--plant`, `--nominal adaptive`, the sensor and actuator options and the estimator grid, with the configuration checked on resume.
 - Training checkpoints now restore mid-episode state exactly for the estimator (parameters, covariances, scores, command history) and for the MuJoCo plant (per-episode armature and time constant, actuator state, actuator generator), and the cached sensor sample continues the noise stream.
-- `tools/run_adaptive_pilot.py` evaluates `*_residual` arms from a selected policy checkpoint and records the residual RMS per episode.
-- Ran one exploratory training of a residual on the identified nominal (MuJoCo, v1.7 recipe, one seed): success fell from 90 to 67 of 100 in distribution and from 91 to 74 under motor fault on the pilot seeds; no campaign followed. The pilot is described in `docs/experiments.md`; its outputs remain local.
+- `tools/run_adaptive_pilot.py` evaluates `*_residual` arms from a selected policy checkpoint and records the residual RMS per episode; ran one exploratory training of a residual on the identified nominal (MuJoCo, v1.7 recipe, one seed): success fell from 90 to 67 of 100 in distribution and from 91 to 74 under motor fault on the pilot seeds; no campaign followed. The pilot is described in `docs/experiments.md`; its outputs remain local.
+- Retained manifest, journal, ordered log, table, decision and completion marker under `results/certificate_factorial_v21/`; 23,700 episodes, 4,085,393 physical steps, no training.
 
 ## v2.0.0: adaptive nominal control on a MuJoCo plant
 
@@ -22,6 +27,7 @@ This file records implemented release increments. Performance evidence is kept s
 - Reproduced every retained field of the 300 v1.3 `A0_computed_torque` rows with the analytical transfer arm; on the same seeds the MuJoCo plant gave the same outcome in 99%, 100% and 100% of episodes with median final-distance differences under 0.8 mm.
 - Retained manifest, per-cell journal, ordered episode log, episode table, decision and completion marker under `results/adaptive_mujoco_v20/`; 12,600 episodes, 2,054,666 physical steps, no training. MuJoCo is an optional dependency.
 
+## v1.9.0: adaptive nominal control
 
 - Replaced the fixed-model computed-torque nominal with one that identifies the plant online in command coordinates: seven parameters per joint (masses, inertias, payload, friction, all scaled by the motor gain) from recursive least squares on the finite-difference acceleration, one estimator per candidate actuator lag `0..3`, the lag with the smallest accumulated innovation selected, and a random-walk covariance term so an in-episode fault is tracked.
 - Handed the identified model to the HOCBF filter through a command-space view, and evaluated both the control law and the certificate at the state predicted through the commands still queued in the actuator, using the identified lag.
@@ -34,6 +40,7 @@ This file records implemented release increments. Performance evidence is kept s
 - Reproduced all 300 retained v1.3 `A0_computed_torque` rows exactly (success and final distance) with the unfiltered fixed arm on seeds `50000..50099`. On those seeds the adaptive filtered arm reaches 91%, 92% and 85% success, against 62.4%, 32.6% and 11.6% for the best learned policy of v1.3 on the same seeds.
 - Retained the campaign manifest, the per-cell journal, the ordered episode log, the episode table, the decision with the full analysis and the completion marker under `results/adaptive_nominal_v19/`; 12,600 episodes, 1,982,359 physical steps, no training.
 
+## v1.8.0: terminal-penalty ablation and failure diagnosis
 
 - Asked whether the `-500` terminal penalty on HOCBF-infeasible aborts explains the v1.7 in-loop training loss, by training five paired seeds `30..34` with `P0_inloop_reference` (`-500`) and `P1_inloop_half_penalty` (`-250`); both arms train, validate and evaluate through the required HOCBF filter.
 - Evaluated the ten selected checkpoints on 7,000 fresh held-out episodes (500 ID, 100 compound-OOD and 100 motor-fault episodes per model) with a crossed paired bootstrap of 20,000 replicates over training-seed pairs and shared episode seeds.

@@ -1448,3 +1448,99 @@ root. Retained under `results/certificate_factorial_v21/`: `manifest.json`
 registry entry, reference hash, runtime, execution fingerprint), `journal.jsonl`,
 `episodes.jsonl`, `episodes.csv`, `decision.json` and `complete.json`.
 
+### Result
+
+The campaign ran once on 14 September 2026 from the sealed state (freeze
+commit `d7c20d6`, seal commit `992329d`), 23,700 episodes and 4,085,393
+physical steps in 50 minutes on six workers, MuJoCo 3.13.0, after a scan of
+138 reachable commits (133 distinct trees, 467 blobs) and the registry found
+the decision block unopened. The reproduction block matched the retained
+v2.0 rows on all 600 episodes and all thirty fields before the first
+decision seed was opened. Every estimator cell was valid (at most 0.7% of
+episodes guarded, lag identified in 97.8% to 99.4% of episodes, time
+constant within 8.5 to 11.8 ms).
+
+The preregistered outcome is **partial**: two of the three success
+statements hold with room to spare, and the third fails because the
+certificate's model has an effect in distribution where the pilot had seen
+none. Success rates per cell, 1,900 episodes each:
+
+| Scenario | fixed/fixed | fixed/identified | identified/fixed | identified/identified |
+|---|---:|---:|---:|---:|
+| `id_reference` | 11.3% | 11.2% | 85.7% | 90.0% |
+| `motor_fault` | 3.4% | 2.8% | 58.2% | 90.2% |
+| `ood_compound` | 0.1% | 0.0% | 34.6% | 79.4% |
+
+Paired differences with 95% intervals:
+
+| Effect | `id_reference` | `motor_fault` | `ood_compound` |
+|---|---:|---:|---:|
+| controller stack at fixed certificate | `+74.4 pp` `[+72.4, +76.4]` | `+54.8 pp` `[+52.5, +57.1]` | `+34.6 pp` `[+32.4, +36.7]` |
+| certificate at identified stack | `+4.3 pp` `[+3.1, +5.4]` | `+32.0 pp` `[+29.7, +34.3]` | `+44.7 pp` `[+42.4, +47.1]` |
+| certificate at fixed stack | `-0.1 pp` `[-0.7, +0.5]` | `-0.6 pp` `[-1.3, +0.1]` | `-0.1 pp` `[-0.2, +0.0]` |
+| interaction | `+4.4 pp` `[+3.2, +5.6]` | `+32.6 pp` `[+30.3, +34.9]` | `+44.8 pp` `[+42.4, +47.1]` |
+
+Statement 1 holds: the identified controller stack behind the fixed-model
+certificate gains at least 32 points in every scenario, lower bounds above
+`+20 pp`. Statement 2 holds: given the identified stack, the identified
+certificate adds 32 points under motor fault and 45 under compound OOD,
+lower bounds above `+10 pp`. Statement 3 fails: in distribution the same
+contrast is `+4.3 pp` with an interval `[+3.1, +5.4]` that lies entirely
+above the `+3 pp` equivalence margin. The pilot's 100 seeds had shown 90
+against 90; with 1,900 pairs the certificate's model turns out to matter in
+distribution as well, in the same direction as under mismatch and by a
+tenth of the size. The interaction is large and positive everywhere: the
+certificate's model does nothing for the fixed controller, which stalls
+before the certificate can matter (its success is 11%, 3% and 0% under
+either certificate), and does a great deal for the identified one.
+
+The safety endpoints came out as the pilot had predicted, with one
+exception. For `identified/identified` minus `identified/fixed`:
+
+| Family | Endpoint | `id_reference` | `motor_fault` | `ood_compound` |
+|---|---|---:|---:|---:|
+| operational | abort | `-1.3 pp` `[-2.3, -0.4]` | `-2.6 pp` `[-3.6, -1.6]` | `+5.4 pp` `[+4.1, +6.7]` |
+| operational | timeout | `-3.0 pp` `[-4.2, -1.7]` | `-29.4 pp` `[-31.8, -27.1]` | `-50.2 pp` `[-52.5, -47.7]` |
+| violation rate | unsafe episode, any excess | `+8.5 pp` `[+7.2, +10.0]` | `-15.3 pp` `[-17.3, -13.3]` | `+4.7 pp` `[+3.0, +6.5]` |
+| violation rate | beyond tolerance | `+3.3 pp` `[+2.3, +4.3]` | `-16.8 pp` `[-18.7, -15.0]` | `-1.4 pp` `[-3.0, +0.2]` |
+| severity, paired | max position excess, rad | `-0.001` `[-0.002, -0.000]` | `-0.049` `[-0.057, -0.041]` | `-0.021` `[-0.029, -0.015]` |
+| severity, paired | max velocity excess, rad/s | `+0.059` `[+0.044, +0.076]` | `-0.154` `[-0.183, -0.126]` | `-0.000` `[-0.032, +0.033]` |
+| severity, paired | intervention fraction | `-0.155` `[-0.162, -0.148]` | `-0.350` `[-0.362, -0.337]` | `-0.459` `[-0.470, -0.448]` |
+| severity, paired | observed prefix, steps | `-18.7` `[-21.1, -16.4]` | `-68.3` `[-72.2, -64.3]` | `-103.0` `[-106.4, -99.6]` |
+
+Conditional on violating, the identified certificate's episodes exceed a
+joint limit by 0.003 to 0.004 rad on average against 0.043, 0.177 and 0.167
+rad for the fixed certificate, and by 0.48 to 0.78 rad/s in velocity
+against 0.77 to 1.07 rad/s. The picture is the one the pilot drew: the
+fixed-model certificate, evaluated with a model that is wrong about the
+plant, intervenes in 53% to 88% of steps, holds the arm short of the target
+(timeouts of 11%, 38% and 62%) and, when the arm does cross a limit, lets
+it go far; the identified certificate intervenes in 35% to 42% of steps,
+lets the arm reach the target, and when it is wrong it is wrong by a few
+thousandths of a radian. In distribution that trade costs 8.5 points of
+unsafe-episode rate, 3.3 at the physical tolerance; under motor fault the
+identified certificate is better on every count; under compound OOD it
+violates more often at zero tolerance, no more often beyond tolerance, and
+aborts more (`+5.4 pp`), refusing where the fixed certificate would have
+stalled. The one departure from the pilot's predictions is the velocity
+excess in distribution, which is larger with the identified certificate
+(`+0.06 rad/s` paired, and 0.72 against 0.78 rad/s conditional), because
+its episodes move faster.
+
+The descriptive arm gives the prediction's effect within the identified
+stack on the first hundred decision seeds per scenario: success `+2`, `+1`
+and `+7 pp` (`[0, +5]`, `[0, +3]`, `[+2, +12]`), unsafe episodes `-6`,
+`-5` and `-10 pp`, aborts `-6`, `-3` and `-9 pp`. The prediction is a
+small part of the controller effect and most of it lies in the model.
+
+What the result does not say: it does not rank the two certificates for a
+deployment, because in distribution they trade a lower violation rate for a
+larger violation when one occurs and the weighing of those is outside the
+benchmark; it does not separate the model from the prediction inside the
+identified stack beyond the descriptive contrast; the equivalence statement
+failed by a margin the pilot could not have resolved, and a wider margin
+was not preregistered, so the in-distribution certificate effect stands as
+an estimate, `+4.3 pp` `[+3.1, +5.4]`, not as a confirmed statement. The
+official invocation was `python -m tools.run_factorial_campaign --workers 6`
+from the repository root.
+
