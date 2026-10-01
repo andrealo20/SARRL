@@ -198,7 +198,7 @@ projection has the generic form
 
 ```math
 \tau^\star = \underset{\tau}{\operatorname{argmin}}\ \frac{1}{2}\left\|\tau-\tau_{\mathrm{candidate}}\right\|_2^2
-\quad \text{subject to} \quad A(x)\tau \le b(x)
+\quad \text{subject to} \quad A(x)\tau \ge b(x)
 ```
 
 For a relative-degree-two safety function $h(q)$, SARRL uses a high-order Control Barrier Function condition
