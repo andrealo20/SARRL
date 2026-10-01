@@ -1,6 +1,7 @@
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from sarrl.envs import PlanarReachEnv
 from sarrl.rl import (
@@ -102,6 +103,53 @@ def test_training_session_reconstructs_nondefault_components(tmp_path: Path):
     assert e2.constructor_config() == env.constructor_config()
     assert loop["step"] == 9 and loop["checkpoint_version"] == 2
     np.testing.assert_array_equal(e2.state, env.state)
+
+
+@pytest.mark.parametrize("wrapper", ["plain", "hocbf", "context"])
+def test_training_session_rebuilds_a_mujoco_plant(tmp_path: Path, wrapper):
+    pytest.importorskip("mujoco")
+    from sarrl.adaptation import AdaptiveContextEnv, ContextConfig, DynamicsContextEncoder
+    from sarrl.envs import SafetyProjectedEnv
+    from sarrl.envs.mujoco_planar import MujocoPlanarReachEnv
+
+    plant = MujocoPlanarReachEnv(
+        mode="residual",
+        max_steps=40,
+        armature_range=(0.02, 0.08),
+        actuator_time_constant_range=(0.01, 0.05),
+    )
+    if wrapper == "hocbf":
+        env = SafetyProjectedEnv(plant)
+    elif wrapper == "context":
+        cfg = ContextConfig(latent_dim=4, hidden_dim=12, history=3)
+        env = AdaptiveContextEnv(plant, DynamicsContextEncoder(cfg), device="cpu")
+    else:
+        env = plant
+    obs_dim = env.observation_space.shape[0]
+    agent = SACAgent(obs_dim, 2, SACConfig(hidden=(16, 16)), seed=8)
+    replay = ReplayBuffer(obs_dim, 2, 50, seed=8)
+    obs, _ = env.reset(seed=9803310)
+    for _ in range(6):
+        obs, _, terminated, truncated, _ = env.step(agent.act(obs))
+        if terminated or truncated:
+            obs, _ = env.reset()
+
+    path = tmp_path / "mujoco_session.pt"
+    save_training_checkpoint(path, agent, replay, env, {"step": 6, "obs": obs})
+    action_ref = agent.act(obs)
+    next_ref = env.step(action_ref)
+
+    agent2, _, env2, loop = load_training_session(path)
+    action_got = agent2.act(np.asarray(loop["obs"], dtype=np.float32))
+    next_got = env2.step(action_got)
+
+    # The plant comes back as MuJoCo, not as the analytical environment.
+    assert type(env2) is type(env)
+    assert isinstance(getattr(env2, "env", env2), MujocoPlanarReachEnv)
+    assert env2.constructor_config() == env.constructor_config()
+    np.testing.assert_array_equal(action_got, action_ref)
+    np.testing.assert_array_equal(next_got[0], next_ref[0])
+    assert next_got[1:4] == next_ref[1:4]
 
 
 def test_cuda_rng_restore_converts_checkpoint_states_to_cpu(monkeypatch):

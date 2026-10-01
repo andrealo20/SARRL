@@ -366,12 +366,12 @@ class AdaptiveContextEnv:
         if state.get("environment_type") != "adaptive_context":
             raise ValueError("not an adaptive-context environment checkpoint")
 
-        from sarrl.envs import PlanarReachEnv
+        from sarrl.envs.planar_reach import plant_from_state_dict
 
         stored_cfg = dict(state["constructor_config"])
         cfg = ContextConfig(**dict(stored_cfg["context"]))
         encoder = DynamicsContextEncoder(cfg)
-        base_env = PlanarReachEnv.from_state_dict(state["base_environment"])
+        base_env = plant_from_state_dict(state["base_environment"])
         wrapped = cls(base_env, encoder, device=device)
         wrapped.load_state_dict(state)
         return wrapped

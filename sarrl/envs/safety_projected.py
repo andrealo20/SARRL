@@ -8,7 +8,7 @@ import numpy as np
 
 from sarrl.safety import HOCBFSafetyFilter, SafetyConfig
 
-from .planar_reach import PlanarReachEnv
+from .planar_reach import PlanarReachEnv, plant_from_state_dict
 
 
 class SafetyProjectedEnv:
@@ -273,7 +273,7 @@ class SafetyProjectedEnv:
         config.pop("environment_type", None)
         config.pop("base_environment")
         safety_config = SafetyConfig(**dict(config.pop("safety_config")))
-        env = PlanarReachEnv.from_state_dict(state["environment"])
+        env = plant_from_state_dict(state["environment"])
         wrapped = cls(env, safety_config=safety_config, **config)
         wrapped.load_state_dict(state)
         return wrapped
