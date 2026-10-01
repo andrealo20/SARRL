@@ -637,7 +637,7 @@ balance of seven recorded terms closes within `7.1e-15 N m`.
 
 ```bash
 python tools/run_residual_diagnosis.py plan --protocol <protocol.md> --amendment <amendment.md>
-python tools/run_residual_diagnosis.py run --protocol <protocol.md> --amendment <amendment.md> --output results/residual_diagnosis_20260905
+python tools/run_residual_diagnosis.py run --protocol <protocol.md> --amendment <amendment.md> --output results/residual_diagnosis_20260905 --execute
 ```
 
 The runner freezes the protocol and amendment by hash into its manifest and
@@ -685,8 +685,8 @@ limit. The preregistered order of decisions puts the safety veto first:
 **no_go_safety**. The candidate is not promoted.
 
 ```bash
-python tools/run_nominal_integral.py plan --protocol <protocol.md>
-python tools/run_nominal_integral.py run --protocol <protocol.md> --output results/nominal_integral_v19a_20260907
+python -m tools.run_nominal_integral plan --protocol <protocol.md>
+python -m tools.run_nominal_integral run --protocol <protocol.md> --output results/nominal_integral_v19a_20260907 --execute
 ```
 
 ### Reconstruction of the fault trajectory
@@ -873,7 +873,7 @@ model being adequate over at most three steps.
 ### Commands and retained evidence
 
 ```bash
-python tools/run_adaptive_campaign.py --workers 4
+python -m tools.run_adaptive_campaign --workers 4
 ```
 
 The output path is fixed to `results/adaptive_nominal_v19`. The protocol is
