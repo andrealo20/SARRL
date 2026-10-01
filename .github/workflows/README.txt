@@ -1,1 +1,1 @@
-CI intentionally runs only the analytical/PyTorch core in v0.1. MuJoCo will be added as an optional integration job at M10.
+The test job runs the analytical/PyTorch core on Python 3.10, 3.11 and 3.12 without optional dependencies, so the MuJoCo tests skip there. The mujoco job installs the optional mujoco extra and runs the whole suite, MuJoCo tests included.

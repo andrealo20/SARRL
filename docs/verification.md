@@ -7,7 +7,8 @@ planned.
 
 The automated regression suite is executed across Python 3.10, 3.11 and 3.12.
 The exact test count evolves with the codebase; release-specific historical counts are retained below. The CI pipeline runs `ruff check .`, `python -m compileall -q sarrl tests
-tools` and `pytest`. Important regression and numerical tests cover:
+tools` and `pytest`; a second job installs the optional `mujoco` extra and runs `pytest` again, so the
+MuJoCo tests, which skip without the engine, also run in CI. Important regression and numerical tests cover:
 
 - inertia-matrix symmetry and positive definiteness;
 - finite-difference verification of rigid-body identities;
@@ -861,4 +862,4 @@ All completed without runtime errors. These tiny-budget runs are integration che
 
 ## Tooling limitation
 
-The verification environment did not provide MuJoCo or Gymnasium. The v1.0 planar release has no dependency on either. M10 Franka/MuJoCo transfer remains explicitly unimplemented until it can be exercised and tested rather than added as dead code.
+The v1.0 verification environment did not provide MuJoCo or Gymnasium, and the v1.0 planar release has no dependency on either. MuJoCo arrived in v2.0 as an optional dependency of the planar plant (`pip install -e '.[mujoco]'`); its tests skip without it and run in the MuJoCo CI job. Franka transfer remains explicitly unimplemented until it can be exercised and tested rather than added as dead code.
