@@ -450,7 +450,14 @@ class PlanarReachEnv:
         cfg = state.get("constructor_config")
         if cfg is None:
             raise ValueError("environment checkpoint lacks constructor configuration")
-        cfg = dict(cfg)
+        env = cls.from_constructor_config(cfg)
+        env.load_state_dict(state)
+        return env
+
+    @classmethod
+    def from_constructor_config(cls, config: dict) -> PlanarReachEnv:
+        """A fresh environment built from a `constructor_config()` dictionary."""
+        cfg = dict(config)
         randomization = DomainRandomization(**dict(cfg.pop("randomization")))
         fault_data = cfg.pop("fault")
         fault = FaultSpec(**dict(fault_data)) if fault_data is not None else None
@@ -462,9 +469,7 @@ class PlanarReachEnv:
                 for key, value in dict(obstacle_data).items()
             }
             obstacle = ObstacleSpec(**obstacle_data)
-        env = cls(randomization=randomization, fault=fault, obstacle=obstacle, **cfg)
-        env.load_state_dict(state)
-        return env
+        return cls(randomization=randomization, fault=fault, obstacle=obstacle, **cfg)
 
     def load_state_dict(self, state: dict) -> None:
         stored_cfg = state.get("constructor_config")
@@ -580,3 +585,21 @@ class PlanarReachEnv:
     def step(self, action):
         baseline, commanded = self._candidate_torque(action)
         return self.step_torque(commanded, baseline=baseline)
+
+
+def plant_from_state_dict(state: dict, plant: str | None = None) -> PlanarReachEnv:
+    """Rebuild the plant a checkpoint describes, analytical or MuJoCo.
+
+    Without an explicit `plant` the kind is read from the stored constructor
+    configuration: only the MuJoCo plant records an integration timestep.
+    """
+    if plant is None:
+        config = state.get("constructor_config") or {}
+        plant = "mujoco" if "timestep" in config else "analytical"
+    if plant == "mujoco":
+        from .mujoco_planar import MujocoPlanarReachEnv
+
+        return MujocoPlanarReachEnv.from_state_dict(state)
+    if plant != "analytical":
+        raise ValueError(f"unknown plant {plant}")
+    return PlanarReachEnv.from_state_dict(state)

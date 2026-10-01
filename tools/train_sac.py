@@ -122,16 +122,9 @@ def _validation_env(
             compensate_delay=env.compensate_delay,
         )
 
-    val_base = PlanarReachEnv(
-        mode=base.mode,
-        dt=base.dt,
-        max_steps=base.max_steps,
-        torque_limit=base.torque_limit,
-        residual_limit=base.residual_limit,
-        success_radius=base.success_radius,
-        randomization=base.randomization,
-        fault=base.fault,
-    )
+    # A fresh copy of the training plant, same class and constructor
+    # configuration: a MuJoCo run validates on MuJoCo.
+    val_base = type(base).from_constructor_config(base.constructor_config())
 
     if isinstance(env, AdaptiveContextEnv):
         if safety_projected:

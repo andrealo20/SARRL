@@ -229,3 +229,25 @@ def test_validation_projection_is_independent_of_training_projection():
     plain_validation = _validation_env(projected_training, safety_projected=False)
     assert isinstance(plain_validation, PlanarReachEnv)
     assert plain_validation.constructor_config() == base.constructor_config()
+
+
+@pytest.mark.parametrize("hocbf", [False, True])
+def test_validation_plant_is_a_copy_of_the_mujoco_training_plant(hocbf):
+    pytest.importorskip("mujoco")
+    from sarrl.envs.mujoco_planar import MujocoPlanarReachEnv
+
+    base = MujocoPlanarReachEnv(
+        mode="residual",
+        randomization=_randomization(),
+        armature_range=(0.02, 0.08),
+        actuator_time_constant_range=(0.01, 0.05),
+    )
+    training = SafetyProjectedEnv(base) if hocbf else base
+    validation = _validation_env(training, safety_projected=hocbf)
+    plant = validation.env if hocbf else validation
+    assert isinstance(plant, MujocoPlanarReachEnv) and plant is not base
+    assert plant.constructor_config() == base.constructor_config()
+    plant.reset(seed=9803320)
+    base.reset(seed=9803320)
+    assert plant.armature == base.armature
+    assert plant.actuator_time_constant == base.actuator_time_constant

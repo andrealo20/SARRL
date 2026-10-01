@@ -19,18 +19,7 @@ from sarrl.controllers.adaptive_nominal import AdaptiveNominalConfig, AdaptiveNo
 from sarrl.dynamics import PlanarArm
 from sarrl.safety import HOCBFSafetyFilter, SafetyConfig
 
-from .planar_reach import PlanarReachEnv
-
-
-def plant_from_state_dict(state: dict, plant: str):
-    """Rebuild the plant a checkpoint describes, analytical or MuJoCo."""
-    if plant == "mujoco":
-        from .mujoco_planar import MujocoPlanarReachEnv
-
-        return MujocoPlanarReachEnv.from_state_dict(state)
-    if plant != "analytical":
-        raise ValueError(f"unknown plant {plant}")
-    return PlanarReachEnv.from_state_dict(state)
+from .planar_reach import PlanarReachEnv, plant_from_state_dict
 
 
 class AdaptiveProjectedEnv:

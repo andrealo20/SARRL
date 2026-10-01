@@ -70,10 +70,11 @@ def load_training_session(path):
     """Reconstruct agent, replay buffer and environment directly from a checkpoint.
 
     This is the preferred resume path for v2 checkpoints because network
-    architecture, replay capacity, domain randomization and fault settings are
-    all taken from the saved session rather than current command-line defaults.
+    architecture, replay capacity, domain randomization, fault settings and the
+    plant (analytical or MuJoCo) are all taken from the saved session rather
+    than current command-line defaults.
     """
-    from sarrl.envs import PlanarReachEnv
+    from sarrl.envs.planar_reach import plant_from_state_dict
     from sarrl.rl.replay_buffer import ReplayBuffer
     from sarrl.rl.sac import SACAgent
 
@@ -99,7 +100,7 @@ def load_training_session(path):
 
         env = AdaptiveProjectedEnv.from_state_dict(env_state)
     else:
-        env = PlanarReachEnv.from_state_dict(env_state)
+        env = plant_from_state_dict(env_state)
 
     # Reconstruct the environment before restoring the SAC RNG. Neural
     # wrappers may initialize torch modules while being reconstructed.
