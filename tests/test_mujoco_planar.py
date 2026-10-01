@@ -72,6 +72,31 @@ def test_step_semantics_match_delay_gain_and_info_fields():
     assert engine.steps == analytical.steps == 30
 
 
+def test_pre_step_acceleration_is_taken_under_the_torque_of_the_step():
+    torque = np.array([10.0, -5.0])
+    frictionless = PlanarArm(PlanarArmParams(coulomb=(0.0, 0.0)))
+    analytical = PlanarReachEnv(mode="torque")
+    engine = MujocoPlanarReachEnv(mode="torque")
+    lagged = MujocoPlanarReachEnv(mode="torque", actuator_time_constant=0.03)
+    for env in (analytical, engine, lagged):
+        env.reset(seed=9803006)
+        env.arm = frictionless
+    engine._sync_plant()
+    lagged._sync_plant()
+    _, _, _, _, info_a = analytical.step_torque(torque)
+    _, _, _, _, info_m = engine.step_torque(torque)
+    _, _, _, _, info_l = lagged.step_torque(torque)
+    # Ideal actuator: the same field as the analytical plant, without dry friction.
+    np.testing.assert_allclose(
+        info_m["pre_step_acceleration"], info_a["pre_step_acceleration"], atol=1e-5
+    )
+    # Lagged actuator: the torque it delivers in the first substep, from rest.
+    alpha = lagged.timestep / (0.03 + lagged.timestep)
+    state = info_l["pre_step_state"]
+    expected = frictionless.forward_dynamics(state[:2], state[2:], alpha * torque)
+    np.testing.assert_allclose(info_l["pre_step_acceleration"], expected, atol=1e-5)
+
+
 def test_fault_changes_the_engine_payload_and_gain():
     spec = _scenario("motor_fault")
     engine = MujocoPlanarReachEnv(
