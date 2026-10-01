@@ -221,15 +221,16 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         self._sync_plant()
         return result
 
+    def _next_delivered(self, applied: np.ndarray) -> np.ndarray:
+        """Torque the actuator delivers during the coming substep, without advancing it."""
+        if self.actuator_time_constant == 0.0:
+            return applied.copy()
+        alpha = self.timestep / (self.actuator_time_constant + self.timestep)
+        return self._actuator_torque + alpha * (applied - self._actuator_torque)
+
     def _deliver(self, applied: np.ndarray) -> np.ndarray:
         """Torque the actuator delivers during the coming substep."""
-        if self.actuator_time_constant == 0.0:
-            self._actuator_torque = applied.copy()
-        else:
-            alpha = self.timestep / (self.actuator_time_constant + self.timestep)
-            self._actuator_torque = self._actuator_torque + alpha * (
-                applied - self._actuator_torque
-            )
+        self._actuator_torque = self._next_delivered(applied)
         return self._actuator_torque
 
     def state_dict(self) -> dict:
@@ -307,7 +308,10 @@ class MujocoPlanarReachEnv(PlanarReachEnv):
         delayed = self._delayed_command(commanded)
         applied = delayed * self.motor_gain
         pre_step_state = self.state.copy()
-        pre_step_acceleration = self.plant_acceleration(self._actuator_torque)
+        # The acceleration as the step begins, under the torque the actuator
+        # delivers in the first substep: the applied torque itself without a
+        # lag, as on the analytical plant.
+        pre_step_acceleration = self.plant_acceleration(self._next_delivered(applied))
         self._contact_geoms = set()
         for _ in range(self.substeps):
             self.data.qfrc_applied[:] = self._deliver(applied)
