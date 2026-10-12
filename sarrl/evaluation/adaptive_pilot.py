@@ -48,8 +48,9 @@ ARMS = (
 # Arms that add a trained bounded residual to the filtered nominal command.
 RESIDUAL_ARMS = ("fixed_hocbf_residual", "adaptive_hocbf_residual")
 # The identified stack with its certificate rows tightened by the estimate's
-# parameter uncertainty, kappa standard deviations of the predicted command.
-MARGIN_ARMS = ("adaptive_hocbf_margin",)
+# parameter uncertainty, kappa standard deviations of the predicted command,
+# and its control, tightened by a constant command error of kappa N m per joint.
+MARGIN_ARMS = ("adaptive_hocbf_margin", "adaptive_hocbf_constmargin")
 HISTORICAL_CASES = {
     "id_reference": (9801800, 9801801),
     "ood_compound": (9801900, 9801901),
@@ -205,12 +206,15 @@ class PilotEpisode:
     joint_position_violation_max_rad: float = 0.0
     joint_velocity_violation_max_rad_s: float = 0.0
     first_unsafe_step: int = -1
-    # Certificate margin of the margin arm, in standard deviations; zero elsewhere.
+    # Certificate margin of the margin arms (standard deviations, or N m for the
+    # constant margin); zero elsewhere.
     certificate_margin: float = 0.0
     # Steps whose certificate carried a margin, and those where it was halved or dropped.
     margin_steps: int = 0
     margin_reduced_steps: int = 0
     margin_dropped_steps: int = 0
+    # Per-joint command margin kappa * sigma enforced, averaged over the margin steps, N m.
+    margin_mean_command: tuple[float, float] | None = None
 
 
 RESIDUAL_SUFFIX = "_residual"
@@ -241,12 +245,20 @@ def build_arm(arm: str, config: AdaptiveNominalConfig, certificate_margin: float
         return estimator, HOCBFSafetyFilter(estimator.estimated_model(), safety_config), estimator
     if arm == "adaptive_hocbf_fixedmodel":
         return estimator, HOCBFSafetyFilter(nominal, safety_config), estimator
-    if arm == "adaptive_hocbf_margin":
+    if arm in MARGIN_ARMS:
+        model = estimator.estimated_model()
+
+        def constant(state, command):
+            # Same steps as the covariance margin: none while the nominal model is used.
+            return None if model.uses_nominal else np.ones(2)
+
         certificate = MarginHOCBFSafetyFilter(
-            estimator.estimated_model(),
+            model,
             safety_config,
             kappa=certificate_margin,
-            uncertainty=estimator.command_uncertainty,
+            uncertainty=(
+                estimator.command_uncertainty if arm == "adaptive_hocbf_margin" else constant
+            ),
         )
         return estimator, certificate, estimator
     raise ValueError(f"unknown arm {arm}")
@@ -469,6 +481,11 @@ def run_case(
         margin_steps=int(certificate.margin_steps) if margined else 0,
         margin_reduced_steps=int(certificate.reduced_steps) if margined else 0,
         margin_dropped_steps=int(certificate.dropped_steps) if margined else 0,
+        margin_mean_command=(
+            tuple(float(v) for v in certificate.applied / certificate.margin_steps)
+            if margined and certificate.margin_steps
+            else None
+        ),
     )
 
 
