@@ -78,7 +78,7 @@ families, the prediction contrast, per-cell estimator diagnostics and
 summaries, the reproduction check and the protocol, and `complete.json`
 hashing the five files. The decision file records `partial`, with the
 failed statement named, every estimator cell valid and the reproduction
-check at 600/600. At the v2.1.0 release the suite collects 421 tests.
+check at 600/600. At the v2.1.0 release the suite collects 411 tests.
 
 ## v2.0.0 MuJoCo campaign evidence
 
@@ -117,6 +117,7 @@ reach the engine; state dictionaries round-trip. Those tests skip where
 MuJoCo is not installed, as in the default CI environment. At the v2.0.0
 release the suite collects 380 tests.
 
+## v1.9.0 adaptive nominal control evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`
 and the code that implements it were committed before any decision seed was
@@ -157,6 +158,7 @@ the learned policies were not re-evaluated on the adaptive nominal. The
 first launch failed at import and opened no seed; the official run used the
 module invocation. At the v1.9.0 release the suite collects 362 tests.
 
+## v1.7.0 and v1.8.0 training campaigns and diagnosis evidence
 
 Both campaigns trained new policies; the diagnosis that follows them did not.
 At the v1.8.0 freeze the suite collects 315 tests across the matrix and passes
@@ -465,7 +467,7 @@ spread is the sample SD across the five models.
 | Pairing | Scenario | Unsafe episodes | Unsafe states | Violation integral | Success |
 |---|---|---:|---:|---:|---:|
 | A2 → A5 | ID reference | -68.6 ± 3.4 pp | -17.5 ± 1.6 pp | -0.126 ± 0.038 | -4.6 ± 2.7 pp |
-| A2 → A5 | Compound OOD | -48.2 ± 2.2 pp | -12.9 ± 1.2 pp | -0.204 ± 0.040 | -3.0 ± 2.6 pp |
+| A2 → A5 | Compound OOD | -48.2 ± 2.2 pp | -12.9 ± 1.2 pp | -0.204 ± 0.040 | -3.0 ± 2.5 pp |
 | A2 → A5 | Motor fault | -54.0 ± 4.0 pp | -12.7 ± 2.0 pp | -0.141 ± 0.012 | -7.2 ± 2.8 pp |
 | A6 pre → A6 | ID reference | -56.0 ± 0.0 pp | -16.2 ± 0.3 pp | -0.187 ± 0.005 | -1.8 ± 0.8 pp |
 | A6 pre → A6 | Compound OOD | -47.2 ± 1.3 pp | -17.6 ± 0.1 pp | -0.311 ± 0.013 | +0.0 ± 0.0 pp |
@@ -479,7 +481,7 @@ A2 → A5 and in 0/15 for A6 pre → A6. The filter therefore removed the
 majority of unsafe episodes at a task-success cost that was, for most trained
 models, not distinguishable from zero.
 
-Maximum joint-position excess fell by 0.161–0.398 rad and maximum
+Maximum joint-position excess fell by 0.161–0.717 rad and maximum
 joint-velocity excess by 2.49–3.50 rad/s depending on pairing and scenario, so
 the effect is a reduction in violation severity and not only in violation
 count.

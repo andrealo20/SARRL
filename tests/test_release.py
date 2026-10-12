@@ -24,10 +24,18 @@ def test_readme_and_verification_document_ci():
 def test_documented_script_invocations_start():
     # `python tools/x.py` puts tools/ itself on sys.path, so a script that
     # imports from the `tools` package without a fallback only runs as
-    # `python -m tools.x`. Only scripts that import from it are launched.
+    # `python -m tools.x`. Commands are read from fenced code blocks, so prose
+    # may still quote a historical form; only scripts that import from the
+    # package are launched.
+    block = re.compile(r"```[^\n]*\n(.*?)```", re.DOTALL)
     invocation = re.compile(r"python3? tools/(\w+)\.py")
     docs = [Path("README.md"), *sorted(Path("docs").glob("*.md"))]
-    names = {name for doc in docs for name in invocation.findall(doc.read_text())}
+    names = {
+        name
+        for doc in docs
+        for code in block.findall(doc.read_text())
+        for name in invocation.findall(code)
+    }
     for name in sorted(names):
         script = Path("tools", f"{name}.py")
         if not re.search(r"^\s*(from|import) tools\b", script.read_text(), re.MULTILINE):

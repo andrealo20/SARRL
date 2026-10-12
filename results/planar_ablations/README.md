@@ -18,13 +18,21 @@ Canonical retained evidence for the randomized planar ablation study.
 - episode success intervals: Wilson 95%
 - paired comparisons: paired bootstrap 95%
 
-## Current conditions
+## Conditions
 
 | Condition | Controller | Held-out success |
 |---|---|---:|
 | A0 | Computed torque | 11.0% |
 | A1 | Direct SAC | 6.0% ± 3.7 pp |
 | A2 | Residual SAC | 56.4% ± 7.0 pp |
+| A3 | Residual SAC + learned context | 64.2% ± 6.7 pp |
+| A4 | Residual SAC + uncertainty gate | 15.2% ± 1.6 pp |
+| A5 | Residual SAC + HOCBF | 49.2% ± 7.9 pp |
+| A6 | Full adaptive stack | 17.0% ± 2.3 pp |
+
+Each learned condition's `summary.csv` holds the per-seed rates; the A3 to A6
+evaluation protocol is described in `docs/experiments.md` and
+`docs/verification.md`.
 
 Residual SAC improved over Direct SAC by **+50.4 percentage points**
 on average across the five training seeds. All five paired-bootstrap
