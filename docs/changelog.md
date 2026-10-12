@@ -2,6 +2,12 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## Unreleased: an uncertainty margin on the identified certificate
+
+- Added `MarginHOCBFSafetyFilter`, a HOCBF projection that tightens every acceleration-affine row by `kappa` standard deviations of the command the online estimate needs (`AdaptiveNominalController.command_uncertainty`, from the selected hypothesis' covariance), halving the margin while it leaves no feasible command and dropping it after eight halvings, with per-episode counters and the mean margin enforced.
+- New pilot arms `adaptive_hocbf_margin` and `adaptive_hocbf_constmargin` (a constant command margin on the same steps, the control for the covariance's shape), `--certificate-margin` and `--seed-offset` in `tools/run_adaptive_pilot.py`.
+- Exploratory MuJoCo pilot on fresh seeds `9803600..9803899`: a small margin removed most of the identified certificate's violations in distribution and under motor fault (13 and 13 unsafe episodes of 100 to 1 and 2 with `kappa = 0.25`) at unchanged success, with more aborts; the covariance margin left fewer violations than a constant margin at the same in-distribution success (1 against 4), a difference within pilot noise. A campaign protocol is drafted in `docs/experiments.md` for review; nothing is sealed and the pilot outputs remain local.
+
 ## v2.1.0: the certificate's model
 
 - Crossed the two uses of the online estimate on the v2.0 MuJoCo benchmark: controller stack in {fixed, identified} by certificate model in {fixed, identified}, four filtered arms on 1,900 fresh paired seeds per scenario (`54200..56099`), plus a reproduction block of the two v2.0 arms on the first hundred v2.0 decision seeds, executed and checked on every retained field before any decision seed was opened (600/600).

@@ -1549,3 +1549,201 @@ an estimate, `+4.3 pp` `[+3.1, +5.4]`, not as a confirmed statement. The
 official invocation was `python -m tools.run_factorial_campaign --workers 6`
 from the repository root.
 
+## v2.2 an uncertainty margin on the identified certificate
+
+v2.1 measured what the identified certificate costs: given the identified
+controller stack, certifying with the online estimate instead of the fixed
+nominal raises success everywhere, but in distribution it raises the
+unsafe-episode rate by `+8.5 pp` `[+7.2, +9.9]` (`+3.3 pp` beyond the
+physical tolerance). The estimate is used in the HOCBF rows as if it were
+exact. The estimator also carries a covariance for every parameter vector,
+and v2.2 asks whether that covariance can buy back the violation rate: a
+certificate that tightens each row by the command error the covariance
+allows, so that the row holds for every plant inside a confidence box
+around the estimate. The idea is that of robust adaptive control barrier
+functions; what is new here is only its form for a command-space
+estimator with a lag and time-constant hypothesis bank, and its
+measurement on the v2.0 MuJoCo benchmark.
+
+### Certificate under test
+
+Every HOCBF row except the four torque-box rows is affine in the
+acceleration the model predicts, `qdd = B tau + drift` with `B` the inverse
+of the estimated command-space mass matrix, so its torque coefficients are
+`A_r = a_r B` for some acceleration coefficients `a_r`. The estimate needs
+the command `u_hat = Phi(q, qd, qdd) theta_hat` for an acceleration `qdd`;
+the plant needs `Phi theta`. If the two differ by `du`, the true
+acceleration is `B (u - du) + drift` and the row changes by `-A_r du`.
+Requiring the row for every `|du_j| <= kappa sigma_j` raises its bound by
+`kappa * sum_j |A_rj| sigma_j`, with
+
+`sigma_j = sqrt(phi_j' P_j phi_j)`,
+
+`phi_j` the joint-`j` regressor row and `P_j` the covariance of the selected
+hypothesis. Three choices close the construction:
+
+- The executed acceleration is not known before the projection, and
+  `sigma` grows with it through the inertial columns of `phi`. The margin
+  uses the larger `sigma` of the candidate command and of the projection
+  without margin, each at the acceleration the estimate predicts for it.
+- The covariance scale assumes a unit innovation variance (the recursive
+  least-squares update divides by `forgetting + phi' P phi`), so `kappa` is
+  a scale factor, not a confidence level. The process-noise term keeps
+  `P` from collapsing after convergence, so the margin never vanishes on
+  an excited trajectory.
+- At the first steps the prior covariance gives `sigma` of hundreds of
+  N m and any positive `kappa` would leave no feasible command. When the
+  tightened rows are infeasible the margin is halved until they are not,
+  and dropped after eight halvings; the episode record counts the steps
+  with a margin, the steps where it was halved and those where it was
+  dropped. No margin is applied when the step uses the nominal model,
+  which carries no covariance, or when the rows without margin are
+  themselves infeasible.
+
+The margin covers parametric error inside the regressor's span only. The
+actuator lag and time constant are selected, not estimated with a
+covariance; sensor noise and any plant term the regressor cannot
+represent, MuJoCo's constraint-based dry friction among them, are outside
+it.
+
+Implementation: `MarginHOCBFSafetyFilter` in `sarrl/safety/filter.py`,
+`AdaptiveNominalController.command_uncertainty`, and the arm
+`adaptive_hocbf_margin` of `tools/run_adaptive_pilot.py` with
+`--certificate-margin kappa`. With `kappa = 0` the arm reproduces
+`adaptive_hocbf` exactly (tested); a test checks that the projected command
+keeps every model row for 200 command errors drawn inside the box.
+A second arm, `adaptive_hocbf_constmargin`, is the control for the
+covariance: the same filter with `sigma = (1, 1)` on the same steps, so
+`kappa` is a constant command error in N m per joint. It separates the
+effect of having a margin from the effect of shaping it with the
+covariance. Every margin episode records the mean per-joint margin the
+filter enforced after halving.
+
+### What the pilot showed and what it did not
+
+Pilot on the fresh seeds `9803600..9803899` (100 per scenario, outside
+every official range and every earlier pilot, reserved in
+`docs/seed_registry.json` before it was opened), MuJoCo plant with the
+v2.0 options and the v2.0 estimator, delay prediction on. Counts per 100
+episodes as success, unsafe episodes, aborts; the margin column is the mean
+enforced margin in distribution, joint 1 / joint 2:
+
+| Arm | Margin, N m | `id_reference` | `motor_fault` | `ood_compound` |
+|---|---:|---:|---:|---:|
+| `identified/fixed` (`adaptive_hocbf_fixedmodel`) | | 88, 3, 1 | 52, 24, 2 | 32, 14, 3 |
+| `identified/identified` (`adaptive_hocbf`), no margin | | 91, 13, 2 | 89, 13, 2 | 80, 15, 6 |
+| constant, `kappa = 0.5` | 0.50 / 0.50 | 90, 6, 4 | 91, 7, 1 | 80, 9, 6 |
+| constant, `kappa = 1` | 1.00 / 1.00 | 90, 5, 4 | 93, 1, 0 | 80, 9, 5 |
+| constant, `kappa = 2` | 1.99 / 1.99 | 90, 4, 3 | 91, 2, 1 | 76, 8, 6 |
+| constant, `kappa = 4` | 3.90 / 3.90 | 85, 2, 4 | 87, 0, 7 | 72, 6, 5 |
+| covariance, `kappa = 0.1` | 2.20 / 1.11 | 88, 3, 7 | 89, 1, 5 | 77, 5, 7 |
+| covariance, `kappa = 0.25` | 4.37 / 2.22 | 90, 1, 5 | 91, 2, 6 | 77, 6, 6 |
+| covariance, `kappa = 0.5` | 7.15 / 3.76 | 89, 0, 4 | 91, 0, 5 | 69, 4, 8 |
+| covariance, `kappa = 0.75` | 8.75 / 4.71 | 82, 0, 2 | 87, 0, 8 | 62, 4, 7 |
+| covariance, `kappa = 1` | 10.09 / 5.50 | 76, 0, 4 | 83, 0, 9 | 58, 1, 5 |
+| covariance, `kappa = 2` | 12.88 / 7.52 | 48, 0, 4 | 61, 0, 11 | 40, 0, 5 |
+
+Any margin removes most of the violations the identified certificate
+leaves in distribution and under motor fault, and a small one costs no
+success there: up to a constant `2 N m` or a covariance `kappa = 0.5`, the
+unsafe episodes fall from 13 to between 0 and 7 while success stays
+between 88 and 90 in distribution (91 without a margin) and between 89 and
+93 under fault (89). Larger covariance margins hold the arm short of the
+target in distribution (16 to 48 timeouts from `kappa = 0.75` to `2`) and
+end more episodes in an abort under fault (8 to 11). Under compound OOD the
+small constant margins keep success at 80 but leave 9 of the 15 unsafe
+episodes; the covariance margins up to `kappa = 0.5` leave 4 to 6, at a
+cost of 3 to 11 points of success.
+
+At equal in-distribution success (90 of 100) the covariance margin at
+`kappa = 0.25` left 1 unsafe episode against 4 for the constant `2 N m`
+(paired: the covariance arm avoided 3 the constant arm had and added none);
+under motor fault the two tie (2 and 2), under OOD 6 against 8. The mean
+margins are not equal, and the covariance margin is larger on joint 1
+while the constant one is the same on both joints, which is the shape the
+comparison is about. It also aborts more: 5, 6 and 6 against 3, 1 and 6,
+and in distribution later in the episode (median abort step 63 against
+33). In a sample of twelve episodes the covariance margin was halved on
+every step up to step 3 to 35, where the prior covariance makes the full
+margin infeasible, and in short bursts later; over the pilot 8% to 21% of
+its steps with a margin were halved and 0.06% to 0.3% dropped it, in 5, 18
+and 10 episodes per scenario.
+
+Where violations remain with a margin they are small: the largest
+velocity excess in distribution is 0.77 rad/s with the covariance margin at
+`kappa = 0.25` against 2.44 rad/s without one, and no margin arm exceeded a
+joint-position limit in distribution. Lag identification is unaffected (100,
+100 and 99 of 100 with `kappa = 0.25`), and at most one episode per
+scenario, in any arm, spent more than 10% of its steps on the nominal
+model.
+
+What the pilot cannot show: with 100 episodes per scenario a difference of
+three unsafe episodes is within noise, so it does not establish that the
+covariance's shape matters beyond the size of the margin; `kappa` and the
+constant level were chosen on these seeds, so the pilot numbers for them
+are optimistic; and the margin covers parametric error only, so no
+statement about violations from sensor noise or the actuator lag follows.
+The pilot ran with MuJoCo 3.14.0 from the commit that added the
+constant-margin arm, whose source hashes each local manifest records; an
+earlier run of the reference and three covariance arms, from the commit
+before it, matched it row for row. Outputs stay local under
+`results/uncertainty_margin_pilot/`. Commands (the other margins differ
+only in `--certificate-margin` and the output directory):
+
+```bash
+python tools/run_adaptive_pilot.py --output results/uncertainty_margin_pilot/reference --arms adaptive_hocbf adaptive_hocbf_fixedmodel --fresh 100 --seed-offset 600 --delay-compensation --plant mujoco --sensor-noise 1e-3 --armature-range 0.02 0.08 --actuator-tau-range 0.01 0.05 --actuator-grid 0 0.01 0.03 0.06
+python tools/run_adaptive_pilot.py --output results/uncertainty_margin_pilot/cov_0.25 --arms adaptive_hocbf_margin --certificate-margin 0.25 --fresh 100 --seed-offset 600 --delay-compensation --plant mujoco --sensor-noise 1e-3 --armature-range 0.02 0.08 --actuator-tau-range 0.01 0.05 --actuator-grid 0 0.01 0.03 0.06
+python tools/run_adaptive_pilot.py --output results/uncertainty_margin_pilot/const_2 --arms adaptive_hocbf_constmargin --certificate-margin 2 --fresh 100 --seed-offset 600 --delay-compensation --plant mujoco --sensor-noise 1e-3 --armature-range 0.02 0.08 --actuator-tau-range 0.01 0.05 --actuator-grid 0 0.01 0.03 0.06
+```
+
+### Proposed protocol (draft, not frozen)
+
+This section is a draft for review. Nothing in it is sealed, no runner
+exists yet, and no decision seed has been reserved or opened.
+
+Arms, all with the v2.0 plant options, estimator and delay prediction:
+`adaptive_hocbf` (no margin), `adaptive_hocbf_margin` with `kappa = 0.25`,
+and `adaptive_hocbf_constmargin` with `kappa = 2 N m`. Both values were
+chosen on the pilot seeds at the same in-distribution success, 90 of 100:
+`kappa = 0.25` is the covariance value at that success and costs 3 OOD
+points where `kappa = 0.5` costs 11; `2 N m` is the largest constant at
+that success. Three scenarios, no obstacle.
+
+Design, as in v2.1: a reproduction block first, `adaptive_hocbf` on the
+first hundred v2.1 decision seeds per scenario (`54200..54299`), every
+field compared with the retained `results/certificate_factorial_v21/`
+rows before any decision seed is opened; then the decision block, seeds
+`56200..58099`, 1,900 per scenario after the guard band `56100..56199`,
+every arm on every seed, 17,100 episodes. The history-wide seed scan and the
+registry check refuse the launch on any collision. Seed-paired percentile
+bootstrap, 10,000 draws, generator seed `220000`.
+
+Estimator validity first, the v2.0 condition for every arm in every
+scenario. Then three statements, each on the 95% bound of a seed-paired
+difference:
+
+1. The margin removes violations: unsafe-episode rate, covariance margin
+   minus no margin, upper bound below `-5 pp` in `id_reference` and in
+   `motor_fault` (pilot `-12` and `-11`).
+2. At no material cost in success: success, covariance margin minus no
+   margin, lower bound above `-3 pp` in `id_reference` and in `motor_fault`
+   (pilot `-1` and `+2`).
+3. The covariance's shape matters: unsafe-episode rate, covariance margin
+   minus constant margin, upper bound below `0 pp` in `id_reference`
+   (pilot `-3`).
+
+Outcome `confirmed` when all three hold; `margin confirmed, shape not` when
+the first two hold and the third does not; `not confirmed` otherwise, with
+each failed statement named. Reported with intervals and no threshold: the
+three contrasts in `ood_compound`; aborts and timeouts; the rate beyond the
+physical tolerance; the paired and conditional severities of v2.1; the
+intervention fraction; the enforced margin and the steps where it was
+halved or dropped. The pilot predicts more aborts with the covariance
+margin (`+3` and `+4 pp` in distribution and under fault) and lower OOD
+success with the covariance margin.
+
+Open points for review: whether the abort rate should carry a fourth,
+bounded statement; whether the shape comparison should be at matched mean
+enforced margin rather than at matched in-distribution success; and
+whether the margin should start only once the estimator's convergence latch
+is set, instead of halving the prior covariance's margin in the first steps.
