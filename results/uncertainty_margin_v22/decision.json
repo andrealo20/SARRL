@@ -1,0 +1,1421 @@
+{
+ "cell_summary": {
+  "adaptive_hocbf/id_reference": {
+   "abort_rate": 0.014210526315789474,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.3642971930441822,
+   "lag_identified_fraction": 0.9947368421052631,
+   "median_final_distance_m": 0.047817426948459654,
+   "normalized_violation_max": 0.4788721564331182,
+   "prediction_error_rms_mean": [
+    3.780665402023251,
+    1.3902348304081131
+   ],
+   "success_rate": 0.9247368421052632,
+   "timeout_rate": 0.061052631578947365,
+   "unsafe_episode_rate": 0.11052631578947368
+  },
+  "adaptive_hocbf/motor_fault": {
+   "abort_rate": 0.010526315789473684,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.3340899967691108,
+   "lag_identified_fraction": 0.9947368421052631,
+   "median_final_distance_m": 0.047931515333849206,
+   "normalized_violation_max": 0.47082239808280946,
+   "prediction_error_rms_mean": [
+    4.006104637716357,
+    2.2660273298554636
+   ],
+   "success_rate": 0.9257894736842105,
+   "timeout_rate": 0.06368421052631579,
+   "unsafe_episode_rate": 0.11157894736842106
+  },
+  "adaptive_hocbf/ood_compound": {
+   "abort_rate": 0.08421052631578947,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.4057787048283191,
+   "lag_identified_fraction": 0.991578947368421,
+   "median_final_distance_m": 0.04815461081465268,
+   "normalized_violation_max": 0.8452214565655947,
+   "prediction_error_rms_mean": [
+    7.871690166725579,
+    2.3087267305790036
+   ],
+   "success_rate": 0.8163157894736842,
+   "timeout_rate": 0.09947368421052631,
+   "unsafe_episode_rate": 0.1531578947368421
+  },
+  "adaptive_hocbf_constmargin/id_reference": {
+   "abort_rate": 0.004210526315789474,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.43860551693327043,
+   "lag_identified_fraction": 0.9921052631578947,
+   "median_final_distance_m": 0.0480452501389627,
+   "normalized_violation_max": 0.3506339657068158,
+   "prediction_error_rms_mean": [
+    4.267789601038036,
+    1.289098513244337
+   ],
+   "success_rate": 0.9268421052631579,
+   "timeout_rate": 0.06894736842105263,
+   "unsafe_episode_rate": 0.02526315789473684
+  },
+  "adaptive_hocbf_constmargin/motor_fault": {
+   "abort_rate": 0.004210526315789474,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.4017674006586192,
+   "lag_identified_fraction": 0.9905263157894737,
+   "median_final_distance_m": 0.04801079964147731,
+   "normalized_violation_max": 0.200182169921435,
+   "prediction_error_rms_mean": [
+    4.5347650479170385,
+    2.055851322013741
+   ],
+   "success_rate": 0.9278947368421052,
+   "timeout_rate": 0.06789473684210526,
+   "unsafe_episode_rate": 0.01368421052631579
+  },
+  "adaptive_hocbf_constmargin/ood_compound": {
+   "abort_rate": 0.08368421052631579,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.4537022335267373,
+   "lag_identified_fraction": 0.9878947368421053,
+   "median_final_distance_m": 0.04828037381105878,
+   "normalized_violation_max": 0.526259549207466,
+   "prediction_error_rms_mean": [
+    8.138990427024098,
+    2.246207046527746
+   ],
+   "success_rate": 0.8031578947368421,
+   "timeout_rate": 0.11315789473684211,
+   "unsafe_episode_rate": 0.07210526315789474
+  },
+  "adaptive_hocbf_margin/id_reference": {
+   "abort_rate": 0.05263157894736842,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.5109207351864768,
+   "lag_identified_fraction": 0.99,
+   "median_final_distance_m": 0.04806696132432449,
+   "normalized_violation_max": 0.3070027446944341,
+   "prediction_error_rms_mean": [
+    4.450172645628579,
+    1.466422416445243
+   ],
+   "success_rate": 0.9052631578947369,
+   "timeout_rate": 0.042105263157894736,
+   "unsafe_episode_rate": 0.009473684210526316
+  },
+  "adaptive_hocbf_margin/motor_fault": {
+   "abort_rate": 0.049473684210526316,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.44328086255871324,
+   "lag_identified_fraction": 0.9894736842105263,
+   "median_final_distance_m": 0.048134541511394784,
+   "normalized_violation_max": 0.17528674258603627,
+   "prediction_error_rms_mean": [
+    4.430474728719573,
+    2.2709876847710735
+   ],
+   "success_rate": 0.9073684210526316,
+   "timeout_rate": 0.0431578947368421,
+   "unsafe_episode_rate": 0.005789473684210527
+  },
+  "adaptive_hocbf_margin/ood_compound": {
+   "abort_rate": 0.08947368421052632,
+   "episodes": 1900,
+   "intervention_fraction_mean": 0.4889074318519514,
+   "lag_identified_fraction": 0.9878947368421053,
+   "median_final_distance_m": 0.04836251029638136,
+   "normalized_violation_max": 0.7170507509006991,
+   "prediction_error_rms_mean": [
+    7.975813570405637,
+    2.273544714458789
+   ],
+   "success_rate": 0.7847368421052632,
+   "timeout_rate": 0.12578947368421053,
+   "unsafe_episode_rate": 0.07842105263157895
+  }
+ },
+ "contrasts": {
+  "id_reference": {
+   "constant_minus_none": {
+    "abort": {
+     "ci95_high": -0.004210526315789474,
+     "ci95_low": -0.015789473684210527,
+     "difference": -0.01,
+     "pairs": 1900,
+     "reference_rate": 0.014210526315789474,
+     "treatment_rate": 0.004210526315789474
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.00025956554220966363,
+     "ci95_low": -0.00048337443249702773,
+     "difference": -0.00036277826417545106,
+     "pairs": 1900,
+     "reference_rate": 0.00036277826417545106,
+     "treatment_rate": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.025546170197417263,
+     "ci95_low": -0.04880072170889954,
+     "difference": -0.036656070241139135,
+     "pairs": 1900,
+     "reference_rate": 0.062458371215169096,
+     "treatment_rate": 0.025802300974029965
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.003735648017750332,
+     "ci95_low": -0.006945987181403208,
+     "difference": -0.005301266564708446,
+     "pairs": 1900,
+     "reference_rate": 0.008987309560998441,
+     "treatment_rate": 0.0036860429962899954
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.07925772555863943,
+     "ci95_low": 0.06931760507326509,
+     "difference": 0.0743083238890882,
+     "pairs": 1900,
+     "reference_rate": 0.3642971930441822,
+     "treatment_rate": 0.43860551693327043
+    },
+    "steps": {
+     "ci95_high": 7.634736842105263,
+     "ci95_low": 4.608907894736842,
+     "difference": 6.118421052631579,
+     "pairs": 1900,
+     "reference_rate": 72.94473684210526,
+     "treatment_rate": 79.06315789473685
+    },
+    "success": {
+     "ci95_high": 0.010526315789473684,
+     "ci95_low": -0.005789473684210527,
+     "difference": 0.002105263157894737,
+     "pairs": 1900,
+     "reference_rate": 0.9247368421052632,
+     "treatment_rate": 0.9268421052631579
+    },
+    "timeout": {
+     "ci95_high": 0.01631578947368421,
+     "ci95_low": 0.0,
+     "difference": 0.007894736842105263,
+     "pairs": 1900,
+     "reference_rate": 0.061052631578947365,
+     "treatment_rate": 0.06894736842105263
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.016842105263157894,
+     "ci95_low": -0.032105263157894734,
+     "difference": -0.024210526315789474,
+     "pairs": 1900,
+     "reference_rate": 0.04,
+     "treatment_rate": 0.015789473684210527
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.0731578947368421,
+     "ci95_low": -0.09789473684210526,
+     "difference": -0.08526315789473685,
+     "pairs": 1900,
+     "reference_rate": 0.11052631578947368,
+     "treatment_rate": 0.02526315789473684
+    }
+   },
+   "covariance_minus_constant": {
+    "abort": {
+     "ci95_high": 0.05894736842105263,
+     "ci95_low": 0.038421052631578946,
+     "difference": 0.04842105263157895,
+     "pairs": 1900,
+     "reference_rate": 0.004210526315789474,
+     "treatment_rate": 0.05263157894736842
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.0,
+     "ci95_low": 0.0,
+     "difference": 0.0,
+     "pairs": 1900,
+     "reference_rate": 0.0,
+     "treatment_rate": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.01124141098105153,
+     "ci95_low": -0.0270895062326477,
+     "difference": -0.018819327910322793,
+     "pairs": 1900,
+     "reference_rate": 0.025802300974029965,
+     "treatment_rate": 0.006982973063707176
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.001598486041030531,
+     "ci95_low": -0.0039005602025996788,
+     "difference": -0.002688475415760399,
+     "pairs": 1900,
+     "reference_rate": 0.0036860429962899954,
+     "treatment_rate": 0.0009975675805295966
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.07784319307163004,
+     "ci95_low": 0.0667563348481467,
+     "difference": 0.07231521825320647,
+     "pairs": 1900,
+     "reference_rate": 0.43860551693327043,
+     "treatment_rate": 0.5109207351864768
+    },
+    "steps": {
+     "ci95_high": 7.3968684210526305,
+     "ci95_low": 4.424697368421053,
+     "difference": 5.953157894736842,
+     "pairs": 1900,
+     "reference_rate": 79.06315789473685,
+     "treatment_rate": 85.01631578947368
+    },
+    "success": {
+     "ci95_high": -0.011578947368421053,
+     "ci95_low": -0.03159210526315789,
+     "difference": -0.02157894736842105,
+     "pairs": 1900,
+     "reference_rate": 0.9268421052631579,
+     "treatment_rate": 0.9052631578947369
+    },
+    "timeout": {
+     "ci95_high": -0.018947368421052633,
+     "ci95_low": -0.035263157894736843,
+     "difference": -0.026842105263157896,
+     "pairs": 1900,
+     "reference_rate": 0.06894736842105263,
+     "treatment_rate": 0.042105263157894736
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.004736842105263158,
+     "ci95_low": -0.015789473684210527,
+     "difference": -0.01,
+     "pairs": 1900,
+     "reference_rate": 0.015789473684210527,
+     "treatment_rate": 0.005789473684210527
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.008947368421052631,
+     "ci95_low": -0.023157894736842106,
+     "difference": -0.015789473684210527,
+     "pairs": 1900,
+     "reference_rate": 0.02526315789473684,
+     "treatment_rate": 0.009473684210526316
+    }
+   },
+   "covariance_minus_none": {
+    "abort": {
+     "ci95_high": 0.049473684210526316,
+     "ci95_low": 0.02736842105263158,
+     "difference": 0.038421052631578946,
+     "pairs": 1900,
+     "reference_rate": 0.014210526315789474,
+     "treatment_rate": 0.05263157894736842
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.0002623455629509461,
+     "ci95_low": -0.0004855352528344936,
+     "difference": -0.00036277826417545106,
+     "pairs": 1900,
+     "reference_rate": 0.00036277826417545106,
+     "treatment_rate": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.04286750592567556,
+     "ci95_low": -0.06873909368848907,
+     "difference": -0.05547539815146193,
+     "pairs": 1900,
+     "reference_rate": 0.062458371215169096,
+     "treatment_rate": 0.006982973063707176
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.006186390977167472,
+     "ci95_low": -0.009892037228813488,
+     "difference": -0.007989741980468845,
+     "pairs": 1900,
+     "reference_rate": 0.008987309560998441,
+     "treatment_rate": 0.0009975675805295966
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.1527448150235139,
+     "ci95_low": 0.14059525985007726,
+     "difference": 0.1466235421422947,
+     "pairs": 1900,
+     "reference_rate": 0.3642971930441822,
+     "treatment_rate": 0.5109207351864768
+    },
+    "steps": {
+     "ci95_high": 13.83578947368421,
+     "ci95_low": 10.216828947368422,
+     "difference": 12.07157894736842,
+     "pairs": 1900,
+     "reference_rate": 72.94473684210526,
+     "treatment_rate": 85.01631578947368
+    },
+    "success": {
+     "ci95_high": -0.01,
+     "ci95_low": -0.02894736842105263,
+     "difference": -0.019473684210526317,
+     "pairs": 1900,
+     "reference_rate": 0.9247368421052632,
+     "treatment_rate": 0.9052631578947369
+    },
+    "timeout": {
+     "ci95_high": -0.01,
+     "ci95_low": -0.028421052631578948,
+     "difference": -0.018947368421052633,
+     "pairs": 1900,
+     "reference_rate": 0.061052631578947365,
+     "treatment_rate": 0.042105263157894736
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.02526315789473684,
+     "ci95_low": -0.0431578947368421,
+     "difference": -0.034210526315789476,
+     "pairs": 1900,
+     "reference_rate": 0.04,
+     "treatment_rate": 0.005789473684210527
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.08736842105263158,
+     "ci95_low": -0.11526315789473685,
+     "difference": -0.10105263157894737,
+     "pairs": 1900,
+     "reference_rate": 0.11052631578947368,
+     "treatment_rate": 0.009473684210526316
+    }
+   }
+  },
+  "motor_fault": {
+   "constant_minus_none": {
+    "abort": {
+     "ci95_high": -0.0010526315789473684,
+     "ci95_low": -0.011578947368421053,
+     "difference": -0.00631578947368421,
+     "pairs": 1900,
+     "reference_rate": 0.010526315789473684,
+     "treatment_rate": 0.004210526315789474
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.00025964612700173583,
+     "ci95_low": -0.0004752357554141495,
+     "difference": -0.0003604145476468597,
+     "pairs": 1900,
+     "reference_rate": 0.0003604145476468597,
+     "treatment_rate": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.02347628355812564,
+     "ci95_low": -0.0414062422755226,
+     "difference": -0.03221162374558662,
+     "pairs": 1900,
+     "reference_rate": 0.04079185549263575,
+     "treatment_rate": 0.00858023174704913
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.0034550803953900043,
+     "ci95_low": -0.005986688610181106,
+     "difference": -0.004674358070819282,
+     "pairs": 1900,
+     "reference_rate": 0.00590010546325487,
+     "treatment_rate": 0.00122574739243559
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.07225499504967588,
+     "ci95_low": 0.06304932949061709,
+     "difference": 0.06767740388950841,
+     "pairs": 1900,
+     "reference_rate": 0.3340899967691108,
+     "treatment_rate": 0.4017674006586192
+    },
+    "steps": {
+     "ci95_high": 7.122131578947368,
+     "ci95_low": 4.31678947368421,
+     "difference": 5.738421052631579,
+     "pairs": 1900,
+     "reference_rate": 75.82578947368421,
+     "treatment_rate": 81.56421052631579
+    },
+    "success": {
+     "ci95_high": 0.01,
+     "ci95_low": -0.00631578947368421,
+     "difference": 0.002105263157894737,
+     "pairs": 1900,
+     "reference_rate": 0.9257894736842105,
+     "treatment_rate": 0.9278947368421052
+    },
+    "timeout": {
+     "ci95_high": 0.012105263157894737,
+     "ci95_low": -0.0036842105263157894,
+     "difference": 0.004210526315789474,
+     "pairs": 1900,
+     "reference_rate": 0.06368421052631579,
+     "treatment_rate": 0.06789473684210526
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.014210526315789474,
+     "ci95_low": -0.02894736842105263,
+     "difference": -0.02157894736842105,
+     "pairs": 1900,
+     "reference_rate": 0.028421052631578948,
+     "treatment_rate": 0.006842105263157895
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.08473684210526315,
+     "ci95_low": -0.11105263157894738,
+     "difference": -0.09789473684210526,
+     "pairs": 1900,
+     "reference_rate": 0.11157894736842106,
+     "treatment_rate": 0.01368421052631579
+    }
+   },
+   "covariance_minus_constant": {
+    "abort": {
+     "ci95_high": 0.05473684210526316,
+     "ci95_low": 0.035789473684210524,
+     "difference": 0.045263157894736845,
+     "pairs": 1900,
+     "reference_rate": 0.004210526315789474,
+     "treatment_rate": 0.049473684210526316
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.0,
+     "ci95_low": 0.0,
+     "difference": 0.0,
+     "pairs": 1900,
+     "reference_rate": 0.0,
+     "treatment_rate": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.0022314509067543307,
+     "ci95_low": -0.010655304887783393,
+     "difference": -0.006303975598434793,
+     "pairs": 1900,
+     "reference_rate": 0.00858023174704913,
+     "treatment_rate": 0.002276256148614338
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.00032638889462033077,
+     "ci95_low": -0.0015358923436074345,
+     "difference": -0.0009005679426335413,
+     "pairs": 1900,
+     "reference_rate": 0.00122574739243559,
+     "treatment_rate": 0.00032517944980204846
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.04702098008510324,
+     "ci95_low": 0.03612886937258874,
+     "difference": 0.041513461900094056,
+     "pairs": 1900,
+     "reference_rate": 0.4017674006586192,
+     "treatment_rate": 0.44328086255871324
+    },
+    "steps": {
+     "ci95_high": 5.846855263157894,
+     "ci95_low": 3.125776315789474,
+     "difference": 4.531052631578947,
+     "pairs": 1900,
+     "reference_rate": 81.56421052631579,
+     "treatment_rate": 86.09526315789473
+    },
+    "success": {
+     "ci95_high": -0.01,
+     "ci95_low": -0.03105263157894737,
+     "difference": -0.020526315789473684,
+     "pairs": 1900,
+     "reference_rate": 0.9278947368421052,
+     "treatment_rate": 0.9073684210526316
+    },
+    "timeout": {
+     "ci95_high": -0.017368421052631578,
+     "ci95_low": -0.03263157894736842,
+     "difference": -0.024736842105263158,
+     "pairs": 1900,
+     "reference_rate": 0.06789473684210526,
+     "treatment_rate": 0.0431578947368421
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.002105263157894737,
+     "ci95_low": -0.01,
+     "difference": -0.005789473684210527,
+     "pairs": 1900,
+     "reference_rate": 0.006842105263157895,
+     "treatment_rate": 0.0010526315789473684
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.002105263157894737,
+     "ci95_low": -0.014210526315789474,
+     "difference": -0.007894736842105263,
+     "pairs": 1900,
+     "reference_rate": 0.01368421052631579,
+     "treatment_rate": 0.005789473684210527
+    }
+   },
+   "covariance_minus_none": {
+    "abort": {
+     "ci95_high": 0.05,
+     "ci95_low": 0.028421052631578948,
+     "difference": 0.03894736842105263,
+     "pairs": 1900,
+     "reference_rate": 0.010526315789473684,
+     "treatment_rate": 0.049473684210526316
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.00026102867737765295,
+     "ci95_low": -0.0004764448990823772,
+     "difference": -0.0003604145476468597,
+     "pairs": 1900,
+     "reference_rate": 0.0003604145476468597,
+     "treatment_rate": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.028988671438633273,
+     "ci95_low": -0.04903715071669196,
+     "difference": -0.03851559934402141,
+     "pairs": 1900,
+     "reference_rate": 0.04079185549263575,
+     "treatment_rate": 0.002276256148614338
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.004244216093139464,
+     "ci95_low": -0.007068479329231105,
+     "difference": -0.005574926013452822,
+     "pairs": 1900,
+     "reference_rate": 0.00590010546325487,
+     "treatment_rate": 0.00032517944980204846
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.1155246210230912,
+     "ci95_low": 0.10281878725008806,
+     "difference": 0.10919086578960246,
+     "pairs": 1900,
+     "reference_rate": 0.3340899967691108,
+     "treatment_rate": 0.44328086255871324
+    },
+    "steps": {
+     "ci95_high": 12.083697368421053,
+     "ci95_low": 8.419421052631579,
+     "difference": 10.269473684210526,
+     "pairs": 1900,
+     "reference_rate": 75.82578947368421,
+     "treatment_rate": 86.09526315789473
+    },
+    "success": {
+     "ci95_high": -0.007894736842105263,
+     "ci95_low": -0.02894736842105263,
+     "difference": -0.018421052631578946,
+     "pairs": 1900,
+     "reference_rate": 0.9257894736842105,
+     "treatment_rate": 0.9073684210526316
+    },
+    "timeout": {
+     "ci95_high": -0.011578947368421053,
+     "ci95_low": -0.03,
+     "difference": -0.020526315789473684,
+     "pairs": 1900,
+     "reference_rate": 0.06368421052631579,
+     "treatment_rate": 0.0431578947368421
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.019473684210526317,
+     "ci95_low": -0.035263157894736843,
+     "difference": -0.02736842105263158,
+     "pairs": 1900,
+     "reference_rate": 0.028421052631578948,
+     "treatment_rate": 0.0010526315789473684
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.09157894736842105,
+     "ci95_low": -0.12052631578947369,
+     "difference": -0.10578947368421053,
+     "pairs": 1900,
+     "reference_rate": 0.11157894736842106,
+     "treatment_rate": 0.005789473684210527
+    }
+   }
+  },
+  "ood_compound": {
+   "constant_minus_none": {
+    "abort": {
+     "ci95_high": 0.008947368421052631,
+     "ci95_low": -0.01,
+     "difference": -0.0005263157894736842,
+     "pairs": 1900,
+     "reference_rate": 0.08421052631578947,
+     "treatment_rate": 0.08368421052631579
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.00035529765185571824,
+     "ci95_low": -0.0009304708500262338,
+     "difference": -0.0005952353653464452,
+     "pairs": 1900,
+     "reference_rate": 0.0006052090742711363,
+     "treatment_rate": 9.973708924691194e-06
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.02259047547951594,
+     "ci95_low": -0.06552247699185501,
+     "difference": -0.04342807542951734,
+     "pairs": 1900,
+     "reference_rate": 0.11012810332079563,
+     "treatment_rate": 0.0667000278912783
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.0033788189487535263,
+     "ci95_low": -0.00950935960696815,
+     "difference": -0.006318631063708793,
+     "pairs": 1900,
+     "reference_rate": 0.01585047654524845,
+     "treatment_rate": 0.009531845481539654
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.05228334114389694,
+     "ci95_low": 0.04351431062755663,
+     "difference": 0.04792352869841824,
+     "pairs": 1900,
+     "reference_rate": 0.4057787048283191,
+     "treatment_rate": 0.4537022335267373
+    },
+    "steps": {
+     "ci95_high": 8.069013157894737,
+     "ci95_low": 4.357355263157896,
+     "difference": 6.164736842105263,
+     "pairs": 1900,
+     "reference_rate": 103.49263157894737,
+     "treatment_rate": 109.65736842105264
+    },
+    "success": {
+     "ci95_high": -0.005789473684210527,
+     "ci95_low": -0.021052631578947368,
+     "difference": -0.013157894736842105,
+     "pairs": 1900,
+     "reference_rate": 0.8163157894736842,
+     "treatment_rate": 0.8031578947368421
+    },
+    "timeout": {
+     "ci95_high": 0.023157894736842106,
+     "ci95_low": 0.004210526315789474,
+     "difference": 0.01368421052631579,
+     "pairs": 1900,
+     "reference_rate": 0.09947368421052631,
+     "treatment_rate": 0.11315789473684211
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.013157894736842105,
+     "ci95_low": -0.035789473684210524,
+     "difference": -0.024210526315789474,
+     "pairs": 1900,
+     "reference_rate": 0.06578947368421052,
+     "treatment_rate": 0.041578947368421056
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.06631578947368422,
+     "ci95_low": -0.09631578947368422,
+     "difference": -0.08105263157894736,
+     "pairs": 1900,
+     "reference_rate": 0.1531578947368421,
+     "treatment_rate": 0.07210526315789474
+    }
+   },
+   "covariance_minus_constant": {
+    "abort": {
+     "ci95_high": 0.015789473684210527,
+     "ci95_low": -0.0036842105263157894,
+     "difference": 0.005789473684210527,
+     "pairs": 1900,
+     "reference_rate": 0.08368421052631579,
+     "treatment_rate": 0.08947368421052632
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": 3.360222841965787e-06,
+     "ci95_low": -2.9921126774073583e-05,
+     "difference": -8.853634644035932e-06,
+     "pairs": 1900,
+     "reference_rate": 9.973708924691194e-06,
+     "treatment_rate": 1.1200742806552623e-06
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.003253458977232625,
+     "ci95_low": -0.022939803150247583,
+     "difference": -0.009559716959226966,
+     "pairs": 1900,
+     "reference_rate": 0.0667000278912783,
+     "treatment_rate": 0.057140310932051325
+    },
+    "normalized_violation_max": {
+     "ci95_high": 0.0004694382052254464,
+     "ci95_low": -0.0032421225848760764,
+     "difference": -0.001368943919818037,
+     "pairs": 1900,
+     "reference_rate": 0.009531845481539654,
+     "treatment_rate": 0.008162901561721616
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.03974659719214871,
+     "ci95_low": 0.03053821617450665,
+     "difference": 0.035205198325214064,
+     "pairs": 1900,
+     "reference_rate": 0.4537022335267373,
+     "treatment_rate": 0.4889074318519514
+    },
+    "steps": {
+     "ci95_high": 9.107907894736842,
+     "ci95_low": 5.294184210526316,
+     "difference": 7.193684210526316,
+     "pairs": 1900,
+     "reference_rate": 109.65736842105264,
+     "treatment_rate": 116.85105263157895
+    },
+    "success": {
+     "ci95_high": -0.011052631578947368,
+     "ci95_low": -0.025802631578947355,
+     "difference": -0.018421052631578946,
+     "pairs": 1900,
+     "reference_rate": 0.8031578947368421,
+     "treatment_rate": 0.7847368421052632
+    },
+    "timeout": {
+     "ci95_high": 0.022631578947368423,
+     "ci95_low": 0.002631578947368421,
+     "difference": 0.01263157894736842,
+     "pairs": 1900,
+     "reference_rate": 0.11315789473684211,
+     "treatment_rate": 0.12578947368421053
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": 0.008947368421052631,
+     "ci95_low": -0.01,
+     "difference": -0.0005263157894736842,
+     "pairs": 1900,
+     "reference_rate": 0.041578947368421056,
+     "treatment_rate": 0.04105263157894737
+    },
+    "unsafe_episode": {
+     "ci95_high": 0.017894736842105262,
+     "ci95_low": -0.005263157894736842,
+     "difference": 0.00631578947368421,
+     "pairs": 1900,
+     "reference_rate": 0.07210526315789474,
+     "treatment_rate": 0.07842105263157895
+    }
+   },
+   "covariance_minus_none": {
+    "abort": {
+     "ci95_high": 0.016842105263157894,
+     "ci95_low": -0.00631578947368421,
+     "difference": 0.005263157894736842,
+     "pairs": 1900,
+     "reference_rate": 0.08421052631578947,
+     "treatment_rate": 0.08947368421052632
+    },
+    "joint_position_violation_max_rad": {
+     "ci95_high": -0.00036578670026692057,
+     "ci95_low": -0.0009315632077877423,
+     "difference": -0.0006040889999904811,
+     "pairs": 1900,
+     "reference_rate": 0.0006052090742711363,
+     "treatment_rate": 1.1200742806552623e-06
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": -0.030365455299676856,
+     "ci95_low": -0.07717598832806177,
+     "difference": -0.05298779238874431,
+     "pairs": 1900,
+     "reference_rate": 0.11012810332079563,
+     "treatment_rate": 0.057140310932051325
+    },
+    "normalized_violation_max": {
+     "ci95_high": -0.004389347085111504,
+     "ci95_low": -0.01106088881726427,
+     "difference": -0.00768757498352683,
+     "pairs": 1900,
+     "reference_rate": 0.01585047654524845,
+     "treatment_rate": 0.008162901561721616
+    },
+    "safety_intervention_fraction": {
+     "ci95_high": 0.08901383027611466,
+     "ci95_low": 0.07709662412488447,
+     "difference": 0.0831287270236323,
+     "pairs": 1900,
+     "reference_rate": 0.4057787048283191,
+     "treatment_rate": 0.4889074318519514
+    },
+    "steps": {
+     "ci95_high": 15.445802631578948,
+     "ci95_low": 11.292078947368422,
+     "difference": 13.358421052631579,
+     "pairs": 1900,
+     "reference_rate": 103.49263157894737,
+     "treatment_rate": 116.85105263157895
+    },
+    "success": {
+     "ci95_high": -0.022105263157894735,
+     "ci95_low": -0.04105263157894737,
+     "difference": -0.031578947368421054,
+     "pairs": 1900,
+     "reference_rate": 0.8163157894736842,
+     "treatment_rate": 0.7847368421052632
+    },
+    "timeout": {
+     "ci95_high": 0.03684210526315789,
+     "ci95_low": 0.015263157894736841,
+     "difference": 0.02631578947368421,
+     "pairs": 1900,
+     "reference_rate": 0.09947368421052631,
+     "treatment_rate": 0.12578947368421053
+    },
+    "unsafe_beyond_tolerance": {
+     "ci95_high": -0.012105263157894737,
+     "ci95_low": -0.037894736842105266,
+     "difference": -0.024736842105263158,
+     "pairs": 1900,
+     "reference_rate": 0.06578947368421052,
+     "treatment_rate": 0.04105263157894737
+    },
+    "unsafe_episode": {
+     "ci95_high": -0.05894736842105263,
+     "ci95_low": -0.09052631578947369,
+     "difference": -0.07473684210526316,
+     "pairs": 1900,
+     "reference_rate": 0.1531578947368421,
+     "treatment_rate": 0.07842105263157895
+    }
+   }
+  }
+ },
+ "decision": "confirmed",
+ "elapsed_seconds_last_session": 2244.2067165374756,
+ "estimator": {
+  "adaptive_hocbf/id_reference": {
+   "episodes_with_prediction_fallback": 1,
+   "guarded_episode_fraction": 0.0005263157894736842,
+   "lag_identified_fraction": 0.9947368421052631,
+   "time_constant_abs_error_mean_s": 0.008495022695481183,
+   "valid": true
+  },
+  "adaptive_hocbf/motor_fault": {
+   "episodes_with_prediction_fallback": 1,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9947368421052631,
+   "time_constant_abs_error_mean_s": 0.008816551755517025,
+   "valid": true
+  },
+  "adaptive_hocbf/ood_compound": {
+   "episodes_with_prediction_fallback": 52,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.991578947368421,
+   "time_constant_abs_error_mean_s": 0.008460923543390612,
+   "valid": true
+  },
+  "adaptive_hocbf_constmargin/id_reference": {
+   "episodes_with_prediction_fallback": 1,
+   "guarded_episode_fraction": 0.0005263157894736842,
+   "lag_identified_fraction": 0.9921052631578947,
+   "time_constant_abs_error_mean_s": 0.008371241303214804,
+   "valid": true
+  },
+  "adaptive_hocbf_constmargin/motor_fault": {
+   "episodes_with_prediction_fallback": 1,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9905263157894737,
+   "time_constant_abs_error_mean_s": 0.00829971390800815,
+   "valid": true
+  },
+  "adaptive_hocbf_constmargin/ood_compound": {
+   "episodes_with_prediction_fallback": 39,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9878947368421053,
+   "time_constant_abs_error_mean_s": 0.008369945081927056,
+   "valid": true
+  },
+  "adaptive_hocbf_margin/id_reference": {
+   "episodes_with_prediction_fallback": 4,
+   "guarded_episode_fraction": 0.005263157894736842,
+   "lag_identified_fraction": 0.99,
+   "time_constant_abs_error_mean_s": 0.008245876921005545,
+   "valid": true
+  },
+  "adaptive_hocbf_margin/motor_fault": {
+   "episodes_with_prediction_fallback": 3,
+   "guarded_episode_fraction": 0.0036842105263157894,
+   "lag_identified_fraction": 0.9894736842105263,
+   "time_constant_abs_error_mean_s": 0.00818473329991227,
+   "valid": true
+  },
+  "adaptive_hocbf_margin/ood_compound": {
+   "episodes_with_prediction_fallback": 28,
+   "guarded_episode_fraction": 0.0,
+   "lag_identified_fraction": 0.9878947368421053,
+   "time_constant_abs_error_mean_s": 0.00826059134641497,
+   "valid": true
+  }
+ },
+ "estimator_valid": true,
+ "failed_statements": [],
+ "invalid_estimator_cells": [],
+ "margin_diagnostics": {
+  "adaptive_hocbf_constmargin/id_reference": {
+   "dropped_step_fraction": 0.0,
+   "episodes_with_dropped_margin": 0,
+   "halved_step_fraction": 0.007843372450237567,
+   "margin_steps": 150063,
+   "mean_enforced_margin_per_joint": [
+    1.9904727514443934,
+    1.9904727514443934
+   ]
+  },
+  "adaptive_hocbf_constmargin/motor_fault": {
+   "dropped_step_fraction": 0.0,
+   "episodes_with_dropped_margin": 0,
+   "halved_step_fraction": 0.0071702647184217665,
+   "margin_steps": 154806,
+   "mean_enforced_margin_per_joint": [
+    1.9912878861284447,
+    1.9912878861284447
+   ]
+  },
+  "adaptive_hocbf_constmargin/ood_compound": {
+   "dropped_step_fraction": 4.805497489127562e-06,
+   "episodes_with_dropped_margin": 1,
+   "halved_step_fraction": 0.007736850957495375,
+   "margin_steps": 208095,
+   "mean_enforced_margin_per_joint": [
+    1.990450800716019,
+    1.990450800716019
+   ]
+  },
+  "adaptive_hocbf_margin/id_reference": {
+   "dropped_step_fraction": 0.0012658856235107229,
+   "episodes_with_dropped_margin": 178,
+   "halved_step_fraction": 0.19584615766481334,
+   "margin_steps": 161152,
+   "mean_enforced_margin_per_joint": [
+    4.230331467854,
+    2.078868399340053
+   ]
+  },
+  "adaptive_hocbf_margin/motor_fault": {
+   "dropped_step_fraction": 0.0013043398387027636,
+   "episodes_with_dropped_margin": 182,
+   "halved_step_fraction": 0.16908653345662306,
+   "margin_steps": 163301,
+   "mean_enforced_margin_per_joint": [
+    3.4023445066262727,
+    1.6982788649892508
+   ]
+  },
+  "adaptive_hocbf_margin/ood_compound": {
+   "dropped_step_fraction": 0.0014971815107102592,
+   "episodes_with_dropped_margin": 273,
+   "halved_step_fraction": 0.08667418263810597,
+   "margin_steps": 221750,
+   "mean_enforced_margin_per_joint": [
+    2.8115165868706944,
+    1.7037582090792784
+   ]
+  }
+ },
+ "physical_steps": 1565757,
+ "protocol": {
+  "arms": {
+   "adaptive_hocbf": "identified controller stack and certificate, no margin (v2.1 identified/identified)",
+   "adaptive_hocbf_constmargin": "same, sigma = (1, 1) on the same steps: a constant command margin",
+   "adaptive_hocbf_margin": "same, model rows tightened by kappa * sum_j |A_rj| sigma_j, sigma from the selected hypothesis' covariance"
+  },
+  "bootstrap": {
+   "draws": 10000,
+   "seed": 220000,
+   "type": "paired_over_episode_seeds"
+  },
+  "campaign": "uncertainty_margin_v22",
+  "decision": {
+   "estimator_validity": {
+    "applied_per": "arm and scenario",
+    "arms_with_estimator": [
+     "adaptive_hocbf",
+     "adaptive_hocbf_margin",
+     "adaptive_hocbf_constmargin"
+    ],
+    "failure_outcome": "inconclusive",
+    "guarded_step_fraction_per_episode": 0.1,
+    "max_guarded_episode_fraction": 0.1
+   },
+   "order": [
+    "estimator_validity",
+    "statements"
+   ],
+   "outcomes": {
+    "confirmed": "all three statements hold",
+    "inconclusive": "estimator validity fails in any cell",
+    "margin_confirmed_shape_not": "the first two hold and the third does not",
+    "not_confirmed": "the first or the second fails; each failed statement is named"
+   }
+  },
+  "estimator": {
+   "actuator_substeps": 10,
+   "actuator_time_constants": [
+    0.0,
+    0.01,
+    0.03,
+    0.06
+   ],
+   "compensate_delay": true,
+   "conditioning_floor": 0.05,
+   "filter_gate": false,
+   "forgetting": 1.0,
+   "lag_min_updates": 10,
+   "lower": [
+    0.2,
+    0.2,
+    0.01,
+    0.01,
+    0.0,
+    0.0,
+    0.0
+   ],
+   "max_lag": 3,
+   "payload_prior": 0.0,
+   "prediction_limit": 5.0,
+   "prior_std": [
+    1.0,
+    1.0,
+    0.1,
+    0.1,
+    2.0,
+    0.1,
+    0.04
+   ],
+   "process_noise": 0.02,
+   "selection_memory": 1.0,
+   "upper": [
+    5.0,
+    5.0,
+    0.5,
+    0.5,
+    6.0,
+    0.5,
+    0.2
+   ]
+  },
+  "frozen_paths": [
+   "sarrl",
+   "tools",
+   "tests",
+   "docs/experiments.md",
+   "pyproject.toml",
+   ".gitignore",
+   "results/certificate_factorial_v21/episodes.jsonl",
+   "docs/seed_registry.json"
+  ],
+  "margin_rules": {
+   "infeasible_margin": "halved until feasible, dropped after 8 halvings",
+   "no_margin_when": "the step uses the nominal model, or the rows without margin are infeasible",
+   "rows": "every row except the four torque-box rows",
+   "sigma_evaluated_at": "the larger of the candidate and the projection without margin"
+  },
+  "margin_units": {
+   "adaptive_hocbf_constmargin": "N m per joint",
+   "adaptive_hocbf_margin": "standard deviations of the predicted command"
+  },
+  "margin_values_chosen": "in the exploratory pilot (seeds 9803600..9803899) at the same in-distribution success, 90 of 100",
+  "margins": {
+   "adaptive_hocbf": 0.0,
+   "adaptive_hocbf_constmargin": 2.0,
+   "adaptive_hocbf_margin": 0.25
+  },
+  "plant": "mujoco",
+  "plant_options": {
+   "actuator_time_constant": 0.0,
+   "actuator_time_constant_range": [
+    0.01,
+    0.05
+   ],
+   "armature": 0.0,
+   "armature_range": [
+    0.02,
+    0.08
+   ],
+   "obstacle": null,
+   "sensor_noise_std": 0.001
+  },
+  "release_target": "v2.2.0",
+  "reported_without_threshold": {
+   "conditional": "mean position and velocity excess over the unsafe episodes of each arm, unpaired percentile bootstrap",
+   "contrasts": [
+    "constant_minus_none",
+    "covariance_minus_constant",
+    "covariance_minus_none"
+   ],
+   "expected_from_pilot": {
+    "abort": "more frequent with the covariance margin, about +3 to +4 pp in id_reference and motor_fault",
+    "ood_compound_success": "lower with the covariance margin"
+   },
+   "margin_diagnostics": "mean enforced margin per joint, fractions of margin steps halved and dropped, episodes with a dropped margin",
+   "paired": [
+    "success",
+    "abort",
+    "timeout",
+    "unsafe_episode",
+    "unsafe_beyond_tolerance (position excess above 0.05 rad or velocity excess above 0.5 rad/s)",
+    "normalized_violation_max",
+    "joint_position_violation_max_rad",
+    "joint_velocity_violation_max_rad_s",
+    "safety_intervention_fraction",
+    "steps (observed prefix length; aborts end the prefix)"
+   ],
+   "scenarios": "all three, ood_compound included"
+  },
+  "seal_file": "docs/v22_seal.json",
+  "seeds": {
+   "decision": {
+    "arms": [
+     "adaptive_hocbf",
+     "adaptive_hocbf_margin",
+     "adaptive_hocbf_constmargin"
+    ],
+    "episodes_per_scenario": 1900,
+    "plant": "mujoco",
+    "start": 56200
+   },
+   "reproduction": {
+    "arms": [
+     "adaptive_hocbf"
+    ],
+    "decision_weight": false,
+    "episodes_per_scenario": 100,
+    "reference": "results/certificate_factorial_v21/episodes.jsonl",
+    "rows_must_match_reference": "every retained field",
+    "runs_and_is_checked_before_any_decision_seed": true,
+    "start": 54200
+   },
+   "scenarios": [
+    "id_reference",
+    "ood_compound",
+    "motor_fault"
+   ],
+   "unopened_range": [
+    56200,
+    58099
+   ],
+   "unopened_range_checked_against": [
+    "committed CSV/JSON/JSONL blobs of every commit reachable from any ref",
+    "docs/seed_registry.json"
+   ]
+  },
+  "state_interface": "measured_state_with_sensor_noise_same_for_every_arm",
+  "statements": {
+   "covariance_shape_matters": {
+    "contrast": "covariance_minus_constant",
+    "metric": "unsafe_episode",
+    "scenarios": [
+     "id_reference"
+    ],
+    "upper_95_below": 0.0
+   },
+   "margin_removes_violations": {
+    "contrast": "covariance_minus_none",
+    "metric": "unsafe_episode",
+    "scenarios": [
+     "id_reference",
+     "motor_fault"
+    ],
+    "upper_95_below": -0.05
+   },
+   "no_material_success_cost": {
+    "contrast": "covariance_minus_none",
+    "lower_95_above": -0.03,
+    "metric": "success",
+    "scenarios": [
+     "id_reference",
+     "motor_fault"
+    ]
+   }
+  },
+  "training": false
+ },
+ "reproduction_check": {
+  "compared": 300,
+  "fields": [
+   "arm",
+   "control_steps",
+   "converged_at_step",
+   "estimated_parameters",
+   "fault_seen",
+   "final_distance",
+   "first_unsafe_step",
+   "joint_position_violation_max_rad",
+   "joint_velocity_violation_max_rad_s",
+   "max_command_torque",
+   "max_speed",
+   "model_fallback_steps",
+   "model_fallbacks",
+   "normalized_violation_max",
+   "obstacle_contact",
+   "obstacle_contact_geoms",
+   "obstacle_contact_steps",
+   "obstacle_present",
+   "obstacle_violation_max_m",
+   "origin",
+   "outcome",
+   "plant",
+   "prediction_error_rms",
+   "prediction_fallbacks",
+   "residual_rms",
+   "reward",
+   "safety_infeasible",
+   "safety_intervention_fraction",
+   "scenario",
+   "seed",
+   "selected_lag",
+   "selected_time_constant",
+   "steps",
+   "success",
+   "true_armature",
+   "true_delay",
+   "true_parameters",
+   "true_time_constant",
+   "unsafe_episode"
+  ],
+  "matched": 300,
+  "mismatches": [],
+  "reference": "/home/user/SARRL/results/certificate_factorial_v21/episodes.jsonl"
+ },
+ "severity_conditional": {
+  "id_reference": {
+   "adaptive_hocbf": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.004297119254643713,
+     "ci95_low": 0.0024557722387464316,
+     "episodes": 210,
+     "mean": 0.003282279533015986
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.6672216414444756,
+     "ci95_low": 0.4695597346818101,
+     "episodes": 210,
+     "mean": 0.5650995490896252
+    }
+   },
+   "adaptive_hocbf_constmargin": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.0,
+     "ci95_low": 0.0,
+     "episodes": 48,
+     "mean": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 1.2437994445134928,
+     "ci95_low": 0.8040501654500204,
+     "episodes": 48,
+     "mean": 1.0213410802220195
+    }
+   },
+   "adaptive_hocbf_margin": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.0,
+     "ci95_low": 0.0,
+     "episodes": 18,
+     "mean": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.9973362100885604,
+     "ci95_low": 0.5016481741990032,
+     "episodes": 18,
+     "mean": 0.7370916011690907
+    }
+   }
+  },
+  "motor_fault": {
+   "adaptive_hocbf": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.004184368694286246,
+     "ci95_low": 0.002422445820422989,
+     "episodes": 212,
+     "mean": 0.003230130379853931
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.44189639272234077,
+     "ci95_low": 0.2951273918742102,
+     "episodes": 212,
+     "mean": 0.36558738413211284
+    }
+   },
+   "adaptive_hocbf_constmargin": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.0,
+     "ci95_low": 0.0,
+     "episodes": 26,
+     "mean": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.7923711170457345,
+     "ci95_low": 0.46589852802649173,
+     "episodes": 26,
+     "mean": 0.6270169353612827
+    }
+   },
+   "adaptive_hocbf_margin": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.0,
+     "ci95_low": 0.0,
+     "episodes": 11,
+     "mean": 0.0
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.6008700297634392,
+     "ci95_low": 0.22526772948619483,
+     "episodes": 11,
+     "mean": 0.3931715165788402
+    }
+   }
+  },
+  "ood_compound": {
+   "adaptive_hocbf": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.0060577830635588185,
+     "ci95_low": 0.0024512963870373197,
+     "episodes": 291,
+     "mean": 0.003951536911048657
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.8426927224753445,
+     "ci95_low": 0.6064311725666636,
+     "episodes": 291,
+     "mean": 0.7190494718539922
+    }
+   },
+   "adaptive_hocbf_constmargin": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 0.00041496453190321026,
+     "ci95_low": 0.0,
+     "episodes": 137,
+     "mean": 0.00013832151063440342
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 1.0676341498539412,
+     "ci95_low": 0.7934500204521815,
+     "episodes": 137,
+     "mean": 0.9250368831637136
+    }
+   },
+   "adaptive_hocbf_margin": {
+    "joint_position_violation_max_rad": {
+     "ci95_high": 4.2848479192852316e-05,
+     "ci95_low": 0.0,
+     "episodes": 149,
+     "mean": 1.428282639761744e-05
+    },
+    "joint_velocity_violation_max_rad_s": {
+     "ci95_high": 0.8475771308477613,
+     "ci95_low": 0.6216104582347867,
+     "episodes": 149,
+     "mean": 0.7286348373885738
+    }
+   }
+  }
+ },
+ "statements": {
+  "covariance_shape_matters": true,
+  "margin_removes_violations": true,
+  "no_material_success_cost": true
+ }
+}

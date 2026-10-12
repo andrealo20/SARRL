@@ -1,0 +1,11 @@
+{
+ "decision": "confirmed",
+ "episodes": 17400,
+ "hashes": {
+  "decision.json": "b396dcf67083fd1101ffe54b54de8855311ceddd3c1f3ce10d2698f26360f30c",
+  "episodes.csv": "beba34b41b69cc928b24859c219978da38ca477074b8f9812559d962a31a499b",
+  "episodes.jsonl": "6c66dcc1ed480500a7ecf3b5d2074ff3c33cce234b26460807797ad4a5bd5dee",
+  "journal.jsonl": "c48261708ecbb340da25b8c7a1037d01f224ef2de3584d760834edb7e46777b7",
+  "manifest.json": "ebc0b5fece9b54e911275e04be2a75b7d4e5597a90b4dc0ab5a56ec0933670da"
+ }
+}
