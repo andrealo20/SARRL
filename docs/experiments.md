@@ -145,6 +145,7 @@ state, architecture, optimization state and RNG state required for reproducible 
 python tools/evaluate.py \
   results/residual_seed0/best.pt \
   --mode residual \
+  --randomize \
   --episodes 100 \
   --seed 40000
 ```
@@ -872,6 +873,10 @@ model being adequate over at most three steps.
 
 ### Commands and retained evidence
 
+The protocol as frozen named the script form
+`python tools/run_adaptive_campaign.py --workers 4`, which fails at import
+(see the result below); the runner starts in its module form:
+
 ```bash
 python -m tools.run_adaptive_campaign --workers 4
 ```
@@ -921,9 +926,9 @@ scenarios, and non-inferiority of the unsafe-episode rate shown in all three.
 
 Intervals are 95% seed-paired percentile bootstraps over 1,900 pairs. The
 fixed filtered arm fails almost entirely by timeout (83%, 93% and 96%),
-stopping at median final distances of 0.31, 0.77 and 0.98 m; the adaptive
+stopping at median final distances of 0.30, 0.77 and 0.98 m; the adaptive
 filtered arm times out in 6.8%, 7.3% and 13.8% of episodes. The maximum
-normalised violation over each cell fell from 0.68, 0.73 and 0.98 to 0.33,
+normalised violation over each cell fell from 0.67, 0.73 and 0.98 to 0.33,
 0.33 and 0.50. The filter intervened on 34%, 32% and 40% of adaptive steps
 against 21%, 34% and 57% of fixed ones. The lag was identified in every
 adaptive episode. Mean final-estimate prediction error on the shared probe
@@ -945,7 +950,7 @@ near a joint limit remain unreachable through the filter; the learned
 residual policies were never re-evaluated on the adaptive nominal, so
 nothing here ranks learning against identification on equal terms. The
 official invocation was `python -m tools.run_adaptive_campaign --workers 6`
-from the repository root; the script form named above fails at import
+from the repository root; the script form the frozen protocol named fails at import
 before any check because `tools` is a namespace package, which the module
 form resolves. No source changed between the two attempts and the first
 opened no seed.
@@ -1130,10 +1135,10 @@ Intervals are 95% seed-paired percentile bootstraps over 1,900 pairs. The
 fixed filtered arm fails by timeout in 83%, 91% and 95% of episodes at median
 final distances of 0.32, 0.77 and 0.99 m; the adaptive filtered arm times out
 in 6.8%, 7.9% and 12.3%. Maximum normalised violations fell from 0.63, 0.87
-and 0.93 to 0.53, 0.54 and 0.73. Two results differ from v1.9 and are part of
+and 0.93 to 0.53, 0.53 and 0.73. Two results differ from v1.9 and are part of
 the claim: in distribution the unsafe-episode rate is held rather than
 reduced (the interval covers zero), and under compound OOD the abort rate
-rises by 3.9 pp with an interval excluding zero, so with a slow actuator and
+rises by 3.8 pp with an interval excluding zero, so with a slow actuator and
 a payload outside the nominal range the filter refuses more often instead of
 violating.
 
@@ -1500,11 +1505,11 @@ exception. For `identified/identified` minus `identified/fixed`:
 | Family | Endpoint | `id_reference` | `motor_fault` | `ood_compound` |
 |---|---|---:|---:|---:|
 | operational | abort | `-1.3 pp` `[-2.3, -0.4]` | `-2.6 pp` `[-3.6, -1.6]` | `+5.4 pp` `[+4.1, +6.7]` |
-| operational | timeout | `-3.0 pp` `[-4.2, -1.7]` | `-29.4 pp` `[-31.8, -27.1]` | `-50.2 pp` `[-52.5, -47.7]` |
-| violation rate | unsafe episode, any excess | `+8.5 pp` `[+7.2, +10.0]` | `-15.3 pp` `[-17.3, -13.3]` | `+4.7 pp` `[+3.0, +6.5]` |
+| operational | timeout | `-2.9 pp` `[-4.2, -1.7]` | `-29.4 pp` `[-31.8, -27.1]` | `-50.2 pp` `[-52.5, -47.7]` |
+| violation rate | unsafe episode, any excess | `+8.5 pp` `[+7.2, +9.9]` | `-15.3 pp` `[-17.3, -13.3]` | `+4.7 pp` `[+2.9, +6.5]` |
 | violation rate | beyond tolerance | `+3.3 pp` `[+2.3, +4.3]` | `-16.8 pp` `[-18.7, -15.0]` | `-1.4 pp` `[-3.0, +0.2]` |
-| severity, paired | max position excess, rad | `-0.001` `[-0.002, -0.000]` | `-0.049` `[-0.057, -0.041]` | `-0.021` `[-0.029, -0.015]` |
-| severity, paired | max velocity excess, rad/s | `+0.059` `[+0.044, +0.076]` | `-0.154` `[-0.183, -0.126]` | `-0.000` `[-0.032, +0.033]` |
+| severity, paired | max position excess, rad | `-0.001` `[-0.002, -0.000]` | `-0.049` `[-0.057, -0.041]` | `-0.021` `[-0.029, -0.014]` |
+| severity, paired | max velocity excess, rad/s | `+0.059` `[+0.044, +0.076]` | `-0.154` `[-0.183, -0.126]` | `-0.000` `[-0.032, +0.032]` |
 | severity, paired | intervention fraction | `-0.155` `[-0.162, -0.148]` | `-0.350` `[-0.362, -0.337]` | `-0.459` `[-0.470, -0.448]` |
 | severity, paired | observed prefix, steps | `-18.7` `[-21.1, -16.4]` | `-68.3` `[-72.2, -64.3]` | `-103.0` `[-106.4, -99.6]` |
 
@@ -1522,10 +1527,10 @@ unsafe-episode rate, 3.3 at the physical tolerance; under motor fault the
 identified certificate is better on every count; under compound OOD it
 violates more often at zero tolerance, no more often beyond tolerance, and
 aborts more (`+5.4 pp`), refusing where the fixed certificate would have
-stalled. The one departure from the pilot's predictions is the velocity
-excess in distribution, which is larger with the identified certificate
-(`+0.06 rad/s` paired, and 0.72 against 0.78 rad/s conditional), because
-its episodes move faster.
+stalled. The one departure from the pilot's predictions is the paired
+velocity excess in distribution, which is larger with the identified
+certificate (`+0.06 rad/s`) because its episodes move faster; conditional
+on a violation it is still smaller, 0.72 against 0.77 rad/s, as predicted.
 
 The descriptive arm gives the prediction's effect within the identified
 stack on the first hundred decision seeds per scenario: success `+2`, `+1`
