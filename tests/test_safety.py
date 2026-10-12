@@ -136,15 +136,19 @@ def test_margin_filter_halves_an_infeasible_margin_and_drops_it_last():
     moderate = MarginHOCBFSafetyFilter(arm, kappa=1.0, uncertainty=lambda s, c: np.ones(2))
     assert moderate.filter(state, candidate).success
     assert (moderate.margin_steps, moderate.reduced_steps, moderate.dropped_steps) == (1, 0, 0)
+    np.testing.assert_array_equal(moderate.applied, np.ones(2))
     # A margin the torque box cannot meet is halved until it can.
     large = MarginHOCBFSafetyFilter(arm, kappa=1.0, uncertainty=lambda s, c: np.full(2, 40.0))
     result = large.filter(state, candidate)
     assert result.success and result.correction_norm > reference.correction_norm
     assert (large.margin_steps, large.reduced_steps, large.dropped_steps) == (1, 1, 0)
+    halvings = np.log2(40.0 / large.applied[0])
+    assert large.applied[0] == large.applied[1] and halvings == round(halvings) >= 1
     # Past the last halving the projection falls back to the rows without margin.
     huge = MarginHOCBFSafetyFilter(arm, kappa=1.0, uncertainty=lambda s, c: np.full(2, 1e6))
     result = huge.filter(state, candidate)
     np.testing.assert_array_equal(result.torque, reference.torque)
     assert (huge.margin_steps, huge.reduced_steps, huge.dropped_steps) == (1, 0, 1)
+    np.testing.assert_array_equal(huge.applied, np.zeros(2))
     huge.reset_counters()
     assert huge.margin_steps == huge.dropped_steps == 0

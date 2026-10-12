@@ -253,7 +253,8 @@ class MarginHOCBFSafetyFilter(HOCBFSafetyFilter):
     before the projection, so the margin uses the larger sigma of the candidate
     and of the projection without margin. When the tightened rows leave no
     feasible command, the margin is halved until they do, and dropped after
-    `BACKOFF` halvings; the counters record both cases.
+    `BACKOFF` halvings; the counters record both cases, and `applied` sums
+    the per-joint command margin kappa * sigma actually enforced.
     """
 
     TORQUE_ROWS = 4
@@ -271,6 +272,7 @@ class MarginHOCBFSafetyFilter(HOCBFSafetyFilter):
         self.margin_steps = 0
         self.reduced_steps = 0
         self.dropped_steps = 0
+        self.applied = np.zeros(2)
 
     def _sigma(self, state, command) -> np.ndarray | None:
         sigma = self.uncertainty(state, command)
@@ -301,6 +303,7 @@ class MarginHOCBFSafetyFilter(HOCBFSafetyFilter):
             if projection.success:
                 if scale < 1.0:
                     self.reduced_steps += 1
+                self.applied += scale * self.kappa * sigma
                 return projection
             scale *= 0.5
         self.dropped_steps += 1

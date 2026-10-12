@@ -255,6 +255,8 @@ def test_margin_arm_without_margin_reproduces_the_identified_arm():
         certificate_margin=1.0,
     )
     assert margined.certificate_margin == 1.0
+    assert margined.margin_steps > 0 and len(margined.margin_mean_command) == 2
+    assert identified.margin_steps == 0 and identified.margin_mean_command is None
     table = summarize([identified, margined])
     assert table["historical/motor_fault/adaptive_hocbf_margin"]["episodes"] == 1
 
@@ -267,3 +269,26 @@ def test_margin_arm_certifies_with_the_live_estimate_and_its_covariance():
     assert certificate.uncertainty == controller.command_uncertainty
     with pytest.raises(ValueError):
         build_stack("adaptive_hocbf", AdaptiveNominalConfig(), certificate_margin=1.0)
+
+
+def test_constant_margin_arm_applies_kappa_newton_metres_on_the_same_steps():
+    config = AdaptiveNominalConfig(filter_gate=True)
+    controller, stack = build_stack("adaptive_hocbf_constmargin", config, certificate_margin=1.5)
+    certificate = stack.safety_filter
+    state, command = np.array([0.4, -0.6, 0.3, 0.2]), np.array([4.0, -2.0])
+    # Gated before convergence: the nominal model is used and neither margin applies.
+    assert certificate.model.uses_nominal
+    assert certificate.uncertainty(state, command) is None
+    assert controller.command_uncertainty(state, command) is None
+    controller._converged = True
+    np.testing.assert_array_equal(certificate.uncertainty(state, command), np.ones(2))
+    episode = run_case(
+        "adaptive_hocbf_constmargin",
+        "motor_fault",
+        9802001,
+        "historical",
+        AdaptiveNominalConfig(),
+        certificate_margin=0.5,
+    )
+    assert episode.margin_steps > 0
+    assert all(0.0 < value <= 0.5 for value in episode.margin_mean_command)

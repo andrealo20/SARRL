@@ -130,7 +130,8 @@ def main() -> int:
         "--certificate-margin",
         type=float,
         default=0.0,
-        help="margin of the margin arm's certificate rows, in standard deviations",
+        help="certificate margin: standard deviations for adaptive_hocbf_margin, "
+        "N m per joint for adaptive_hocbf_constmargin",
     )
     parser.add_argument(
         "--policy",
