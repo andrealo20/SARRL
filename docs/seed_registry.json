@@ -10,6 +10,8 @@
     {"label": "v2.0 decision block; first hundred per scenario reused by the v2.1 reproduction block", "low": 52200, "high": 54099, "status": "used", "kind": "decision"},
     {"label": "v2.1 guard band", "low": 54100, "high": 54199, "status": "unused_guard", "kind": "guard"},
     {"label": "v2.1 decision block", "low": 54200, "high": 56099, "status": "used", "kind": "decision"},
+    {"label": "v2.2 guard band", "low": 56100, "high": 56199, "status": "unused_guard", "kind": "guard"},
+    {"label": "v2.2 decision block", "low": 56200, "high": 58099, "status": "reserved", "kind": "decision"},
     {"label": "v1.5 phase A disagreement population", "low": 60000, "high": 60099, "status": "used", "kind": "evaluation"},
     {"label": "v1.5 bootstrap generators", "low": 150000, "high": 150001, "status": "used", "kind": "generator"},
     {"label": "v1.8 bootstrap generators", "low": 180000, "high": 180002, "status": "used", "kind": "generator"},

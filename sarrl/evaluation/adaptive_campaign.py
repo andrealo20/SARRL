@@ -198,6 +198,8 @@ def load_episodes(path: Path) -> list[PilotEpisode]:
             record["prediction_error_rms"] = tuple(record["prediction_error_rms"])
         if "obstacle_contact_geoms" in record:
             record["obstacle_contact_geoms"] = tuple(record["obstacle_contact_geoms"])
+        if record.get("margin_mean_command") is not None:
+            record["margin_mean_command"] = tuple(record["margin_mean_command"])
         episodes.append(PilotEpisode(**record))
     return episodes
 

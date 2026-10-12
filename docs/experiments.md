@@ -1696,10 +1696,12 @@ python tools/run_adaptive_pilot.py --output results/uncertainty_margin_pilot/cov
 python tools/run_adaptive_pilot.py --output results/uncertainty_margin_pilot/const_2 --arms adaptive_hocbf_constmargin --certificate-margin 2 --fresh 100 --seed-offset 600 --delay-compensation --plant mujoco --sensor-noise 1e-3 --armature-range 0.02 0.08 --actuator-tau-range 0.01 0.05 --actuator-grid 0 0.01 0.03 0.06
 ```
 
-### Proposed protocol (draft, not frozen)
+### Protocol (implemented, not yet frozen)
 
-This section is a draft for review. Nothing in it is sealed, no runner
-exists yet, and no decision seed has been reserved or opened.
+The protocol below is implemented in `sarrl/evaluation/margin_campaign.py`
+and `tools/run_margin_campaign.py` and its decision block is reserved in
+`docs/seed_registry.json`. It is not frozen: no seal file exists, so the
+runner refuses to start, and no decision seed has been opened.
 
 Arms, all with the v2.0 plant options, estimator and delay prediction:
 `adaptive_hocbf` (no margin), `adaptive_hocbf_margin` with `kappa = 0.25`,
@@ -1707,43 +1709,76 @@ and `adaptive_hocbf_constmargin` with `kappa = 2 N m`. Both values were
 chosen on the pilot seeds at the same in-distribution success, 90 of 100:
 `kappa = 0.25` is the covariance value at that success and costs 3 OOD
 points where `kappa = 0.5` costs 11; `2 N m` is the largest constant at
-that success. Three scenarios, no obstacle.
+that success. Three scenarios, no obstacle. The analysis refuses an
+episode whose recorded margin is not its arm's.
 
 Design, as in v2.1: a reproduction block first, `adaptive_hocbf` on the
-first hundred v2.1 decision seeds per scenario (`54200..54299`), every
-field compared with the retained `results/certificate_factorial_v21/`
-rows before any decision seed is opened; then the decision block, seeds
-`56200..58099`, 1,900 per scenario after the guard band `56100..56199`,
-every arm on every seed, 17,100 episodes. The history-wide seed scan and the
-registry check refuse the launch on any collision. Seed-paired percentile
-bootstrap, 10,000 draws, generator seed `220000`.
+first hundred v2.1 decision seeds per scenario (`54200..54299`), 300
+episodes, every field compared with the retained
+`results/certificate_factorial_v21/episodes.jsonl` rows before any
+decision seed is opened (fields added to the episode record after v2.1,
+the margin fields among them, are not in the reference and are not
+compared); then the decision block, seeds `56200..58099`, 1,900 per
+scenario after the guard band `56100..56199`, every arm on every seed,
+17,100 episodes. The history-wide seed scan and the registry check refuse
+the launch on any collision. Seed-paired percentile bootstrap, 10,000
+draws, generator seed `220000`.
 
-Estimator validity first, the v2.0 condition for every arm in every
-scenario. Then three statements, each on the 95% bound of a seed-paired
-difference:
+Estimator validity first: the v2.0 condition (an episode spending more
+than 10% of its control steps on the nominal model is guarded, and at most
+10% of episodes may be) for every arm in every scenario; a failing cell
+makes the outcome `inconclusive`. Then three statements, each on the 95%
+bound of a seed-paired difference:
 
-1. The margin removes violations: unsafe-episode rate, covariance margin
+1. `margin_removes_violations`: unsafe-episode rate, covariance margin
    minus no margin, upper bound below `-5 pp` in `id_reference` and in
    `motor_fault` (pilot `-12` and `-11`).
-2. At no material cost in success: success, covariance margin minus no
-   margin, lower bound above `-3 pp` in `id_reference` and in `motor_fault`
-   (pilot `-1` and `+2`).
-3. The covariance's shape matters: unsafe-episode rate, covariance margin
-   minus constant margin, upper bound below `0 pp` in `id_reference`
-   (pilot `-3`).
+2. `no_material_success_cost`: success, covariance margin minus no margin,
+   lower bound above `-3 pp` in `id_reference` and in `motor_fault` (pilot
+   `-1` and `+2`).
+3. `covariance_shape_matters`: unsafe-episode rate, covariance margin minus
+   constant margin, upper bound below `0 pp` in `id_reference` (pilot
+   `-3`).
 
-Outcome `confirmed` when all three hold; `margin confirmed, shape not` when
-the first two hold and the third does not; `not confirmed` otherwise, with
-each failed statement named. Reported with intervals and no threshold: the
-three contrasts in `ood_compound`; aborts and timeouts; the rate beyond the
-physical tolerance; the paired and conditional severities of v2.1; the
-intervention fraction; the enforced margin and the steps where it was
-halved or dropped. The pilot predicts more aborts with the covariance
-margin (`+3` and `+4 pp` in distribution and under fault) and lower OOD
-success with the covariance margin.
+Outcome `confirmed` when all three hold; `margin_confirmed_shape_not` when
+the first two hold and the third does not; `not_confirmed` otherwise, with
+each failed statement named. Reported with intervals and no threshold, for
+the three contrasts (covariance minus none, constant minus none,
+covariance minus constant) in every scenario, `ood_compound` included:
+success, aborts, timeouts, the unsafe-episode rate at zero and beyond the
+physical tolerance of v2.1 (`0.05 rad`, `0.5 rad/s`), the paired
+severities (maximum normalised violation, maximum position and velocity
+excess, intervention fraction, observed prefix length) and, per arm, the
+conditional severities over its unsafe episodes; for each margin arm, the
+mean enforced margin per joint and the fractions of margin steps halved
+and dropped. The pilot predicts more aborts with the covariance margin
+(`+3` and `+4 pp` in distribution and under fault) and lower OOD success
+with the covariance margin.
 
-Open points for review: whether the abort rate should carry a fourth,
-bounded statement; whether the shape comparison should be at matched mean
-enforced margin rather than at matched in-distribution success; and
-whether the margin should start only once the estimator's convergence latch
-is set, instead of halving the prior covariance's margin in the first steps.
+Open points for review, implemented as stated above until decided: whether
+the abort rate should carry a fourth, bounded statement; whether the shape
+comparison should be at matched mean enforced margin rather than at matched
+in-distribution success; and whether the margin should start only once the
+estimator's convergence latch is set, instead of halving the prior
+covariance's margin in the first steps.
+
+### Commands and retained evidence
+
+Before freezing, the whole reproduction block was run locally against the
+retained v2.1 log: 300 of 300 rows matched on all 39 retained fields, and
+the history-wide scan found the decision block unopened in the 145
+commits then reachable. The protocol section and its implementation are frozen by
+`docs/v22_seal.json`, a seal file naming the freeze commit, which must be
+an ancestor of the commit the runner starts from; the runner refuses to
+start unless the frozen paths match the sealed commit and carry no local
+change, and runs once, with the guarantees of the v2.1 runner (lock,
+fsynced journal with torn-tail repair, atomic outputs, completion marker).
+The retained directory `results/uncertainty_margin_v22/` is exempt from
+the repository's `results/` ignore rule, apart from the lock file, and will
+hold `manifest.json`, `journal.jsonl`, `episodes.jsonl`, `episodes.csv`,
+`decision.json` and `complete.json`. The official invocation, from the
+repository root once the seal is committed, is
+
+```bash
+python -m tools.run_margin_campaign --workers 4
+```
