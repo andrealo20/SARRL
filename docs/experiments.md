@@ -1696,12 +1696,12 @@ python tools/run_adaptive_pilot.py --output results/uncertainty_margin_pilot/cov
 python tools/run_adaptive_pilot.py --output results/uncertainty_margin_pilot/const_2 --arms adaptive_hocbf_constmargin --certificate-margin 2 --fresh 100 --seed-offset 600 --delay-compensation --plant mujoco --sensor-noise 1e-3 --armature-range 0.02 0.08 --actuator-tau-range 0.01 0.05 --actuator-grid 0 0.01 0.03 0.06
 ```
 
-### Protocol (implemented, not yet frozen)
+### Protocol
 
 The protocol below is implemented in `sarrl/evaluation/margin_campaign.py`
-and `tools/run_margin_campaign.py` and its decision block is reserved in
-`docs/seed_registry.json`. It is not frozen: no seal file exists, so the
-runner refuses to start, and no decision seed has been opened.
+and `tools/run_margin_campaign.py`, with its decision block reserved in
+`docs/seed_registry.json`. It was frozen at commit `817db04` and sealed by
+`b3925ed` in `docs/v22_seal.json` before any decision seed was opened.
 
 Arms, all with the v2.0 plant options, estimator and delay prediction:
 `adaptive_hocbf` (no margin), `adaptive_hocbf_margin` with `kappa = 0.25`,
@@ -1755,7 +1755,7 @@ and dropped. The pilot predicts more aborts with the covariance margin
 (`+3` and `+4 pp` in distribution and under fault) and lower OOD success
 with the covariance margin.
 
-Open points for review, implemented as stated above until decided: whether
+Open points raised before the seal and left as implemented: whether
 the abort rate should carry a fourth, bounded statement; whether the shape
 comparison should be at matched mean enforced margin rather than at matched
 in-distribution success; and whether the margin should start only once the
@@ -1774,11 +1774,100 @@ start unless the frozen paths match the sealed commit and carry no local
 change, and runs once, with the guarantees of the v2.1 runner (lock,
 fsynced journal with torn-tail repair, atomic outputs, completion marker).
 The retained directory `results/uncertainty_margin_v22/` is exempt from
-the repository's `results/` ignore rule, apart from the lock file, and will
-hold `manifest.json`, `journal.jsonl`, `episodes.jsonl`, `episodes.csv`,
+the repository's `results/` ignore rule, apart from the lock file, and
+holds `manifest.json`, `journal.jsonl`, `episodes.jsonl`, `episodes.csv`,
 `decision.json` and `complete.json`. The official invocation, from the
-repository root once the seal is committed, is
+repository root at the seal commit, was
 
 ```bash
 python -m tools.run_margin_campaign --workers 4
 ```
+
+### Result
+
+The campaign ran from the sealed state (freeze commit `817db04`, seal
+commit `b3925ed`) on 12 October 2026: 17,400 episodes and 1,565,757
+physical steps in 37 minutes on four workers, Python 3.11 and MuJoCo
+3.14.0, after a scan of 142 reachable commits (140 distinct trees,
+478 blobs) and the registry found the decision block unopened. It was
+executed twice from that state. The manifest of the first execution
+listed, among the installed distributions of the execution environment, a
+package unrelated to the project; the package was removed and the campaign
+run again from the same commit. The second execution's episode log is
+byte-identical to the first's, SHA-256
+`6c66dcc1ed480500a7ecf3b5d2074ff3c33cce234b26460807797ad4a5bd5dee`, and
+its decision is the same; the retained files are the second execution's.
+The reproduction block matched the retained v2.1 rows on 300 of 300
+episodes and every field before the first decision seed was opened. Every
+estimator cell was valid: at most 0.53% of episodes guarded, the lag
+identified in 98.8% to 99.5% of episodes, the time constant within 8.2 to
+8.8 ms on average.
+
+The preregistered outcome is **confirmed**: the three statements hold.
+Rates per cell, 1,900 episodes each, as success, unsafe episodes, aborts:
+
+| Scenario | No margin | Constant, 2 N m | Covariance, `kappa = 0.25` |
+|---|---:|---:|---:|
+| `id_reference` | 92.5%, 11.1%, 1.4% | 92.7%, 2.5%, 0.4% | 90.5%, 0.9%, 5.3% |
+| `motor_fault` | 92.6%, 11.2%, 1.1% | 92.8%, 1.4%, 0.4% | 90.7%, 0.6%, 4.9% |
+| `ood_compound` | 81.6%, 15.3%, 8.4% | 80.3%, 7.2%, 8.4% | 78.5%, 7.8%, 8.9% |
+
+| Statement | Contrast | `id_reference` | `motor_fault` | Bound |
+|---|---|---:|---:|---|
+| `margin_removes_violations` | unsafe, covariance minus none | `-10.1 pp` `[-11.5, -8.7]` | `-10.6 pp` `[-12.1, -9.2]` | upper below `-5` |
+| `no_material_success_cost` | success, covariance minus none | `-1.9 pp` `[-2.9, -1.0]` | `-1.8 pp` `[-2.9, -0.8]` | lower above `-3` |
+| `covariance_shape_matters` | unsafe, covariance minus constant | `-1.6 pp` `[-2.3, -0.9]` | | upper below `0` |
+
+The covariance margin removes nine tenths of the unsafe episodes the
+identified certificate leaves in distribution and under motor fault (11.1%
+to 0.9%, 11.2% to 0.6%), including those beyond the physical tolerance
+(`-3.4` and `-2.7 pp`), for about two points of success; the lower bound
+of that cost, `-2.9 pp` in both scenarios, clears the `-3 pp` margin by a
+tenth of a point.
+
+Most of that is the margin, not its shape. The constant `2 N m` margin,
+enforced on the same steps, removes 8.5 and 9.8 points of unsafe episodes
+at no measured cost in success (`+0.2 pp` in both scenarios, intervals
+covering zero) and with fewer aborts (`-1.0` and `-0.6 pp`). Against it,
+the covariance margin removes 1.6 points more in distribution (the third
+statement) and 0.8 under fault (`[-1.4, -0.2]`), and pays for them with
+2.2 and 2.1 points of success and 4.8 and 4.5 points of aborts; it
+enforces a larger margin on joint 1 than on joint 2 (4.2 and 2.1 N m on
+average in distribution, against 2.0 on both for the constant arm). Under
+compound OOD both margins about halve the violations (15.3% to 7.2% with
+the constant margin, to 7.8% with the covariance margin), the shape adds
+nothing (`+0.6 pp` `[-0.5, +1.8]`), and success falls by 1.3 and 3.2
+points. Both pilot predictions held: more
+aborts with the covariance margin in distribution and under fault (`+3.8`
+and `+3.9 pp` against no margin), and lower OOD success with it.
+
+The violations that remain are rarer but not smaller. Conditional on an
+unsafe episode, the mean velocity excess in distribution is 0.57 rad/s
+without a margin (210 episodes), 1.02 rad/s with the constant margin (48)
+and 0.74 rad/s with the covariance margin (18); paired over all episodes,
+the maximum velocity excess falls with either margin (`-0.04` and
+`-0.06 rad/s`). Joint-position excesses, already below 0.004 rad on
+average without a margin, all but disappear. The filter intervenes more:
+in distribution in 36% of steps without a margin, 44% with the constant
+and 51% with the covariance margin. The covariance margin was halved on
+19.6%, 16.9% and 8.7% of its steps with a margin and dropped on 0.13% to
+0.15%, in 178, 182 and 273 episodes per scenario; the constant margin was
+halved on under 1% of its steps.
+
+For context only, on different seeds: in v2.1 the fixed-model
+certificate behind the identified controller had 3.9% unsafe episodes in
+distribution at 85.7% success; the covariance margin reaches 0.9% at
+90.5%, the constant margin 2.5% at 92.7%.
+
+What the result does not say: the protocol was sealed on the author's
+decision, without the external review rounds of v2.1; both margin values
+were chosen on the pilot seeds, so the statements hold for those values
+and say nothing about other ones; the third statement establishes that
+the covariance's shape lowers the in-distribution violation rate beyond a
+constant margin, but at 1,900 seeds the two arms are not matched in
+success, and the extra violations it removes cost success and aborts, so
+the campaign does not establish the covariance margin as the better
+trade. On this benchmark a constant command margin of `2 N m` removes most
+of the identified certificate's violations at no measured success cost.
+The margin covers parametric error only, and the evidence is the planar
+arm on the MuJoCo plant.

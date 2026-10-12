@@ -41,6 +41,44 @@ MuJoCo tests, which skip without the engine, also run in CI. Important regressio
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## v2.2.0 uncertainty-margin evidence
+
+The campaign trained nothing. The protocol section of `docs/experiments.md`
+and its implementation were committed before any decision seed was opened
+(freeze commit `817db04`) and sealed by `b3925ed` in `docs/v22_seal.json`.
+Unlike v2.1, the protocol went through no external review round: it was
+sealed on the author's decision, with three open points recorded in the
+protocol and left as implemented. Before the seal, the whole reproduction
+block was run once locally against the retained v2.1 log (300 of 300 rows,
+all 39 retained fields).
+
+Before the first episode the runner verified the sealed source state and a
+clean tree, scanned the CSV, JSON and JSONL blobs of 142 reachable commits
+(140 distinct trees, 478 blobs) for seed-named values in `56200..58099`
+(none), checked the registry, and recorded the reproduction reference hash,
+the runtime (Python 3.11.15, torch 2.14.1, numpy 2.4.6, MuJoCo 3.14.0 on
+Linux), the installed distributions and the four-worker fingerprint in
+`manifest.json`. The reproduction block ran first and matched the retained
+v2.1 rows on 300 of 300 episodes and every field.
+
+The campaign was executed twice from the sealed state. The first
+execution's manifest listed, among the installed distributions of the
+execution environment, a package unrelated to the project; it was
+uninstalled and the runner started again from the same commit on an empty
+output directory. Both executions produced the same `episodes.jsonl`
+(SHA-256 `6c66dcc1ed480500a7ecf3b5d2074ff3c33cce234b26460807797ad4a5bd5dee`) and the same decision; the retained files are the
+second execution's.
+
+Retained under `results/uncertainty_margin_v22/`: `manifest.json`,
+`journal.jsonl` (17,400 session-tagged cell records in completion order),
+`episodes.jsonl` (the same records in the planned order), `episodes.csv`,
+`decision.json` with the three contrasts in every scenario, the
+conditional severities, the margin diagnostics, per-cell estimator
+diagnostics and summaries, the reproduction check and the protocol, and
+`complete.json` hashing the five files. The decision file records
+`confirmed`, with every estimator cell valid and the reproduction check at
+300/300. At the v2.2.0 release the suite collects 440 tests.
+
 ## v2.1.0 certificate factorial evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`
