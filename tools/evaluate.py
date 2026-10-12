@@ -5,8 +5,8 @@ from __future__ import annotations
 
 import argparse
 
-from sarrl.envs import PlanarReachEnv
-from sarrl.evaluation import evaluate_policy
+from sarrl.envs import DomainRandomization, PlanarReachEnv
+from sarrl.evaluation import evaluate_policy, planar_id_randomization
 from sarrl.rl import SACAgent
 
 
@@ -16,11 +16,17 @@ def main() -> int:
     p.add_argument("--mode", choices=["torque", "residual"], default="residual")
     p.add_argument("--episodes", type=int, default=100)
     p.add_argument("--seed", type=int, default=10_000)
+    p.add_argument(
+        "--randomize",
+        action="store_true",
+        help="Evaluate on the randomized planar benchmark used for training and held-out results.",
+    )
     args = p.parse_args()
     if args.episodes <= 0 or args.seed < 0:
         raise SystemExit("episodes must be positive and seed non-negative")
 
-    env = PlanarReachEnv(mode=args.mode)
+    randomization = planar_id_randomization() if args.randomize else DomainRandomization()
+    env = PlanarReachEnv(mode=args.mode, randomization=randomization)
     agent = SACAgent.from_checkpoint(args.checkpoint, seed=0, load_optimizers=False)
     if (
         agent.obs_dim != env.observation_space.shape[0]

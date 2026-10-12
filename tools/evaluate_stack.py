@@ -19,7 +19,8 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("checkpoint")
     p.add_argument("--episodes", type=int, default=100)
-    p.add_argument("--seed", type=int, default=20_000)
+    # Held-out seeds by default; 20000.. is the validation population.
+    p.add_argument("--seed", type=int, default=40_000)
     p.add_argument("--randomize", action="store_true")
     p.add_argument("--motor-fault", type=float, default=None, help="joint-2 gain after step 80")
     p.add_argument("--safety", action="store_true")

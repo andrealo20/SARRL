@@ -16,7 +16,8 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--episodes", type=int, default=100)
     p.add_argument("--seed", type=int, default=1000)
-    p.add_argument("--output", default="results/v0_1_nominal.csv")
+    # results/v0_1_nominal.csv is retained evidence; the default never overwrites it.
+    p.add_argument("--output", default="results/nominal.csv")
     args = p.parse_args()
     if args.episodes <= 0:
         raise SystemExit("--episodes must be positive")
