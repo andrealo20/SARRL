@@ -5,7 +5,9 @@ from sarrl.controllers import AdaptiveNominalConfig, ComputedTorqueController
 from sarrl.dynamics import PlanarArm
 from sarrl.evaluation.adaptive_pilot import (
     ARMS,
+    MARGIN_ARMS,
     NominalStack,
+    build_stack,
     pilot_cases,
     run_case,
     summarize,
@@ -23,6 +25,17 @@ def test_pilot_cases_keep_historical_seeds_first_and_fresh_seeds_apart():
     assert len(pilot_cases(3, historical=False)) == 9
     with pytest.raises(ValueError):
         pilot_cases(101)
+
+
+def test_seed_offset_opens_fresh_blocks_no_earlier_pilot_used():
+    shifted = pilot_cases(100, historical=False, seed_offset=600)
+    seeds = [seed for _, seed, _ in shifted]
+    assert (min(seeds), max(seeds), len(set(seeds))) == (9803600, 9803899, 300)
+    assert not set(seeds) & {seed for _, seed, _ in pilot_cases(100, historical=False)}
+    assert shifted[0] == ("id_reference", 9803600, "fresh")
+    for offset in (-300, 100):
+        with pytest.raises(ValueError):
+            pilot_cases(3, seed_offset=offset)
 
 
 def test_nominal_stack_without_filter_returns_the_clipped_baseline():
@@ -224,3 +237,33 @@ def test_fixed_certificate_arm_drives_the_identified_command_with_a_nominal_cert
     assert isinstance(stack.safety_filter.model, PlanarArm)
     identified, identified_stack = build_stack("adaptive_hocbf", AdaptiveNominalConfig(), True)
     assert identified_stack.safety_filter.model.controller is identified
+
+
+def test_margin_arm_without_margin_reproduces_the_identified_arm():
+    config = AdaptiveNominalConfig()
+    identified = run_case("adaptive_hocbf", "motor_fault", 9802001, "historical", config)
+    unmargined = run_case("adaptive_hocbf_margin", "motor_fault", 9802001, "historical", config)
+    for field in ("outcome", "steps", "final_distance", "selected_lag", "prediction_error_rms"):
+        assert getattr(unmargined, field) == getattr(identified, field)
+    assert unmargined.arm == "adaptive_hocbf_margin" and unmargined.certificate_margin == 0.0
+    margined = run_case(
+        "adaptive_hocbf_margin",
+        "motor_fault",
+        9802001,
+        "historical",
+        config,
+        certificate_margin=1.0,
+    )
+    assert margined.certificate_margin == 1.0
+    table = summarize([identified, margined])
+    assert table["historical/motor_fault/adaptive_hocbf_margin"]["episodes"] == 1
+
+
+def test_margin_arm_certifies_with_the_live_estimate_and_its_covariance():
+    controller, stack = build_stack(MARGIN_ARMS[0], AdaptiveNominalConfig(), certificate_margin=2.0)
+    certificate = stack.safety_filter
+    assert certificate.kappa == 2.0
+    assert certificate.model.controller is controller
+    assert certificate.uncertainty == controller.command_uncertainty
+    with pytest.raises(ValueError):
+        build_stack("adaptive_hocbf", AdaptiveNominalConfig(), certificate_margin=1.0)

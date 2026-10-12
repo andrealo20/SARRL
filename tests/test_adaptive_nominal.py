@@ -278,3 +278,27 @@ def test_actuator_time_constant_hypotheses_select_the_true_lag_and_constant():
     assert len(AdaptiveNominalController(PlanarArm()).hypotheses) == 4
     with pytest.raises(ValueError):
         AdaptiveNominalConfig(actuator_time_constants=(-0.01,)).validate()
+
+
+def test_command_uncertainty_shrinks_with_data_and_is_absent_under_the_nominal_model():
+    rng = np.random.default_rng(81)
+    controller = AdaptiveNominalController(PlanarArm())
+    state = np.array([0.4, -0.6, 0.3, 0.2])
+    command = np.array([4.0, -2.0])
+    prior = controller.command_uncertainty(state, command)
+    assert prior.shape == (2,) and np.all(np.isfinite(prior)) and np.all(prior > 0.0)
+    _simulate(controller, _random_plant(rng), np.array([0.9, 0.8]), 1, steps=200, rng=rng)
+    identified = controller.command_uncertainty(state, command)
+    assert np.all(identified < prior)
+    # The deviation is evaluated at the acceleration the estimate predicts for the command.
+    model = controller.estimated_model()
+    rows = controller.regressor.rows(
+        state[:2], state[2:], model.forward_dynamics(state[:2], state[2:], command)
+    )
+    covariance = controller.covariance[controller.hypothesis]
+    expected = np.sqrt([rows[j] @ covariance[j] @ rows[j] for j in range(2)])
+    np.testing.assert_allclose(identified, expected, rtol=1e-12)
+    gated = AdaptiveNominalController(PlanarArm(), AdaptiveNominalConfig(filter_gate=True))
+    assert gated.command_uncertainty(state, command) is None
+    with pytest.raises(ValueError):
+        controller.command_uncertainty(np.zeros(3), command)

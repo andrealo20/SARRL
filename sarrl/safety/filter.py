@@ -216,12 +216,16 @@ class HOCBFSafetyFilter:
             rhs.append(float(-limit[i]))
         return np.asarray(rows), np.asarray(rhs), current_safe
 
+    def _project(self, state, candidate, A, b) -> ProjectionResult:
+        """Projection onto the rows; subclasses may tighten them."""
+        return project_polytope_2d(candidate, A, b, tol=self.config.feasibility_tol)
+
     def filter(self, state, candidate, obstacles=()) -> SafetyResult:
         candidate = np.asarray(candidate, dtype=np.float64)
         if candidate.shape != (2,) or not np.all(np.isfinite(candidate)):
             raise ValueError("candidate torque must be a finite vector of shape (2,)")
         A, b, current_safe = self.constraints(state, obstacles)
-        projection = project_polytope_2d(candidate, A, b, tol=self.config.feasibility_tol)
+        projection = self._project(state, candidate, A, b)
         return SafetyResult(
             torque=projection.x,
             success=projection.success,
@@ -230,3 +234,74 @@ class HOCBFSafetyFilter:
             active_constraints=projection.active,
             current_safe=current_safe,
         )
+
+
+class MarginHOCBFSafetyFilter(HOCBFSafetyFilter):
+    """HOCBF projection whose model-dependent rows carry a parameter-uncertainty margin.
+
+    Every row except the four torque-box rows is affine in the acceleration the
+    model predicts, qdd = B tau + drift, so its torque coefficients are a B for
+    some acceleration coefficients a. If the command the model needs for that
+    acceleration is wrong by du, the acceleration is wrong by -B du and the
+    row by -(a B) du. Requiring the row for every |du_j| <= kappa sigma_j
+    raises its bound by kappa * sum_j |A_rj| sigma_j.
+
+    `uncertainty(state, command)` returns sigma, the per-joint standard
+    deviation of the command the model needs for the acceleration it predicts
+    for `command`, or None when the model carries no covariance for the step.
+    Sigma grows with that acceleration, and the executed command is not known
+    before the projection, so the margin uses the larger sigma of the candidate
+    and of the projection without margin. When the tightened rows leave no
+    feasible command, the margin is halved until they do, and dropped after
+    `BACKOFF` halvings; the counters record both cases.
+    """
+
+    TORQUE_ROWS = 4
+    BACKOFF = 8
+
+    def __init__(self, model, config: SafetyConfig | None = None, *, kappa: float, uncertainty):
+        super().__init__(model, config)
+        if not np.isfinite(kappa) or kappa < 0.0:
+            raise ValueError("kappa must be finite and non-negative")
+        self.kappa = float(kappa)
+        self.uncertainty = uncertainty
+        self.reset_counters()
+
+    def reset_counters(self) -> None:
+        self.margin_steps = 0
+        self.reduced_steps = 0
+        self.dropped_steps = 0
+
+    def _sigma(self, state, command) -> np.ndarray | None:
+        sigma = self.uncertainty(state, command)
+        if sigma is None:
+            return None
+        sigma = np.asarray(sigma, dtype=np.float64)
+        if sigma.shape != (2,) or not np.all(np.isfinite(sigma)) or np.any(sigma < 0.0):
+            raise ValueError("uncertainty must be a finite non-negative pair")
+        return sigma
+
+    def _project(self, state, candidate, A, b) -> ProjectionResult:
+        tol = self.config.feasibility_tol
+        plain = project_polytope_2d(candidate, A, b, tol=tol)
+        # Tightened rows cannot be feasible when the rows themselves are not.
+        if self.kappa == 0.0 or not plain.success:
+            return plain
+        sigma = self._sigma(state, candidate)
+        if sigma is None:
+            return plain
+        sigma = np.maximum(sigma, self._sigma(state, plain.x))
+        rows = A.shape[0] - self.TORQUE_ROWS
+        margin = np.zeros_like(b)
+        margin[:rows] = self.kappa * (np.abs(A[:rows]) @ sigma)
+        self.margin_steps += 1
+        scale = 1.0
+        for _ in range(self.BACKOFF + 1):
+            projection = project_polytope_2d(candidate, A, b + scale * margin, tol=tol)
+            if projection.success:
+                if scale < 1.0:
+                    self.reduced_steps += 1
+                return projection
+            scale *= 0.5
+        self.dropped_steps += 1
+        return plain
