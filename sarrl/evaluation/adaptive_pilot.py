@@ -31,7 +31,7 @@ from sarrl.evaluation.planar_v12 import planar_safety_config
 from sarrl.evaluation.planar_v13 import v13_scenarios
 from sarrl.evaluation.safety_audit import evaluate_safety_episodes
 from sarrl.runtime import ControlStackConfig, ControlStackResult
-from sarrl.safety import HOCBFSafetyFilter
+from sarrl.safety import HOCBFSafetyFilter, MarginHOCBFSafetyFilter
 
 # The two crossed arms separate the controller's model from the certificate's:
 # `adaptive_hocbf_fixedmodel` drives the identified nominal but certifies with
@@ -47,6 +47,9 @@ ARMS = (
 )
 # Arms that add a trained bounded residual to the filtered nominal command.
 RESIDUAL_ARMS = ("fixed_hocbf_residual", "adaptive_hocbf_residual")
+# The identified stack with its certificate rows tightened by the estimate's
+# parameter uncertainty, kappa standard deviations of the predicted command.
+MARGIN_ARMS = ("adaptive_hocbf_margin",)
 HISTORICAL_CASES = {
     "id_reference": (9801800, 9801801),
     "ood_compound": (9801900, 9801901),
@@ -58,16 +61,25 @@ PROBE_SEED = 190_001
 PROBE_COUNT = 50
 
 
-def pilot_cases(fresh_per_scenario: int, historical: bool = True) -> list[tuple[str, int, str]]:
-    """Historical diagnostic seeds first, then fresh seeds outside every official range."""
+def pilot_cases(
+    fresh_per_scenario: int, historical: bool = True, seed_offset: int = 0
+) -> list[tuple[str, int, str]]:
+    """Historical diagnostic seeds first, then fresh seeds outside every official range.
+
+    `seed_offset` shifts every scenario's fresh block by the same amount, a
+    multiple of 300, so a later pilot opens seeds no earlier pilot used.
+    """
     if fresh_per_scenario < 0 or fresh_per_scenario > 100:
         raise ValueError("fresh_per_scenario must lie in 0..100")
+    if seed_offset < 0 or seed_offset % 300:
+        raise ValueError("seed_offset must be a non-negative multiple of 300")
     cases = []
     for scenario in ("id_reference", "ood_compound", "motor_fault"):
         for seed in HISTORICAL_CASES[scenario] if historical else ():
             cases.append((scenario, seed, "historical"))
         for offset in range(fresh_per_scenario):
-            cases.append((scenario, FRESH_SEED_BASE[scenario] + offset, "fresh"))
+            seed = FRESH_SEED_BASE[scenario] + seed_offset + offset
+            cases.append((scenario, seed, "fresh"))
     return cases
 
 
@@ -193,15 +205,23 @@ class PilotEpisode:
     joint_position_violation_max_rad: float = 0.0
     joint_velocity_violation_max_rad_s: float = 0.0
     first_unsafe_step: int = -1
+    # Certificate margin of the margin arm, in standard deviations; zero elsewhere.
+    certificate_margin: float = 0.0
+    # Steps whose certificate carried a margin, and those where it was halved or dropped.
+    margin_steps: int = 0
+    margin_reduced_steps: int = 0
+    margin_dropped_steps: int = 0
 
 
 RESIDUAL_SUFFIX = "_residual"
 
 
-def build_arm(arm: str, config: AdaptiveNominalConfig):
+def build_arm(arm: str, config: AdaptiveNominalConfig, certificate_margin: float = 0.0):
     """Return (controller, safety filter, estimator); the estimator may be the controller."""
     if arm.endswith(RESIDUAL_SUFFIX):
         arm = arm[: -len(RESIDUAL_SUFFIX)]
+    if certificate_margin != 0.0 and arm not in MARGIN_ARMS:
+        raise ValueError("a certificate margin needs a margin arm")
     nominal = PlanarArm()
     safety_config = planar_safety_config()
     if arm == "fixed":
@@ -221,16 +241,28 @@ def build_arm(arm: str, config: AdaptiveNominalConfig):
         return estimator, HOCBFSafetyFilter(estimator.estimated_model(), safety_config), estimator
     if arm == "adaptive_hocbf_fixedmodel":
         return estimator, HOCBFSafetyFilter(nominal, safety_config), estimator
+    if arm == "adaptive_hocbf_margin":
+        certificate = MarginHOCBFSafetyFilter(
+            estimator.estimated_model(),
+            safety_config,
+            kappa=certificate_margin,
+            uncertainty=estimator.command_uncertainty,
+        )
+        return estimator, certificate, estimator
     raise ValueError(f"unknown arm {arm}")
 
 
 def build_stack(
-    arm: str, config: AdaptiveNominalConfig, compensate_delay: bool = False, policy=None
+    arm: str,
+    config: AdaptiveNominalConfig,
+    compensate_delay: bool = False,
+    policy=None,
+    certificate_margin: float = 0.0,
 ):
     """Arms ending in `_residual` add a bounded policy residual to the nominal command."""
     if arm.endswith(RESIDUAL_SUFFIX) != (policy is not None):
         raise ValueError("a residual arm needs a policy and a nominal arm must not carry one")
-    controller, safety_filter, estimator = build_arm(arm, config)
+    controller, safety_filter, estimator = build_arm(arm, config, certificate_margin)
     adaptive = isinstance(controller, AdaptiveNominalController)
     stack = NominalStack(
         controller,
@@ -345,11 +377,12 @@ def run_case(
     plant: str = "analytical",
     options: PlantOptions | None = None,
     policy=None,
+    certificate_margin: float = 0.0,
 ):
     spec = {s.key: s for s in v13_scenarios()}[scenario]
     options = options or PlantOptions()
     env = make_env(plant, spec, options)
-    controller, stack = build_stack(arm, config, compensate_delay, policy)
+    controller, stack = build_stack(arm, config, compensate_delay, policy, certificate_margin)
     # Estimator fields describe whichever estimator ran, the controller or an observer.
     estimator = stack.estimator if stack.estimator is not None else controller
     adaptive = isinstance(estimator, AdaptiveNominalController)
@@ -390,6 +423,8 @@ def run_case(
         label = "timeout"
     probes = probe_bank()
     true_parameters = CommandRegressor.parameters(env.arm.params, env.motor_gain).tolist()
+    certificate = stack.safety_filter
+    margined = isinstance(certificate, MarginHOCBFSafetyFilter)
     return PilotEpisode(
         arm=arm,
         scenario=scenario,
@@ -430,6 +465,10 @@ def run_case(
         joint_position_violation_max_rad=float(safety.joint_position_violation_max_rad),
         joint_velocity_violation_max_rad_s=float(safety.joint_velocity_violation_max_rad_s),
         first_unsafe_step=int(safety.first_unsafe_observation),
+        certificate_margin=float(certificate_margin),
+        margin_steps=int(certificate.margin_steps) if margined else 0,
+        margin_reduced_steps=int(certificate.reduced_steps) if margined else 0,
+        margin_dropped_steps=int(certificate.dropped_steps) if margined else 0,
     )
 
 
@@ -438,7 +477,7 @@ def summarize(episodes: list[PilotEpisode]) -> dict:
     table: dict = {}
     for origin in ("historical", "fresh", "all"):
         for scenario in ("id_reference", "ood_compound", "motor_fault"):
-            for arm in ARMS + RESIDUAL_ARMS:
+            for arm in ARMS + RESIDUAL_ARMS + MARGIN_ARMS:
                 rows = [
                     e
                     for e in episodes
@@ -472,6 +511,8 @@ def summarize(episodes: list[PilotEpisode]) -> dict:
                         if rows[0].residual_rms is not None
                         else None
                     ),
+                    "episodes_with_reduced_margin": sum(e.margin_reduced_steps > 0 for e in rows),
+                    "episodes_with_dropped_margin": sum(e.margin_dropped_steps > 0 for e in rows),
                     "obstacle_episodes": sum(e.obstacle_present for e in rows),
                     "obstacle_violation_episodes": sum(
                         e.obstacle_violation_max_m > 0.0 for e in rows

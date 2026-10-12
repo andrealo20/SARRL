@@ -27,6 +27,7 @@ from sarrl.envs.planar_reach import ObstacleSpec
 from sarrl.evaluation import assert_repository_import_root
 from sarrl.evaluation.adaptive_pilot import (
     ARMS,
+    MARGIN_ARMS,
     RESIDUAL_ARMS,
     PlantOptions,
     episodes_to_records,
@@ -116,7 +117,21 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--fresh", type=int, default=20, help="fresh seeds per scenario")
-    parser.add_argument("--arms", nargs="+", default=list(ARMS), choices=ARMS + RESIDUAL_ARMS)
+    parser.add_argument(
+        "--seed-offset",
+        type=int,
+        default=0,
+        help="shift of every fresh block, a multiple of 300, so a new pilot opens unused seeds",
+    )
+    parser.add_argument(
+        "--arms", nargs="+", default=list(ARMS), choices=ARMS + RESIDUAL_ARMS + MARGIN_ARMS
+    )
+    parser.add_argument(
+        "--certificate-margin",
+        type=float,
+        default=0.0,
+        help="margin of the margin arm's certificate rows, in standard deviations",
+    )
     parser.add_argument(
         "--policy",
         type=Path,
@@ -159,6 +174,8 @@ def main() -> int:
     residual_arms = [arm for arm in args.arms if arm in RESIDUAL_ARMS]
     if bool(residual_arms) != (args.policy is not None):
         raise ValueError("residual arms need --policy, and --policy needs a residual arm")
+    if args.certificate_margin != 0.0 and not any(arm in MARGIN_ARMS for arm in args.arms):
+        raise ValueError("--certificate-margin needs a margin arm")
     policy = None
     if args.policy is not None:
         policy = SACAgent.from_checkpoint(args.policy, seed=0, load_optimizers=False)
@@ -203,7 +220,7 @@ def main() -> int:
             tuple(args.actuator_tau_range) if args.actuator_tau_range else None
         ),
     )
-    cases = pilot_cases(args.fresh, historical=args.historical)
+    cases = pilot_cases(args.fresh, historical=args.historical, seed_offset=args.seed_offset)
     started = time.time()
     episodes = []
     for index, (scenario, seed, origin) in enumerate(cases, start=1):
@@ -219,6 +236,7 @@ def main() -> int:
                     args.plant,
                     options,
                     policy if arm in RESIDUAL_ARMS else None,
+                    args.certificate_margin if arm in MARGIN_ARMS else 0.0,
                 )
             )
         print(f"[{index}/{len(cases)}] {scenario} {seed} done", flush=True)
@@ -233,6 +251,8 @@ def main() -> int:
         "training": False,
         "arms": list(args.arms),
         "cases": [list(case) for case in cases],
+        "seed_offset": args.seed_offset,
+        "certificate_margin": args.certificate_margin,
         "estimator": asdict(config),
         "delay_compensation": bool(args.delay_compensation),
         "plant": args.plant,

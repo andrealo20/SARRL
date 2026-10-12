@@ -460,6 +460,26 @@ class AdaptiveNominalController:
         """Live model view for a safety filter, expressed in command units."""
         return EstimatedCommandModel(self)
 
+    def command_uncertainty(self, state, command) -> np.ndarray | None:
+        """Per-joint standard deviation of the command the estimate needs for an acceleration.
+
+        The acceleration is the one the estimated model predicts for `command`
+        at `state`; the deviation is sqrt(phi_j' P_j phi_j) with the selected
+        hypothesis' covariance, whose scale assumes a unit innovation variance.
+        None while the step uses the nominal model, which carries no covariance.
+        """
+        x = np.asarray(state, dtype=np.float64)
+        if x.shape != (4,) or not np.all(np.isfinite(x)):
+            raise ValueError("state must be a finite vector of shape (4,)")
+        model = self.estimated_model()
+        if model.uses_nominal:
+            return None
+        acceleration = model.forward_dynamics(x[:2], x[2:], _vector(command, "command"))
+        rows = self.regressor.rows(x[:2], x[2:], acceleration)
+        covariance = self.covariance[self.hypothesis]
+        variance = np.einsum("ij,ijk,ik->i", rows, covariance, rows)
+        return np.sqrt(np.maximum(variance, 0.0))
+
 
 def _rk4(model, state, command, dt):
     def derivative(x):

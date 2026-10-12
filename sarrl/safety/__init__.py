@@ -1,6 +1,7 @@
 from .filter import (
     CircularObstacle,
     HOCBFSafetyFilter,
+    MarginHOCBFSafetyFilter,
     ProjectionResult,
     SafetyConfig,
     SafetyResult,
@@ -10,6 +11,7 @@ from .filter import (
 __all__ = [
     "CircularObstacle",
     "HOCBFSafetyFilter",
+    "MarginHOCBFSafetyFilter",
     "ProjectionResult",
     "SafetyConfig",
     "SafetyResult",
