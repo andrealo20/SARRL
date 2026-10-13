@@ -8,7 +8,19 @@ This file records implemented release increments. Performance evidence is kept s
   noise levels and matched joint trajectories at two posture ranges.
   Four independent processes save hash-checked resumable cells; source
   guards reject controller changes and all 560 previous records must
-  reproduce before the new seed block. No new result is recorded yet.
+  reproduce before the new seed block.
+- Ran the grid once from clean commit `a5041c7`, reproducing all 560
+  previous records before 2,800 new episodes. Original adaptive success
+  fell to 17/20 at wide 30 ms and 10/20 at wide 40 ms, both clean and noisy;
+  every delay-aware arm and the physical oracle retained 20/20 in every
+  condition. No contacts or position/speed violations occurred. Saturation
+  affected 46 original adaptive episodes and no other arm; prediction
+  fallbacks were zero. Both banks selected the correct final delay in all
+  their episodes. Bank prediction slightly worsened mean RMS at wide
+  40 ms, by 0.65% clean and 0.85% noisy, despite improving it in the other
+  fourteen delayed conditions. Retained all records, 140 traces, checked
+  provenance and a saved-data figure; 5,040,000 physical steps include
+  reproduction, with virtual prediction integration counted separately.
 
 - Added a five-candidate Panda command-delay bank using accumulated
   pre-update innovation, and bounded RK4 prediction through queued commands

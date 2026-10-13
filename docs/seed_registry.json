@@ -35,6 +35,6 @@
     {"label": "Panda delay identification engineering tests", "low": 9804600, "high": 9804699, "status": "used", "kind": "local"},
     {"label": "Panda delay identification engineering pilot", "low": 9804700, "high": 9804799, "status": "used", "kind": "local"},
     {"label": "Panda posture and delay-grid engineering tests", "low": 9804800, "high": 9804899, "status": "used", "kind": "local"},
-    {"label": "Panda posture and delay-grid engineering pilot", "low": 9804900, "high": 9804999, "status": "reserved", "kind": "local"}
+    {"label": "Panda posture and delay-grid engineering pilot", "low": 9804900, "high": 9804999, "status": "used", "kind": "local"}
   ]
 }

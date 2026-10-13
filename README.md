@@ -225,6 +225,28 @@ error without noise. True delays are only 0 and 20 ms, and the queue starts
 at zero. The [protocol, full results and traces](docs/panda-delay.md)
 retain those limits and the separate privileged diagnostics.
 
+The frozen controllers were then tested on all delays from 0 to 40 ms in
+10 ms steps, at both noise levels and on the original tasks translated
+to wider postures. All 560 previous records reproduced before 2,800 new
+episodes. At wide postures, original adaptive success fell to 17/20 at
+30 ms and 10/20 at 40 ms, both clean and noisy. Every delay-aware arm
+retained 20/20 in every condition. At wide noisy 40 ms:
+
+| Controller | Success | Final joint error, mrad | Tracking RMS, mrad |
+|---|---:|---:|---:|
+| Original adaptive | 10/20 | 10.054279 | 10.633881 |
+| Identified-delay alignment | 20/20 | 0.359496 | 4.284080 |
+| Identified-delay alignment + prediction | 20/20 | 0.366779 | 4.320690 |
+
+No contacts or position/speed violations were observed. Saturation affected
+46 original adaptive episodes and no other arm. Both banks selected the
+correct final delay in all 400 of their episodes, with no prediction
+fallback. Prediction worsened RMS slightly at wide 40 ms and increased
+final error in 13 of the 16 delayed conditions. The
+[full grid, figure and retained evidence](docs/panda-posture-delay.md)
+support alignment as the next baseline; prediction needs further assessment.
+The FIFO still starts at zero and delay stays constant.
+
 ### Safety
 
 Task success alone cannot separate a controller that reaches the target through the safe set from one that reaches it by traversing constraint violations. The v1.4 campaign re-evaluated the same frozen policies on the same seeds and measured the safety envelope directly, isolating the effect of the hard-HOCBF filter:
@@ -273,7 +295,7 @@ The planar stack requires NumPy, SciPy and PyTorch. The MuJoCo plant needs the o
 
 ## Limitations
 
-The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation, v1.9 adaptive-nominal, v2.0 MuJoCo, v2.1 certificate-factorial and v2.2 uncertainty-margin campaigns are complete. The Panda pilots cover nominal joint-trajectory tracking, payload/friction identification and constant command-delay compensation around one posture. Seven-joint safety filtering, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation, v1.9 adaptive-nominal, v2.0 MuJoCo, v2.1 certificate-factorial and v2.2 uncertainty-margin campaigns are complete. The Panda pilots cover nominal joint-trajectory tracking, payload/friction identification and constant command-delay compensation across two sampled posture ranges. Seven-joint safety filtering, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 

@@ -209,9 +209,33 @@ isolated 3.15.0. The full suite passed with 520 tests and one skip for
 unavailable local diagnostic records (521 collected), under Python 3.12.3,
 NumPy 2.5.2 and MuJoCo 3.13.0. Lint and compilation checks passed.
 
-The pre-execution protocol is in
-[`panda-posture-delay.md`](panda-posture-delay.md). No result from the new
-pilot is recorded yet.
+The pilot ran once from clean commit `a5041c7`. All six frozen controller,
+plant and interface source hashes matched the previous manifest. The seed
+scan checked 167 reachable commits, 160 distinct trees and 515 evidence
+blobs. All 560 previous records reproduced on every field before the new
+block. The 2,800 new episodes used 4,200,000 physical steps, plus 840,000
+for reproduction. New prediction substeps total 2,392,000; reproduction
+adds another 239,400 virtual substeps.
+
+Each delay-aware arm and the physical oracle achieved 400/400 success;
+fixed achieved 0/400 and original adaptive 374/400. The adaptive failures
+were at wide postures with 30 and 40 ms delays, both clean and noisy.
+No contacts, position/speed violations or prediction fallbacks occurred.
+The original adaptive arm saturated in 46 episodes; no other arm did.
+Both banks selected the correct final delay in all 400 of their episodes.
+Prediction's mean RMS worsened relative to bank alignment at wide 40 ms,
+by 0.65% clean and 0.85% noisy; all cell outcomes and final-error regressions
+are retained in [`panda-posture-delay.md`](panda-posture-delay.md).
+
+A separate saved-data audit checked every completion and source hash,
+all 2,800 task/parameter draws, terminal forward kinematics, success flags,
+cell identities and the recomputed summary. All 140 first-seed traces
+were verified for exact exogenous noise, FIFO delivery, current/future
+references, sent commands, saturation counters and tracking RMS. There
+were also 280 sampled private-model prediction replays, without new
+physical episodes. The completed-run resume command refused replacement;
+completion hashes were checked again afterwards. The saved-data figure
+was visually inspected.
 
 ## v2.2.0 uncertainty-margin evidence
 
