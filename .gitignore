@@ -154,6 +154,12 @@ results/panda_adaptation_pilot/*
 !results/panda_adaptation_pilot/*.json
 !results/panda_adaptation_pilot/traces.json.gz
 
+# Compact evidence of the seven-joint sensor-noise and command-delay pilot.
+!results/panda_robustness_pilot/
+results/panda_robustness_pilot/*
+!results/panda_robustness_pilot/*.json
+!results/panda_robustness_pilot/traces.json.gz
+
 # Canonical retained evidence for the v2.2 uncertainty-margin campaign;
 # the lock file is runtime state.
 !results/uncertainty_margin_v22/

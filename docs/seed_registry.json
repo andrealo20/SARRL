@@ -29,6 +29,8 @@
     {"label": "Panda nominal engineering pilot", "low": 9804000, "high": 9804099, "status": "used", "kind": "local"},
     {"label": "Panda model and controller tests", "low": 9804100, "high": 9804199, "status": "used", "kind": "local"},
     {"label": "Panda adaptation engineering tests", "low": 9804200, "high": 9804299, "status": "used", "kind": "local"},
-    {"label": "Panda adaptation engineering pilot", "low": 9804300, "high": 9804399, "status": "used", "kind": "local"}
+    {"label": "Panda adaptation engineering pilot", "low": 9804300, "high": 9804399, "status": "used", "kind": "local"},
+    {"label": "Panda noise and delay engineering tests", "low": 9804400, "high": 9804499, "status": "used", "kind": "local"},
+    {"label": "Panda noise and delay engineering pilot", "low": 9804500, "high": 9804599, "status": "reserved", "kind": "local"}
   ]
 }

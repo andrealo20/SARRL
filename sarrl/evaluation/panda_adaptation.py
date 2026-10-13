@@ -8,6 +8,7 @@ import numpy as np
 
 from sarrl.controllers.panda_adaptive import PandaAdaptiveController, PandaEstimatorConfig
 from sarrl.controllers.panda_nominal import PandaComputedTorqueController
+from sarrl.envs.panda_interface import PandaControlInterface, PandaInterfaceConfig
 from sarrl.envs.panda_reach import PandaReachConfig, PandaReachEnv
 from sarrl.robots.panda import PandaDynamics, PandaModelParameters
 
@@ -22,6 +23,12 @@ def _reproduction_value_matches(actual, retained) -> bool:
         return actual == retained
     if isinstance(retained, float):
         return bool(np.isclose(actual, retained, rtol=REPRODUCTION_RTOL, atol=REPRODUCTION_ATOL))
+    if isinstance(retained, dict):
+        return (
+            isinstance(actual, dict)
+            and set(actual) == set(retained)
+            and all(_reproduction_value_matches(actual[k], v) for k, v in retained.items())
+        )
     if isinstance(retained, list):
         return (
             isinstance(actual, (list, tuple))
@@ -84,7 +91,14 @@ def pilot_protocol(episodes: int = 20, seed_start: int = 9804300) -> dict:
     }
 
 
-def run_episode(seed: int, scenario: str, arm: str, *, retain_trace=False):
+def run_episode(
+    seed: int,
+    scenario: str,
+    arm: str,
+    *,
+    retain_trace=False,
+    interface_config: PandaInterfaceConfig | None = None,
+):
     if arm not in ARMS:
         raise ValueError(f"unknown Panda controller arm: {arm}")
     parameters = sample_parameters(seed, scenario)
@@ -97,6 +111,9 @@ def run_episode(seed: int, scenario: str, arm: str, *, retain_trace=False):
     else:
         controller = PandaComputedTorqueController()
     start, goal = env.start.copy(), env.goal.copy()
+    interface = (
+        PandaControlInterface(interface_config, seed) if interface_config is not None else None
+    )
     tracking = np.zeros(7)
     error_squares = np.zeros(7)
     saturated = 0
@@ -107,8 +124,10 @@ def run_episode(seed: int, scenario: str, arm: str, *, retain_trace=False):
         error = q - reference[0]
         tracking = np.maximum(tracking, np.abs(error))
         error_squares += error**2
-        torque = controller.command(q, qd, *reference)
+        measured_q, measured_qd = interface.measure(q, qd, env.steps) if interface else (q, qd)
+        torque = controller.command(measured_q, measured_qd, *reference)
         saturated += int(np.any(np.abs(torque - controller.last_raw_torque) > 1e-12))
+        delivered = interface.deliver(torque, env.torque_limit) if interface else torque
         if retain_trace:
             trace.append(
                 {
@@ -122,10 +141,21 @@ def run_episode(seed: int, scenario: str, arm: str, *, retain_trace=False):
                     ),
                 }
             )
-        env.step_torque(torque)
+            if interface:
+                trace[-1].update(
+                    measured_q=measured_q.tolist(),
+                    measured_qd=measured_qd.tolist(),
+                    delivered_torque_nm=delivered.tolist(),
+                )
+        env.step_torque(delivered)
+        next_q, next_qd = (
+            interface.measure(env.data.qpos, env.data.qvel, env.steps)
+            if interface
+            else (env.data.qpos.copy(), env.data.qvel.copy())
+        )
         if arm == "adaptive":
             controller.observe_transition(
-                q, qd, env.data.qpos.copy(), env.data.qvel.copy(), torque, env.config.control_dt
+                measured_q, measured_qd, next_q, next_qd, torque, env.config.control_dt
             )
     if retain_trace:
         trace.append(
@@ -140,12 +170,16 @@ def run_episode(seed: int, scenario: str, arm: str, *, retain_trace=False):
                 ),
             }
         )
+        if interface:
+            trace[-1].update(
+                measured_q=next_q.tolist(), measured_qd=next_qd.tolist(), delivered_torque_nm=None
+            )
     estimator = controller.estimator.diagnostics() if arm == "adaptive" else None
     if estimator is not None:
         estimator["parameter_error"] = (
             controller.estimator.parameters - parameters.vector()
         ).tolist()
-    return {
+    record = {
         "seed": seed,
         "scenario": scenario,
         "arm": arm,
@@ -162,20 +196,23 @@ def run_episode(seed: int, scenario: str, arm: str, *, retain_trace=False):
         "physical_steps": env.steps * env.substeps,
         "estimator": estimator,
         **env.diagnostics(),
-    }, trace
+    }
+    if interface:
+        record.update(interface_config=asdict(interface_config), **interface.diagnostics())
+    return record, trace
 
 
-def summarize(records: list[dict]) -> dict:
+def summarize(records: list[dict], *, scenarios=SCENARIOS) -> dict:
     if not records:
         raise ValueError("the Panda adaptation pilot needs at least one episode")
     seeds = sorted({r["seed"] for r in records})
-    expected = {(scenario, seed, arm) for scenario in SCENARIOS for seed in seeds for arm in ARMS}
+    expected = {(scenario, seed, arm) for scenario in scenarios for seed in seeds for arm in ARMS}
     keys = [(r["scenario"], r["seed"], r["arm"]) for r in records]
     if len(keys) != len(expected) or set(keys) != expected:
         raise ValueError("pilot records must contain exactly one of every paired cell")
     cells = {}
     contrasts = {}
-    for scenario in SCENARIOS:
+    for scenario in scenarios:
         by_arm = {}
         for arm in ARMS:
             rows = sorted(

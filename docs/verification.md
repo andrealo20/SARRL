@@ -114,6 +114,24 @@ The combined final joint error averaged 78.348 mrad fixed and 0.029043 mrad
 adaptive. The design, parameter-error diagnostics and limits of this
 descriptive result are in [`panda-adaptation.md`](panda-adaptation.md).
 
+## Panda sensor-noise and command-delay checks
+
+Sixteen collected cases in `tests/test_panda_robustness.py` check invalid
+interface settings, cached/copy-safe/repeated sensor samples, the exact
+two-interval zero-initialized command queue and clipping, unchanged ideal
+episode and trace fields, measured-only adaptive transitions using the
+current sent command, shared task/parameter/noise draws, ground-truth
+success scoring, deterministic noisy delayed episodes, cross-condition
+pairing rejection, nested reproduction comparisons, unchanged previous
+summary, runner output/seed guards and refusal after a reproduction mismatch.
+
+The full suite passed with 481 tests and one skip for unavailable local
+diagnostic records (482 collected), under Python 3.12.3, NumPy 2.5.2 and
+MuJoCo 3.13.0. All Panda tests under isolated MuJoCo 3.15.0 passed: 41
+passed and one skipped for the original numerical-reference runtime.
+Lint and compilation checks passed. The committed design in
+[`panda-robustness.md`](panda-robustness.md) specifies the later pilot.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`

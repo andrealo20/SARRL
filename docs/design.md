@@ -25,6 +25,8 @@ The MuJoCo plant (v2.0) is downstream of the verified analytical stack. A separa
 joint-trajectory controller. A separate [adaptation pilot](panda-adaptation.md)
 verifies online payload/friction estimation; seven-joint safety filtering
 remains future work.
+A [noise/delay pilot](panda-robustness.md) tests those unchanged controllers
+through a shared noisy sensor sample and a delayed torque-command FIFO.
 
 ## Nominal controller
 

@@ -2,7 +2,13 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## Unreleased: Panda nominal and adaptation pilots
+## Unreleased: seven-joint Panda pilots
+
+- Added a cached Panda measurement interface with independent position and
+  velocity noise and a pure command-delay FIFO. An exploratory factorial
+  pilot keeps the existing controllers, scores physical state, reproduces
+  all 240 retained adaptation episodes, and records sent versus delivered
+  torque and matched exogenous noise. No noise/delay result is recorded yet.
 
 - Added an eight-parameter online Panda model for payload mass at a known
   attachment and seven extra viscous dampings. Its controller uses bounded

@@ -1889,3 +1889,13 @@ friction-only and combined plants. The eight-parameter regressor, observational
 interface, paired design, reproduction check and resumable execution are
 specified in [`panda-adaptation.md`](panda-adaptation.md). It is descriptive,
 with no statistical acceptance rule and no safety certificate.
+
+## Panda measurement-noise and command-delay pilot
+
+The next descriptive increment keeps those controllers and the combined
+payload/friction plant, and crosses Gaussian measurement noise with a pure
+20 ms command delay. Cached observations are shared by feedback and RLS;
+true physical state scores the task. All 240 retained adaptation episodes
+must reproduce before new seeds. The paired conditions, observable inputs,
+startup queue, seed blocks and execution guards are specified in
+[`panda-robustness.md`](panda-robustness.md).
