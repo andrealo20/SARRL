@@ -290,8 +290,32 @@ passed on the recorded NumPy 2.5.2 and MuJoCo 3.13.0 runtime and on
 isolated MuJoCo 3.15.0. Lint, compilation and the public audit's CLI help
 passed.
 
-The [design and fixed memory lengths](panda-score-memory.md) precede new
-pilot data. The new seed block remains unopened.
+The full local suite passed with 558 tests and one skip for unavailable
+local diagnostic records (559 collected), on Python 3.12.3, NumPy 2.5.2
+and MuJoCo 3.13.0. The pilot then ran once from clean commit `c4736d4`.
+The seed scan covered 171 reachable commits, 164 distinct trees and 529
+evidence blobs. All 1,280 previous records matched on every compared field
+before the 1,920 new episodes. No source or memory length changed after
+the new seeds opened.
+
+All four alignment arms succeeded in 320/320, original adaptive in 276/320,
+fixed in 0/320. Correct final age on changing profiles was 1/160 for
+cumulative scores, 74/160 for exponential and 72/160 for the window;
+on constant profiles it was 160/160, 159/160 and 152/160. Both memory
+variants increased mean final error and RMS after 1 s in every noisy
+changing condition. The [full results](panda-score-memory.md) retain these
+regressions and the clean/noisy split without promoting a new baseline.
+
+No contacts or position/speed violations occurred, including warmup.
+Original adaptive clipped in 48 episodes, 192 scored intervals. Each
+alignment arm clipped in the same twelve scenario/seed cases, 74 intervals
+per arm; fixed and warmups had zero clipping. Physical steps totaled
+4,960,000 including reproduction, with no virtual prediction substeps.
+The frozen public audit passed for all 1,920 records and 96 traces,
+including 48 continuous warmups, eighty causal estimator replays and
+independent batch score-weight reconstruction. Completion hashes passed
+again, completed-output resume refused replacement, and the figure was
+generated from saved data and visually inspected.
 
 ## v2.2.0 uncertainty-margin evidence
 

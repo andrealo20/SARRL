@@ -111,3 +111,126 @@ python -m tools.make_panda_score_memory_figure
 This pilot retains one switch time and two on-grid latencies. Multiple
 switches, off-grid or stochastic delays, memory calibration, prediction,
 residual learning and seven-joint safety filtering are separate work.
+
+## Retained result
+
+The pilot ran once from clean source commit `c4736d4`, on Python 3.12.3,
+NumPy 2.5.2 and MuJoCo 3.13.0, with four single-threaded workers. The seed
+scan covered 171 reachable commits, 164 distinct trees and 529 evidence
+blobs. All 1,280 reference episodes matched on every compared field before
+the new seeds opened. No score length or controller was changed afterwards.
+
+All four alignment arms succeeded in 320/320 episodes, original adaptive
+in 276/320, and fixed in 0/320. For original adaptive, both noise levels
+gave 20/20 at fixed 10 ms and 10 to 40 ms, 12/20 cold at fixed 40 ms and
+40 to 10 ms, and 17/20 warm at those latter profiles. Every alignment
+condition retained 20/20.
+
+No contacts or position/speed violations occurred, including warmup.
+Original adaptive clipped in 48 episodes and 192 scored intervals.
+Each alignment arm clipped in the same twelve scenario/seed cases,
+74 scored intervals per arm, all on seed `9805303`; fixed and all warmups
+had zero clipping. These observations do not establish a safety certificate.
+
+### Age selection
+
+| Score rule | Correct final age, constant profiles | Correct final age, changing profiles | Mean post-switch correct fraction, changing profiles | Mean post-switch selection switches, changing profiles |
+|---|---:|---:|---:|---:|
+| Cumulative | 160/160 | 1/160 | 0.55% | 0.00625 |
+| Exponential | 159/160 | 74/160 | 33.30% | 2.61250 |
+| Fifty-transition window | 152/160 | 72/160 | 39.93% | 3.44375 |
+
+The changing-profile counts split as follows. Each cell contains twenty
+paired tasks; these are descriptive counts across the retained conditions.
+
+| Startup | Sensing | Change | Cumulative | Exponential | Window |
+|---|---|---|---:|---:|---:|
+| Cold | Clean | 10 to 40 ms | 0/20 | 1/20 | 0/20 |
+| Cold | Clean | 40 to 10 ms | 0/20 | 0/20 | 0/20 |
+| Warm | Clean | 10 to 40 ms | 0/20 | 4/20 | 1/20 |
+| Warm | Clean | 40 to 10 ms | 0/20 | 0/20 | 0/20 |
+| Cold | Noisy | 10 to 40 ms | 0/20 | 20/20 | 20/20 |
+| Cold | Noisy | 40 to 10 ms | 0/20 | 10/20 | 11/20 |
+| Warm | Noisy | 10 to 40 ms | 1/20 | 20/20 | 20/20 |
+| Warm | Noisy | 40 to 10 ms | 0/20 | 19/20 | 20/20 |
+
+Most recovery occurred with sensor noise: exponential selection ended
+correct in 69/80 noisy changes and 5/80 clean changes; the window in
+71/80 and 1/80 respectively. The privileged diagnostic aligned every
+transition correctly. For the episodes ending correctly after a change,
+median final uninterrupted acquisition delay was 0.455 s for exponential
+(74 episodes, range 0.05 to 1.90 s) and 0.325 s for the window (72 episodes,
+range 0.12 to 1.82 s). The cumulative bank's one acquisition took 1.83 s.
+These conditional medians exclude the 86 and 88 absent acquisitions;
+they do not summarize all changing episodes.
+
+Shorter memory also lost constant-profile correctness. The exponential
+failure was warm clean 10 ms. The window's eight failures were two cold
+clean 10 ms, five warm clean 10 ms and one warm clean 40 ms. All noisy
+constant profiles ended correctly for both variants. Correct final
+selection and stable selection remain separate metrics in the full summary.
+
+### Tracking regressions
+
+In every noisy changing condition, both memory variants increased mean
+final joint error and RMS after 1 s relative to the cumulative bank.
+The table gives mean final maximum joint error / mean per-joint RMS after
+1 s, in mrad. Every listed cell still succeeded in 20/20 tasks.
+
+| Startup | Change | Cumulative | Exponential | Window | Known-age diagnostic |
+|---|---|---:|---:|---:|---:|
+| Cold | 10 to 40 ms | 0.493384 / 1.316085 | 0.694876 / 1.420655 | 0.673783 / 1.518244 | 0.434402 / 1.478354 |
+| Cold | 40 to 10 ms | 0.358644 / 1.051319 | 2.484474 / 1.298138 | 2.504270 / 1.431683 | 0.346828 / 0.953680 |
+| Warm | 10 to 40 ms | 0.464884 / 1.300843 | 0.815538 / 1.628543 | 0.818967 / 1.650462 | 0.419403 / 1.460077 |
+| Warm | 40 to 10 ms | 0.393379 / 1.064059 | 1.253950 / 1.312854 | 1.483405 / 1.371517 | 0.362771 / 0.947997 |
+
+Exponential after-switch RMS increased by 7.946% to 25.191% across these
+four conditions; window RMS increased by 15.361% to 36.180%. Maximum
+single-episode final joint error was 0.989597 mrad for cumulative scores,
+8.293696 for exponential and 7.830507 for the window. At warm noisy
+40 to 10 ms, mean payload error was 4.760 g for cumulative, 23.234 g for
+exponential, 27.128 g for the window and 2.497 g for the diagnostic.
+
+The clean changing conditions did not show a uniform tracking gain either.
+For cold clean 10 to 40 ms, window after-switch RMS was 1.397150 mrad
+versus cumulative's 1.258440, despite lower mean final error. For cold
+clean 40 to 10 ms, neither memory variant ended with the correct age.
+The full cell summary retains all clean/constant metrics, parameter
+errors, clipping, paired differences and startup contrasts.
+
+This comparison does not support replacing cumulative scores with either
+fixed memory rule. Score forgetting alone produced partial recovery,
+selection switches and tracking regressions. The cumulative bank remains
+the reference for further comparisons. The next diagnosis should examine
+how candidate parameter fitting and trajectory excitation distinguish age
+hypotheses before choosing another memory length; the current data do not
+establish the cause of the clean/noisy difference.
+
+![Saved-data score-memory comparison](../assets/panda_score_memory_pilot.png)
+
+The lower panels use the first seed chosen before execution. It happens
+to contain the cumulative bank's only successful changing-profile final
+selection, so its late recovery is not representative of the other 159
+changing cases.
+
+### Evidence and verification
+
+Retained files are the [manifest](../results/panda_score_memory_pilot/manifest.json),
+[reproduction report](../results/panda_score_memory_pilot/reproduction.json),
+[1,920 records](../results/panda_score_memory_pilot/episodes.json),
+[full summary](../results/panda_score_memory_pilot/summary.json),
+[96 compressed first-seed traces](../results/panda_score_memory_pilot/traces.json.gz)
+and [completion hashes](../results/panda_score_memory_pilot/complete.json).
+The traces include 48 warmups and the memory variants' squared innovations
+and score sequences. The frozen public audit passed on every record and
+trace, including eighty causal estimator replays and independent batch
+reconstruction of exponential/window weights at each transition.
+It also checked source blobs, model provenance, commands, noise, packet
+delivery, phase RMS, clipping and age metrics without physical episodes.
+
+All five completion hashes passed again. Completed-output resume refused
+replacement. The saved-data figure was visually inspected. New physical
+steps were 2,976,000, including 96,000 warmup steps, or 4,960,000 with
+reproduction; virtual prediction substeps were zero. The full local suite
+passed with 558 tests and one skip for unavailable local diagnostic
+records. All twenty-two new cases passed on isolated MuJoCo 3.15.0.
