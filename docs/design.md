@@ -27,6 +27,8 @@ verifies online payload/friction estimation; seven-joint safety filtering
 remains future work.
 A [noise/delay pilot](panda-robustness.md) tests those unchanged controllers
 through a shared noisy sensor sample and a delayed torque-command FIFO.
+The [delay-identification pilot](panda-delay.md) separates command alignment,
+online delay selection and state/reference prediction through that queue.
 
 ## Nominal controller
 

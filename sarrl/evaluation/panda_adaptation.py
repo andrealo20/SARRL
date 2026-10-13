@@ -9,7 +9,7 @@ import numpy as np
 from sarrl.controllers.panda_adaptive import PandaAdaptiveController, PandaEstimatorConfig
 from sarrl.controllers.panda_nominal import PandaComputedTorqueController
 from sarrl.envs.panda_interface import PandaControlInterface, PandaInterfaceConfig
-from sarrl.envs.panda_reach import PandaReachConfig, PandaReachEnv
+from sarrl.envs.panda_reach import PandaReachConfig, PandaReachEnv, quintic_reference
 from sarrl.robots.panda import PandaDynamics, PandaModelParameters
 
 ARMS = ("fixed", "adaptive", "oracle")
@@ -98,13 +98,18 @@ def run_episode(
     *,
     retain_trace=False,
     interface_config: PandaInterfaceConfig | None = None,
+    controller_override: PandaAdaptiveController | None = None,
 ):
     if arm not in ARMS:
         raise ValueError(f"unknown Panda controller arm: {arm}")
     parameters = sample_parameters(seed, scenario)
     env = PandaReachEnv(parameters=parameters)
     _, reset_info = env.reset(seed=seed)
-    if arm == "adaptive":
+    if controller_override is not None:
+        if arm != "adaptive" or not isinstance(controller_override, PandaAdaptiveController):
+            raise ValueError("controller overrides must be adaptive Panda controllers")
+        controller = controller_override
+    elif arm == "adaptive":
         controller = PandaAdaptiveController()
     elif arm == "oracle":
         controller = PandaComputedTorqueController(PandaDynamics(parameters=parameters))
@@ -125,7 +130,16 @@ def run_episode(
         tracking = np.maximum(tracking, np.abs(error))
         error_squares += error**2
         measured_q, measured_qd = interface.measure(q, qd, env.steps) if interface else (q, qd)
-        torque = controller.command(measured_q, measured_qd, *reference)
+        control_q, control_qd, control_reference = measured_q, measured_qd, reference
+        if hasattr(controller, "prepare_control"):
+            control_q, control_qd, lookahead = controller.prepare_control(measured_q, measured_qd)
+            control_reference = quintic_reference(
+                start,
+                goal,
+                env.steps * env.config.control_dt + lookahead,
+                env.config.move_seconds,
+            )
+        torque = controller.command(control_q, control_qd, *control_reference)
         saturated += int(np.any(np.abs(torque - controller.last_raw_torque) > 1e-12))
         delivered = interface.deliver(torque, env.torque_limit) if interface else torque
         if retain_trace:
@@ -146,6 +160,11 @@ def run_episode(
                     measured_q=measured_q.tolist(),
                     measured_qd=measured_qd.tolist(),
                     delivered_torque_nm=delivered.tolist(),
+                )
+            if hasattr(controller, "control_diagnostics"):
+                trace[-1].update(
+                    controller.control_diagnostics(),
+                    control_reference_q=control_reference[0].tolist(),
                 )
         env.step_torque(delivered)
         next_q, next_qd = (
@@ -174,6 +193,14 @@ def run_episode(
             trace[-1].update(
                 measured_q=next_q.tolist(), measured_qd=next_qd.tolist(), delivered_torque_nm=None
             )
+        if hasattr(controller, "control_diagnostics"):
+            trace[-1].update(controller.control_diagnostics())
+            trace[-1].update(
+                control_state=None,
+                control_reference_q=None,
+                prediction_lookahead_s=0.0,
+                prediction_fallback=False,
+            )
     estimator = controller.estimator.diagnostics() if arm == "adaptive" else None
     if estimator is not None:
         estimator["parameter_error"] = (
@@ -199,14 +226,16 @@ def run_episode(
     }
     if interface:
         record.update(interface_config=asdict(interface_config), **interface.diagnostics())
+    if hasattr(controller, "delay_diagnostics"):
+        record["delay_estimator"] = controller.delay_diagnostics()
     return record, trace
 
 
-def summarize(records: list[dict], *, scenarios=SCENARIOS) -> dict:
+def summarize(records: list[dict], *, scenarios=SCENARIOS, arms=ARMS) -> dict:
     if not records:
         raise ValueError("the Panda adaptation pilot needs at least one episode")
     seeds = sorted({r["seed"] for r in records})
-    expected = {(scenario, seed, arm) for scenario in scenarios for seed in seeds for arm in ARMS}
+    expected = {(scenario, seed, arm) for scenario in scenarios for seed in seeds for arm in arms}
     keys = [(r["scenario"], r["seed"], r["arm"]) for r in records]
     if len(keys) != len(expected) or set(keys) != expected:
         raise ValueError("pilot records must contain exactly one of every paired cell")
@@ -214,7 +243,7 @@ def summarize(records: list[dict], *, scenarios=SCENARIOS) -> dict:
     contrasts = {}
     for scenario in scenarios:
         by_arm = {}
-        for arm in ARMS:
+        for arm in arms:
             rows = sorted(
                 (r for r in records if r["scenario"] == scenario and r["arm"] == arm),
                 key=lambda r: r["seed"],
@@ -236,7 +265,7 @@ def summarize(records: list[dict], *, scenarios=SCENARIOS) -> dict:
                 "max_position_excess_rad": max(r["joint_position_excess_rad"] for r in rows),
                 "max_velocity_excess_rad_s": max(r["joint_velocity_excess_rad_s"] for r in rows),
             }
-            if arm == "adaptive":
+            if rows[0]["estimator"] is not None:
                 cells[f"{scenario}/{arm}"].update(
                     {
                         "mean_payload_absolute_error_kg": float(
@@ -252,7 +281,7 @@ def summarize(records: list[dict], *, scenarios=SCENARIOS) -> dict:
                 )
         fixed, adaptive = by_arm["fixed"], by_arm["adaptive"]
         for index, seed in enumerate(seeds):
-            matched = [by_arm[arm][index] for arm in ARMS]
+            matched = [by_arm[arm][index] for arm in arms]
             for field in ("seed", "true_parameters", "start_q", "goal_q", "target_xyz_m"):
                 if any(row[field] != matched[0][field] for row in matched[1:]):
                     raise ValueError(f"unpaired {field} in {scenario}, seed {seed}")

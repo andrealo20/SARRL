@@ -4,6 +4,24 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: seven-joint Panda pilots
 
+- Added a five-candidate Panda command-delay bank using accumulated
+  pre-update innovation, and bounded RK4 prediction through queued commands
+  with a matching future reference. A separate seven-arm engineering pilot
+  compares alignment, online selection and prediction with explicitly
+  privileged known-delay diagnostics.
+- Ran the delay-identification pilot once from clean commit `b7440fe`,
+  after reproducing all 240 previous noise/delay records. All six adaptive
+  or privileged arms succeeded in 20/20 cases per condition, fixed in 0/20.
+  With noise plus delay, bank alignment reduced mean final joint error
+  from 3.360627 to 0.341801 mrad and payload error from 77.809 to 2.340 g.
+  Bank prediction further reduced mean tracking RMS from 2.298004 to
+  2.076842 mrad, with a small final-error regression in the noise-free case.
+  Both banks selected the correct final delay in every episode. Retained
+  560 new records, twenty-eight traces, checked provenance and a saved-data
+  figure. No contacts, position/speed violations, saturation or prediction
+  fallbacks occurred; 1,200,000 physical steps include reproduction, and
+  239,400 prediction substeps are counted separately.
+
 - Added a cached Panda measurement interface with independent position and
   velocity noise and a pure command-delay FIFO. An exploratory factorial
   pilot keeps the existing controllers, scores physical state, reproduces
