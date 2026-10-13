@@ -68,7 +68,7 @@ steps.
 
 ## Panda adaptation integration checks
 
-Fourteen tests in `tests/test_panda_adaptive.py` cover the eight-parameter
+Fifteen tests in `tests/test_panda_adaptive.py` cover the eight-parameter
 regressor against independent engine dynamics, payload inertia and damping,
 excited and unobserved RLS parameters, estimate bounds, nominal equivalence,
 paired task and parameter sampling, deterministic repeated rollouts,
@@ -76,10 +76,24 @@ reproduction tolerances, adaptive tracking under a modelled load, and checked
 cell resume. A corrupt saved cell is rejected before any pending case runs.
 The adaptive controller receives neither the true parameters nor the plant.
 
-The full suite passed with 464 tests and one skip for unavailable local
-diagnostic records (465 collected), under Python 3.12.3 and MuJoCo 3.13.0.
-After tightening the resume guards, all fourteen adaptation tests passed
-again. Lint and compilation checks passed.
+Before the runtime compatibility follow-up below, the full suite passed
+with 464 tests and one skip for unavailable local diagnostic records
+(465 collected), under Python 3.12.3 and MuJoCo 3.13.0. After tightening
+the resume guards, the then-fourteen adaptation tests passed again.
+Lint and compilation checks passed.
+
+CI's MuJoCo 3.15.0 produced a `1.62e-8 N m` difference in the first nominal
+reference's maximum torque, outside the frozen reproduction tolerance.
+An isolated local 3.15.0 installation reproduced that difference while
+keeping NumPy at the reference version. The original XML-loading path and
+the zero-parameter extension produced identical episode records and traces
+within the same engine. The regression suite now checks that equivalence
+on every supported runtime, and compares against retained numerical data
+only when MuJoCo and NumPy match their recorded versions. The runner's
+strict reproduction tolerances and retained evidence are unchanged.
+All fifteen adaptation tests passed under MuJoCo 3.13.0. All Panda tests
+under isolated 3.15.0 passed: 25 passed, one skipped for the reference
+runtime mismatch. This adds one test, bringing collection to 466 tests.
 
 The pilot ran once from clean implementation commit `3086aeb`. Its history
 scan covered 160 reachable commits, 153 distinct trees and 494 evidence

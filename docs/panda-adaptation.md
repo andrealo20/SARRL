@@ -180,6 +180,11 @@ commit. Later documentation updates do not replace that source snapshot.
 The registry now marks this pilot block as used. The launch commands above
 document its original execution; a new pilot needs a fresh registered block
 and a corresponding runner guard. The retained pilot cannot be overwritten.
+Exact numerical reproduction uses the recorded MuJoCo and NumPy versions.
+MuJoCo 3.15.0 changes the first nominal episode's maximum torque by
+`1.62e-8 N m`, outside the frozen tolerance. Separate regression checks
+verify exact equivalence of the original and zero-parameter XML-loading
+paths within each engine; they do not relax the pilot's reproduction guard.
 
 ![Paired tracking and parameter estimates](../assets/panda_adaptation_pilot.png)
 

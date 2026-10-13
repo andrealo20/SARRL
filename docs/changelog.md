@@ -21,6 +21,10 @@ This file records implemented release increments. Performance evidence is kept s
   hashes and a saved-data figure are retained. Friction identification is
   less precise than payload estimation; this is a noise-free, within-model
   engineering result without seven-joint safety filtering.
+- Checked the Panda tests on MuJoCo 3.13 and 3.15. Zero added parameters
+  reproduce the original XML-loading path exactly within either engine;
+  retained numerical reproduction is tested with its recorded MuJoCo and
+  NumPy versions. The experiment's strict tolerances are unchanged.
 
 - Added a fixed-base, seven-joint Panda MuJoCo model without a gripper,
   derived from a pinned Menagerie source with its Apache-2.0 license,

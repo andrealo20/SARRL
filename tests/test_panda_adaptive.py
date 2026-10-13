@@ -116,7 +116,28 @@ def test_panda_scenarios_reuse_parameter_draws_without_changing_task_draws():
         sample_parameters(seed, "missing")
 
 
-def test_panda_nominal_extension_reproduces_the_retained_first_episode():
+def test_panda_zero_parameters_match_the_original_xml_loading_path(monkeypatch):
+    import sarrl.envs.panda_reach as reach
+    import sarrl.robots.panda as robot
+
+    actual, actual_trace = nominal_episode(9804208, retain_trace=True)
+
+    def original_loader(timestep=0.002, *, parameters=None):
+        model = mujoco.MjModel.from_xml_path(str(robot.ASSETS / "panda.xml"))
+        model.opt.timestep = timestep
+        return model
+
+    monkeypatch.setattr(robot, "load_panda_model", original_loader)
+    monkeypatch.setattr(reach, "load_panda_model", original_loader)
+    original, original_trace = nominal_episode(9804208, retain_trace=True)
+    assert actual == original
+    assert actual_trace == original_trace
+
+
+def test_panda_nominal_reproduction_matches_the_retained_reference_runtime():
+    runtime = json.loads(Path("results/panda_nominal_pilot/manifest.json").read_text())["runtime"]
+    if mujoco.__version__ != runtime["mujoco"] or np.__version__ != runtime["numpy"]:
+        pytest.skip("strict retained reproduction requires its recorded MuJoCo and NumPy versions")
     rows = json.loads(Path("results/panda_nominal_pilot/episodes.json").read_text())
     actual, _ = nominal_episode(rows[0]["seed"])
     assert reproduction_mismatches(actual, rows[0]) == []
