@@ -1880,3 +1880,12 @@ trajectories around one posture, with no adaptation, learning or safety filter.
 The task, measurements, reserved pilot seeds and runnable command are in
 [`panda.md`](panda.md). Its results are descriptive and do not extend the
 planar campaigns' claims to seven joints.
+
+## Panda payload/friction adaptation pilot
+
+The next engineering increment uses the same nominal task and compares fixed,
+adaptive and true-parameter diagnostic controllers across nominal, payload-only,
+friction-only and combined plants. The eight-parameter regressor, observational
+interface, paired design, reproduction check and resumable execution are
+specified in [`panda-adaptation.md`](panda-adaptation.md). It is descriptive,
+with no statistical acceptance rule and no safety certificate.

@@ -6,7 +6,14 @@ from dataclasses import dataclass
 
 import numpy as np
 
-from sarrl.robots.panda import HOME, VELOCITY_LIMIT, load_panda_model, mujoco, vector7
+from sarrl.robots.panda import (
+    HOME,
+    VELOCITY_LIMIT,
+    PandaModelParameters,
+    load_panda_model,
+    mujoco,
+    vector7,
+)
 
 
 @dataclass(frozen=True)
@@ -48,10 +55,16 @@ def quintic_reference(start, goal, time: float, duration: float):
 class PandaReachEnv:
     """Seven torque controls, fixed-horizon episodes and substep constraint observation."""
 
-    def __init__(self, config: PandaReachConfig | None = None):
+    def __init__(
+        self,
+        config: PandaReachConfig | None = None,
+        *,
+        parameters: PandaModelParameters | None = None,
+    ):
         self.config = config or PandaReachConfig()
         self.config.validate()
-        self.model = load_panda_model(self.config.timestep)
+        self.parameters = parameters or PandaModelParameters()
+        self.model = load_panda_model(self.config.timestep, parameters=self.parameters)
         self.data = mujoco.MjData(self.model)
         self.substeps = round(self.config.control_dt / self.config.timestep)
         self.horizon = round(

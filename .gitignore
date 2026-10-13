@@ -148,6 +148,12 @@ results/certificate_factorial_v21/campaign.lock
 results/panda_nominal_pilot/*
 !results/panda_nominal_pilot/*.json
 
+# Compact evidence of the paired seven-joint adaptation engineering pilot.
+!results/panda_adaptation_pilot/
+results/panda_adaptation_pilot/*
+!results/panda_adaptation_pilot/*.json
+!results/panda_adaptation_pilot/traces.json.gz
+
 # Canonical retained evidence for the v2.2 uncertainty-margin campaign;
 # the lock file is runtime state.
 !results/uncertainty_margin_v22/

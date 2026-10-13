@@ -117,7 +117,7 @@ python -m tools.make_panda_figure --input results/panda_nominal_pilot --output r
 On headless Linux, select an available MuJoCo OpenGL backend before running
 the command, for example `MUJOCO_GL=egl`.
 
-The next increment can introduce model mismatch on this verified torque
-interface and compare a fixed controller with a separately specified
-seven-joint estimator. Cartesian reaching and safety filtering need their
-own task definitions and checks.
+The [payload/friction adaptation pilot](panda-adaptation.md) builds on this
+torque interface with a separately specified seven-joint estimator.
+Cartesian reaching and safety filtering need their own task definitions
+and checks.

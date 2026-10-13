@@ -2,7 +2,15 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## Unreleased: Panda nominal pilot
+## Unreleased: Panda nominal and adaptation pilots
+
+- Added an eight-parameter online Panda model for payload mass at a known
+  attachment and seven extra viscous dampings. Its controller uses bounded
+  RLS on sent commands and measured position/velocity transitions.
+- Added a paired engineering pilot with nominal, payload-only,
+  friction-only and combined conditions, a privileged oracle diagnostic,
+  nominal reproduction before new seeds, source/runtime checks and
+  hash-validated cell-level resume. No adaptation result is recorded yet.
 
 - Added a fixed-base, seven-joint Panda MuJoCo model without a gripper,
   derived from a pinned Menagerie source with its Apache-2.0 license,
@@ -14,9 +22,9 @@ This file records implemented release increments. Performance evidence is kept s
   cannot overwrite existing evidence.
 - Added numerical checks for actuation, mass matrices, forward/inverse
   dynamics, gravity compensation, tracking, reproducibility and contact observation.
-- The increment covers nominal joint-trajectory tracking. Seven-joint
-  adaptation, residual learning, Cartesian inverse kinematics and safety
-  certification remain unimplemented.
+- The seven-joint increment covers joint-trajectory tracking and payload/friction
+  adaptation. Residual learning, Cartesian inverse kinematics and safety
+  certification remain unimplemented for this arm.
 - Retained 20/20 successful nominal episodes on `9804000..9804019`, with
   30,000 physical steps and no observed contact, joint-position/speed
   violation or saturation. The maximum control-sample joint tracking error

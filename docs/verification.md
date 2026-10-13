@@ -66,6 +66,23 @@ preceding that commit; `source_link.json` records the comparison. The figure
 was generated from the first episode's saved trace without new physical
 steps.
 
+## Panda adaptation integration checks
+
+Fourteen tests in `tests/test_panda_adaptive.py` cover the eight-parameter
+regressor against independent engine dynamics, payload inertia and damping,
+excited and unobserved RLS parameters, estimate bounds, nominal equivalence,
+paired task and parameter sampling, deterministic repeated rollouts,
+reproduction tolerances, adaptive tracking under a modelled load, and checked
+cell resume. A corrupt saved cell is rejected before any pending case runs.
+The adaptive controller receives neither the true parameters nor the plant.
+
+The full suite passed with 464 tests and one skip for unavailable local
+diagnostic records (465 collected), under Python 3.12.3 and MuJoCo 3.13.0.
+After tightening the resume guards, all fourteen adaptation tests passed
+again. Lint and compilation checks passed. The experiment design is in
+[`panda-adaptation.md`](panda-adaptation.md); results will be recorded after
+the committed pilot runs.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`
@@ -927,4 +944,4 @@ All completed without runtime errors. These tiny-budget runs are integration che
 
 ## Tooling limitation
 
-The v1.0 verification environment did not provide MuJoCo or Gymnasium, and the v1.0 planar release has no dependency on either. MuJoCo arrived in v2.0 as an optional dependency of the planar plant (`pip install -e '.[mujoco]'`); its tests skip without it and run in the MuJoCo CI job. Franka transfer remains explicitly unimplemented until it can be exercised and tested rather than added as dead code.
+The v1.0 verification environment did not provide MuJoCo or Gymnasium, and the v1.0 planar release has no dependency on either. MuJoCo arrived in v2.0 as an optional dependency of the planar plant (`pip install -e '.[mujoco]'`); its tests skip without it and run in the MuJoCo CI job. The later Panda integration checks are recorded above.
