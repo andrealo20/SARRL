@@ -10,7 +10,14 @@
 
 **SARRL** (Safe Adaptive Residual Reinforcement Learning) is a research stack for robotic control under model mismatch. It combines model-based control with bounded residual reinforcement learning, learned dynamics context, uncertainty-aware policy authority and HOCBF safety filtering.
 
-The reference platform is a reproducible **2-DoF planar arm**, available as an analytical model and, since v2.0, as a MuJoCo plant with unmodelled actuator dynamics. A [seven-joint Panda nominal pilot](docs/panda.md) verifies the torque interface; a [payload/friction pilot](docs/panda-adaptation.md) adds online identification and a [noise/delay pilot](docs/panda-robustness.md) tests the same controllers through perturbed sensing and actuation. A [delay-identification pilot](docs/panda-delay.md) then separates command alignment, online delay selection and prediction through the queued commands. The Panda results are engineering checks around one posture. Hardware and sim-to-real results are not currently claimed.
+Version 2.3 adds a **seven-joint Panda in MuJoCo** with torque control,
+online payload/friction identification and command-delay alignment. The
+reference platform for residual learning and HOCBF remains the reproducible
+**2-DoF planar arm**, available as an analytical model and a MuJoCo plant.
+The Panda release covers joint-trajectory engineering benchmarks across two
+sampled posture ranges. Prediction and changing-latency variants remain
+experimental. See the [v2.3 guide](docs/v2.3.md) for scope, a short example
+and frozen-data audits. Hardware and sim-to-real results are not claimed.
 
 ## Results
 
@@ -156,117 +163,41 @@ it needs the `mujoco` and `figures` extras (`pip install -e '.[mujoco,figures]'`
 
 Learned-policy values are means ± sample SD across five independently trained policies, with 100 episodes per policy and scenario. The v1.9 row is a single deterministic controller on the same 100 seeds per scenario (the v1.3 `50000..50099` seeds, run as the reproduction block of the v1.9 campaign); its decision rests on 1,900 further paired seeds per scenario. The two v2.0 rows are the decision block of that campaign: 1,900 paired seeds per scenario (`52200..54099`) on the MuJoCo plant with per-episode armature, first-order actuator lag and a noisy measured state, so they are not seed-matched to the rows above. The two v2.1 rows are the crossed arms of the certificate factorial on 1,900 paired seeds per scenario (`54200..56099`), same plant and options. The two v2.2 rows are the margin arms of the uncertainty-margin campaign on 1,900 paired seeds per scenario (`56200..58099`), same plant and options; its arm without a margin reached 92.5%, 81.6% and 92.6%. These campaign results cover the planar benchmark, analytical and MuJoCo.
 
-### Seven-joint Panda engineering pilot
+### Seven-joint Panda
 
-On twenty paired joint-trajectory tasks per condition, with unknown payload
-mass and seven extra viscous dampings:
+The Panda uses seven torque motors, an independent controller model and
+quintic joint references. Identification estimates payload mass and seven
+added viscous-friction terms from causal measured transitions. The model's
+collision assets, attribution and file hashes are packaged with the code.
 
-| Condition | Fixed nominal success | Online adaptive success |
-|---|---:|---:|
-| Nominal | 20/20 | 20/20 |
-| Payload | 0/20 | 20/20 |
-| Friction | 20/20 | 20/20 |
-| Payload + friction | 0/20 | 20/20 |
+| Check | Retained result | Protocol and evidence |
+|---|---|---|
+| Nominal tracking | 20/20 successful matched-model trajectories | [Nominal](docs/panda.md) |
+| Combined payload/friction | 20/20 adaptive versus 0/20 fixed; mean final joint error 0.029043 versus 78.348 mrad | [Adaptation](docs/panda-adaptation.md) |
+| Noise plus 20 ms delay | 20/20 original adaptive; mean final joint error 3.002693 mrad | [Noise/delay](docs/panda-robustness.md) |
+| Online delay selection | Both banks selected the correct final delay in 80/80 episodes each | [Alignment and prediction](docs/panda-delay.md) |
+| Two postures, constant delays 0 to 40 ms | Bank alignment succeeded in 400/400 and selected every final delay correctly | [Posture/delay grid](docs/panda-posture-delay.md) |
+| Warm startup and changing latency | Bank alignment succeeded in 320/320 but kept the initial delay in all 160 changing cases | [Variable latency](docs/panda-variable-delay.md) |
+| Exponential/window score memory | All banks succeeded in 320/320; final age recovery improved but noisy tracking regressed | [Score memory](docs/panda-score-memory.md) |
 
-The combined condition's mean final joint error fell from 78.348 to
-0.029043 mrad. Across all 240 episodes, including a privileged
-true-parameter reference controller, no contacts, joint-position/speed
-violations or saturation were observed. The reference succeeded in every
-condition. The runner first reproduced all twenty retained nominal episodes.
+These pilots use different fresh seed blocks; their rows are separate
+engineering checks. Final joint error is the maximum over joints, averaged
+over tasks. Task success includes the measured contact, position and speed
+constraints. Privileged diagnostics are labelled separately in each protocol.
 
-The task uses a small posture region, noise-free state and direct torque
-actuation. Some friction parameters remain poorly identified despite
-successful tracking. These results do not establish a seven-joint safety
-certificate or a benefit from residual learning. See the
-[design and retained evidence](docs/panda-adaptation.md).
+At wide postures with noisy 40 ms constant delay, bank alignment reduced
+mean final joint error from 10.054279 to 0.359496 mrad and succeeded in
+20/20 versus 10/20 for original adaptive. Prediction slightly worsened
+tracking RMS there. Cumulative alignment therefore remains the reference.
 
-![Panda adaptation pilot](assets/panda_adaptation_pilot.png)
+Changing latency is unresolved. In the score-memory pilot, cumulative,
+exponential and window scores identified the final age in 1/160, 74/160
+and 72/160 changing episodes. Both finite-memory variants increased mean
+final error and RMS after 1 s in every noisy changing condition, despite
+reaching all targets. Seven-joint residual learning and HOCBF filtering
+remain future work.
 
-A subsequent noise-by-delay pilot keeps the combined payload/friction plant
-and the same controllers on twenty new paired tasks per condition. Noise
-SD is 0.001 rad on position and 0.001 rad/s on velocity; command delay is
-20 ms, starting with two zero-torque intervals. Fixed success is 0/20,
-adaptive and privileged-reference success 20/20 in every condition, but
-adaptive mean final joint error increases:
-
-| Interface | Adaptive final joint error, mrad | Reference final joint error, mrad |
-|---|---:|---:|
-| Ideal | 0.033114 | 0.0000537 |
-| Noise | 0.263047 | 0.265811 |
-| Delay | 2.964439 | 0.001198 |
-| Noise + delay | 3.002693 | 0.276642 |
-
-No contacts, position/speed violations or saturation are observed in the
-240 new episodes. Under noise plus delay, the unchanged estimator hits
-parameter bounds in 54.38% of updates, against 1.72% ideal. Passing the
-final task thresholds does not establish accurate identification or a
-tolerance envelope. All 240 previous adaptation episodes reproduced before
-the new block; [records, traces and diagnostics](docs/panda-robustness.md)
-are retained.
-
-A seven-arm follow-up compares causal command alignment and prediction
-on twenty fresh paired tasks per condition. Under the same noise plus
-20 ms delay setting, the new tasks give:
-
-| Controller | Final joint error, mrad | Tracking RMS, mrad | Payload absolute error, g |
-|---|---:|---:|---:|
-| Original adaptive | 3.360627 | 4.139280 | 77.809 |
-| Identified-delay alignment | 0.341801 | 2.298004 | 2.340 |
-| Identified-delay alignment + prediction | 0.337742 | 2.076842 | 2.374 |
-
-Final error is the maximum over joints, averaged over tasks. Tracking RMS
-is calculated per joint, then averaged over joints and tasks.
-All three achieve 20/20 success. Both delay banks select the correct
-final delay in every condition; no contacts, position/speed violations,
-saturation or prediction fallbacks occur across the 560 new episodes.
-Alignment accounts for most of the gain; prediction reduces RMS by a
-further 9.62% in the noisy delayed condition, but slightly increases final
-error without noise. True delays are only 0 and 20 ms, and the queue starts
-at zero. The [protocol, full results and traces](docs/panda-delay.md)
-retain those limits and the separate privileged diagnostics.
-
-The frozen controllers were then tested on all delays from 0 to 40 ms in
-10 ms steps, at both noise levels and on the original tasks translated
-to wider postures. All 560 previous records reproduced before 2,800 new
-episodes. At wide postures, original adaptive success fell to 17/20 at
-30 ms and 10/20 at 40 ms, both clean and noisy. Every delay-aware arm
-retained 20/20 in every condition. At wide noisy 40 ms:
-
-| Controller | Success | Final joint error, mrad | Tracking RMS, mrad |
-|---|---:|---:|---:|
-| Original adaptive | 10/20 | 10.054279 | 10.633881 |
-| Identified-delay alignment | 20/20 | 0.359496 | 4.284080 |
-| Identified-delay alignment + prediction | 20/20 | 0.366779 | 4.320690 |
-
-No contacts or position/speed violations were observed. Saturation affected
-46 original adaptive episodes and no other arm. Both banks selected the
-correct final delay in all 400 of their episodes, with no prediction
-fallback. Prediction worsened RMS slightly at wide 40 ms and increased
-final error in 13 of the 16 delayed conditions. The
-[full grid, figure and retained evidence](docs/panda-posture-delay.md)
-support alignment as the next baseline; prediction needs further assessment.
-The FIFO still starts at zero and delay stays constant.
-
-A further frozen-alignment pilot added a common 0.2 s physical warmup,
-populated command history and packet latency changing from 10 to 40 ms
-or 40 to 10 ms at 1 s, with constant-profile controls. All 2,800 previous
-records reproduced before 1,280 new episodes. Bank alignment reached all
-320 targets, versus 273/320 for original adaptive, with no contacts or
-position/speed violations. It identified the final age in all 160 constant
-cases but kept the initial age in all 160 changing cases. Successful
-tracking therefore does not establish adaptation to changing latency.
-The [full results, protocol and traces](docs/panda-variable-delay.md)
-retain this limitation, which motivated a fresh-seed score-memory comparison.
-
-That comparison reproduced all 1,280 previous records before 1,920 new
-episodes. Cumulative, exponential and fifty-transition window banks each
-reached all 320 targets. Correct final age after a latency change improved
-from 1/160 for cumulative scores to 74/160 and 72/160, but constant-profile
-correctness regressed from 160/160 to 159/160 and 152/160. Both memory
-variants increased mean final error and RMS after 1 s in every noisy
-changing condition. Score forgetting alone therefore does not support a
-baseline replacement. The [full results and evidence](docs/panda-score-memory.md)
-retain the partial recovery, selection switches and tracking regressions.
+![Panda posture and delay comparison](assets/panda_posture_delay_pilot.png)
 
 ### Safety
 
@@ -304,6 +235,18 @@ python -m pip install -e '.[dev]'
 pytest -q
 ```
 
+Run one nominal Panda trajectory after installing the simulator extra:
+
+```bash
+python -m pip install -e '.[mujoco]'
+python examples/panda_reach.py
+```
+
+The example prints a JSON result and writes no files. It is an installation
+check using an existing engineering-test seed. See the [release guide](docs/v2.3.md)
+for the controller scope, complete evidence and source/runtime requirements
+for audits.
+
 The planar stack requires NumPy, SciPy and PyTorch. The MuJoCo plant needs the optional `mujoco` extra (`pip install -e '.[mujoco]'`); its tests skip without it. Training and evaluation commands are documented in [`docs/experiments.md`](docs/experiments.md).
 
 ## Repository guide
@@ -327,7 +270,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {2.2.0},
+  version = {2.3.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```
