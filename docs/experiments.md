@@ -1918,3 +1918,17 @@ fresh paired seeds. Translating both task endpoints preserves joint
 displacement and timing. The runner first reproduces all 560 previous
 records and checks controller hashes. The design, sampling rule, seed block
 and retained evidence are in [`panda-posture-delay.md`](panda-posture-delay.md).
+
+## Panda populated queue and variable latency
+
+This descriptive pilot freezes bank alignment and adds a shared
+physical warmup plus packet latency changes in both directions, with
+constant-delay controls and a privileged known-age diagnostic. It first
+reproduces all 2,800 posture/delay records. See
+[`panda-variable-delay.md`](panda-variable-delay.md) for transport semantics,
+handoff inputs, physical-step accounting and the pre-execution protocol.
+The run retained 1,280 new episodes after matching all reference records.
+Bank alignment succeeded in 320/320, original adaptive in 273/320. The
+bank identified every constant profile but kept the initial age in all
+160 changing-profile episodes. The retained protocol reports this
+identification failure separately from successful tracking.

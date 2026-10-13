@@ -4,6 +4,20 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: seven-joint Panda pilots
 
+- Added a frozen bank-alignment test under a shared physical warmup and
+  changing packet latency. The transport holds the last received command
+  and discards stale timestamps; a privileged diagnostic knows applied
+  command age. All 2,800 previous records must reproduce before new data.
+  The pilot ran once from clean commit `8900bc6`; all reference records
+  matched. Retained 1,280 new records, 64 first-seed traces, a saved-data
+  figure and a public audit with 48 causal estimator replays. Bank
+  alignment succeeded in 320/320 episodes versus original adaptive's
+  273/320, without contacts or position/speed violations. Only original
+  adaptive clipped (44 episodes). The bank selected the correct final
+  age in all 160 constant-profile cases but none of the 160 changing
+  cases, retaining the initial age after both switch directions. No
+  controller was tuned on the new data.
+
 - Added a frozen-controller posture/delay grid: five constant delays, two
   noise levels and matched joint trajectories at two posture ranges.
   Four independent processes save hash-checked resumable cells; source

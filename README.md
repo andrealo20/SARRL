@@ -247,6 +247,18 @@ final error in 13 of the 16 delayed conditions. The
 support alignment as the next baseline; prediction needs further assessment.
 The FIFO still starts at zero and delay stays constant.
 
+A further frozen-alignment pilot added a common 0.2 s physical warmup,
+populated command history and packet latency changing from 10 to 40 ms
+or 40 to 10 ms at 1 s, with constant-profile controls. All 2,800 previous
+records reproduced before 1,280 new episodes. Bank alignment reached all
+320 targets, versus 273/320 for original adaptive, with no contacts or
+position/speed violations. It identified the final age in all 160 constant
+cases but kept the initial age in all 160 changing cases. Successful
+tracking therefore does not establish adaptation to changing latency.
+The [full results, protocol and traces](docs/panda-variable-delay.md)
+retain this limitation; score forgetting or a finite window needs a
+separate comparison on fresh seeds.
+
 ### Safety
 
 Task success alone cannot separate a controller that reaches the target through the safe set from one that reaches it by traversing constraint violations. The v1.4 campaign re-evaluated the same frozen policies on the same seeds and measured the safety envelope directly, isolating the effect of the hard-HOCBF filter:
@@ -295,7 +307,7 @@ The planar stack requires NumPy, SciPy and PyTorch. The MuJoCo plant needs the o
 
 ## Limitations
 
-The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation, v1.9 adaptive-nominal, v2.0 MuJoCo, v2.1 certificate-factorial and v2.2 uncertainty-margin campaigns are complete. The Panda pilots cover nominal joint-trajectory tracking, payload/friction identification and constant command-delay compensation across two sampled posture ranges. Seven-joint safety filtering, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation, v1.9 adaptive-nominal, v2.0 MuJoCo, v2.1 certificate-factorial and v2.2 uncertainty-margin campaigns are complete. The Panda pilots cover nominal joint-trajectory tracking, payload/friction identification, constant command-delay compensation across two sampled posture ranges and a descriptive warm-start test with changing latency. The frozen delay bank retained tracking success but failed to identify changed latency within three seconds. Seven-joint safety filtering, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 
