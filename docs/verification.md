@@ -196,6 +196,23 @@ without new physical episodes. The completed-run resume command refused
 replacement; completion hashes were checked again afterwards. The figure
 was generated from retained data only.
 
+## Panda posture and delay-grid checks
+
+Twelve collected cases in `tests/test_panda_posture_delay.py` verify
+translated-path displacement and clearance, the full delay/noise grid,
+exact narrow-task equivalence with the previous rollout, wide noisy
+identification at 10, 30 and 40 ms, factorial pairing and translation
+checks, rejection of changed frozen controller bytes, identical serial
+and spawned-process records/traces, checked resume, reproduction blocking
+and seed/worker/output guards. All twelve passed on MuJoCo 3.13.0 and
+isolated 3.15.0. The full suite passed with 520 tests and one skip for
+unavailable local diagnostic records (521 collected), under Python 3.12.3,
+NumPy 2.5.2 and MuJoCo 3.13.0. Lint and compilation checks passed.
+
+The pre-execution protocol is in
+[`panda-posture-delay.md`](panda-posture-delay.md). No result from the new
+pilot is recorded yet.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`

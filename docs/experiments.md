@@ -1909,3 +1909,12 @@ as privileged diagnostics. The same noise/delay conditions and physical task
 are retained, with fresh seeds after reproducing all 240 earlier records.
 The seven arms, five-candidate bank, prediction guards and execution protocol
 are specified in [`panda-delay.md`](panda-delay.md).
+
+## Panda posture and command-delay grid
+
+The next engineering pilot keeps the seven controllers frozen and crosses
+five constant delays, two noise levels and two posture ranges on twenty
+fresh paired seeds. Translating both task endpoints preserves joint
+displacement and timing. The runner first reproduces all 560 previous
+records and checks controller hashes. The design, sampling rule, seed block
+and retained evidence are in [`panda-posture-delay.md`](panda-posture-delay.md).

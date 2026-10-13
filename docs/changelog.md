@@ -4,6 +4,12 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: seven-joint Panda pilots
 
+- Added a frozen-controller posture/delay grid: five constant delays, two
+  noise levels and matched joint trajectories at two posture ranges.
+  Four independent processes save hash-checked resumable cells; source
+  guards reject controller changes and all 560 previous records must
+  reproduce before the new seed block. No new result is recorded yet.
+
 - Added a five-candidate Panda command-delay bank using accumulated
   pre-update innovation, and bounded RK4 prediction through queued commands
   with a matching future reference. A separate seven-arm engineering pilot

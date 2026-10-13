@@ -29,6 +29,8 @@ A [noise/delay pilot](panda-robustness.md) tests those unchanged controllers
 through a shared noisy sensor sample and a delayed torque-command FIFO.
 The [delay-identification pilot](panda-delay.md) separates command alignment,
 online delay selection and state/reference prediction through that queue.
+The [posture/delay grid](panda-posture-delay.md) tests the same frozen
+controllers on translated trajectories and all five candidate delays.
 
 ## Nominal controller
 
