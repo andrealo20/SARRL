@@ -1,0 +1,3534 @@
+{
+ "adaptive_minus_fixed": {
+  "narrow_clean_d00": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.036154180124993454,
+   "success_count_difference": 20
+  },
+  "narrow_clean_d10": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.035575618124581675,
+   "success_count_difference": 20
+  },
+  "narrow_clean_d20": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.03474068922082531,
+   "success_count_difference": 20
+  },
+  "narrow_clean_d30": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.03378824970962508,
+   "success_count_difference": 20
+  },
+  "narrow_clean_d40": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.032891556806212016,
+   "success_count_difference": 20
+  },
+  "narrow_noise_d00": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.03602146625701562,
+   "success_count_difference": 20
+  },
+  "narrow_noise_d10": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.03549918144683219,
+   "success_count_difference": 20
+  },
+  "narrow_noise_d20": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.0346817703245859,
+   "success_count_difference": 20
+  },
+  "narrow_noise_d30": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.03372806562414276,
+   "success_count_difference": 20
+  },
+  "narrow_noise_d40": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.032845984242095075,
+   "success_count_difference": 20
+  },
+  "wide_clean_d00": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.042673383157036435,
+   "success_count_difference": 20
+  },
+  "wide_clean_d10": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.04213790068639421,
+   "success_count_difference": 20
+  },
+  "wide_clean_d20": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.041159909660351844,
+   "success_count_difference": 20
+  },
+  "wide_clean_d30": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.04027440312053572,
+   "success_count_difference": 17
+  },
+  "wide_clean_d40": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.03933984986082885,
+   "success_count_difference": 10
+  },
+  "wide_noise_d00": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.042538849535019754,
+   "success_count_difference": 20
+  },
+  "wide_noise_d10": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.04201722606054727,
+   "success_count_difference": 20
+  },
+  "wide_noise_d20": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.04107992048971195,
+   "success_count_difference": 20
+  },
+  "wide_noise_d30": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.04019755983987315,
+   "success_count_difference": 17
+  },
+  "wide_noise_d40": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.039294023773187324,
+   "success_count_difference": 10
+  }
+ },
+ "cells": {
+  "narrow_clean_d00/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.03266666666666666,
+   "mean_final_joint_error_rad": 3.069553465869235e-05,
+   "mean_final_tip_error_m": 1.3000945202824126e-05,
+   "mean_payload_absolute_error_kg": 0.0006009285137087483,
+   "mean_tracking_rms_rad": 0.0009655301468911657,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.27615934755638155,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d00/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.03266666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 3.069553465869235e-05,
+   "mean_final_tip_error_m": 1.3000945202824126e-05,
+   "mean_payload_absolute_error_kg": 0.0006009285137087483,
+   "mean_tracking_rms_rad": 0.0009655301468911657,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.27615934755638155,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d00/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.03266666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 3.069553465869235e-05,
+   "mean_final_tip_error_m": 1.3000945202824126e-05,
+   "mean_payload_absolute_error_kg": 0.0006009285137087483,
+   "mean_tracking_rms_rad": 0.0009655301468911657,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.27615934755638155,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d00/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07576498410401271,
+   "mean_final_tip_error_m": 0.036167181070196286,
+   "mean_tracking_rms_rad": 0.024953815694537827,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d00/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.03266666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 3.069553465869235e-05,
+   "mean_final_tip_error_m": 1.3000945202824126e-05,
+   "mean_payload_absolute_error_kg": 0.0006009285137087483,
+   "mean_tracking_rms_rad": 0.0009655301468911657,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.27615934755638155,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d00/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.03266666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 3.069553465869235e-05,
+   "mean_final_tip_error_m": 1.3000945202824126e-05,
+   "mean_payload_absolute_error_kg": 0.0006009285137087483,
+   "mean_tracking_rms_rad": 0.0009655301468911657,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.27615934755638155,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d00/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 4.75299286392325e-08,
+   "mean_final_tip_error_m": 2.7724223248901835e-08,
+   "mean_tracking_rms_rad": 0.00013733627590047646,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d10/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.46133333333333343,
+   "mean_final_joint_error_rad": 0.0012879978488055028,
+   "mean_final_tip_error_m": 0.0005910406078327024,
+   "mean_payload_absolute_error_kg": 0.02752016249135202,
+   "mean_tracking_rms_rad": 0.0021171748239294675,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.5429515968673241,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d10/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.004833333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 2.4390328194645595e-05,
+   "mean_final_tip_error_m": 1.0246968831642809e-05,
+   "mean_payload_absolute_error_kg": 0.0004723438254986889,
+   "mean_tracking_rms_rad": 0.001456108921547472,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.22996319800512016,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d10/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.006333333333333332,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 2.8294933052547267e-05,
+   "mean_final_tip_error_m": 1.2087870062508387e-05,
+   "mean_payload_absolute_error_kg": 0.00047305103349956634,
+   "mean_tracking_rms_rad": 0.0013857729791553247,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.23140138592662549,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 29900,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d10/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07575874651685946,
+   "mean_final_tip_error_m": 0.036166658732414377,
+   "mean_tracking_rms_rad": 0.025017672552808845,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d10/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.004833333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 2.4390328194645595e-05,
+   "mean_final_tip_error_m": 1.0246968831642809e-05,
+   "mean_payload_absolute_error_kg": 0.0004723438254986889,
+   "mean_tracking_rms_rad": 0.001456108921547472,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.22996319800512016,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d10/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.006333333333333332,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 2.8793570073187834e-05,
+   "mean_final_tip_error_m": 1.2246976335845622e-05,
+   "mean_payload_absolute_error_kg": 0.0004788678701793614,
+   "mean_tracking_rms_rad": 0.0013402777377110736,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.23435827502000542,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 30000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d10/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 1.5714282523837664e-07,
+   "mean_final_tip_error_m": 8.631136055945696e-08,
+   "mean_tracking_rms_rad": 0.0008227827512630558,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d20/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5736666666666667,
+   "mean_final_joint_error_rad": 0.003007983215726337,
+   "mean_final_tip_error_m": 0.0014254931467408472,
+   "mean_payload_absolute_error_kg": 0.06962344426599612,
+   "mean_tracking_rms_rad": 0.0036855278076326015,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.7338765706857463,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d20/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.005166666666666666,
+   "mean_correct_selection_fraction": 0.9966666666666667,
+   "mean_final_joint_error_rad": 2.1024214914819316e-05,
+   "mean_final_tip_error_m": 9.164311293422323e-06,
+   "mean_payload_absolute_error_kg": 0.00042730031351994046,
+   "mean_tracking_rms_rad": 0.0020972777858841523,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1997896660422765,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d20/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.005333333333333333,
+   "mean_correct_selection_fraction": 0.9966666666666667,
+   "mean_final_joint_error_rad": 2.7995519190637808e-05,
+   "mean_final_tip_error_m": 1.2537449843490083e-05,
+   "mean_payload_absolute_error_kg": 0.00042940511318796394,
+   "mean_tracking_rms_rad": 0.001966216219004563,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.207086854442066,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 59700,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d20/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07575287261540133,
+   "mean_final_tip_error_m": 0.036166182367566156,
+   "mean_tracking_rms_rad": 0.025104117393454296,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d20/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.005166666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 2.1024214914819316e-05,
+   "mean_final_tip_error_m": 9.164311293422323e-06,
+   "mean_payload_absolute_error_kg": 0.00042730031351994046,
+   "mean_tracking_rms_rad": 0.0020972777858841523,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1997896660422765,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d20/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.005666666666666665,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 2.8944761776444895e-05,
+   "mean_final_tip_error_m": 1.2908564929959196e-05,
+   "mean_payload_absolute_error_kg": 0.00044035666842925925,
+   "mean_tracking_rms_rad": 0.0018100023601361152,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2122889598038607,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 60000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d20/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 1.0729451272289622e-06,
+   "mean_final_tip_error_m": 1.5639055432500631e-07,
+   "mean_tracking_rms_rad": 0.0015733669730072359,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d30/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.6215,
+   "mean_final_joint_error_rad": 0.0049472999901298996,
+   "mean_final_tip_error_m": 0.0023775046928214494,
+   "mean_payload_absolute_error_kg": 0.11825234198101804,
+   "mean_tracking_rms_rad": 0.005367472824532706,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.8391670409889624,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d30/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.004999999999999999,
+   "mean_correct_selection_fraction": 0.9933333333333332,
+   "mean_final_joint_error_rad": 2.0838881820598244e-05,
+   "mean_final_tip_error_m": 8.829545711932914e-06,
+   "mean_payload_absolute_error_kg": 0.0004094523919282722,
+   "mean_tracking_rms_rad": 0.0028341571729763033,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.16207331920546245,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d30/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.004833333333333332,
+   "mean_correct_selection_fraction": 0.9933333333333332,
+   "mean_final_joint_error_rad": 3.0078482764300807e-05,
+   "mean_final_tip_error_m": 1.3968900368059803e-05,
+   "mean_payload_absolute_error_kg": 0.00041917493332168656,
+   "mean_tracking_rms_rad": 0.0026546430864518725,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.18706175856409876,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 89400,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d30/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07574737490548174,
+   "mean_final_tip_error_m": 0.03616575440244652,
+   "mean_tracking_rms_rad": 0.025217902524782933,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d30/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.004999999999999999,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 2.0838881820598244e-05,
+   "mean_final_tip_error_m": 8.829545711932914e-06,
+   "mean_payload_absolute_error_kg": 0.0004094523919282722,
+   "mean_tracking_rms_rad": 0.0028341571729763033,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.16207331920546245,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d30/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.004833333333333332,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 3.087103213380016e-05,
+   "mean_final_tip_error_m": 1.426768188428481e-05,
+   "mean_payload_absolute_error_kg": 0.00042770876682621803,
+   "mean_tracking_rms_rad": 0.002328576226089235,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1942525873342115,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 90000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d30/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 5.858073727366652e-06,
+   "mean_final_tip_error_m": 2.403415408090034e-07,
+   "mean_tracking_rms_rad": 0.00239144896749037,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d40/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5656666666666667,
+   "mean_final_joint_error_rad": 0.006850123657547003,
+   "mean_final_tip_error_m": 0.003273821701268545,
+   "mean_payload_absolute_error_kg": 0.1609999783902155,
+   "mean_tracking_rms_rad": 0.007073402911693597,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.8531749554873903,
+   "saturated_episodes": 4,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d40/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.005166666666666666,
+   "mean_correct_selection_fraction": 0.9899999999999997,
+   "mean_final_joint_error_rad": 2.942227722917412e-05,
+   "mean_final_tip_error_m": 8.704844695624275e-06,
+   "mean_payload_absolute_error_kg": 0.0003966376213354383,
+   "mean_tracking_rms_rad": 0.0037019939120742987,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.12053336718619698,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d40/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.005166666666666666,
+   "mean_correct_selection_fraction": 0.9899999999999997,
+   "mean_final_joint_error_rad": 3.3052209244421873e-05,
+   "mean_final_tip_error_m": 1.5829320403215902e-05,
+   "mean_payload_absolute_error_kg": 0.0004196344084001991,
+   "mean_tracking_rms_rad": 0.0034528097239769602,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.16914787141724777,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 119000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d40/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07574226305138604,
+   "mean_final_tip_error_m": 0.03616537850748056,
+   "mean_tracking_rms_rad": 0.025368628440180275,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d40/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.005166666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 2.942227722917412e-05,
+   "mean_final_tip_error_m": 8.704844695624275e-06,
+   "mean_payload_absolute_error_kg": 0.0003966376213354383,
+   "mean_tracking_rms_rad": 0.0037019939120742987,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.12053336718619698,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d40/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.005166666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 3.4015550151561547e-05,
+   "mean_final_tip_error_m": 1.621283619118988e-05,
+   "mean_payload_absolute_error_kg": 0.0004292064191863343,
+   "mean_tracking_rms_rad": 0.0028945569208084243,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.17832483191346152,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 120000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_clean_d40/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 1.8314610421064913e-05,
+   "mean_final_tip_error_m": 2.7894907373241903e-07,
+   "mean_tracking_rms_rad": 0.003316200566969138,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d00/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.055833333333333346,
+   "mean_final_joint_error_rad": 0.0002793453689523918,
+   "mean_final_tip_error_m": 0.00013965863601090938,
+   "mean_payload_absolute_error_kg": 0.002460957420227916,
+   "mean_tracking_rms_rad": 0.0009810478170439066,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.28092612584852217,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d00/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.055833333333333346,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0002793453689523918,
+   "mean_final_tip_error_m": 0.00013965863601090938,
+   "mean_payload_absolute_error_kg": 0.002460957420227916,
+   "mean_tracking_rms_rad": 0.0009810478170439066,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.28092612584852217,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d00/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.055833333333333346,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0002793453689523918,
+   "mean_final_tip_error_m": 0.00013965863601090938,
+   "mean_payload_absolute_error_kg": 0.002460957420227916,
+   "mean_tracking_rms_rad": 0.0009810478170439066,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.28092612584852217,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d00/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07577438683998014,
+   "mean_final_tip_error_m": 0.036161124893026524,
+   "mean_tracking_rms_rad": 0.02495292110455814,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d00/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.055833333333333346,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0002793453689523918,
+   "mean_final_tip_error_m": 0.00013965863601090938,
+   "mean_payload_absolute_error_kg": 0.002460957420227916,
+   "mean_tracking_rms_rad": 0.0009810478170439066,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.28092612584852217,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d00/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.055833333333333346,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0002793453689523918,
+   "mean_final_tip_error_m": 0.00013965863601090938,
+   "mean_payload_absolute_error_kg": 0.002460957420227916,
+   "mean_tracking_rms_rad": 0.0009810478170439066,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.28092612584852217,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d00/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.0002702449194475746,
+   "mean_final_tip_error_m": 0.00013399799725905445,
+   "mean_tracking_rms_rad": 0.00022401683546197188,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d10/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.3668333333333333,
+   "mean_final_joint_error_rad": 0.0014553873143497876,
+   "mean_final_tip_error_m": 0.0006631289631673058,
+   "mean_payload_absolute_error_kg": 0.03048821585845634,
+   "mean_tracking_rms_rad": 0.002137084665193572,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.5786690812077935,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d10/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.032999999999999995,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00028139942133568183,
+   "mean_final_tip_error_m": 0.0001410298825619024,
+   "mean_payload_absolute_error_kg": 0.002121048466364528,
+   "mean_tracking_rms_rad": 0.001462165835016046,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2287437021726102,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d10/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.03333333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00028175201954269355,
+   "mean_final_tip_error_m": 0.00014182752688591784,
+   "mean_payload_absolute_error_kg": 0.0021379527051364365,
+   "mean_tracking_rms_rad": 0.0013894828501113377,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.23115604043417476,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 29900,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d10/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07576999993412484,
+   "mean_final_tip_error_m": 0.0361623104099995,
+   "mean_tracking_rms_rad": 0.02501728150837565,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d10/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.032999999999999995,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00028139942133568183,
+   "mean_final_tip_error_m": 0.0001410298825619024,
+   "mean_payload_absolute_error_kg": 0.002121048466364528,
+   "mean_tracking_rms_rad": 0.001462165835016046,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2287437021726102,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d10/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.03283333333333334,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0002816609330198918,
+   "mean_final_tip_error_m": 0.00014180864568284264,
+   "mean_payload_absolute_error_kg": 0.0021577567734127447,
+   "mean_tracking_rms_rad": 0.0013440607386439986,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.23323680911857855,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 30000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d10/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.0002806551198719882,
+   "mean_final_tip_error_m": 0.0001391498644980716,
+   "mean_tracking_rms_rad": 0.0008499053842407417,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d20/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5066666666666666,
+   "mean_final_joint_error_rad": 0.0031559704712553595,
+   "mean_final_tip_error_m": 0.001479968350348669,
+   "mean_payload_absolute_error_kg": 0.07216266332949568,
+   "mean_tracking_rms_rad": 0.0036843919221954172,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.7591735752161358,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d20/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.030333333333333334,
+   "mean_correct_selection_fraction": 0.9966666666666667,
+   "mean_final_joint_error_rad": 0.0002954823140384772,
+   "mean_final_tip_error_m": 0.00014945630820846072,
+   "mean_payload_absolute_error_kg": 0.0018502145171774675,
+   "mean_tracking_rms_rad": 0.002106313679550911,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.19831880154022086,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d20/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.02983333333333333,
+   "mean_correct_selection_fraction": 0.9966666666666667,
+   "mean_final_joint_error_rad": 0.00029492690783387566,
+   "mean_final_tip_error_m": 0.00014716599091301868,
+   "mean_payload_absolute_error_kg": 0.0018790038140221676,
+   "mean_tracking_rms_rad": 0.0019689071645457175,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.20803518135027105,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 59700,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d20/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.0757676492674036,
+   "mean_final_tip_error_m": 0.036161738674934565,
+   "mean_tracking_rms_rad": 0.025104306170022562,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d20/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.030333333333333334,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0002954823140384772,
+   "mean_final_tip_error_m": 0.00014945630820846072,
+   "mean_payload_absolute_error_kg": 0.0018502145171774675,
+   "mean_tracking_rms_rad": 0.002106313679550911,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.19831880154022086,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d20/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.029833333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00029488742977687096,
+   "mean_final_tip_error_m": 0.0001476232424671113,
+   "mean_payload_absolute_error_kg": 0.001931885492073271,
+   "mean_tracking_rms_rad": 0.0018106328968120766,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.21409506308707335,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 60000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d20/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.0002931172261068836,
+   "mean_final_tip_error_m": 0.00014918953570860387,
+   "mean_tracking_rms_rad": 0.0015898936795851666,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d30/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5758333333333333,
+   "mean_final_joint_error_rad": 0.005109565124602059,
+   "mean_final_tip_error_m": 0.0024315442409094394,
+   "mean_payload_absolute_error_kg": 0.12096713659565342,
+   "mean_tracking_rms_rad": 0.005376417929652142,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.8711820849773239,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d30/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.026000000000000002,
+   "mean_correct_selection_fraction": 0.9933333333333332,
+   "mean_final_joint_error_rad": 0.000313541192789293,
+   "mean_final_tip_error_m": 0.00016575947715071688,
+   "mean_payload_absolute_error_kg": 0.0016434159424154938,
+   "mean_tracking_rms_rad": 0.002850698741642511,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1582969072741087,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d30/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.026499999999999996,
+   "mean_correct_selection_fraction": 0.9933333333333332,
+   "mean_final_joint_error_rad": 0.00030354614413155985,
+   "mean_final_tip_error_m": 0.0001540808465114213,
+   "mean_payload_absolute_error_kg": 0.0017188331083320962,
+   "mean_tracking_rms_rad": 0.0026619455086679773,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1840736887737246,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 89400,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d30/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07576279552489569,
+   "mean_final_tip_error_m": 0.03615960986505219,
+   "mean_tracking_rms_rad": 0.02521874774282378,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d30/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.026000000000000002,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.000313541192789293,
+   "mean_final_tip_error_m": 0.00016575947715071688,
+   "mean_payload_absolute_error_kg": 0.0016434159424154938,
+   "mean_tracking_rms_rad": 0.002850698741642511,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1582969072741087,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d30/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.028333333333333332,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003040030013750198,
+   "mean_final_tip_error_m": 0.00015443586716781972,
+   "mean_payload_absolute_error_kg": 0.001722802696539838,
+   "mean_tracking_rms_rad": 0.002332721754777462,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1926389204528901,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 90000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d30/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.0003113788295162796,
+   "mean_final_tip_error_m": 0.00016616516300582495,
+   "mean_tracking_rms_rad": 0.0024033362692738917,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d40/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5245,
+   "mean_final_joint_error_rad": 0.006972359467534328,
+   "mean_final_tip_error_m": 0.0033098987196758327,
+   "mean_payload_absolute_error_kg": 0.16337733136475527,
+   "mean_tracking_rms_rad": 0.00707908623207062,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.8637155911881856,
+   "saturated_episodes": 4,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d40/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.023666666666666666,
+   "mean_correct_selection_fraction": 0.9899999999999997,
+   "mean_final_joint_error_rad": 0.0003439272416501965,
+   "mean_final_tip_error_m": 0.00019209022172060334,
+   "mean_payload_absolute_error_kg": 0.0014600542992717958,
+   "mean_tracking_rms_rad": 0.003720257513951869,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.11694382483612818,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d40/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.0235,
+   "mean_correct_selection_fraction": 0.9899999999999997,
+   "mean_final_joint_error_rad": 0.0003124500502603163,
+   "mean_final_tip_error_m": 0.00016012907586401742,
+   "mean_payload_absolute_error_kg": 0.00160659279898851,
+   "mean_tracking_rms_rad": 0.0034634173731075994,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.15813246010928195,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 119000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d40/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.07575324502697219,
+   "mean_final_tip_error_m": 0.03615588296177091,
+   "mean_tracking_rms_rad": 0.025370208412381405,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d40/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.023666666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003439272416501965,
+   "mean_final_tip_error_m": 0.00019209022172060334,
+   "mean_payload_absolute_error_kg": 0.0014600542992717958,
+   "mean_tracking_rms_rad": 0.003720257513951869,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.11694382483612818,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d40/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.026000000000000002,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003133411851302014,
+   "mean_final_tip_error_m": 0.0001604533373680087,
+   "mean_payload_absolute_error_kg": 0.0016249576977550196,
+   "mean_tracking_rms_rad": 0.0029056515045362786,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.16916638519067875,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 120000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "narrow_noise_d40/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.0003470279549794633,
+   "mean_final_tip_error_m": 0.00019426580075266808,
+   "mean_tracking_rms_rad": 0.003325804705792919,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d00/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.033166666666666664,
+   "mean_final_joint_error_rad": 5.569479419239576e-05,
+   "mean_final_tip_error_m": 1.7093390554255976e-05,
+   "mean_payload_absolute_error_kg": 0.000762748994656104,
+   "mean_tracking_rms_rad": 0.0009430526445960623,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2661760212993022,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d00/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.033166666666666664,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 5.569479419239576e-05,
+   "mean_final_tip_error_m": 1.7093390554255976e-05,
+   "mean_payload_absolute_error_kg": 0.000762748994656104,
+   "mean_tracking_rms_rad": 0.0009430526445960623,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2661760212993022,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d00/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.033166666666666664,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 5.569479419239576e-05,
+   "mean_final_tip_error_m": 1.7093390554255976e-05,
+   "mean_payload_absolute_error_kg": 0.000762748994656104,
+   "mean_tracking_rms_rad": 0.0009430526445960623,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2661760212993022,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d00/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12078388196351222,
+   "mean_final_tip_error_m": 0.042690476547590686,
+   "mean_tracking_rms_rad": 0.03987330774639786,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d00/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.033166666666666664,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 5.569479419239576e-05,
+   "mean_final_tip_error_m": 1.7093390554255976e-05,
+   "mean_payload_absolute_error_kg": 0.000762748994656104,
+   "mean_tracking_rms_rad": 0.0009430526445960623,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2661760212993022,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d00/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.033166666666666664,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 5.569479419239576e-05,
+   "mean_final_tip_error_m": 1.7093390554255976e-05,
+   "mean_payload_absolute_error_kg": 0.000762748994656104,
+   "mean_tracking_rms_rad": 0.0009430526445960623,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2661760212993022,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d00/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 4.87430432676017e-08,
+   "mean_final_tip_error_m": 2.9239013744582342e-08,
+   "mean_tracking_rms_rad": 0.00015500475598772498,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d10/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.36066666666666664,
+   "mean_final_joint_error_rad": 0.0017545983818513273,
+   "mean_final_tip_error_m": 0.0005526040063525607,
+   "mean_payload_absolute_error_kg": 0.024717196014248256,
+   "mean_tracking_rms_rad": 0.00248335079905753,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.5543788759689806,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d10/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.009333333333333334,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 4.721953301333737e-05,
+   "mean_final_tip_error_m": 1.4499433292707948e-05,
+   "mean_payload_absolute_error_kg": 0.0006352942834183916,
+   "mean_tracking_rms_rad": 0.0015739533951262766,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.18886191132100358,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d10/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.009666666666666667,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 5.0595820493284926e-05,
+   "mean_final_tip_error_m": 1.683264851646662e-05,
+   "mean_payload_absolute_error_kg": 0.0006359123637285525,
+   "mean_tracking_rms_rad": 0.0014882677527731046,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.19123784588145307,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 29900,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d10/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.1207884602555871,
+   "mean_final_tip_error_m": 0.04269050469274678,
+   "mean_tracking_rms_rad": 0.04000915784382713,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d10/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.009333333333333334,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 4.721953301333737e-05,
+   "mean_final_tip_error_m": 1.4499433292707948e-05,
+   "mean_payload_absolute_error_kg": 0.0006352942834183916,
+   "mean_tracking_rms_rad": 0.0015739533951262766,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.18886191132100358,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d10/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.010166666666666668,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 5.103642535514152e-05,
+   "mean_final_tip_error_m": 1.6954299327430166e-05,
+   "mean_payload_absolute_error_kg": 0.000639893413988718,
+   "mean_tracking_rms_rad": 0.001433551588440518,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.19425068845844107,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 30000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d10/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 1.6819632548334407e-07,
+   "mean_final_tip_error_m": 9.1893599055142e-08,
+   "mean_tracking_rms_rad": 0.0009113502190787033,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d20/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5265000000000001,
+   "mean_final_joint_error_rad": 0.004781801098149416,
+   "mean_final_tip_error_m": 0.0015306813873264353,
+   "mean_payload_absolute_error_kg": 0.06941338292527177,
+   "mean_tracking_rms_rad": 0.005527005737068828,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.6585343784039456,
+   "saturated_episodes": 2,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d20/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.009499999999999998,
+   "mean_correct_selection_fraction": 0.9966666666666667,
+   "mean_final_joint_error_rad": 4.143767774760776e-05,
+   "mean_final_tip_error_m": 1.2811733003089808e-05,
+   "mean_payload_absolute_error_kg": 0.0005702201817673946,
+   "mean_tracking_rms_rad": 0.0023554117290250755,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1459809653804667,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d20/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.009499999999999998,
+   "mean_correct_selection_fraction": 0.9966666666666667,
+   "mean_final_joint_error_rad": 4.695389765518865e-05,
+   "mean_final_tip_error_m": 1.6844576291712596e-05,
+   "mean_payload_absolute_error_kg": 0.0005653490557643914,
+   "mean_tracking_rms_rad": 0.002242030610722057,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.15012094084955688,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 59700,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d20/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12079220760800753,
+   "mean_final_tip_error_m": 0.042690591047678285,
+   "mean_tracking_rms_rad": 0.04017680569179646,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d20/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.009499999999999998,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 4.143767774760776e-05,
+   "mean_final_tip_error_m": 1.2811733003089808e-05,
+   "mean_payload_absolute_error_kg": 0.0005702201817673946,
+   "mean_tracking_rms_rad": 0.0023554117290250755,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1459809653804667,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d20/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.008833333333333332,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 4.830623968709313e-05,
+   "mean_final_tip_error_m": 1.7237481743027154e-05,
+   "mean_payload_absolute_error_kg": 0.0005754971094941719,
+   "mean_tracking_rms_rad": 0.002047985641256379,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.15399249222567551,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 60000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d20/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 1.1416752958549881e-06,
+   "mean_final_tip_error_m": 1.6760157954371175e-07,
+   "mean_tracking_rms_rad": 0.0017451287741391149,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d30/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5821666666666666,
+   "mean_final_joint_error_rad": 0.007249071845202057,
+   "mean_final_tip_error_m": 0.0024163251594701103,
+   "mean_payload_absolute_error_kg": 0.11159853258677968,
+   "mean_tracking_rms_rad": 0.008015514438408821,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.7515741895578969,
+   "saturated_episodes": 7,
+   "successes": 17,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d30/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.01,
+   "mean_correct_selection_fraction": 0.9933333333333332,
+   "mean_final_joint_error_rad": 3.875587841823125e-05,
+   "mean_final_tip_error_m": 1.1879998245530343e-05,
+   "mean_payload_absolute_error_kg": 0.0005345651218435332,
+   "mean_tracking_rms_rad": 0.003231073921498475,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.11803192242999914,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d30/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.009833333333333335,
+   "mean_correct_selection_fraction": 0.9933333333333332,
+   "mean_final_joint_error_rad": 4.55938627057062e-05,
+   "mean_final_tip_error_m": 1.753035138389532e-05,
+   "mean_payload_absolute_error_kg": 0.0005268942049740432,
+   "mean_tracking_rms_rad": 0.0031677969332990184,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.12563411382414447,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 89400,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d30/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12079520395794163,
+   "mean_final_tip_error_m": 0.042690728280005835,
+   "mean_tracking_rms_rad": 0.04038412386278573,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d30/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.01,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 3.875587841823125e-05,
+   "mean_final_tip_error_m": 1.1879998245530343e-05,
+   "mean_payload_absolute_error_kg": 0.0005345651218435332,
+   "mean_tracking_rms_rad": 0.003231073921498475,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.11803192242999914,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d30/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.009833333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 4.685361189297466e-05,
+   "mean_final_tip_error_m": 1.7869339064043692e-05,
+   "mean_payload_absolute_error_kg": 0.0005341992813876594,
+   "mean_tracking_rms_rad": 0.0027522353570929607,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.12911051725221548,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 90000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d30/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 6.350146226610786e-06,
+   "mean_final_tip_error_m": 2.593300884255592e-07,
+   "mean_tracking_rms_rad": 0.002655161600268417,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d40/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5445,
+   "mean_final_joint_error_rad": 0.009873352110052991,
+   "mean_final_tip_error_m": 0.0033510629048076473,
+   "mean_payload_absolute_error_kg": 0.15394256036220194,
+   "mean_tracking_rms_rad": 0.010633424471810482,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.7752328531664398,
+   "saturated_episodes": 10,
+   "successes": 10,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d40/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.0105,
+   "mean_correct_selection_fraction": 0.9899999999999997,
+   "mean_final_joint_error_rad": 4.450623569695333e-05,
+   "mean_final_tip_error_m": 1.148659879745226e-05,
+   "mean_payload_absolute_error_kg": 0.0005196012125606497,
+   "mean_tracking_rms_rad": 0.004237825086094752,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.09538122899726585,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d40/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.010333333333333335,
+   "mean_correct_selection_fraction": 0.9899999999999997,
+   "mean_final_joint_error_rad": 4.6073163757451295e-05,
+   "mean_final_tip_error_m": 1.8775413252880265e-05,
+   "mean_payload_absolute_error_kg": 0.0005071246729359158,
+   "mean_tracking_rms_rad": 0.004265301486422331,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1099936653121815,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 119000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d40/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12079754180605526,
+   "mean_final_tip_error_m": 0.0426909127656365,
+   "mean_tracking_rms_rad": 0.04064362658986189,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d40/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.0105,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 4.450623569695333e-05,
+   "mean_final_tip_error_m": 1.148659879745226e-05,
+   "mean_payload_absolute_error_kg": 0.0005196012125606497,
+   "mean_tracking_rms_rad": 0.004237825086094752,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.09538122899726585,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d40/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.010333333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 4.8141942376064836e-05,
+   "mean_final_tip_error_m": 1.945226657728749e-05,
+   "mean_payload_absolute_error_kg": 0.0005228580164906404,
+   "mean_tracking_rms_rad": 0.0035443429696764735,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.11271222226126787,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 120000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_clean_d40/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 1.9720527949114094e-05,
+   "mean_final_tip_error_m": 3.122573316063544e-07,
+   "mean_tracking_rms_rad": 0.0036872575204022146,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d00/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.04666666666666666,
+   "mean_final_joint_error_rad": 0.0003644779730973996,
+   "mean_final_tip_error_m": 0.00014802059863833154,
+   "mean_payload_absolute_error_kg": 0.003573462268260663,
+   "mean_tracking_rms_rad": 0.0009836841073060042,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.26431192895539457,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d00/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.04666666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003644779730973996,
+   "mean_final_tip_error_m": 0.00014802059863833154,
+   "mean_payload_absolute_error_kg": 0.003573462268260663,
+   "mean_tracking_rms_rad": 0.0009836841073060042,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.26431192895539457,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d00/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.04666666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003644779730973996,
+   "mean_final_tip_error_m": 0.00014802059863833154,
+   "mean_payload_absolute_error_kg": 0.003573462268260663,
+   "mean_tracking_rms_rad": 0.0009836841073060042,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.26431192895539457,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d00/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12078289758961822,
+   "mean_final_tip_error_m": 0.042686870133658086,
+   "mean_tracking_rms_rad": 0.03987496234957487,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d00/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.04666666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003644779730973996,
+   "mean_final_tip_error_m": 0.00014802059863833154,
+   "mean_payload_absolute_error_kg": 0.003573462268260663,
+   "mean_tracking_rms_rad": 0.0009836841073060042,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.26431192895539457,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d00/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.04666666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003644779730973996,
+   "mean_final_tip_error_m": 0.00014802059863833154,
+   "mean_payload_absolute_error_kg": 0.003573462268260663,
+   "mean_tracking_rms_rad": 0.0009836841073060042,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.26431192895539457,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d00/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.0002775303605633614,
+   "mean_final_tip_error_m": 0.0001250141196955813,
+   "mean_tracking_rms_rad": 0.00024314659945194497,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d10/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.27316666666666667,
+   "mean_final_joint_error_rad": 0.002075584852790946,
+   "mean_final_tip_error_m": 0.0006708803516076655,
+   "mean_payload_absolute_error_kg": 0.0296415639944271,
+   "mean_tracking_rms_rad": 0.002597413542800122,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.5910454515786775,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d10/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.023666666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00034213761471541085,
+   "mean_final_tip_error_m": 0.00014100586454002793,
+   "mean_payload_absolute_error_kg": 0.0030359716749053245,
+   "mean_tracking_rms_rad": 0.0015926134263388205,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.19947574140200333,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d10/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.02333333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00034812886296896534,
+   "mean_final_tip_error_m": 0.0001452872420760327,
+   "mean_payload_absolute_error_kg": 0.0030429935181481627,
+   "mean_tracking_rms_rad": 0.0015025508540018756,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.20217726775865263,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 29900,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d10/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12078678819486563,
+   "mean_final_tip_error_m": 0.04268810641215494,
+   "mean_tracking_rms_rad": 0.04001082808676509,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d10/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.023666666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00034213761471541085,
+   "mean_final_tip_error_m": 0.00014100586454002793,
+   "mean_payload_absolute_error_kg": 0.0030359716749053245,
+   "mean_tracking_rms_rad": 0.0015926134263388205,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.19947574140200333,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d10/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.024166666666666663,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003483854414370619,
+   "mean_final_tip_error_m": 0.0001453236636602447,
+   "mean_payload_absolute_error_kg": 0.0030549383766911354,
+   "mean_tracking_rms_rad": 0.001449030201444665,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.2037614982900551,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 30000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d10/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.00028797143865087315,
+   "mean_final_tip_error_m": 0.0001270939601226307,
+   "mean_tracking_rms_rad": 0.0009365227924100399,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d20/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.46383333333333326,
+   "mean_final_joint_error_rad": 0.004980285873581061,
+   "mean_final_tip_error_m": 0.001608233586114646,
+   "mean_payload_absolute_error_kg": 0.07269304569324526,
+   "mean_tracking_rms_rad": 0.005539574685977034,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.6589451653631441,
+   "saturated_episodes": 2,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d20/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.017833333333333333,
+   "mean_correct_selection_fraction": 0.9966666666666667,
+   "mean_final_joint_error_rad": 0.0003437734547487076,
+   "mean_final_tip_error_m": 0.00014572000648006562,
+   "mean_payload_absolute_error_kg": 0.002805855028397358,
+   "mean_tracking_rms_rad": 0.002379149700718302,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.15314185995051466,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d20/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.017333333333333333,
+   "mean_correct_selection_fraction": 0.9966666666666667,
+   "mean_final_joint_error_rad": 0.00035619949014518634,
+   "mean_final_tip_error_m": 0.00015080720691222746,
+   "mean_payload_absolute_error_kg": 0.0028310298020573555,
+   "mean_tracking_rms_rad": 0.00226352863470027,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.15833419588597678,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 59700,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d20/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12079170140484892,
+   "mean_final_tip_error_m": 0.0426881540758266,
+   "mean_tracking_rms_rad": 0.04017841062887355,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d20/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.017833333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003437734547487076,
+   "mean_final_tip_error_m": 0.00014572000648006562,
+   "mean_payload_absolute_error_kg": 0.002805855028397358,
+   "mean_tracking_rms_rad": 0.002379149700718302,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.15314185995051466,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d20/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.0185,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00035813686588043544,
+   "mean_final_tip_error_m": 0.0001516062964654784,
+   "mean_payload_absolute_error_kg": 0.0028843179653169127,
+   "mean_tracking_rms_rad": 0.002071422709393595,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.16394529549161163,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 60000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d20/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.00029731134309758135,
+   "mean_final_tip_error_m": 0.00013304417443061578,
+   "mean_tracking_rms_rad": 0.0017600875106554676,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d30/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.5306666666666667,
+   "mean_final_joint_error_rad": 0.007458338376101159,
+   "mean_final_tip_error_m": 0.0024888616735451222,
+   "mean_payload_absolute_error_kg": 0.11480377855097723,
+   "mean_tracking_rms_rad": 0.008024402204414121,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.7554898491990764,
+   "saturated_episodes": 7,
+   "successes": 17,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d30/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.019999999999999997,
+   "mean_correct_selection_fraction": 0.9933333333333332,
+   "mean_final_joint_error_rad": 0.0003438094083277693,
+   "mean_final_tip_error_m": 0.00015516349010444137,
+   "mean_payload_absolute_error_kg": 0.0025818465242404276,
+   "mean_tracking_rms_rad": 0.0032571600378801294,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.12078968868495882,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d30/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.020499999999999997,
+   "mean_correct_selection_fraction": 0.9933333333333332,
+   "mean_final_joint_error_rad": 0.00035791516934809977,
+   "mean_final_tip_error_m": 0.00015656016413344382,
+   "mean_payload_absolute_error_kg": 0.002642349902542329,
+   "mean_tracking_rms_rad": 0.003193862509984654,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.13079827260772228,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 89400,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d30/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12080126972003816,
+   "mean_final_tip_error_m": 0.04268642151341828,
+   "mean_tracking_rms_rad": 0.0403856658851804,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d30/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.019999999999999997,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003438094083277693,
+   "mean_final_tip_error_m": 0.00015516349010444137,
+   "mean_payload_absolute_error_kg": 0.0025818465242404276,
+   "mean_tracking_rms_rad": 0.0032571600378801294,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.12078968868495882,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d30/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.017833333333333333,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00035957527623948094,
+   "mean_final_tip_error_m": 0.00015712717918664324,
+   "mean_payload_absolute_error_kg": 0.0026788148622131137,
+   "mean_tracking_rms_rad": 0.0027843091362741114,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.1347610100696242,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 90000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d30/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.0003101627924026941,
+   "mean_final_tip_error_m": 0.00014689230660879454,
+   "mean_tracking_rms_rad": 0.002665534947432359,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d40/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.4926666666666667,
+   "mean_final_joint_error_rad": 0.010054279332242708,
+   "mean_final_tip_error_m": 0.0033892593702689287,
+   "mean_payload_absolute_error_kg": 0.15598828650272617,
+   "mean_tracking_rms_rad": 0.01063388101035485,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.7596889843053588,
+   "saturated_episodes": 10,
+   "successes": 10,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d40/bank_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.021166666666666667,
+   "mean_correct_selection_fraction": 0.9899999999999997,
+   "mean_final_joint_error_rad": 0.00035949592973254924,
+   "mean_final_tip_error_m": 0.00016641628547763457,
+   "mean_payload_absolute_error_kg": 0.002380974715811374,
+   "mean_tracking_rms_rad": 0.004284080261198647,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.09536693861007715,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d40/bank_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.019999999999999997,
+   "mean_correct_selection_fraction": 0.9899999999999997,
+   "mean_final_joint_error_rad": 0.00036677876862983556,
+   "mean_final_tip_error_m": 0.00016304099558503982,
+   "mean_payload_absolute_error_kg": 0.0025179340812397587,
+   "mean_tracking_rms_rad": 0.0043206902230071825,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.11309053163678075,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 119000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d40/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.12081432558325171,
+   "mean_final_tip_error_m": 0.04268328314345625,
+   "mean_tracking_rms_rad": 0.04064524170805795,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d40/known_align": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.021166666666666667,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.00035949592973254924,
+   "mean_final_tip_error_m": 0.00016641628547763457,
+   "mean_payload_absolute_error_kg": 0.002380974715811374,
+   "mean_tracking_rms_rad": 0.004284080261198647,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.09536693861007715,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 0,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d40/known_predict": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "final_delay_correct_episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_bound_hit_fraction": 0.019666666666666666,
+   "mean_correct_selection_fraction": 1.0,
+   "mean_final_joint_error_rad": 0.0003713547457897145,
+   "mean_final_tip_error_m": 0.00016505853974756594,
+   "mean_payload_absolute_error_kg": 0.002610512001533083,
+   "mean_tracking_rms_rad": 0.0036108161848961012,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.11419517962736048,
+   "prediction_fallbacks": 0,
+   "prediction_virtual_substeps": 120000,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "wide_noise_d40/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_final_joint_error_rad": 0.00033543103688795614,
+   "mean_final_tip_error_m": 0.00016253823035089441,
+   "mean_tracking_rms_rad": 0.0036947578424457598,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  }
+ },
+ "delay_contrasts": {
+  "narrow_clean_d00/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d00/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d00/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d00/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d00/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d00/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d10/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.001263607520610857,
+   "mean_paired_tracking_rms_difference_rad": -0.0006610659023819957,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d10/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d10/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 3.9046048579016725e-06,
+   "mean_paired_tracking_rms_difference_rad": -7.033594239214724e-05,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d10/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -4.986370206405688e-07,
+   "mean_paired_tracking_rms_difference_rad": 4.5495241444250915e-05,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d10/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.001263607520610857,
+   "mean_paired_tracking_rms_difference_rad": -0.0006610659023819957,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d10/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 4.403241878542241e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.00011583118383639815,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d20/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0029869590008115175,
+   "mean_paired_tracking_rms_difference_rad": -0.0015882500217484496,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d20/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d20/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 6.9713042758184905e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.00013106156687958873,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d20/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -9.492425858070863e-07,
+   "mean_paired_tracking_rms_difference_rad": 0.00015621385886844798,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d20/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0029869590008115175,
+   "mean_paired_tracking_rms_difference_rad": -0.0015882500217484496,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d20/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 7.920546861625577e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.0002872754257480367,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d30/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.004926461108309302,
+   "mean_paired_tracking_rms_difference_rad": -0.0025333156515564034,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d30/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d30/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 9.239600943702561e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.0001795140865244305,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d30/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -7.925493694993513e-07,
+   "mean_paired_tracking_rms_difference_rad": 0.0003260668603626372,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d30/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.004926461108309302,
+   "mean_paired_tracking_rms_difference_rad": -0.0025333156515564034,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d30/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.0032150313201913e-05,
+   "mean_paired_tracking_rms_difference_rad": -0.0005055809468870678,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d40/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.006820701380317829,
+   "mean_paired_tracking_rms_difference_rad": -0.0033714089996192973,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d40/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d40/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 3.62993201524775e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.00024918418809733855,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d40/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -9.63340907139676e-07,
+   "mean_paired_tracking_rms_difference_rad": 0.0005582528031685359,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d40/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.006820701380317829,
+   "mean_paired_tracking_rms_difference_rad": -0.0033714089996192973,
+   "success_count_difference": 0
+  },
+  "narrow_clean_d40/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 4.593272922387426e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.0008074369912658743,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d00/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d00/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d00/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d00/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d00/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d00/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d10/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0011739878930141056,
+   "mean_paired_tracking_rms_difference_rad": -0.000674918830177526,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d10/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d10/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 3.5259820701169506e-07,
+   "mean_paired_tracking_rms_difference_rad": -7.268298490470801e-05,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d10/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 9.108652280175045e-08,
+   "mean_paired_tracking_rms_difference_rad": 4.542211146733915e-05,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d10/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0011739878930141056,
+   "mean_paired_tracking_rms_difference_rad": -0.000674918830177526,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d10/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 2.615116842099446e-07,
+   "mean_paired_tracking_rms_difference_rad": -0.00011810509637204714,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d20/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0028604881572168823,
+   "mean_paired_tracking_rms_difference_rad": -0.001578078242644506,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d20/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d20/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": -5.554062046015523e-07,
+   "mean_paired_tracking_rms_difference_rad": -0.00013740651500519357,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d20/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 3.947805700468821e-08,
+   "mean_paired_tracking_rms_difference_rad": 0.00015827426773364103,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d20/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0028604881572168823,
+   "mean_paired_tracking_rms_difference_rad": -0.001578078242644506,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d20/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": -5.948842616062405e-07,
+   "mean_paired_tracking_rms_difference_rad": -0.00029568078273883457,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d30/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.004796023931812766,
+   "mean_paired_tracking_rms_difference_rad": -0.0025257191880096314,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d30/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d30/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": -9.995048657733194e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.00018875323297453365,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d30/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -4.568572434599655e-07,
+   "mean_paired_tracking_rms_difference_rad": 0.00032922375389051546,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d30/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.004796023931812766,
+   "mean_paired_tracking_rms_difference_rad": -0.0025257191880096314,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d30/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": -9.538191414273228e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.0005179769868650491,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d40/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.006628432225884132,
+   "mean_paired_tracking_rms_difference_rad": -0.0033588287181187497,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d40/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d40/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": -3.1477191389880226e-05,
+   "mean_paired_tracking_rms_difference_rad": -0.00025684014084426994,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d40/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -8.911348698851379e-07,
+   "mean_paired_tracking_rms_difference_rad": 0.0005577658685713211,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d40/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.006628432225884132,
+   "mean_paired_tracking_rms_difference_rad": -0.0033588287181187497,
+   "success_count_difference": 0
+  },
+  "narrow_noise_d40/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": -3.0586056519995086e-05,
+   "mean_paired_tracking_rms_difference_rad": -0.0008146060094155912,
+   "success_count_difference": 0
+  },
+  "wide_clean_d00/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d00/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d00/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d00/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d00/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d00/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d10/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0017073788488379898,
+   "mean_paired_tracking_rms_difference_rad": -0.0009093974039312525,
+   "success_count_difference": 0
+  },
+  "wide_clean_d10/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d10/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 3.3762874799475594e-06,
+   "mean_paired_tracking_rms_difference_rad": -8.568564235317224e-05,
+   "success_count_difference": 0
+  },
+  "wide_clean_d10/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -4.406048618565972e-07,
+   "mean_paired_tracking_rms_difference_rad": 5.47161643325867e-05,
+   "success_count_difference": 0
+  },
+  "wide_clean_d10/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0017073788488379898,
+   "mean_paired_tracking_rms_difference_rad": -0.0009093974039312525,
+   "success_count_difference": 0
+  },
+  "wide_clean_d10/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 3.816892341804157e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.00014040180668575895,
+   "success_count_difference": 0
+  },
+  "wide_clean_d20/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.004740363420401808,
+   "mean_paired_tracking_rms_difference_rad": -0.003171594008043752,
+   "success_count_difference": 0
+  },
+  "wide_clean_d20/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d20/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 5.5162199075808885e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.00011338111830301809,
+   "success_count_difference": 0
+  },
+  "wide_clean_d20/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -1.3523420319044853e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.00019404496946567868,
+   "success_count_difference": 0
+  },
+  "wide_clean_d20/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.004740363420401808,
+   "mean_paired_tracking_rms_difference_rad": -0.003171594008043752,
+   "success_count_difference": 0
+  },
+  "wide_clean_d20/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 6.8685619394853735e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.00030742608776869674,
+   "success_count_difference": 0
+  },
+  "wide_clean_d30/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.007210315966783826,
+   "mean_paired_tracking_rms_difference_rad": -0.004784440516910345,
+   "success_count_difference": 3
+  },
+  "wide_clean_d30/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d30/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 6.8379842874749516e-06,
+   "mean_paired_tracking_rms_difference_rad": -6.327698819945707e-05,
+   "success_count_difference": 0
+  },
+  "wide_clean_d30/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -1.2597491872684552e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.0004155615762060574,
+   "success_count_difference": 0
+  },
+  "wide_clean_d30/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.007210315966783826,
+   "mean_paired_tracking_rms_difference_rad": -0.004784440516910345,
+   "success_count_difference": 3
+  },
+  "wide_clean_d30/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 8.097733474743407e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.0004788385644055146,
+   "success_count_difference": 0
+  },
+  "wide_clean_d40/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.009828845874356038,
+   "mean_paired_tracking_rms_difference_rad": -0.006395599385715729,
+   "success_count_difference": 10
+  },
+  "wide_clean_d40/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_clean_d40/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.566928060497963e-06,
+   "mean_paired_tracking_rms_difference_rad": 2.747640032757931e-05,
+   "success_count_difference": 0
+  },
+  "wide_clean_d40/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -2.0687786186135425e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.0007209585167458584,
+   "success_count_difference": 0
+  },
+  "wide_clean_d40/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.009828845874356038,
+   "mean_paired_tracking_rms_difference_rad": -0.006395599385715729,
+   "success_count_difference": 10
+  },
+  "wide_clean_d40/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 3.6357066791115055e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.000693482116418279,
+   "success_count_difference": 0
+  },
+  "wide_noise_d00/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d00/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d00/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d00/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d00/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d00/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d10/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0017334472380755351,
+   "mean_paired_tracking_rms_difference_rad": -0.0010048001164613023,
+   "success_count_difference": 0
+  },
+  "wide_noise_d10/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d10/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 5.991248253554502e-06,
+   "mean_paired_tracking_rms_difference_rad": -9.006257233694497e-05,
+   "success_count_difference": 0
+  },
+  "wide_noise_d10/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -2.565784680965549e-07,
+   "mean_paired_tracking_rms_difference_rad": 5.3520652557210175e-05,
+   "success_count_difference": 0
+  },
+  "wide_noise_d10/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.0017334472380755351,
+   "mean_paired_tracking_rms_difference_rad": -0.0010048001164613023,
+   "success_count_difference": 0
+  },
+  "wide_noise_d10/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 6.247826721651056e-06,
+   "mean_paired_tracking_rms_difference_rad": -0.00014358322489415516,
+   "success_count_difference": 0
+  },
+  "wide_noise_d20/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.004636512418832354,
+   "mean_paired_tracking_rms_difference_rad": -0.003160424985258732,
+   "success_count_difference": 0
+  },
+  "wide_noise_d20/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d20/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.2426035396478733e-05,
+   "mean_paired_tracking_rms_difference_rad": -0.0001156210660180315,
+   "success_count_difference": 0
+  },
+  "wide_noise_d20/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -1.93737573524911e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.00019210592530667566,
+   "success_count_difference": 0
+  },
+  "wide_noise_d20/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.004636512418832354,
+   "mean_paired_tracking_rms_difference_rad": -0.003160424985258732,
+   "success_count_difference": 0
+  },
+  "wide_noise_d20/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.4363411131727844e-05,
+   "mean_paired_tracking_rms_difference_rad": -0.00030772699132470714,
+   "success_count_difference": 0
+  },
+  "wide_noise_d30/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.007114528967773389,
+   "mean_paired_tracking_rms_difference_rad": -0.004767242166533991,
+   "success_count_difference": 3
+  },
+  "wide_noise_d30/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d30/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.4105761020330454e-05,
+   "mean_paired_tracking_rms_difference_rad": -6.329752789547592e-05,
+   "success_count_difference": 0
+  },
+  "wide_noise_d30/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -1.6601068913811925e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.000409553373710542,
+   "success_count_difference": 0
+  },
+  "wide_noise_d30/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.007114528967773389,
+   "mean_paired_tracking_rms_difference_rad": -0.004767242166533991,
+   "success_count_difference": 3
+  },
+  "wide_noise_d30/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.5765867911711645e-05,
+   "mean_paired_tracking_rms_difference_rad": -0.00047285090160601817,
+   "success_count_difference": 0
+  },
+  "wide_noise_d40/bank_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.009694783402510159,
+   "mean_paired_tracking_rms_difference_rad": -0.006349800749156202,
+   "success_count_difference": 10
+  },
+  "wide_noise_d40/bank_align-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "mean_paired_tracking_rms_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "wide_noise_d40/bank_predict-bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 7.282838897286307e-06,
+   "mean_paired_tracking_rms_difference_rad": 3.6609961808535866e-05,
+   "success_count_difference": 0
+  },
+  "wide_noise_d40/bank_predict-known_predict": {
+   "mean_paired_final_joint_error_difference_rad": -4.5759771598789455e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.000709874038111081,
+   "success_count_difference": 0
+  },
+  "wide_noise_d40/known_align-adaptive": {
+   "mean_paired_final_joint_error_difference_rad": -0.009694783402510159,
+   "mean_paired_tracking_rms_difference_rad": -0.006349800749156202,
+   "success_count_difference": 10
+  },
+  "wide_noise_d40/known_predict-known_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.1858816057165254e-05,
+   "mean_paired_tracking_rms_difference_rad": -0.000673264076302545,
+   "success_count_difference": 0
+  }
+ },
+ "episodes": 2800,
+ "physical_steps": 4200000,
+ "posture_contrasts": {
+  "clean_d00/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 2.499925953370341e-05,
+   "mean_paired_tracking_rms_difference_rad": -2.247750229510332e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d00/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 2.499925953370341e-05,
+   "mean_paired_tracking_rms_difference_rad": -2.247750229510332e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d00/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 2.499925953370341e-05,
+   "mean_paired_tracking_rms_difference_rad": -2.247750229510332e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d00/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.04501889785949951,
+   "mean_paired_tracking_rms_difference_rad": 0.014919492051860033,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d00/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 2.499925953370341e-05,
+   "mean_paired_tracking_rms_difference_rad": -2.247750229510332e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d00/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 2.499925953370341e-05,
+   "mean_paired_tracking_rms_difference_rad": -2.247750229510332e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d00/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 1.213114628369205e-09,
+   "mean_paired_tracking_rms_difference_rad": 1.7668480087248514e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d10/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0004666005330458245,
+   "mean_paired_tracking_rms_difference_rad": 0.00036617597512806174,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d10/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 2.2829204818691773e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00011784447357880492,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d10/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 2.230088744073766e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00010249477361777993,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d10/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.04502971373872764,
+   "mean_paired_tracking_rms_difference_rad": 0.014991485291018286,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d10/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 2.2829204818691773e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00011784447357880492,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d10/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 2.2242855281953687e-05,
+   "mean_paired_tracking_rms_difference_rad": 9.327385072944415e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d10/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 1.105350024496743e-08,
+   "mean_paired_tracking_rms_difference_rad": 8.856746781564734e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d20/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0017738178824230789,
+   "mean_paired_tracking_rms_difference_rad": 0.0018414779294362257,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d20/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 2.041346283278844e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0002581339431409234,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d20/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 1.895837846455084e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00027581439171749404,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d20/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.045039334992606206,
+   "mean_paired_tracking_rms_difference_rad": 0.015072688298342168,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d20/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 2.041346283278844e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0002581339431409234,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d20/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 1.936147791064824e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00023798328112026334,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d20/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 6.873016862602582e-08,
+   "mean_paired_tracking_rms_difference_rad": 0.00017176180113187916,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d30/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0023017718550721574,
+   "mean_paired_tracking_rms_difference_rad": 0.0026480416138761147,
+   "success_count_difference": -3,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d30/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.7916996597633004e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00039691674852217196,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d30/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 1.5515379941405394e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0005131538468471455,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d30/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.04504782905245989,
+   "mean_paired_tracking_rms_difference_rad": 0.015166221338002803,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d30/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.7916996597633004e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00039691674852217196,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d30/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 1.5982579759174496e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0004236591310037252,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d30/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 4.920724992441352e-07,
+   "mean_paired_tracking_rms_difference_rad": 0.00026371263277804766,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d40/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.003023228452505988,
+   "mean_paired_tracking_rms_difference_rad": 0.0035600215601168847,
+   "success_count_difference": -10,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d40/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.5083958467779212e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0005358311740204534,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d40/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 1.3020954513029425e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.000812491762445371,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d40/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.04505527875466922,
+   "mean_paired_tracking_rms_difference_rad": 0.015274998149681609,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d40/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.5083958467779212e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0005358311740204534,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d40/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 1.4126392224503293e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0006497860488680487,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "clean_d40/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 1.4059175280491804e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.00037105695343307677,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d00/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 8.513260414500773e-05,
+   "mean_paired_tracking_rms_difference_rad": 2.6362902620974915e-06,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d00/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 8.513260414500773e-05,
+   "mean_paired_tracking_rms_difference_rad": 2.6362902620974915e-06,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d00/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 8.513260414500773e-05,
+   "mean_paired_tracking_rms_difference_rad": 2.6362902620974915e-06,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d00/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.04500851074963808,
+   "mean_paired_tracking_rms_difference_rad": 0.014922041245016726,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d00/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 8.513260414500773e-05,
+   "mean_paired_tracking_rms_difference_rad": 2.6362902620974915e-06,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d00/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 8.513260414500773e-05,
+   "mean_paired_tracking_rms_difference_rad": 2.6362902620974915e-06,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d00/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 7.285441115786797e-06,
+   "mean_paired_tracking_rms_difference_rad": 1.912976398997308e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d10/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0006201975384411585,
+   "mean_paired_tracking_rms_difference_rad": 0.0004603288776065508,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d10/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 6.0738193379729005e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00013044759132277455,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d10/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 6.637684342627182e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00011306800389053757,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d10/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.045016788260740806,
+   "mean_paired_tracking_rms_difference_rad": 0.01499354657838945,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d10/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 6.0738193379729005e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00013044759132277455,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d10/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 6.672450841717012e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00010496946280066654,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d10/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 7.31631877888498e-06,
+   "mean_paired_tracking_rms_difference_rad": 8.661740816929811e-05,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d20/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0018243154023257018,
+   "mean_paired_tracking_rms_difference_rad": 0.0018551827637816169,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d20/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 4.82911407102304e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00027283602116739074,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d20/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 6.12725823113107e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00029462147015455283,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d20/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.04502405213744531,
+   "mean_paired_tracking_rms_difference_rad": 0.015074104458850986,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d20/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 4.82911407102304e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00027283602116739074,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d20/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 6.324943610356449e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00026078981258151817,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d20/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 4.194116990697758e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.00017019383107030135,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d30/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0023487732514991004,
+   "mean_paired_tracking_rms_difference_rad": 0.0026479842747619774,
+   "success_count_difference": -3,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d30/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 3.0268215538476263e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00040646129623761836,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d30/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 5.436902521653991e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0005319170013166761,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d30/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.04503847419514248,
+   "mean_paired_tracking_rms_difference_rad": 0.015166918142356623,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d30/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 3.0268215538476263e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.00040646129623761836,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d30/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 5.557227486446114e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0004515873814966495,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d30/oracle": {
+   "mean_paired_final_joint_error_difference_rad": -1.216037113585533e-06,
+   "mean_paired_tracking_rms_difference_rad": 0.00026219867815846694,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d40/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0030819198647083802,
+   "mean_paired_tracking_rms_difference_rad": 0.00355479477828423,
+   "success_count_difference": -10,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d40/bank_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.5568688082352734e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0005638227472467769,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d40/bank_predict": {
+   "mean_paired_final_joint_error_difference_rad": 5.4328718369519265e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0008572728498995827,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d40/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.04506108055627951,
+   "mean_paired_tracking_rms_difference_rad": 0.015275033295676541,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d40/known_align": {
+   "mean_paired_final_joint_error_difference_rad": 1.5568688082352734e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0005638227472467769,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d40/known_predict": {
+   "mean_paired_final_joint_error_difference_rad": 5.8013560659513073e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0007051646803598228,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  },
+  "noise_d40/oracle": {
+   "mean_paired_final_joint_error_difference_rad": -1.1596918091507161e-05,
+   "mean_paired_tracking_rms_difference_rad": 0.0003689531366528417,
+   "success_count_difference": 0,
+   "unsafe_episode_count_difference": 0
+  }
+ },
+ "prediction_virtual_substeps": 2392000,
+ "scope": "descriptive paired engineering pilot, no safety certificate"
+}

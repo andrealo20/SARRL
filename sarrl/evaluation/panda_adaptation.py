@@ -99,12 +99,14 @@ def run_episode(
     retain_trace=False,
     interface_config: PandaInterfaceConfig | None = None,
     controller_override: PandaAdaptiveController | None = None,
+    task_start=None,
+    task_goal=None,
 ):
     if arm not in ARMS:
         raise ValueError(f"unknown Panda controller arm: {arm}")
     parameters = sample_parameters(seed, scenario)
     env = PandaReachEnv(parameters=parameters)
-    _, reset_info = env.reset(seed=seed)
+    _, reset_info = env.reset(seed=seed, start=task_start, goal=task_goal)
     if controller_override is not None:
         if arm != "adaptive" or not isinstance(controller_override, PandaAdaptiveController):
             raise ValueError("controller overrides must be adaptive Panda controllers")
