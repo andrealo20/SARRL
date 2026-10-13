@@ -3,6 +3,35 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## v2.3 release checks
+
+The release tree passed 558 tests with one skip for unavailable local
+diagnostic records (559 collected), on Python 3.12.3, NumPy 2.5.2 and
+MuJoCo 3.13.0. Lint and compilation passed, including the short Panda
+example. The changes to score-memory evaluation correct a protocol prose
+label; controller arithmetic and retained numerical evidence are unchanged.
+
+A wheel and source distribution were built locally without fetching build
+dependencies. The wheel was installed into a clean target directory outside
+the checkout, reusing the runtime's numerical dependencies. Imports resolved
+to that installed package, with both package and distribution metadata at
+2.3.0. On MuJoCo 3.13.0 and isolated 3.15.0, all twelve Panda model/mesh/license
+hashes passed, nominal/adaptive/delay/memory APIs loaded, and the planar
+inertia matrix remained positive definite. The example copied from the
+source distribution completed 300 control steps successfully on both
+engines, with no unsafe event or clipping. It uses engineering seed
+`9804100`; this is packaging evidence, not a new pilot result.
+
+All seven Panda completion markers passed, covering 7,060 retained new
+episode records. Every one of their 173 recorded source blobs matched its
+frozen commit and remained reachable from release history. From detached
+commit `c4736d4`, the public score-memory audit passed again on all 1,920
+records and 96 traces with eighty causal estimator replays and independent
+score-weight reconstruction, without new physical episodes. The
+[release guide](v2.3.md) documents auditing with each recorded source/runtime.
+Original manifests, including the corrected prose label's historical
+wording, remain unchanged.
+
 ## Test coverage checklist
 
 The automated regression suite is executed across Python 3.10, 3.11 and 3.12.

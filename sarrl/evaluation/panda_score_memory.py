@@ -29,7 +29,7 @@ def score_memory_protocol(episodes=20, seed_start=9805300):
         score_exponential_decay=49 / 51,
         score_window="sum of last 50 transitions, including the current transition",
         score_pairing="50-interval window and exponential effective sample size 50",
-        estimator="original candidate RLS unchanged, including its parameter forgetting",
+        estimator="original cumulative candidate RLS unchanged; no parameter forgetting",
         frozen_controller_reference="results/panda_variable_delay_pilot/manifest.json",
         reproduction={
             **protocol["reproduction"],

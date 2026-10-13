@@ -10,8 +10,8 @@ population claim, parameter sweep or tuning after new seeds open.
 
 Keep the original `PandaDelayController` unchanged as `bank_align`.
 Add two alignment-only controllers with the same five age hypotheses,
-eight-parameter candidate RLS estimators, priors, bounds, parameter
-forgetting, gains and torque clipping. Each innovation is calculated
+eight-parameter candidate RLS estimators, priors, bounds, covariance
+updates, gains and torque clipping. Each innovation is calculated
 before updating its candidate estimator. The squared innovation is the
 sum over all seven torque components, as in the cumulative baseline.
 
@@ -25,9 +25,9 @@ sample size `(1 + decay) / (1 - decay)` is also fifty. These are two fixed
 engineering choices, selected before tests and new data, without a search
 over memory lengths.
 
-Candidate RLS estimators retain their own complete causal update history.
-There are no score or estimator resets, switch detectors, hysteresis or
-changes to parameter forgetting. The controller receives measured state,
+Candidate RLS estimators retain their own complete causal update history
+without a parameter-forgetting factor. There are no score or estimator
+resets, switch detectors or hysteresis. The controller receives measured state,
 sent clipped commands and the control period. It receives no true age,
 packet arrivals, delivered torque, switch time, profile or plant object.
 Prediction is disabled. The new class uses the original update arithmetic;
@@ -234,3 +234,11 @@ steps were 2,976,000, including 96,000 warmup steps, or 4,960,000 with
 reproduction; virtual prediction substeps were zero. The full local suite
 passed with 558 tests and one skip for unavailable local diagnostic
 records. All twenty-two new cases passed on isolated MuJoCo 3.15.0.
+
+The retained manifest's `protocol.estimator` prose incorrectly mentions
+parameter forgetting. The frozen `PandaRLS` code has no forgetting factor;
+its information and covariance updates are cumulative. Only delay-score
+memory differs between arms. The manifest is retained unchanged. Release
+v2.3 corrects the protocol text for future use without changing controller
+arithmetic. Audit these records with the recorded source commit, as shown
+in the [release guide](v2.3.md).

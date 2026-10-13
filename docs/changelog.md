@@ -2,7 +2,17 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## Unreleased: seven-joint Panda pilots
+## v2.3.0: seven-joint Panda control and identification
+
+- Added a short nominal Panda example and a release guide separating the
+  constant-delay reference from experimental prediction and changing-delay
+  variants. The planar learning and HOCBF stack retains its previous scope.
+- Consolidated the seven retained Panda pilots, preserving their frozen
+  source commits, completion hashes, model attribution and raw evidence.
+- Corrected score-memory protocol wording: candidate RLS updates are
+  cumulative without parameter forgetting; only hypothesis scores forget.
+  The original manifests remain unchanged, including their inaccurate prose
+  label, and the retained numerical results are unchanged.
 
 - Added exponential and fifty-transition window scoring as separate Panda
   delay-bank variants, with the original per-candidate RLS updates.
