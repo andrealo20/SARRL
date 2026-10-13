@@ -252,9 +252,30 @@ with 536 tests and one skip for unavailable local diagnostic records
 All sixteen new cases passed on isolated MuJoCo 3.15.0. Lint and compilation
 checks passed; the saved-data audit CLI help was checked.
 
-The design is frozen before data in
-[`panda-variable-delay.md`](panda-variable-delay.md). No new pilot result
-is recorded yet.
+The pilot ran once from clean source commit `8900bc6`. Its history scan
+covered 169 reachable commits, 162 distinct trees and 522 evidence blobs.
+All 2,800 previous episodes matched on every compared field before the
+new seeds opened. The 1,280 new records contain 273/320 original adaptive
+successes, 320/320 for frozen bank alignment and the known-age diagnostic,
+and 0/320 for fixed. No contacts or position/speed violations occurred,
+including warmup; only original adaptive clipped, in 44 episodes and
+152 scored control intervals.
+
+The bank selected the correct final delay in all 160 constant-profile
+episodes, but none of the 160 changing-profile episodes. All changing
+cases kept the initial age throughout transitions 100 to 299. Tracking
+success does not establish identification of the changed regime. See
+[`panda-variable-delay.md`](panda-variable-delay.md) for all success cells,
+tracking comparisons, the frozen protocol and retained evidence.
+
+The frozen public audit passed on 1,280 records and 64 first-seed traces,
+including 32 physical warmups and 48 causal estimator replays. It checked
+saved-data hashes, source blobs, model provenance, torque calculations,
+noise streams, packet delivery, clipping and tracking/age metrics without
+new physical episodes. Total physical steps were 6,184,000 including
+reproduction; 2,392,000 reproduction virtual substeps were counted
+separately. Completed-output resume refused replacement. Completion
+hashes passed again, and the saved-data figure was visually inspected.
 
 ## v2.2.0 uncertainty-margin evidence
 

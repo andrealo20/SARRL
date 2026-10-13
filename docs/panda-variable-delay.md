@@ -125,3 +125,106 @@ Python sources, without new physical episodes:
 ```bash
 python -m tools.audit_panda_variable_delay
 ```
+
+## Retained result
+
+The pilot ran once from clean source commit `8900bc6`, on Python 3.12.3,
+NumPy 2.5.2 and MuJoCo 3.13.0, with four single-threaded workers. The
+seed scan covered 169 reachable commits, 162 distinct trees and 522
+evidence blobs without finding the reserved block. All 2,800 previous
+records matched on every compared field before the new seeds opened.
+
+Across the 1,280 new episodes, `fixed` succeeded in 0/320, original
+`adaptive` in 273/320, and both `bank_align` and privileged `known_align`
+in 320/320. The latter two succeeded in 20/20 in every condition. Original
+adaptive counts were:
+
+| Startup and sensing | Fixed 10 ms | Fixed 40 ms | 10 to 40 ms | 40 to 10 ms |
+|---|---:|---:|---:|---:|
+| Cold, clean | 20/20 | 12/20 | 20/20 | 13/20 |
+| Cold, noisy | 20/20 | 12/20 | 20/20 | 12/20 |
+| Warm, clean | 20/20 | 16/20 | 20/20 | 16/20 |
+| Warm, noisy | 20/20 | 16/20 | 20/20 | 16/20 |
+
+No contacts or position/speed violations occurred, including warmup.
+Controller clipping affected 44 original adaptive episodes, in 152 scored
+control intervals; every other arm and all warmups had zero clipping.
+These are observations in the sampled simulator tasks, without a
+seven-joint safety certificate.
+
+### Tracking and startup
+
+The table reports noisy conditions. Each entry is mean final maximum
+joint error / mean per-joint RMS after 1 s, both in mrad. The second metric
+excludes the first second of scored tracking, which contains the warm
+handoff transient. The complete summary also retains full-horizon and
+pre-switch RMS, clean conditions, parameter errors and paired contrasts.
+
+| Startup | Packet profile | Original adaptive | Frozen bank alignment | Known-age diagnostic |
+|---|---|---:|---:|---:|
+| Cold | Fixed 10 ms | 1.990034 / 1.673448 | 0.304332 / 0.718607 | 0.304332 / 0.718607 |
+| Cold | Fixed 40 ms | 10.266868 / 6.563305 | 0.339243 / 1.768373 | 0.339243 / 1.768373 |
+| Cold | 10 to 40 ms | 1.951117 / 2.160262 | 0.385306 / 1.395672 | 0.351259 / 1.591705 |
+| Cold | 40 to 10 ms | 10.222875 / 6.289070 | 0.319318 / 1.095348 | 0.294021 / 0.985539 |
+| Warm | Fixed 10 ms | 1.230272 / 1.353810 | 0.302174 / 0.679851 | 0.302170 / 0.680093 |
+| Warm | Fixed 40 ms | 6.297909 / 4.965548 | 0.345430 / 1.753778 | 0.345127 / 1.754176 |
+| Warm | 10 to 40 ms | 1.201621 / 1.902162 | 0.364173 / 1.372440 | 0.351057 / 1.564719 |
+| Warm | 40 to 10 ms | 6.275623 / 4.719958 | 0.346783 / 1.087299 | 0.297640 / 0.968923 |
+
+The populated queue did not prevent initial latency identification. On
+constant profiles the bank selected the correct final age in all 160
+episodes, with final uninterrupted acquisition delays between 0.01 and
+0.09 s. Warmup changed the physical initial state and improved original
+adaptive success at initial 40 ms. It also increased full-horizon tracking
+RMS for the alignment arms: for noisy fixed 40 ms, bank RMS was 7.638753
+mrad warm versus 4.345873 cold, while RMS after 1 s was 1.753778 versus
+1.768373. This comparison includes both the physical handoff and the
+populated queue.
+
+### Latency changes
+
+The bank failed to identify the new regime in all 160 changing-profile
+episodes. Every one kept the initial age throughout transitions 100 to
+299, both cold and warm, clean and noisy. Final correctness was 0/160 and
+final-regime acquisition remained absent. Post-switch correctness was
+0.5%, representing only interval 100, when the old command age still
+applied. The known-age diagnostic aligned every transition correctly.
+
+The bank still reached all targets with a maximum final joint error below
+0.754 mrad. Tracking success therefore does not establish adaptation to
+changing latency. Its cumulative scores retain the early regime's
+advantage over this three-second horizon. A future comparison should test
+score forgetting or a finite window against this frozen baseline on fresh
+seeds, with acquisition and tracking reported separately.
+
+Knowing the applied age reduced final error in every changing condition,
+but did not always reduce tracking RMS. For warm noisy 10 to 40 ms, known
+alignment had after-switch RMS 1.564719 mrad versus the bank's 1.372440;
+for 40 to 10 ms it improved RMS to 0.968923 from 1.087299. The diagnostic
+changes which RLS transitions are fitted and is not a guaranteed tracking
+upper bound. At warm noisy 40 to 10 ms, mean payload error was 3.566 g for
+the bank, 2.104 g for the diagnostic and 98.362 g for original adaptive.
+
+![Saved-data tracking and delay selection](../assets/panda_variable_delay_pilot.png)
+
+### Evidence and checks
+
+Retained files are the [manifest](../results/panda_variable_delay_pilot/manifest.json),
+[reproduction report](../results/panda_variable_delay_pilot/reproduction.json),
+[1,280 episode records](../results/panda_variable_delay_pilot/episodes.json),
+[complete cell summary](../results/panda_variable_delay_pilot/summary.json),
+[64 compressed first-seed traces](../results/panda_variable_delay_pilot/traces.json.gz)
+and [completion hashes](../results/panda_variable_delay_pilot/complete.json).
+The traces include 32 warmups with continuous physical-state handoff.
+The public saved-data audit passed for all records and traces, including
+48 causal estimator replays. It checked torque calculations, measurement
+noise, packet delivery, clipping, phase RMS, delay diagnostics, source
+hashes and model provenance without new physical episodes. A completed
+`--resume` call refused replacement, and completion hashes passed again.
+The figure uses only these saved files and was visually inspected.
+
+New physical steps total 1,984,000, including 64,000 warmup steps;
+reproduction brings the total to 6,184,000. Its 2,392,000 virtual prediction
+substeps are separate. No controller was changed after the new seeds
+opened. This remains a descriptive test of twenty paired tasks, one
+switch time and two on-grid latencies.
