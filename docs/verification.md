@@ -150,6 +150,25 @@ limits and recomputed tracking RMS. The completed-run resume command was
 executed and refused replacement. The result is descriptive at one chosen
 noise/delay setting, not a tolerance envelope or safety certificate.
 
+## Panda delay identification and prediction checks
+
+Twenty-seven collected cases in `tests/test_panda_delay.py` check delay
+configuration and privileged inputs, exact zero-delay equivalence with the
+original adaptive rollout, causal target alignment and zero startup,
+forward acceleration against independently configured engine dynamics,
+pending-command prediction order, private-model equilibrium, counted
+prediction fallback, invalid-transition rejection, identification of all
+five grid delays, paired tasks/parameters/noise, privilege labels,
+reference lookahead with current-time tracking, exact repeated prediction
+rollouts and runner/reproduction guards.
+
+The full suite passed with 508 tests and one skip for unavailable local
+diagnostic records (509 collected), under Python 3.12.3, NumPy 2.5.2 and
+MuJoCo 3.13.0. All Panda tests also passed on isolated MuJoCo 3.15.0:
+68 passed and one skipped for the recorded numerical-reference runtime.
+Lint and compilation checks passed. The committed design in
+[`panda-delay.md`](panda-delay.md) fixes the later seven-arm pilot.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`

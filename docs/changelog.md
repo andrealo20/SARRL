@@ -4,6 +4,12 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: seven-joint Panda pilots
 
+- Added a five-candidate Panda command-delay bank using accumulated
+  pre-update innovation, and bounded RK4 prediction through queued commands
+  with a matching future reference. A separate seven-arm engineering pilot
+  compares alignment, online selection and prediction with explicitly
+  privileged known-delay diagnostics. No new pilot result is recorded yet.
+
 - Added a cached Panda measurement interface with independent position and
   velocity noise and a pure command-delay FIFO. An exploratory factorial
   pilot keeps the existing controllers, scores physical state, reproduces

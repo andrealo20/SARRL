@@ -15,6 +15,7 @@ sarrl/assets/panda/** -text
 sarrl/assets/panda/assets/* binary
 results/panda_adaptation_pilot/** -text
 results/panda_robustness_pilot/** -text
+results/panda_delay_pilot/** -text
 
 # The v1.7 and v1.8 training tables were written with CRLF terminators and
 # are hash-bound in the retained inventories; keep their bytes unchanged.

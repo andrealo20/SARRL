@@ -1899,3 +1899,13 @@ true physical state scores the task. All 240 retained adaptation episodes
 must reproduce before new seeds. The paired conditions, observable inputs,
 startup queue, seed blocks and execution guards are specified in
 [`panda-robustness.md`](panda-robustness.md).
+
+## Panda delay identification and prediction pilot
+
+A separate engineering increment compares original adaptation, command
+alignment with known or identified delay, and prediction through the queued
+commands with a matching reference lookahead. Known-delay arms are labelled
+as privileged diagnostics. The same noise/delay conditions and physical task
+are retained, with fresh seeds after reproducing all 240 earlier records.
+The seven arms, five-candidate bank, prediction guards and execution protocol
+are specified in [`panda-delay.md`](panda-delay.md).
