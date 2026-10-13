@@ -101,12 +101,32 @@ def run_episode(
     controller_override: PandaAdaptiveController | None = None,
     task_start=None,
     task_goal=None,
+    prepared_env: PandaReachEnv | None = None,
+    prepared_interface: PandaControlInterface | None = None,
+    phase_split_step: int | None = None,
 ):
     if arm not in ARMS:
         raise ValueError(f"unknown Panda controller arm: {arm}")
     parameters = sample_parameters(seed, scenario)
-    env = PandaReachEnv(parameters=parameters)
-    _, reset_info = env.reset(seed=seed, start=task_start, goal=task_goal)
+    if prepared_env is None:
+        env = PandaReachEnv(parameters=parameters)
+        _, reset_info = env.reset(seed=seed, start=task_start, goal=task_goal)
+    else:
+        if (
+            not isinstance(prepared_env, PandaReachEnv)
+            or prepared_env.parameters != parameters
+            or prepared_env.config != PandaReachConfig()
+            or prepared_env.steps != 0
+            or prepared_env._done
+            or task_start is not None
+            or task_goal is not None
+        ):
+            raise ValueError("prepared Panda environment must match the parameters and fresh task")
+        env, reset_info = prepared_env, {"sampling_attempts": 1}
+    if phase_split_step is not None and (
+        type(phase_split_step) is not int or not 0 < phase_split_step < env.horizon
+    ):
+        raise ValueError("phase split must be an interior control-step index")
     if controller_override is not None:
         if arm != "adaptive" or not isinstance(controller_override, PandaAdaptiveController):
             raise ValueError("controller overrides must be adaptive Panda controllers")
@@ -118,11 +138,22 @@ def run_episode(
     else:
         controller = PandaComputedTorqueController()
     start, goal = env.start.copy(), env.goal.copy()
-    interface = (
-        PandaControlInterface(interface_config, seed) if interface_config is not None else None
-    )
+    if prepared_interface is not None:
+        if (
+            not isinstance(prepared_interface, PandaControlInterface)
+            or prepared_interface.config != interface_config
+            or prepared_interface.measurements != 0
+            or prepared_interface.commands != 0
+        ):
+            raise ValueError("prepared Panda interface must match its config and be unused")
+        interface = prepared_interface
+    else:
+        interface = (
+            PandaControlInterface(interface_config, seed) if interface_config is not None else None
+        )
     tracking = np.zeros(7)
     error_squares = np.zeros(7)
+    phase_squares = np.zeros((2, 7)) if phase_split_step is not None else None
     saturated = 0
     trace = []
     for _ in range(env.horizon):
@@ -131,6 +162,8 @@ def run_episode(
         error = q - reference[0]
         tracking = np.maximum(tracking, np.abs(error))
         error_squares += error**2
+        if phase_squares is not None:
+            phase_squares[int(env.steps >= phase_split_step)] += error**2
         measured_q, measured_qd = interface.measure(q, qd, env.steps) if interface else (q, qd)
         control_q, control_qd, control_reference = measured_q, measured_qd, reference
         if hasattr(controller, "prepare_control"):
@@ -228,6 +261,11 @@ def run_episode(
     }
     if interface:
         record.update(interface_config=asdict(interface_config), **interface.diagnostics())
+    if phase_squares is not None:
+        record["tracking_phase_rms_rad"] = {
+            "before": np.sqrt(phase_squares[0] / phase_split_step).tolist(),
+            "after": np.sqrt(phase_squares[1] / (env.horizon - phase_split_step)).tolist(),
+        }
     if hasattr(controller, "delay_diagnostics"):
         record["delay_estimator"] = controller.delay_diagnostics()
     return record, trace

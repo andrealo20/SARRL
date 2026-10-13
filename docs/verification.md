@@ -237,6 +237,25 @@ physical episodes. The completed-run resume command refused replacement;
 completion hashes were checked again afterwards. The saved-data figure
 was visually inspected.
 
+## Panda populated-queue and variable-latency checks
+
+Sixteen collected cases in `tests/test_panda_variable_delay.py` verify
+constant-transport equivalence with the original FIFO and cold rollout,
+packet hold and stale rejection, applied age versus sent-packet delay,
+warmup/main-state continuity, shared handoff and scored noise, fresh
+estimators, total physical-step accounting and warmup safety inclusion.
+They also check that a future switch cannot change pre-switch states or
+commands, privileged diagnostic alignment, paired-summary rejection,
+serial/parallel identity and execution guards. The full local suite passed
+with 536 tests and one skip for unavailable local diagnostic records
+(537 collected), on Python 3.12.3, NumPy 2.5.2 and MuJoCo 3.13.0.
+All sixteen new cases passed on isolated MuJoCo 3.15.0. Lint and compilation
+checks passed; the saved-data audit CLI help was checked.
+
+The design is frozen before data in
+[`panda-variable-delay.md`](panda-variable-delay.md). No new pilot result
+is recorded yet.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`

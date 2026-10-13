@@ -31,6 +31,9 @@ The [delay-identification pilot](panda-delay.md) separates command alignment,
 online delay selection and state/reference prediction through that queue.
 The [posture/delay grid](panda-posture-delay.md) tests the same frozen
 controllers on translated trajectories and all five candidate delays.
+The [populated-queue/variable-latency pilot](panda-variable-delay.md) keeps
+alignment frozen and adds a common physical warmup and timestamped packet
+transport, with a known-applied-age diagnostic.
 
 ## Nominal controller
 

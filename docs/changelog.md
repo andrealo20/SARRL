@@ -4,6 +4,12 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: seven-joint Panda pilots
 
+- Added a frozen bank-alignment test under a shared physical warmup and
+  changing packet latency. The transport holds the last received command
+  and discards stale timestamps; a privileged diagnostic knows applied
+  command age. All 2,800 previous records must reproduce before new data.
+  No new pilot result is recorded yet.
+
 - Added a frozen-controller posture/delay grid: five constant delays, two
   noise levels and matched joint trajectories at two posture ranges.
   Four independent processes save hash-checked resumable cells; source
