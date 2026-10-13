@@ -143,6 +143,23 @@ results/adaptive_mujoco_v20/campaign.lock
 !results/certificate_factorial_v21/**
 results/certificate_factorial_v21/campaign.lock
 
+# Compact evidence of the seven-joint nominal engineering pilot.
+!results/panda_nominal_pilot/
+results/panda_nominal_pilot/*
+!results/panda_nominal_pilot/*.json
+
+# Compact evidence of the paired seven-joint adaptation engineering pilot.
+!results/panda_adaptation_pilot/
+results/panda_adaptation_pilot/*
+!results/panda_adaptation_pilot/*.json
+!results/panda_adaptation_pilot/traces.json.gz
+
+# Compact evidence of the seven-joint sensor-noise and command-delay pilot.
+!results/panda_robustness_pilot/
+results/panda_robustness_pilot/*
+!results/panda_robustness_pilot/*.json
+!results/panda_robustness_pilot/traces.json.gz
+
 # Canonical retained evidence for the v2.2 uncertainty-margin campaign;
 # the lock file is runtime state.
 !results/uncertainty_margin_v22/

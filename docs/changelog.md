@@ -2,6 +2,65 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## Unreleased: seven-joint Panda pilots
+
+- Added a cached Panda measurement interface with independent position and
+  velocity noise and a pure command-delay FIFO. An exploratory factorial
+  pilot keeps the existing controllers, scores physical state, reproduces
+  all 240 retained adaptation episodes, and records sent versus delivered
+  torque and matched exogenous noise.
+- Ran the noise/delay pilot once from clean commit `2fc7a48`, on twenty
+  paired seeds per condition after reproducing all 240 previous records.
+  Adaptive and oracle success stayed at 20/20 in each condition, fixed at
+  0/20. Adaptive mean final joint error rose from 0.033114 mrad ideal to
+  3.002693 mrad with sensor noise SDs of 0.001 rad and 0.001 rad/s and
+  a 20 ms command delay.
+  No contact, position/speed violation or saturation occurred in 360,000
+  new physical steps. Delay raised parameter error and bound-hit rates.
+  Retained all records, twelve traces, checked provenance and a saved-data
+  figure; verified all sensor samples and delivered commands in the traces.
+
+- Added an eight-parameter online Panda model for payload mass at a known
+  attachment and seven extra viscous dampings. Its controller uses bounded
+  RLS on sent commands and measured position/velocity transitions.
+- Added a paired engineering pilot with nominal, payload-only,
+  friction-only and combined conditions, a privileged oracle diagnostic,
+  nominal reproduction before new seeds, source/runtime checks and
+  hash-validated cell-level resume.
+- Ran that pilot once from clean commit `3086aeb` on twenty paired seeds
+  per condition, after reproducing all twenty retained nominal episodes.
+  Payload-only and combined success rose from 0/20 fixed to 20/20 adaptive;
+  nominal and friction-only success stayed at 20/20. Combined final joint
+  error averaged 78.348 versus 0.029043 mrad. No contacts, position/speed
+  violations or saturation occurred in 360,000 new physical steps.
+  Episode records, twelve traces, source/runtime provenance, completion
+  hashes and a saved-data figure are retained. Friction identification is
+  less precise than payload estimation; this is a noise-free, within-model
+  engineering result without seven-joint safety filtering.
+- Checked the Panda tests on MuJoCo 3.13 and 3.15. Zero added parameters
+  reproduce the original XML-loading path exactly within either engine;
+  retained numerical reproduction is tested with its recorded MuJoCo and
+  NumPy versions. The experiment's strict tolerances are unchanged.
+
+- Added a fixed-base, seven-joint Panda MuJoCo model without a gripper,
+  derived from a pinned Menagerie source with its Apache-2.0 license,
+  collision meshes, attribution and file hashes. Position servos are replaced
+  with torque motors; kinematics, inertia and passive joint properties are retained.
+- Added an independent-model computed-torque controller, a quintic
+  joint-trajectory environment and a small descriptive pilot runner. Contacts
+  and joint limits are observed at every physical substep. Output directories
+  cannot overwrite existing evidence.
+- Added numerical checks for actuation, mass matrices, forward/inverse
+  dynamics, gravity compensation, tracking, reproducibility and contact observation.
+- The seven-joint increment covers joint-trajectory tracking and payload/friction
+  adaptation. Residual learning, Cartesian inverse kinematics and safety
+  certification remain unimplemented for this arm.
+- Retained 20/20 successful nominal episodes on `9804000..9804019`, with
+  30,000 physical steps and no observed contact, joint-position/speed
+  violation or saturation. The maximum control-sample joint tracking error
+  is 0.386 mrad. A saved-trajectory figure and the source-hash comparison
+  against the implementation commit accompany the result.
+
 ## v2.2.0: an uncertainty margin on the identified certificate
 
 - Added `MarginHOCBFSafetyFilter`, a HOCBF projection that tightens every acceleration-affine row by `kappa` standard deviations of the command the online estimate needs (`AdaptiveNominalController.command_uncertainty`, from the selected hypothesis' covariance), halving the margin while it leaves no feasible command and dropping it after eight halvings, with per-episode counters and the mean margin enforced.

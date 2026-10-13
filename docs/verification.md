@@ -41,6 +41,115 @@ MuJoCo tests, which skip without the engine, also run in CI. Important regressio
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## Panda nominal integration checks
+
+Eleven simulator-gated tests in `tests/test_panda.py` verify model-file hashes,
+seven unit-gear torque controls, symmetric positive-definite mass matrices,
+forward/inverse dynamics agreement, stationary gravity compensation, quintic
+reference endpoint derivatives, exact repeated rollouts, independent nominal
+and plant models, torque limits, invalid-input handling, physical contact
+observation and refusal to overwrite outputs or use unregistered pilot seeds.
+They passed under Python 3.12.3 and MuJoCo 3.13.0 in WSL.
+The full suite passed with 450 tests and one skip for unavailable local
+diagnostic records (451 collected); lint and compilation checks passed.
+
+A local wheel was built without fetching dependencies. The Panda was loaded
+from the extracted wheel, with all twelve model, collision-mesh and license
+hashes verified, without using the checkout's assets. See [`panda.md`](panda.md)
+for the pilot's limited scope.
+
+The retained pilot contains 20 successful nominal episodes on
+`9804000..9804019`, 30,000 physical steps and no contacts, joint-limit/speed
+violations or saturation. Every completion-marker hash was verified. Its
+eight source hashes match implementation commit `adb2344`, despite the run
+preceding that commit; `source_link.json` records the comparison. The figure
+was generated from the first episode's saved trace without new physical
+steps.
+
+## Panda adaptation integration checks
+
+Fifteen tests in `tests/test_panda_adaptive.py` cover the eight-parameter
+regressor against independent engine dynamics, payload inertia and damping,
+excited and unobserved RLS parameters, estimate bounds, nominal equivalence,
+paired task and parameter sampling, deterministic repeated rollouts,
+reproduction tolerances, adaptive tracking under a modelled load, and checked
+cell resume. A corrupt saved cell is rejected before any pending case runs.
+The adaptive controller receives neither the true parameters nor the plant.
+
+Before the runtime compatibility follow-up below, the full suite passed
+with 464 tests and one skip for unavailable local diagnostic records
+(465 collected), under Python 3.12.3 and MuJoCo 3.13.0. After tightening
+the resume guards, the then-fourteen adaptation tests passed again.
+Lint and compilation checks passed.
+
+CI's MuJoCo 3.15.0 produced a `1.62e-8 N m` difference in the first nominal
+reference's maximum torque, outside the frozen reproduction tolerance.
+An isolated local 3.15.0 installation reproduced that difference while
+keeping NumPy at the reference version. The original XML-loading path and
+the zero-parameter extension produced identical episode records and traces
+within the same engine. The regression suite now checks that equivalence
+on every supported runtime, and compares against retained numerical data
+only when MuJoCo and NumPy match their recorded versions. The runner's
+strict reproduction tolerances and retained evidence are unchanged.
+All fifteen adaptation tests passed under MuJoCo 3.13.0. All Panda tests
+under isolated 3.15.0 passed: 25 passed, one skipped for the reference
+runtime mismatch. This adds one test, bringing collection to 466 tests.
+
+The pilot ran once from clean implementation commit `3086aeb`. Its history
+scan covered 160 reachable commits, 153 distinct trees and 494 evidence
+blobs without finding the reserved seed block. Before opening new seeds,
+all twenty retained nominal episodes reproduced on every field. The new
+240 episodes used 360,000 physical steps, with no observed contact,
+position/speed violation or saturation; reproduction adds 30,000 steps.
+All completion hashes, 240 unique cell identities and twelve 301-sample
+traces were checked. Every recorded source hash matches the exact bytes in
+the implementation commit. The figure uses only those saved records.
+The completed pilot's `--resume` command was also executed and refused to
+replace its outputs; completion hashes were checked again afterwards.
+
+With payload alone or payload plus friction, fixed-model success was 0/20
+and adaptive success was 20/20. Both achieved 20/20 on nominal and
+friction-only cases; the oracle achieved 20/20 in every condition.
+The combined final joint error averaged 78.348 mrad fixed and 0.029043 mrad
+adaptive. The design, parameter-error diagnostics and limits of this
+descriptive result are in [`panda-adaptation.md`](panda-adaptation.md).
+
+## Panda sensor-noise and command-delay checks
+
+Sixteen collected cases in `tests/test_panda_robustness.py` check invalid
+interface settings, cached/copy-safe/repeated sensor samples, the exact
+two-interval zero-initialized command queue and clipping, unchanged ideal
+episode and trace fields, measured-only adaptive transitions using the
+current sent command, shared task/parameter/noise draws, ground-truth
+success scoring, deterministic noisy delayed episodes, cross-condition
+pairing rejection, nested reproduction comparisons, unchanged previous
+summary, runner output/seed guards and refusal after a reproduction mismatch.
+
+The full suite passed with 481 tests and one skip for unavailable local
+diagnostic records (482 collected), under Python 3.12.3, NumPy 2.5.2 and
+MuJoCo 3.13.0. All Panda tests under isolated MuJoCo 3.15.0 passed: 41
+passed and one skipped for the original numerical-reference runtime.
+Lint and compilation checks passed. The committed design in
+[`panda-robustness.md`](panda-robustness.md) specifies the pilot.
+
+The pilot ran once from clean commit `2fc7a48`, after scanning 163 reachable
+commits, 156 distinct trees and 501 evidence blobs and reproducing all 240
+retained adaptation episodes on every field. Its 240 new episodes used
+360,000 physical steps, plus 360,000 for reproduction. In each condition
+(ideal, noise, delay, noise plus delay), fixed success was 0/20 and both
+adaptive and oracle success were 20/20. No contacts, position/speed
+violations or saturation were observed. Adaptive mean final joint error
+rose from 0.033114 mrad ideal to 3.002693 mrad with both perturbations;
+parameter error and bound hits increased under delay.
+
+All completion hashes and recorded source hashes match the retained files
+and implementation commit. A separate saved-data audit verified all 240
+success flags and final errors, cross-condition pairing, twelve 301-sample
+traces, exact RNG-derived sensor samples, every delayed command, torque
+limits and recomputed tracking RMS. The completed-run resume command was
+executed and refused replacement. The result is descriptive at one chosen
+noise/delay setting, not a tolerance envelope or safety certificate.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`
@@ -902,4 +1011,4 @@ All completed without runtime errors. These tiny-budget runs are integration che
 
 ## Tooling limitation
 
-The v1.0 verification environment did not provide MuJoCo or Gymnasium, and the v1.0 planar release has no dependency on either. MuJoCo arrived in v2.0 as an optional dependency of the planar plant (`pip install -e '.[mujoco]'`); its tests skip without it and run in the MuJoCo CI job. Franka transfer remains explicitly unimplemented until it can be exercised and tested rather than added as dead code.
+The v1.0 verification environment did not provide MuJoCo or Gymnasium, and the v1.0 planar release has no dependency on either. MuJoCo arrived in v2.0 as an optional dependency of the planar plant (`pip install -e '.[mujoco]'`); its tests skip without it and run in the MuJoCo CI job. The later Panda integration checks are recorded above.

@@ -24,6 +24,10 @@ figures = ["matplotlib>=3.7"]
 [tool.setuptools.packages.find]
 include = ["sarrl*"]
 
+[tool.setuptools.package-data]
+sarrl = ["assets/panda/*.xml", "assets/panda/*.json", "assets/panda/*.md",
+         "assets/panda/LICENSE", "assets/panda/assets/*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"

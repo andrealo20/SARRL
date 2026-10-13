@@ -1,0 +1,16 @@
+{
+  "implementation_commit": "adb23445f6a76a5abfbb532e0a395afd2ec7c151",
+  "pilot_complete_sha256": "bce2e3135a8b28502d9556d69f73ae61985d1aa97633340e1aa640bba745bad2",
+  "all_recorded_sources_match_commit": true,
+  "verified_source_sha256": {
+    "sarrl/robots/panda.py": "fb6f53183e72ea021fb0b877596b758cbdc293fcb65dafaa770e51363c9c4426",
+    "sarrl/controllers/panda_nominal.py": "1341c02ca257dd6314d3d116a11cbf07e15e4653e8425a252441a47f009e0a98",
+    "sarrl/envs/panda_reach.py": "31af650e4a6abb822a892fe7d4466e7cf3294da97fb74515ec3b506bba8ec233",
+    "sarrl/evaluation/panda_nominal.py": "f2cba368abdbdb0048ec41da5fdc00d21717a4529096fd52b62dabda79a9dcc1",
+    "tools/run_panda_nominal.py": "252264c3bccab606722eb34d8fae7415191c9fb0c2b29973342a6b5990b2a282",
+    "pyproject.toml": "bb5f8d5e070e5e863586bb559da27a6acb6f3dbb7cc8ece6aa10e61a66dcc870",
+    "sarrl/assets/panda/source.json": "ed70832188e1e0643f7059ad3a0e619d323a1a379f7bc608cf4e2bf7b27128f9",
+    "docs/seed_registry.json": "60fbdccdbb2b6957fdc08de2fb2a96e1b9a79e4e89d6c458fc2016f31017b616"
+  },
+  "note": "The pilot ran before the implementation commit. Its manifest records the working-tree changes. All eight recorded source hashes match the subsequently committed source files."
+}

@@ -1,0 +1,263 @@
+{
+ "adaptive_minus_fixed": {
+  "delay": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.03958349029786148,
+   "success_count_difference": 20
+  },
+  "ideal": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.04098497953737952,
+   "success_count_difference": 20
+  },
+  "noise": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.04088684791237761,
+   "success_count_difference": 20
+  },
+  "noise_delay": {
+   "adaptive_lower_final_joint_error_pairs": 20,
+   "mean_paired_final_tip_error_difference_m": -0.039546604528659275,
+   "success_count_difference": 20
+  }
+ },
+ "cells": {
+  "delay/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 300.0,
+   "mean_estimator_bound_hit_fraction": 0.588,
+   "mean_final_joint_error_rad": 0.0029644394485176667,
+   "mean_final_tip_error_m": 0.0014158528821827184,
+   "mean_payload_absolute_error_kg": 0.06854888238969395,
+   "mean_sent_delivered_rms_nm": 1.1244473598327633,
+   "mean_tracking_rms_rad": 0.0038176128172280727,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.6232839796654577,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "delay/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 300.0,
+   "mean_final_joint_error_rad": 0.08452131792746034,
+   "mean_final_tip_error_m": 0.040999343180044195,
+   "mean_sent_delivered_rms_nm": 0.48034363166552885,
+   "mean_tracking_rms_rad": 0.029115511091449674,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "delay/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 300.0,
+   "mean_final_joint_error_rad": 1.1983583208814708e-06,
+   "mean_final_tip_error_m": 2.1330048525956043e-07,
+   "mean_sent_delivered_rms_nm": 0.6921699240912921,
+   "mean_tracking_rms_rad": 0.0016383713988365272,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "ideal/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 0.0,
+   "mean_estimator_bound_hit_fraction": 0.01716666666666667,
+   "mean_final_joint_error_rad": 3.311428129726679e-05,
+   "mean_final_tip_error_m": 1.5281788472670115e-05,
+   "mean_payload_absolute_error_kg": 0.000731818040092308,
+   "mean_sent_delivered_rms_nm": 0.0,
+   "mean_tracking_rms_rad": 0.000976813436187239,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.10256489469250883,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "ideal/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 0.0,
+   "mean_final_joint_error_rad": 0.0845308882680294,
+   "mean_final_tip_error_m": 0.04100026132585219,
+   "mean_sent_delivered_rms_nm": 0.0,
+   "mean_tracking_rms_rad": 0.028881395620563115,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "ideal/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 0.0,
+   "mean_final_joint_error_rad": 5.3685244993592615e-08,
+   "mean_final_tip_error_m": 3.6243230289056726e-08,
+   "mean_sent_delivered_rms_nm": 0.0,
+   "mean_tracking_rms_rad": 0.00015064578512582607,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "noise/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 0.0,
+   "mean_estimator_bound_hit_fraction": 0.043666666666666666,
+   "mean_final_joint_error_rad": 0.0002630474347478349,
+   "mean_final_tip_error_m": 0.00014731531158966994,
+   "mean_payload_absolute_error_kg": 0.0021865490020703537,
+   "mean_sent_delivered_rms_nm": 0.0,
+   "mean_tracking_rms_rad": 0.0010085316819308976,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.10798142666314496,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "noise/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 0.0,
+   "mean_final_joint_error_rad": 0.08451549060860614,
+   "mean_final_tip_error_m": 0.041034163223967274,
+   "mean_sent_delivered_rms_nm": 0.0,
+   "mean_tracking_rms_rad": 0.02888508117376018,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "noise/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 0.0,
+   "mean_final_joint_error_rad": 0.0002658111136715615,
+   "mean_final_tip_error_m": 0.00014294030144760707,
+   "mean_sent_delivered_rms_nm": 0.0,
+   "mean_tracking_rms_rad": 0.0002313080795037918,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "noise_delay/adaptive": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "full_rank_episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 300.0,
+   "mean_estimator_bound_hit_fraction": 0.5438333333333334,
+   "mean_final_joint_error_rad": 0.0030026930966647073,
+   "mean_final_tip_error_m": 0.0014881675979874817,
+   "mean_payload_absolute_error_kg": 0.06988530311959448,
+   "mean_sent_delivered_rms_nm": 1.1874259455311487,
+   "mean_tracking_rms_rad": 0.0038240775879605816,
+   "mean_viscous_absolute_error_nm_s_per_rad": 0.6456032922074297,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "noise_delay/fixed": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 300.0,
+   "mean_final_joint_error_rad": 0.08450609145283199,
+   "mean_final_tip_error_m": 0.04103477212664676,
+   "mean_sent_delivered_rms_nm": 0.5338583772852671,
+   "mean_tracking_rms_rad": 0.029118671192931454,
+   "saturated_episodes": 0,
+   "successes": 0,
+   "unsafe_episodes": 0
+  },
+  "noise_delay/oracle": {
+   "contact_episodes": 0,
+   "episodes": 20,
+   "max_position_excess_rad": 0.0,
+   "max_velocity_excess_rad_s": 0.0,
+   "mean_actuation_mismatch_steps": 300.0,
+   "mean_final_joint_error_rad": 0.0002766417679122331,
+   "mean_final_tip_error_m": 0.00015750056422332204,
+   "mean_sent_delivered_rms_nm": 0.7690116582471224,
+   "mean_tracking_rms_rad": 0.0016537244162616032,
+   "saturated_episodes": 0,
+   "successes": 20,
+   "unsafe_episodes": 0
+  }
+ },
+ "episodes": 240,
+ "interface_minus_ideal": {
+  "delay/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0029313251672204,
+   "success_count_difference": 0
+  },
+  "delay/fixed": {
+   "mean_paired_final_joint_error_difference_rad": -9.570340569065028e-06,
+   "success_count_difference": 0
+  },
+  "delay/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 1.1446730758878782e-06,
+   "success_count_difference": 0
+  },
+  "ideal/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "ideal/fixed": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "ideal/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 0.0,
+   "success_count_difference": 0
+  },
+  "noise/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0002299331534505681,
+   "success_count_difference": 0
+  },
+  "noise/fixed": {
+   "mean_paired_final_joint_error_difference_rad": -1.539765942327187e-05,
+   "success_count_difference": 0
+  },
+  "noise/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 0.0002657574284265679,
+   "success_count_difference": 0
+  },
+  "noise_delay/adaptive": {
+   "mean_paired_final_joint_error_difference_rad": 0.0029695788153674407,
+   "success_count_difference": 0
+  },
+  "noise_delay/fixed": {
+   "mean_paired_final_joint_error_difference_rad": -2.4796815197411505e-05,
+   "success_count_difference": 0
+  },
+  "noise_delay/oracle": {
+   "mean_paired_final_joint_error_difference_rad": 0.0002765880826672395,
+   "success_count_difference": 0
+  }
+ },
+ "physical_steps": 360000,
+ "scope": "descriptive paired engineering pilot, no safety certificate"
+}

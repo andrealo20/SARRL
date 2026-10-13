@@ -1871,3 +1871,31 @@ trade. On this benchmark a constant command margin of `2 N m` removes most
 of the identified certificate's violations at no measured success cost.
 The margin covers parametric error only, and the evidence is the planar
 arm on the MuJoCo plant.
+
+## Panda nominal integration pilot
+
+The first seven-joint increment is an engineering check of a torque-controlled
+Panda and its nominal computed-torque controller. It uses quintic joint-space
+trajectories around one posture, with no adaptation, learning or safety filter.
+The task, measurements, reserved pilot seeds and runnable command are in
+[`panda.md`](panda.md). Its results are descriptive and do not extend the
+planar campaigns' claims to seven joints.
+
+## Panda payload/friction adaptation pilot
+
+The next engineering increment uses the same nominal task and compares fixed,
+adaptive and true-parameter diagnostic controllers across nominal, payload-only,
+friction-only and combined plants. The eight-parameter regressor, observational
+interface, paired design, reproduction check and resumable execution are
+specified in [`panda-adaptation.md`](panda-adaptation.md). It is descriptive,
+with no statistical acceptance rule and no safety certificate.
+
+## Panda measurement-noise and command-delay pilot
+
+The next descriptive increment keeps those controllers and the combined
+payload/friction plant, and crosses Gaussian measurement noise with a pure
+20 ms command delay. Cached observations are shared by feedback and RLS;
+true physical state scores the task. All 240 retained adaptation episodes
+must reproduce before new seeds. The paired conditions, observable inputs,
+startup queue, seed blocks and execution guards are specified in
+[`panda-robustness.md`](panda-robustness.md).
