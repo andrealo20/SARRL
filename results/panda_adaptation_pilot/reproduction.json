@@ -1,0 +1,28 @@
+{
+ "compared": 20,
+ "fields": [
+  "contact_substeps",
+  "controller_saturated_steps",
+  "final_q",
+  "final_speed_max_rad_s",
+  "goal_q",
+  "joint_error_max_rad",
+  "joint_position_excess_rad",
+  "joint_velocity_excess_rad_s",
+  "max_speed_rad_s",
+  "max_torque_nm",
+  "sampling_attempts",
+  "saturated_steps",
+  "seed",
+  "start_q",
+  "steps",
+  "success",
+  "target_xyz_m",
+  "tip_error_m",
+  "tracking_error_max_rad",
+  "unsafe_episode"
+ ],
+ "matched": 20,
+ "mismatches": [],
+ "reference_sha256": "2c546323b4033435a09897b94743eebd53484202b9516385198da69aab96da68"
+}

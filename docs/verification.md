@@ -79,9 +79,26 @@ The adaptive controller receives neither the true parameters nor the plant.
 The full suite passed with 464 tests and one skip for unavailable local
 diagnostic records (465 collected), under Python 3.12.3 and MuJoCo 3.13.0.
 After tightening the resume guards, all fourteen adaptation tests passed
-again. Lint and compilation checks passed. The experiment design is in
-[`panda-adaptation.md`](panda-adaptation.md); results will be recorded after
-the committed pilot runs.
+again. Lint and compilation checks passed.
+
+The pilot ran once from clean implementation commit `3086aeb`. Its history
+scan covered 160 reachable commits, 153 distinct trees and 494 evidence
+blobs without finding the reserved seed block. Before opening new seeds,
+all twenty retained nominal episodes reproduced on every field. The new
+240 episodes used 360,000 physical steps, with no observed contact,
+position/speed violation or saturation; reproduction adds 30,000 steps.
+All completion hashes, 240 unique cell identities and twelve 301-sample
+traces were checked. Every recorded source hash matches the exact bytes in
+the implementation commit. The figure uses only those saved records.
+The completed pilot's `--resume` command was also executed and refused to
+replace its outputs; completion hashes were checked again afterwards.
+
+With payload alone or payload plus friction, fixed-model success was 0/20
+and adaptive success was 20/20. Both achieved 20/20 on nominal and
+friction-only cases; the oracle achieved 20/20 in every condition.
+The combined final joint error averaged 78.348 mrad fixed and 0.029043 mrad
+adaptive. The design, parameter-error diagnostics and limits of this
+descriptive result are in [`panda-adaptation.md`](panda-adaptation.md).
 
 ## v2.2.0 uncertainty-margin evidence
 

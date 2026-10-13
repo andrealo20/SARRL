@@ -23,7 +23,7 @@ The planar system is not intended as the final manipulation benchmark. It is the
 The MuJoCo plant (v2.0) is downstream of the verified analytical stack. A separate
 [Panda nominal pilot](panda.md) verifies the seven-joint torque interface and
 joint-trajectory controller. A separate [adaptation pilot](panda-adaptation.md)
-specifies online payload/friction estimation; seven-joint safety filtering
+verifies online payload/friction estimation; seven-joint safety filtering
 remains future work.
 
 ## Nominal controller

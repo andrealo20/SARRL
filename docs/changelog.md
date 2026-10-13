@@ -10,7 +10,17 @@ This file records implemented release increments. Performance evidence is kept s
 - Added a paired engineering pilot with nominal, payload-only,
   friction-only and combined conditions, a privileged oracle diagnostic,
   nominal reproduction before new seeds, source/runtime checks and
-  hash-validated cell-level resume. No adaptation result is recorded yet.
+  hash-validated cell-level resume.
+- Ran that pilot once from clean commit `3086aeb` on twenty paired seeds
+  per condition, after reproducing all twenty retained nominal episodes.
+  Payload-only and combined success rose from 0/20 fixed to 20/20 adaptive;
+  nominal and friction-only success stayed at 20/20. Combined final joint
+  error averaged 78.348 versus 0.029043 mrad. No contacts, position/speed
+  violations or saturation occurred in 360,000 new physical steps.
+  Episode records, twelve traces, source/runtime provenance, completion
+  hashes and a saved-data figure are retained. Friction identification is
+  less precise than payload estimation; this is a noise-free, within-model
+  engineering result without seven-joint safety filtering.
 
 - Added a fixed-base, seven-joint Panda MuJoCo model without a gripper,
   derived from a pinned Menagerie source with its Apache-2.0 license,
