@@ -277,6 +277,22 @@ reproduction; 2,392,000 reproduction virtual substeps were counted
 separately. Completed-output resume refused replacement. Completion
 hashes passed again, and the saved-data figure was visually inspected.
 
+## Panda delay-score memory checks
+
+Twenty-two new cases in `tests/test_panda_score_memory.py` cover independent
+batch score weights, causal prefixes, dropping an old score advantage,
+validation without partial updates, and equality of every candidate RLS
+diagnostic with the frozen bank on identical exogenous transitions.
+They verify the full six-arm factorial's handoff/noise pairing, score
+traces, physical-step accounting, future-profile causality, factory/default
+equivalence, serial/parallel identity and execution guards. The new cases
+passed on the recorded NumPy 2.5.2 and MuJoCo 3.13.0 runtime and on
+isolated MuJoCo 3.15.0. Lint, compilation and the public audit's CLI help
+passed.
+
+The [design and fixed memory lengths](panda-score-memory.md) precede new
+pilot data. The new seed block remains unopened.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`

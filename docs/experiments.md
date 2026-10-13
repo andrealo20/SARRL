@@ -1932,3 +1932,11 @@ Bank alignment succeeded in 320/320, original adaptive in 273/320. The
 bank identified every constant profile but kept the initial age in all
 160 changing-profile episodes. The retained protocol reports this
 identification failure separately from successful tracking.
+
+## Panda delay-score memory
+
+The next descriptive comparison changes only innovation-score memory:
+the frozen cumulative bank, exponential decay with effective sample size
+fifty, and a fifty-transition window. It reproduces all 1,280 variable-delay
+records before fresh paired seeds. See [the frozen design](panda-score-memory.md)
+for variants, transport, acquisition metrics and constant-profile controls.

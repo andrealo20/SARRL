@@ -4,6 +4,12 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: seven-joint Panda pilots
 
+- Added exponential and fifty-transition window scoring as separate Panda
+  delay-bank variants, with the original per-candidate RLS updates.
+  A paired pilot compares both against the frozen cumulative bank under
+  constant and changing latency, after reproducing all 1,280 prior records.
+  The design and memory lengths are fixed before new data.
+
 - Added a frozen bank-alignment test under a shared physical warmup and
   changing packet latency. The transport holds the last received command
   and discards stale timestamps; a privileged diagnostic knows applied
