@@ -26,7 +26,7 @@
     {"label": "failure diagnosis historical cases", "low": 9801800, "high": 9802001, "status": "used", "kind": "local"},
     {"label": "adaptive, MuJoCo, residual and obstacle pilots and unit tests", "low": 9803000, "high": 9803499, "status": "used", "kind": "local"},
     {"label": "v2.2 uncertainty-margin pilot", "low": 9803600, "high": 9803899, "status": "used", "kind": "local"},
-    {"label": "Panda nominal engineering pilot", "low": 9804000, "high": 9804099, "status": "reserved", "kind": "local"},
+    {"label": "Panda nominal engineering pilot", "low": 9804000, "high": 9804099, "status": "used", "kind": "local"},
     {"label": "Panda model and controller tests", "low": 9804100, "high": 9804199, "status": "used", "kind": "local"}
   ]
 }

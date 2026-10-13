@@ -17,6 +17,11 @@ This file records implemented release increments. Performance evidence is kept s
 - The increment covers nominal joint-trajectory tracking. Seven-joint
   adaptation, residual learning, Cartesian inverse kinematics and safety
   certification remain unimplemented.
+- Retained 20/20 successful nominal episodes on `9804000..9804019`, with
+  30,000 physical steps and no observed contact, joint-position/speed
+  violation or saturation. The maximum control-sample joint tracking error
+  is 0.386 mrad. A saved-trajectory figure and the source-hash comparison
+  against the implementation commit accompany the result.
 
 ## v2.2.0: an uncertainty margin on the identified certificate
 

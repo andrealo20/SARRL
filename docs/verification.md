@@ -58,6 +58,14 @@ from the extracted wheel, with all twelve model, collision-mesh and license
 hashes verified, without using the checkout's assets. See [`panda.md`](panda.md)
 for the pilot's limited scope.
 
+The retained pilot contains 20 successful nominal episodes on
+`9804000..9804019`, 30,000 physical steps and no contacts, joint-limit/speed
+violations or saturation. Every completion-marker hash was verified. Its
+eight source hashes match implementation commit `adb2344`, despite the run
+preceding that commit; `source_link.json` records the comparison. The figure
+was generated from the first episode's saved trace without new physical
+steps.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`

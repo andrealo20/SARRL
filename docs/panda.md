@@ -86,6 +86,37 @@ delay, external obstacle or added payload. The bounded task uses a small
 region around one posture. Passing it does not establish robustness,
 general reaching performance, collision prevention or hardware safety.
 
+## Retained result
+
+On 13 October 2026 the pilot ran once on seeds `9804000..9804019`, Python
+3.12.3, NumPy 2.5.2 and MuJoCo 3.13.0 under WSL. All 20 episodes succeeded,
+over 30,000 physical steps, with no contacts, position/speed violations or
+controller saturation. The maximum joint-reference tracking error at the
+control samples was 0.386 mrad. The maximum final joint error was
+`8.22e-8 rad`, attachment-site position error `7.63e-8 m`, and final joint
+speed `6.81e-7 rad/s`. These small final errors are from a matched-model,
+noise-free simulation.
+
+Evidence is under [`results/panda_nominal_pilot`](../results/panda_nominal_pilot):
+the manifest, 20 episode records, first-episode trace, summary and completion
+marker. The run preceded implementation commit `adb2344`; the manifest
+records the then-uncommitted changes. All eight recorded source hashes were
+subsequently checked against that commit, as recorded in `source_link.json`.
+The original manifest and completion marker are retained unchanged.
+
+![Panda and joint tracking on the first pilot seed](../assets/panda_nominal_tracking.png)
+
+The figure replays the first recorded episode; rendering does not advance
+the simulator. To write a fresh copy, install the `figures` extra and run:
+
+```bash
+python -m pip install -e '.[mujoco,figures]'
+python -m tools.make_panda_figure --input results/panda_nominal_pilot --output results/panda_nominal_preview.png
+```
+
+On headless Linux, select an available MuJoCo OpenGL backend before running
+the command, for example `MUJOCO_GL=egl`.
+
 The next increment can introduce model mismatch on this verified torque
 interface and compare a fixed controller with a separately specified
 seven-joint estimator. Cartesian reaching and safety filtering need their

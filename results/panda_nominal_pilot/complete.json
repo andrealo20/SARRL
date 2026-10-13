@@ -1,0 +1,9 @@
+{
+  "episodes": 20,
+  "hashes": {
+    "episodes.json": "2c546323b4033435a09897b94743eebd53484202b9516385198da69aab96da68",
+    "first_episode_trace.json": "657f0b47f57bff9adcca948e4295bbf0b959a4e3710b1da4bbc95440df1c3645",
+    "manifest.json": "b2a7599463905918a5c087314a77fbd66f803a044bb5c8f7f78a7bae330a673e",
+    "summary.json": "e9a23467de1176081cbe427f01aaf382f65d7f707033668257481707ce7d0959"
+  }
+}

@@ -82,7 +82,8 @@ def main(argv=None) -> None:
     axes[1].legend(fontsize=8, ncol=2)
     first = episodes[0]
     axes[1].set_title(
-        f"Seed {first['seed']}; no contacts\nFinal tip error {1000 * first['tip_error_m']:.3f} mm"
+        f"Seed {first['seed']}; contacts: {first['contact_substeps']}\n"
+        f"Final tip error {1000 * first['tip_error_m']:.2g} mm"
     )
     fig.tight_layout()
     args.output.parent.mkdir(parents=True, exist_ok=True)
