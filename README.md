@@ -10,7 +10,7 @@
 
 **SARRL** (Safe Adaptive Residual Reinforcement Learning) is a research stack for robotic control under model mismatch. It combines model-based control with bounded residual reinforcement learning, learned dynamics context, uncertainty-aware policy authority and HOCBF safety filtering.
 
-The reference platform is a reproducible **2-DoF planar arm**, available as an analytical model and, since v2.0, as a MuJoCo plant with unmodelled actuator dynamics. A [seven-joint Panda nominal pilot](docs/panda.md) verifies the torque interface; a [payload/friction adaptation pilot](docs/panda-adaptation.md) adds online identification on that arm. The Panda results are a noise-free engineering check. Hardware and sim-to-real results are not currently claimed.
+The reference platform is a reproducible **2-DoF planar arm**, available as an analytical model and, since v2.0, as a MuJoCo plant with unmodelled actuator dynamics. A [seven-joint Panda nominal pilot](docs/panda.md) verifies the torque interface; a [payload/friction pilot](docs/panda-adaptation.md) adds online identification and a [noise/delay pilot](docs/panda-robustness.md) tests the same controllers through perturbed sensing and actuation. The Panda results are engineering checks around one posture. Hardware and sim-to-real results are not currently claimed.
 
 ## Results
 
@@ -181,6 +181,28 @@ certificate or a benefit from residual learning. See the
 [design and retained evidence](docs/panda-adaptation.md).
 
 ![Panda adaptation pilot](assets/panda_adaptation_pilot.png)
+
+A subsequent noise-by-delay pilot keeps the combined payload/friction plant
+and the same controllers on twenty new paired tasks per condition. Noise
+SD is 0.001 rad on position and 0.001 rad/s on velocity; command delay is
+20 ms, starting with two zero-torque intervals. Fixed success is 0/20,
+adaptive and privileged-reference success 20/20 in every condition, but
+adaptive mean final joint error increases:
+
+| Interface | Adaptive final joint error, mrad | Reference final joint error, mrad |
+|---|---:|---:|
+| Ideal | 0.033114 | 0.0000537 |
+| Noise | 0.263047 | 0.265811 |
+| Delay | 2.964439 | 0.001198 |
+| Noise + delay | 3.002693 | 0.276642 |
+
+No contacts, position/speed violations or saturation are observed in the
+240 new episodes. Under noise plus delay, the unchanged estimator hits
+parameter bounds in 54.38% of updates, against 1.72% ideal. Passing the
+final task thresholds does not establish accurate identification or a
+tolerance envelope. All 240 previous adaptation episodes reproduced before
+the new block; [records, traces and diagnostics](docs/panda-robustness.md)
+are retained.
 
 ### Safety
 

@@ -130,7 +130,25 @@ diagnostic records (482 collected), under Python 3.12.3, NumPy 2.5.2 and
 MuJoCo 3.13.0. All Panda tests under isolated MuJoCo 3.15.0 passed: 41
 passed and one skipped for the original numerical-reference runtime.
 Lint and compilation checks passed. The committed design in
-[`panda-robustness.md`](panda-robustness.md) specifies the later pilot.
+[`panda-robustness.md`](panda-robustness.md) specifies the pilot.
+
+The pilot ran once from clean commit `2fc7a48`, after scanning 163 reachable
+commits, 156 distinct trees and 501 evidence blobs and reproducing all 240
+retained adaptation episodes on every field. Its 240 new episodes used
+360,000 physical steps, plus 360,000 for reproduction. In each condition
+(ideal, noise, delay, noise plus delay), fixed success was 0/20 and both
+adaptive and oracle success were 20/20. No contacts, position/speed
+violations or saturation were observed. Adaptive mean final joint error
+rose from 0.033114 mrad ideal to 3.002693 mrad with both perturbations;
+parameter error and bound hits increased under delay.
+
+All completion hashes and recorded source hashes match the retained files
+and implementation commit. A separate saved-data audit verified all 240
+success flags and final errors, cross-condition pairing, twelve 301-sample
+traces, exact RNG-derived sensor samples, every delayed command, torque
+limits and recomputed tracking RMS. The completed-run resume command was
+executed and refused replacement. The result is descriptive at one chosen
+noise/delay setting, not a tolerance envelope or safety certificate.
 
 ## v2.2.0 uncertainty-margin evidence
 

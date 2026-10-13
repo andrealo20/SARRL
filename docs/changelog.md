@@ -8,7 +8,17 @@ This file records implemented release increments. Performance evidence is kept s
   velocity noise and a pure command-delay FIFO. An exploratory factorial
   pilot keeps the existing controllers, scores physical state, reproduces
   all 240 retained adaptation episodes, and records sent versus delivered
-  torque and matched exogenous noise. No noise/delay result is recorded yet.
+  torque and matched exogenous noise.
+- Ran the noise/delay pilot once from clean commit `2fc7a48`, on twenty
+  paired seeds per condition after reproducing all 240 previous records.
+  Adaptive and oracle success stayed at 20/20 in each condition, fixed at
+  0/20. Adaptive mean final joint error rose from 0.033114 mrad ideal to
+  3.002693 mrad with sensor noise SDs of 0.001 rad and 0.001 rad/s and
+  a 20 ms command delay.
+  No contact, position/speed violation or saturation occurred in 360,000
+  new physical steps. Delay raised parameter error and bound-hit rates.
+  Retained all records, twelve traces, checked provenance and a saved-data
+  figure; verified all sensor samples and delivered commands in the traces.
 
 - Added an eight-parameter online Panda model for payload mass at a known
   attachment and seven extra viscous dampings. Its controller uses bounded

@@ -101,3 +101,80 @@ error separately from task success. Twenty tasks at one noise/delay
 setting do not establish a tolerance envelope, population generalisation
 or hardware safety. No residual learning or seven-joint safety filter is
 introduced in this pilot.
+
+## Retained result
+
+On 13 October 2026 the pilot ran once from clean commit `2fc7a48`, with
+Python 3.12.3, NumPy 2.5.2 and MuJoCo 3.13.0 under WSL. The seed scan
+covered 163 reachable commits, 156 distinct trees and 501 evidence blobs.
+All 240 retained adaptation episodes reproduced on every field before
+the new block opened. The new 240 episodes used 360,000 physical steps;
+including reproduction, this execution used 720,000 steps.
+
+For every condition, fixed-model success was 0/20, adaptive success 20/20
+and oracle success 20/20. No contact, joint-position/speed violation or
+controller saturation was observed. Final joint error below is the maximum
+absolute error across joints at the horizon, averaged across seeds.
+Tracking RMS is averaged over time, joints and seeds. Values are in mrad.
+
+| Interface | Fixed final error | Adaptive final error | Oracle final error | Adaptive tracking RMS |
+|---|---:|---:|---:|---:|
+| Ideal | 84.531 | 0.033114 | 0.0000537 | 0.977 |
+| Noise | 84.515 | 0.263047 | 0.265811 | 1.009 |
+| Delay | 84.521 | 2.964439 | 0.001198 | 3.818 |
+| Noise + delay | 84.506 | 3.002693 | 0.276642 | 3.824 |
+
+With both perturbations, adaptive mean final tip error was 1.488 mm,
+against 0.0153 mm with the ideal interface and 0.1575 mm for the perturbed
+oracle. The largest adaptive final joint error was 6.834 mrad, below the
+10 mrad criterion. Success therefore stayed at 20/20 despite a roughly
+91-fold rise in mean final joint error from the ideal condition. The
+combined tracking RMS rose about fourfold; the oracle's combined RMS
+was 1.654 mrad.
+
+Parameter identification also degraded:
+
+| Interface | Payload MAE, kg | Extra-damping MAE, N m s/rad | Updates with a bound hit |
+|---|---:|---:|---:|
+| Ideal | 0.000732 | 0.103 | 1.72% |
+| Noise | 0.002187 | 0.108 | 4.37% |
+| Delay | 0.068549 | 0.623 | 58.80% |
+| Noise + delay | 0.069885 | 0.646 | 54.38% |
+
+All eighty adaptive episodes had numerical information rank eight.
+That rank did not prevent biased parameters or frequent clipping. The
+unchanged estimator regresses on the current sent command while the
+delayed plant receives a previous one. The saved first-seed traces show
+the initial payload estimate hitting its 3.5 kg bound and then falling
+before slowly recovering. The delay effect includes both the prescribed
+zero-torque startup and the continuing FIFO delay; this pilot does not
+separate them.
+
+The selected sensor noise raises final error with little change in
+adaptive tracking RMS. The chosen delay causes larger tracking and
+parameter-error increases. This supports testing a causal delay model
+and command-history alignment next, on new seeds, before introducing a
+learned residual. It does not establish tolerance to other delay/noise
+levels, broader postures, motor faults or hardware operation.
+
+The [retained files](../results/panda_robustness_pilot) include all 240
+records, twelve traces, manifest, reproduction report, summary and
+completion marker. All output hashes and the recorded source bytes were
+verified against the implementation commit. An independent saved-data
+audit reconstructed every first-seed sensor sample from its RNG and
+checked each delayed command, torque limit and tracking RMS. All 240
+success flags were recomputed from physical-state diagnostics. The
+completed-run `--resume` command refuses replacement.
+
+The block is now marked used. The earlier command documents the original
+launch; a new pilot needs a fresh block and matching runner guard.
+The existing records and their source snapshot remain unchanged.
+
+![Panda tracking, estimates and delivered commands](../assets/panda_robustness_pilot.png)
+
+The figure uses saved data only. To create another copy:
+
+```bash
+python -m pip install -e '.[figures]'
+python -m tools.make_panda_robustness_figure --output results/panda_robustness_preview.png
+```
