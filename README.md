@@ -10,7 +10,7 @@
 
 **SARRL** (Safe Adaptive Residual Reinforcement Learning) is a research stack for robotic control under model mismatch. It combines model-based control with bounded residual reinforcement learning, learned dynamics context, uncertainty-aware policy authority and HOCBF safety filtering.
 
-The reference platform is a reproducible **2-DoF planar arm**, available as an analytical model and, since v2.0, as a MuJoCo plant with unmodelled actuator dynamics. A [seven-joint Panda nominal pilot](docs/panda.md) verifies the torque interface; a [payload/friction pilot](docs/panda-adaptation.md) adds online identification and a [noise/delay pilot](docs/panda-robustness.md) tests the same controllers through perturbed sensing and actuation. The Panda results are engineering checks around one posture. Hardware and sim-to-real results are not currently claimed.
+The reference platform is a reproducible **2-DoF planar arm**, available as an analytical model and, since v2.0, as a MuJoCo plant with unmodelled actuator dynamics. A [seven-joint Panda nominal pilot](docs/panda.md) verifies the torque interface; a [payload/friction pilot](docs/panda-adaptation.md) adds online identification and a [noise/delay pilot](docs/panda-robustness.md) tests the same controllers through perturbed sensing and actuation. A [delay-identification pilot](docs/panda-delay.md) then separates command alignment, online delay selection and prediction through the queued commands. The Panda results are engineering checks around one posture. Hardware and sim-to-real results are not currently claimed.
 
 ## Results
 
@@ -204,6 +204,27 @@ tolerance envelope. All 240 previous adaptation episodes reproduced before
 the new block; [records, traces and diagnostics](docs/panda-robustness.md)
 are retained.
 
+A seven-arm follow-up compares causal command alignment and prediction
+on twenty fresh paired tasks per condition. Under the same noise plus
+20 ms delay setting, the new tasks give:
+
+| Controller | Final joint error, mrad | Tracking RMS, mrad | Payload absolute error, g |
+|---|---:|---:|---:|
+| Original adaptive | 3.360627 | 4.139280 | 77.809 |
+| Identified-delay alignment | 0.341801 | 2.298004 | 2.340 |
+| Identified-delay alignment + prediction | 0.337742 | 2.076842 | 2.374 |
+
+Final error is the maximum over joints, averaged over tasks. Tracking RMS
+is calculated per joint, then averaged over joints and tasks.
+All three achieve 20/20 success. Both delay banks select the correct
+final delay in every condition; no contacts, position/speed violations,
+saturation or prediction fallbacks occur across the 560 new episodes.
+Alignment accounts for most of the gain; prediction reduces RMS by a
+further 9.62% in the noisy delayed condition, but slightly increases final
+error without noise. True delays are only 0 and 20 ms, and the queue starts
+at zero. The [protocol, full results and traces](docs/panda-delay.md)
+retain those limits and the separate privileged diagnostics.
+
 ### Safety
 
 Task success alone cannot separate a controller that reaches the target through the safe set from one that reaches it by traversing constraint violations. The v1.4 campaign re-evaluated the same frozen policies on the same seeds and measured the safety envelope directly, isolating the effect of the hard-HOCBF filter:
@@ -252,7 +273,7 @@ The planar stack requires NumPy, SciPy and PyTorch. The MuJoCo plant needs the o
 
 ## Limitations
 
-The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation, v1.9 adaptive-nominal, v2.0 MuJoCo, v2.1 certificate-factorial and v2.2 uncertainty-margin campaigns are complete. The Panda pilot covers nominal joint-trajectory tracking; seven-joint adaptation and safety filtering, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
+The v1.3 OOD/fault, v1.4 quantified-safety, v1.5 gate-calibration, v1.6 disagreement/failure, v1.7 safety-aware training, v1.8 penalty-ablation, v1.9 adaptive-nominal, v2.0 MuJoCo, v2.1 certificate-factorial and v2.2 uncertainty-margin campaigns are complete. The Panda pilots cover nominal joint-trajectory tracking, payload/friction identification and constant command-delay compensation around one posture. Seven-joint safety filtering, hardware and sim-to-real campaigns remain future work. The v1.6 screen was deliberately a low-power feasibility screen: calibrated joint power was 38.5% at AUC 0.70, and the in-distribution arm contained 24 composite events in 500 episodes. HOCBF guarantees are model-relative: physical violations remain possible under randomized dynamics, actuator delay and injected faults even when the nominal executed-command margin is non-negative. Ensemble disagreement is neither calibrated probability nor a formal safety certificate.
 
 ## License and citation
 

@@ -101,3 +101,78 @@ first-seed traces, summary and completion hashes. Duplicate per-cell
 files remain local. Test other true delays, broader postures, actuator
 time constants, Cartesian reaching and safety filtering in separate
 increments. A successful result here does not establish those capabilities.
+
+## Retained result
+
+The pilot ran once from clean source commit `b7440fe`, with Python 3.12.3,
+NumPy 2.5.2 and MuJoCo 3.13.0. The history scan checked 165 reachable
+commits, 158 distinct trees and 508 evidence blobs before opening the new
+seed block. All 240 previous noise/delay episodes reproduced on every
+retained field. The 560 new episodes used `9804700..9804719`; the entire
+reserved block remains unavailable for later experiments.
+
+Fixed-model success was 0/20 in every condition; each of the other six
+arms achieved 20/20. No contacts, joint-position/speed violations or
+saturation were observed. Prediction used 239,400 virtual integration
+substeps, in addition to the 1,200,000 physical steps including reproduction.
+No prediction fallback occurred.
+
+Mean final maximum joint error and mean tracking RMS, both in mrad.
+RMS is calculated per joint over the episode, then averaged over joints
+and seeds:
+
+| Arm | Delay: final | Delay: RMS | Noise + delay: final | Noise + delay: RMS |
+|---|---:|---:|---:|---:|
+| `fixed` | 81.529466 | 28.442463 | 81.561074 | 28.449925 |
+| `adaptive` | 3.208822 | 4.105476 | 3.360627 | 4.139280 |
+| `known_align` | 0.016352 | 2.273256 | 0.341801 | 2.298004 |
+| `bank_align` | 0.016352 | 2.273256 | 0.341801 | 2.298004 |
+| `known_predict` | 0.022834 | 1.886656 | 0.339116 | 1.910745 |
+| `bank_predict` | 0.021363 | 2.055419 | 0.337742 | 2.076842 |
+| `oracle` | 0.001137 | 1.680110 | 0.331603 | 1.691743 |
+
+Without delay, all four new arms retain the original adaptive metrics:
+final error 0.031253 mrad and RMS 0.942713 mrad in the ideal condition;
+final error 0.319411 mrad and RMS 0.968483 mrad with noise. Known alignment
+and bank alignment also match each other's tracking and parameter-error
+metrics in both delayed conditions.
+
+With noise plus delay, alignment reduces payload absolute error from
+77.809 g to 2.340 g, mean damping absolute error from 0.692690 to
+0.106001 N m s/rad, and the fraction of updates hitting parameter bounds
+from 56.17% to 2.57%. Bank prediction gives 2.374 g, 0.107126 N m s/rad
+and 2.50%, respectively. The main identification gain comes from alignment.
+Bank prediction then reduces mean tracking RMS by 9.62% relative to bank
+alignment. It does not improve every endpoint: without noise, final error
+rises slightly from 0.016352 to 0.021363 mrad while RMS improves.
+The privileged known-delay predictor has lower RMS than the online bank
+predictor in both delayed conditions.
+
+Each bank selects the correct final delay in all 80 of its episodes. For
+the delayed cases it first selects 10 ms, then selects 20 ms after the
+second transition at 0.02 s and keeps it for the remaining episode:
+299/300 updates select the correct delay. With zero delay it selects zero
+from the first update. The zero-initialized queue exposes the delay early;
+these results do not test selection from a moving steady state, changing
+latency, delays outside the grid, or broader posture and load distributions.
+
+The retained files are in [`results/panda_delay_pilot`](../results/panda_delay_pilot).
+Completion hashes and all recorded source hashes were checked against the
+retained bytes and frozen Git blobs. A separate saved-data audit recomputed
+all 560 success flags, final errors and the summary. For all twenty-eight
+301-sample traces it verified exact sensor draws, FIFO-delivered commands,
+torque limits, current-time tracking RMS, selected-delay histories and
+future references, and recomputed every sent command from its recorded
+control state and model. Sampled predictor replays verified queued-state
+integration without new physical episodes. The completed-run `--resume`
+command refused replacement; hashes remained intact.
+
+![Panda command-delay pilot](../assets/panda_delay_pilot.png)
+
+The figure includes every episode's final error and the preselected first
+noise-plus-delay task's traces. It uses saved data only. Regenerate it at
+a new output path, with the `figures` extra installed:
+
+```bash
+python -m tools.make_panda_delay_figure --output results/panda_delay_preview.png
+```

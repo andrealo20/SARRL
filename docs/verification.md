@@ -167,7 +167,34 @@ diagnostic records (509 collected), under Python 3.12.3, NumPy 2.5.2 and
 MuJoCo 3.13.0. All Panda tests also passed on isolated MuJoCo 3.15.0:
 68 passed and one skipped for the recorded numerical-reference runtime.
 Lint and compilation checks passed. The committed design in
-[`panda-delay.md`](panda-delay.md) fixes the later seven-arm pilot.
+[`panda-delay.md`](panda-delay.md) was frozen before the seven-arm pilot.
+
+The pilot ran once from clean commit `b7440fe`, after scanning 165 reachable
+commits, 158 distinct trees and 508 evidence blobs and reproducing all 240
+previous noise/delay episodes on every field. It retained 560 unique new
+cells, twenty paired seeds per condition across seven arms, using 840,000
+physical steps plus 360,000 for reproduction. Prediction used a separately
+counted 239,400 virtual substeps. No contact, position/speed violation,
+saturation or prediction fallback was observed. Fixed success was 0/20
+in each condition and every other arm achieved 20/20.
+
+With noise plus delay, mean final joint error fell from 3.360627 mrad for
+original adaptation to 0.341801 mrad for bank alignment and 0.337742 mrad
+for bank prediction. Their mean tracking RMS was 4.139280, 2.298004 and
+2.076842 mrad, respectively. Both banks selected the correct final delay
+in every episode. The retained result includes the small noise-free final
+error regression from prediction and the favorable zero-startup queue.
+
+A separate saved-data audit checked every completion and source hash,
+all 560 cell identities, recomputed success flags, final errors and summary,
+and all twenty-eight 301-sample traces. It verified exact RNG-derived noise,
+every FIFO-delivered torque, torque clipping, current-time RMS, selected
+delay histories and future references. Every sent command was recomputed
+from the recorded control state, selected model and reference. Sampled
+replays on all eight predictive traces checked queued-state integration
+without new physical episodes. The completed-run resume command refused
+replacement; completion hashes were checked again afterwards. The figure
+was generated from retained data only.
 
 ## v2.2.0 uncertainty-margin evidence
 
