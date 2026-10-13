@@ -41,6 +41,23 @@ MuJoCo tests, which skip without the engine, also run in CI. Important regressio
 - paired bootstrap comparisons;
 - validation/held-out seed separation.
 
+## Panda nominal integration checks
+
+Eleven simulator-gated tests in `tests/test_panda.py` verify model-file hashes,
+seven unit-gear torque controls, symmetric positive-definite mass matrices,
+forward/inverse dynamics agreement, stationary gravity compensation, quintic
+reference endpoint derivatives, exact repeated rollouts, independent nominal
+and plant models, torque limits, invalid-input handling, physical contact
+observation and refusal to overwrite outputs or use unregistered pilot seeds.
+They passed under Python 3.12.3 and MuJoCo 3.13.0 in WSL.
+The full suite passed with 450 tests and one skip for unavailable local
+diagnostic records (451 collected); lint and compilation checks passed.
+
+A local wheel was built without fetching dependencies. The Panda was loaded
+from the extracted wheel, with all twelve model, collision-mesh and license
+hashes verified, without using the checkout's assets. See [`panda.md`](panda.md)
+for the pilot's limited scope.
+
 ## v2.2.0 uncertainty-margin evidence
 
 The campaign trained nothing. The protocol section of `docs/experiments.md`

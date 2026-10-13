@@ -10,6 +10,10 @@
 *.pt binary
 *.npz binary
 
+# The packaged Panda model and meshes are checked by their exact bytes.
+sarrl/assets/panda/** -text
+sarrl/assets/panda/assets/* binary
+
 # The v1.7 and v1.8 training tables were written with CRLF terminators and
 # are hash-bound in the retained inventories; keep their bytes unchanged.
 results/safety_aware_training/training/** -text

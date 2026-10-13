@@ -2,6 +2,22 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## Unreleased: Panda nominal pilot
+
+- Added a fixed-base, seven-joint Panda MuJoCo model without a gripper,
+  derived from a pinned Menagerie source with its Apache-2.0 license,
+  collision meshes, attribution and file hashes. Position servos are replaced
+  with torque motors; kinematics, inertia and passive joint properties are retained.
+- Added an independent-model computed-torque controller, a quintic
+  joint-trajectory environment and a small descriptive pilot runner. Contacts
+  and joint limits are observed at every physical substep. Output directories
+  cannot overwrite existing evidence.
+- Added numerical checks for actuation, mass matrices, forward/inverse
+  dynamics, gravity compensation, tracking, reproducibility and contact observation.
+- The increment covers nominal joint-trajectory tracking. Seven-joint
+  adaptation, residual learning, Cartesian inverse kinematics and safety
+  certification remain unimplemented.
+
 ## v2.2.0: an uncertainty margin on the identified certificate
 
 - Added `MarginHOCBFSafetyFilter`, a HOCBF projection that tightens every acceleration-affine row by `kappa` standard deviations of the command the online estimate needs (`AdaptiveNominalController.command_uncertainty`, from the selected hypothesis' covariance), halving the margin while it leaves no feasible command and dropping it after eight halvings, with per-episode counters and the mean margin enforced.

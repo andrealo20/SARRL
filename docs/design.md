@@ -20,7 +20,10 @@ Each layer has a narrow API so it can be ablated independently.
 
 The planar system is not intended as the final manipulation benchmark. It is the reference system on which equations can be audited directly. A black-box simulator would make it harder to determine whether a failed learning result came from the algorithm, the dynamics interface or the simulator.
 
-The MuJoCo plant (v2.0) and the planned Franka transfer are therefore downstream of the verified planar stack.
+The MuJoCo plant (v2.0) is downstream of the verified analytical stack. A separate
+[Panda nominal pilot](panda.md) verifies the seven-joint torque interface and
+joint-trajectory controller; seven-joint adaptation and safety filtering remain
+future work.
 
 ## Nominal controller
 

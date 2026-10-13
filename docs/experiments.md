@@ -1871,3 +1871,12 @@ trade. On this benchmark a constant command margin of `2 N m` removes most
 of the identified certificate's violations at no measured success cost.
 The margin covers parametric error only, and the evidence is the planar
 arm on the MuJoCo plant.
+
+## Panda nominal integration pilot
+
+The first seven-joint increment is an engineering check of a torque-controlled
+Panda and its nominal computed-torque controller. It uses quintic joint-space
+trajectories around one posture, with no adaptation, learning or safety filter.
+The task, measurements, reserved pilot seeds and runnable command are in
+[`panda.md`](panda.md). Its results are descriptive and do not extend the
+planar campaigns' claims to seven joints.
