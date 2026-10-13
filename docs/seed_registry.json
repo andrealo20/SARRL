@@ -37,6 +37,8 @@
     {"label": "Panda posture and delay-grid engineering tests", "low": 9804800, "high": 9804899, "status": "used", "kind": "local"},
     {"label": "Panda posture and delay-grid engineering pilot", "low": 9804900, "high": 9804999, "status": "used", "kind": "local"},
     {"label": "Panda warm-start and variable-delay engineering tests", "low": 9805000, "high": 9805099, "status": "used", "kind": "local"},
-    {"label": "Panda warm-start and variable-delay engineering pilot", "low": 9805100, "high": 9805199, "status": "used", "kind": "local"}
+    {"label": "Panda warm-start and variable-delay engineering pilot", "low": 9805100, "high": 9805199, "status": "used", "kind": "local"},
+    {"label": "Panda delay-score memory engineering tests", "low": 9805200, "high": 9805299, "status": "used", "kind": "local"},
+    {"label": "Panda delay-score memory engineering pilot", "low": 9805300, "high": 9805399, "status": "used", "kind": "local"}
   ]
 }

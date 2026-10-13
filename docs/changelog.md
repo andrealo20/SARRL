@@ -4,6 +4,20 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: seven-joint Panda pilots
 
+- Added exponential and fifty-transition window scoring as separate Panda
+  delay-bank variants, with the original per-candidate RLS updates.
+  A paired pilot compares both against the frozen cumulative bank under
+  constant and changing latency, after reproducing all 1,280 prior records.
+  The design and memory lengths are fixed before new data.
+  Ran the comparison once from clean commit `c4736d4`, matching all prior
+  records before 1,920 new episodes. Every alignment arm succeeded in
+  320/320, but finite memory provided partial age recovery: 74/160
+  changing cases for exponential and 72/160 for the window versus 1/160
+  cumulative. Both regressed on constant-profile final age selection and
+  on final error/RMS in every noisy changing condition. Retained all
+  records, 96 traces, hashes, a saved-data figure and an audit with eighty
+  causal estimator replays and independent score-weight reconstruction.
+
 - Added a frozen bank-alignment test under a shared physical warmup and
   changing packet latency. The transport holds the last received command
   and discards stale timestamps; a privileged diagnostic knows applied

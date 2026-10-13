@@ -18,6 +18,7 @@ results/panda_robustness_pilot/** -text
 results/panda_delay_pilot/** -text
 results/panda_posture_delay_pilot/** -text
 results/panda_variable_delay_pilot/** -text
+results/panda_score_memory_pilot/** -text
 
 # The v1.7 and v1.8 training tables were written with CRLF terminators and
 # are hash-bound in the retained inventories; keep their bytes unchanged.

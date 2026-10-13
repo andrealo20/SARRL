@@ -34,6 +34,9 @@ controllers on translated trajectories and all five candidate delays.
 The [populated-queue/variable-latency pilot](panda-variable-delay.md) keeps
 alignment frozen and adds a common physical warmup and timestamped packet
 transport, with a known-applied-age diagnostic.
+The [score-memory pilot](panda-score-memory.md) compares cumulative,
+exponential and windowed innovation scores with unchanged candidate RLS
+updates and no switch-time input.
 
 ## Nominal controller
 

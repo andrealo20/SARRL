@@ -175,9 +175,11 @@ def _prepare(seed, condition, retain_trace):
     return env, task, config, profile, history, held, warmup, warm_trace
 
 
-def run_episode(seed, scenario, arm, *, retain_trace=False):
+def run_episode(seed, scenario, arm, *, retain_trace=False, bank_factory=None):
     if arm not in ARMS:
         raise ValueError(f"unknown variable-delay arm: {arm}")
+    if bank_factory is not None and (arm != "bank_align" or not callable(bank_factory)):
+        raise ValueError("bank factories require the bank_align arm and a callable")
     config = condition_config(scenario)
     env, task, _, profile, history, held, warmup, warm_trace = _prepare(
         seed, scenario, retain_trace
@@ -188,7 +190,11 @@ def run_episode(seed, scenario, arm, *, retain_trace=False):
     interface = PandaPacketInterface(config, seed, profile, history, held)
     controller = None
     if arm == "bank_align":
-        controller = PandaDelayController(predict=False)
+        controller = PandaDelayController(predict=False) if bank_factory is None else bank_factory()
+        if not isinstance(controller, PandaDelayController) or controller.predict:
+            raise ValueError(
+                "bank factories must return a Panda delay controller without prediction"
+            )
         controller.sent_history = [u.copy() for u in history]
     elif arm == "known_align":
         controller = KnownAgeDiagnostic(ages, history)
@@ -261,8 +267,8 @@ def run_episode(seed, scenario, arm, *, retain_trace=False):
     return record, trace
 
 
-def summarize(records):
-    summary = adaptation_summary(records, scenarios=CONDITIONS, arms=ARMS)
+def summarize(records, *, arms=ARMS):
+    summary = adaptation_summary(records, scenarios=CONDITIONS, arms=arms)
     lookup = {(r["scenario"], r["seed"], r["arm"]): r for r in records}
     seeds = sorted({r["seed"] for r in records})
     for seed in seeds:
@@ -270,7 +276,7 @@ def summarize(records):
         hashes = {n: set() for n in ("clean", "noise")}
         for condition, (startup, noise, profile) in CONDITION_PARTS.items():
             ref = lookup[condition, seed, "fixed"]
-            for arm in ARMS:
+            for arm in arms:
                 row = lookup[condition, seed, arm]
                 for field in ("start_q", "goal_q", "true_parameters", "task_sampling"):
                     if row[field] != reference[field]:
@@ -312,7 +318,7 @@ def summarize(records):
                                 "unpaired initial state across matched packet profiles"
                             )
     for condition in CONDITIONS:
-        for arm in ARMS:
+        for arm in arms:
             rows = [lookup[condition, seed, arm] for seed in seeds]
             cell = summary["cells"][f"{condition}/{arm}"]
             for phase in ("before", "after"):
@@ -372,7 +378,7 @@ def summarize(records):
     summary["startup_contrasts"] = {}
     for noise in ("clean", "noise"):
         for profile in PROFILES:
-            for arm in ARMS:
+            for arm in arms:
                 pairs = [
                     (
                         lookup[f"warm_{noise}_{profile}", seed, arm],
