@@ -71,9 +71,8 @@ in the [release guide](v2.3.md).
 
 ## Regenerate the video
 
-The tools and retained data require the repository checkout, available from
-the release's full source archive. Choose new paths because existing outputs
-are never overwritten:
+The 4K renderer and retained data require the current repository checkout.
+Choose new paths because existing outputs are never overwritten:
 
 ```bash
 python -m tools.render_panda_4k --mode comparison \
