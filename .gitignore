@@ -197,6 +197,15 @@ results/panda_estimator_memory_pilot/*
 !results/panda_estimator_memory_pilot/*.json
 !results/panda_estimator_memory_pilot/traces.json.gz
 
+!results/panda_reference_validation/
+results/panda_reference_validation/*
+!results/panda_reference_validation/*.json
+!results/panda_reference_validation/traces.json.gz
+!results/panda_reference_profile/
+results/panda_reference_profile/*
+!results/panda_reference_profile/*.json
+!results/panda_reference_profile/timings.json.gz
+
 # Canonical retained evidence for the v2.2 uncertainty-margin campaign;
 # the lock file is runtime state.
 !results/uncertainty_margin_v22/

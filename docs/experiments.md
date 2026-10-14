@@ -1972,3 +1972,12 @@ reached 320/320 task successes and 99/160 correct changing final ages, against
 constant final ages. The candidate fails the frozen changing-age gain and
 per-joint RMS criteria, so it does not advance to confirmation. All outcomes
 and the retained reference decision are documented with the raw records.
+
+## Panda reference validation
+
+The [constant-delay validation](panda-reference-validation.md) retains the
+cumulative bank unchanged and opens fifty paired seeds across twenty
+conditions and four arms after reproducing all 1,920 parameter-memory records.
+Its per-joint acceptance rule, uncertainty unit and saved-input profiling
+scope are frozen before new data. Changing-latency identification remains
+a separate comparison.

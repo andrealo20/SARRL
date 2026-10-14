@@ -2,6 +2,13 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## Unreleased: Panda validation
+
+- Added a paired constant-delay reference validation protocol, causal audit
+  and saved-input control-cycle profiling.
+- Defined per-joint reference criteria and seed-block bootstrap contrasts
+  before opening the reserved validation seeds.
+
 ## v2.4.0: changing-latency diagnosis and parameter memory
 
 - Added bounded candidate parameter forgetting with fixed score memory,
