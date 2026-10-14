@@ -109,6 +109,11 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, default=Path("results/panda_estimator_memory_pilot"))
     parser.add_argument("--workers", type=int, choices=range(1, 5), default=4)
     parser.add_argument("--resume", action="store_true")
+    parser.add_argument(
+        "--reproduce-only",
+        action="store_true",
+        help="stop after checking retained episodes; use --resume for the new comparison",
+    )
     args = parser.parse_args(argv)
     if Path(sarrl.__file__).resolve().parent.parent != ROOT:
         parser.error("imported package does not match this checkout")
@@ -159,7 +164,10 @@ def main(argv=None):
             parser.error("comparison completed before acquiring the lock")
         if not args.resume:
             write_json(output / "manifest.json", manifest)
-        reproduce_previous(output, workers=args.workers)
+        reproduction = reproduce_previous(output, workers=args.workers)
+        if args.reproduce_only:
+            print(json.dumps({"reproduction": reproduction, "fresh_episodes": 0}, indent=2))
+            return 0
         payloads = execute_cells(
             output / "cells",
             planned,

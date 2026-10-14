@@ -63,10 +63,16 @@ under a different destination.
 
 ```bash
 python -m tools.run_panda_estimator_memory \
-  --output results/panda_estimator_memory_pilot --workers 4
+  --output results/panda_estimator_memory_pilot --workers 4 --reproduce-only
+python -m tools.run_panda_estimator_memory \
+  --output results/panda_estimator_memory_pilot --workers 4 --resume
 python -m tools.audit_panda_estimator_memory \
   --input results/panda_estimator_memory_pilot
 ```
+
+The first command ends with zero fresh episodes. Run the second only after
+reproduction and source checks pass. It validates the saved reproduction
+cells before entering the new comparison.
 
 ## Exploratory decision rule
 
