@@ -1946,3 +1946,14 @@ changing-profile final age selection from 1/160 to 74/160 and 72/160,
 but regressed to 159/160 and 152/160 on constant profiles and increased
 tracking RMS in every noisy changing condition. Neither replaces the
 cumulative reference on this evidence.
+
+## Panda saved-input latency diagnosis
+
+The frozen [diagnostic analysis](panda-latency-diagnosis.md) replays all 48
+first-seed bank traces without new physical episodes. Suffix score sums
+recover the final age in six of eight changing traces per arm, but fail
+in both clean decreasing-delay conditions. Shared true parameters and
+within-phase bounded fits distinguish the final age in all 24 changing
+traces in both post-switch phases. The next controlled comparison should
+isolate candidate estimator memory while holding score memory fixed.
+These offline findings do not establish improved closed-loop tracking.

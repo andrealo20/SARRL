@@ -3,6 +3,19 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Panda latency diagnosis
+
+The saved-input analysis reproduced all 48 bank traces from seed 9805300,
+including final candidate estimates, scores, bound hits and complete
+selection histories. Both output hashes and all three frozen analysis-source
+hashes passed. No new physical episode or seed was opened.
+
+The diagnostic, score-memory and delay tests passed 54 cases. The tests
+cover score-history removal, parameter/alignment confounding, missing
+excitation, output preservation and a retained replay with physical stepping
+disabled. Lint passed. A dedicated CI job uses the retained NumPy/MuJoCo
+versions and executes the full diagnostic command.
+
 ## v2.3.2 demonstration checks
 
 ### Release package

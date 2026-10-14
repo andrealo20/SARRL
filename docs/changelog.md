@@ -7,6 +7,8 @@ This file records implemented release increments. Performance evidence is kept s
 - Added causal replay, phase-specific parameter fits and information
   diagnostics for retained Panda delay-bank traces. Inputs and controller
   sources are hash-checked; diagnostic outputs are never overwritten.
+- Retained 48 trace replays and diagnostic findings that motivate a separate
+  candidate-memory comparison. No new physical episodes were opened.
 
 ## v2.3.2: replay and documentation consolidation
 

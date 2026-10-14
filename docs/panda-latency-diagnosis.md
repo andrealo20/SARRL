@@ -71,9 +71,50 @@ python -m tools.diagnose_panda_latency \
 The output records source hashes, the analysis commit, runtime, input hashes,
 per-trace diagnostics and completion hashes. Existing outputs are refused.
 
-## Decision after analysis
+## Retained findings
 
-Retain the cumulative reference while selecting one targeted comparison.
+Execution from frozen analysis commit `98134bd` reproduced every bank's
+selected parameters, candidate estimates, scores, bound hits and selection
+history in all 48 traces. It performed zero physical simulation steps and
+opened no new seeds. The [manifest](../results/panda_latency_diagnosis/manifest.json),
+[diagnostics](../results/panda_latency_diagnosis/diagnostics.json) and
+[completion hashes](../results/panda_latency_diagnosis/complete.json) are retained.
+
+The following counts cover the eight changing-profile traces per arm,
+all from the same first seed. Suffix scores are cumulative sums starting
+at transition 100 on each arm's original innovation history.
+
+| Original arm | Correct final age | Correct final age with suffix scores |
+|---|---:|---:|
+| Cumulative | 1/8 | 6/8 |
+| Exponential | 5/8 | 6/8 |
+| Window | 5/8 | 6/8 |
+
+Suffix scoring still selects the wrong final age in both clean 40-to-10 ms
+conditions for every arm. In all six of these traces, the correct candidate
+also fails to minimize mean pre-update innovation in both post-switch phases.
+Using the shared true parameter vector or fitting parameters separately
+within each phase instead ranks the final applied age correctly in every
+changing trace, in both motion and settling (48 phase rankings per diagnostic).
+Inherited candidate fits therefore warrant a separate comparison. These
+observations do not establish that parameter forgetting improves control.
+
+The physical-state design remains full rank in those post-switch phases.
+Its column-normalized condition ranges from 1.15 to 3.23, while raw condition
+ranges from 574 to 23,743. The combined norm of its seven friction columns
+drops during settling to a median 1.33% of the preceding moving phase
+(range 0.47% to 2.95%). Normalized conditioning alone would miss this loss
+of absolute friction information. The present traces cannot establish
+the result across other task or parameter draws.
+
+## Next comparison
+
+Retain the cumulative reference. The next targeted comparison should hold
+the score-memory rule fixed and change candidate estimator memory, with
+constant-profile controls. This isolates the inherited information update
+from another score-length choice. A privileged switch reset remains a
+diagnostic, not an online controller feature.
+
 The next protocol must freeze the controller change, constant-profile
 controls, paired seeds, tracking and identification metrics, and promotion
 criteria before opening new episodes. Improving final delay selection alone
