@@ -184,6 +184,13 @@ results/panda_score_memory_pilot/*
 !results/panda_score_memory_pilot/*.json
 !results/panda_score_memory_pilot/traces.json.gz
 
+# Saved-input diagnostics; no new physical episodes.
+!results/panda_latency_diagnosis/
+results/panda_latency_diagnosis/*
+!results/panda_latency_diagnosis/manifest.json
+!results/panda_latency_diagnosis/diagnostics.json
+!results/panda_latency_diagnosis/complete.json
+
 # Canonical retained evidence for the v2.2 uncertainty-margin campaign;
 # the lock file is runtime state.
 !results/uncertainty_margin_v22/

@@ -1,0 +1,28 @@
+{
+  "analysis_commit": "98134bd42a4df43a6dedb4fa4945a15b2e80b460",
+  "evidence_commit": "c4736d4a165c486039abbca7718008951cfa5b7d",
+  "evidence_hashes": {
+    "episodes.json": "3c5e87032b2a5122c0f34611b3703c76e9fe1b947a88d22c0bca76df25db8a03",
+    "manifest.json": "564192ca388f2c8d25c40580f7411f4f00e2ca994ae39919a36f31c5b0449de1",
+    "reproduction.json": "a28c664f9b6e0a2f042fe50e6e0c670ee6f2f8372ab0e2e67879007e539df628",
+    "summary.json": "d7aacaf07d731032a02de2cbd3c15ffec3b5f230cee9cde61129ccd63b65c98f",
+    "traces.json.gz": "f4ba2d7a21e69b845947c753062ccd75ee6acca1ae2cd1493d051d16091105ab"
+  },
+  "kind": "saved_trace_latency_diagnosis",
+  "new_episode_seeds": [],
+  "physical_simulation_steps": 0,
+  "runtime": {
+    "mujoco": "3.13.0",
+    "numpy": "2.5.2",
+    "python": "3.12.3",
+    "scipy": "1.18.1"
+  },
+  "scope": "descriptive diagnosis; suffix scores and batch fits are offline diagnostics",
+  "seed": 9805300,
+  "selection": "every retained first-seed trace for each of the three bank arms",
+  "source_sha256": {
+    "docs/panda-latency-diagnosis.md": "7148ed8b667aa9c9b5f0f314504f673969d7b46680661303cf79ed64cf688438",
+    "sarrl/evaluation/panda_latency_diagnosis.py": "74811de9d9d84e5fee00b4f7d7eab8f55d59ab5281dad99d7e92817821790492",
+    "tools/diagnose_panda_latency.py": "c0bdde495c9479dd477d647d698199053620093c3d85f1a03aa1738d131c8fb6"
+  }
+}

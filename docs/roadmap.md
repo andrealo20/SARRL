@@ -20,6 +20,10 @@ latency is unresolved. Another memory length is not the next default experiment:
 first inspect innovation histories, parameter estimates and information
 conditioning in the retained traces.
 
+The [saved-trace diagnosis](panda-latency-diagnosis.md) defines this first
+stage of v2.4. Its retrospective fits and score resets are diagnostic;
+the next controller comparison requires a separate frozen protocol.
+
 The first Panda safety increment targets joint constraints. General collision
 avoidance requires a separate formulation and evaluation. Hardware and
 sim-to-real are outside this sequence. Residual learning advances to the Panda
