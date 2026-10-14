@@ -23,7 +23,7 @@ and frozen-data audits. Hardware and sim-to-real results are not claimed.
 
 [![Fixed and adaptive Panda replay](assets/replays/panda_control.gif)](assets/replays/panda_control.mp4)
 
-[Watch the 24-second comparison in 4K, 3840 × 2160](assets/replays/panda_control.mp4). Both controllers
+[Watch the 24-second comparison, 3840 × 2160](assets/replays/panda_control.mp4). Both controllers
 follow the same joint reference with the same added payload and friction.
 The video replays the first retained paired case, seed `9804300`; three
 seconds of physical time are slowed to twenty-four seconds. Both arms move
@@ -42,7 +42,7 @@ and rendering commands.
 
 [![Nominal Panda motion and tip path](assets/replays/panda_motion.gif)](assets/replays/panda_motion.mp4)
 
-[Watch the 12-second motion replay in 4K, 3840 × 2160](assets/replays/panda_motion.mp4). The teal
+[Watch the 12-second motion replay, 3840 × 2160](assets/replays/panda_motion.mp4). The teal
 line follows the recorded attachment-site path; the orange point marks the
 target. This is the first nominal pilot episode, seed `9804000`, with three
 physical seconds slowed to twelve seconds. It demonstrates joint-trajectory
@@ -220,7 +220,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {2.3.1},
+  version = {2.3.2},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```

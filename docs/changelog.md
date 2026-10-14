@@ -2,7 +2,7 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## Unreleased: visual guide
+## v2.3.2: replay and documentation consolidation
 
 - Added two Panda GIFs, full-resolution video links, two native Mermaid
   architecture diagrams and three explained result plots to the README.
@@ -15,8 +15,10 @@ This file records implemented release increments. Performance evidence is kept s
   X-Z close-up to show the fixed/adaptive Panda tracking difference.
 - Doubled both video dimensions using native scene, chart and caption rendering.
   GIF previews are wider, and the README embeds its three result plots as SVG.
-- Added native 3840-by-2160 MP4 replays, with a landscape comparison layout
-  and H.264 High level 5.1 encoding. Existing images and GIF previews are preserved.
+- Added landscape MP4 replays at 3840 by 2160 pixels, with joint-error and
+  endpoint plots. Existing images and GIF previews are preserved.
+- Added the `tools.render_panda_video` command and release-specific demo
+  instructions. The previous renderer command remains available.
 
 ## v2.3.1: Panda demonstration and reference environment
 

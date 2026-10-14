@@ -22,7 +22,7 @@ Both arms follow the same commanded trajectory. Their actual joint states
 differ, but the shared camera view makes a few centimetres of endpoint offset
 hard to see. The revised replay adds a gold target cross and colored tip trails
 to each robot view. During the final settling second, both cameras zoom
-toward the same target with identical settings. In the 4K MP4, plots to the
+toward the same target with identical settings. In the landscape MP4, plots to the
 right report joint error in degrees and tip position in the X-Z plane relative
 to the target, in mm. The portrait GIF keeps these plots below the robot views.
 Its black cross marks the target. The axes have equal physical scale; no
@@ -48,7 +48,7 @@ The video displays the model's collision meshes, without a gripper.
 
 ## Reference environment
 
-Use Python 3.12 and a checkout of the current repository. The reference file
+Use Python 3.12 and a checkout of release `v2.3.2` or later. The reference file
 pins the direct
 numerical and rendering dependencies used for the demo. Transitive dependencies
 are resolved by pip; the file is not a complete environment lock. The checked
@@ -71,13 +71,13 @@ in the [release guide](v2.3.md).
 
 ## Regenerate the video
 
-The 4K renderer and retained data require the current repository checkout.
+The renderer and retained data require a repository checkout of `v2.3.2` or later.
 Choose new paths because existing outputs are never overwritten:
 
 ```bash
-python -m tools.render_panda_4k --mode comparison \
-  --output demo-output/panda-4k.mp4 \
-  --poster demo-output/panda-4k.png
+python -m tools.render_panda_video --mode comparison \
+  --output demo-output/panda-control.mp4 \
+  --poster demo-output/panda-control.png
 ```
 
 On headless Linux with EGL support, set `MUJOCO_GL=egl` before starting Python.

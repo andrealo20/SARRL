@@ -3,9 +3,22 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
-## v2.3.1 demonstration checks
+## v2.3.2 demonstration checks
 
-### Native 4K video playback
+### Release package
+
+The wheel and source distribution built successfully. A fresh installation
+outside the checkout, reusing the numerical dependencies, reported version
+2.3.2, verified twelve model files and completed the nominal Panda example
+with 300 control steps, no clipping and no unsafe event. The example uses
+the existing engineering-test seed, without adding benchmark evidence.
+
+The landscape renderer has a neutral command name; the prior command remains
+compatible. Its help command and lint passed. Media files and controller
+arithmetic are unchanged. All seven pilot completion markers and 173 frozen
+source blobs passed, covering 7,060 retained episode records.
+
+### Landscape video playback
 
 Both MP4s were regenerated at 3840 by 2160 pixels with H.264 High level 5.1,
 YUV 4:2:0 and CRF 18. The comparison arranges two native robot viewports beside

@@ -8,6 +8,7 @@ are retained and can change the scope of subsequent releases.
 | Version | Scope | Completion evidence |
 |---|---|---|
 | v2.3.1 | Saved-data Panda demo, reference environment and documentation | A reproducible paired replay and an accessible installation example |
+| v2.3.2 | Replay and documentation consolidation | Release-specific demo commands, installed-package checks and preserved controller evidence |
 | v2.4 | Changing-latency diagnosis | Evidence distinguishing candidate parameter compensation, score persistence and insufficient trajectory excitation; a targeted comparison based on that diagnosis |
 | v2.5 | Panda controller validation | Frozen paired evaluation on fresh seeds, with tracking, constraint measurements and per-cycle computational cost; separate constant, switching and off-grid latency comparisons |
 | v2.6 | Seven-joint safety filtering | QP formulation for joint position, velocity and torque constraints; numerical validation, explicit infeasibility and paired physical-violation/tracking measurements |
