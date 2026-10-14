@@ -167,7 +167,7 @@ control state and model. Sampled predictor replays verified queued-state
 integration without new physical episodes. The completed-run `--resume`
 command refused replacement; hashes remained intact.
 
-![Panda command-delay pilot](../assets/panda_delay_pilot.png)
+![Panda command-delay pilot](../assets/figures/panda_delay.png)
 
 The figure includes every episode's final error and the preselected first
 noise-plus-delay task's traces. It uses saved data only. Regenerate it at

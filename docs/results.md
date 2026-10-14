@@ -127,7 +127,7 @@ margin's extra reduction costs about two points of success and 4.5 to 4.8
 points of aborts against it. Under compound OOD both about halve the
 violations and the covariance's shape adds nothing.
 
-![v2.0 results on the MuJoCo plant](../assets/v20_mujoco_results.png)
+![v2.0 results on the MuJoCo plant](../assets/figures/planar_mujoco.png)
 
 Left and centre: one motor-fault decision episode on the MuJoCo plant, the
 first seed on which the retained log records a timeout for the fixed nominal
@@ -177,7 +177,7 @@ final error and RMS after 1 s in every noisy changing condition, despite
 reaching all targets. Seven-joint residual learning and HOCBF filtering
 remain future work.
 
-![Panda posture and delay comparison](../assets/panda_posture_delay_pilot.png)
+![Panda posture and delay comparison](../assets/figures/panda_posture_delay.png)
 
 ### Safety
 

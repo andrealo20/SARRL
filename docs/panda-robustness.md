@@ -170,7 +170,7 @@ The block is now marked used. The earlier command documents the original
 launch; a new pilot needs a fresh block and matching runner guard.
 The existing records and their source snapshot remain unchanged.
 
-![Panda tracking, estimates and delivered commands](../assets/panda_robustness_pilot.png)
+![Panda tracking, estimates and delivered commands](../assets/figures/panda_robustness.png)
 
 The figure uses saved data only. To create another copy:
 

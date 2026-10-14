@@ -205,7 +205,7 @@ changes which RLS transitions are fitted and is not a guaranteed tracking
 upper bound. At warm noisy 40 to 10 ms, mean payload error was 3.566 g for
 the bank, 2.104 g for the diagnostic and 98.362 g for original adaptive.
 
-![Saved-data tracking and delay selection](../assets/panda_variable_delay_pilot.png)
+![Saved-data tracking and delay selection](../assets/figures/panda_variable_delay.png)
 
 ### Evidence and checks
 

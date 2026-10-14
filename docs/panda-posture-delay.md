@@ -164,7 +164,7 @@ It also performed 280 sampled private-model prediction replays without
 new physical episodes. The completed-run resume command refused replacement;
 completion hashes remained intact. The seed block is now marked used.
 
-![Panda posture and delay-grid pilot](../assets/panda_posture_delay_pilot.png)
+![Panda posture and delay-grid pilot](../assets/figures/panda_posture_delay.png)
 
 The figure plots all twenty paired tasks' noisy-condition means for the
 three operational adaptive variants, plus two coordinates of every start

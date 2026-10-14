@@ -5,6 +5,28 @@ planned.
 
 ## v2.3.1 demonstration checks
 
+### Visual guide refinement
+
+The README visual guide contains ten static figures and two animated GIFs,
+with two full-resolution MP4 replays. All eight result plots regenerated with
+shared STIX typography and external legends, passing canvas-bound and
+neighbouring-panel checks. Header and architecture drawings also passed their
+canvas checks. Plot SVGs accompany PNGs for enlargement.
+
+All 540 video frames and 288 GIF frames decoded successfully. Control replay
+is 960 by 880 pixels over 24 seconds; nominal motion is 960 by 800 over twelve
+seconds. GIFs are 800 pixels wide and use centisecond timing, giving 24.01 and
+12.01 seconds. First, middle and final frames were inspected. Text bands are
+checked on every rendered frame; the time cursor is confined to the plot.
+All visual-guide links and seven original completion markers passed. The
+targeted release, demo-integrity, model and adaptation suite passed 31 tests;
+lint and compilation passed. No controller or raw evidence file changed.
+
+The planar result figure uses the existing v2.0 outcome-conditioned seed
+selection rule. Its two illustrative replays preserve that scope and do not
+constitute a new campaign. Panda animations use forward kinematics of saved
+states without advancing the physical plant.
+
 The paired video was rendered from the hash-verified adaptation pilot's first
 payload/friction case, seed `9804300`, without new physical simulation steps.
 Its final error values match the retained episode records. All 360 encoded

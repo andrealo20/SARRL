@@ -2,6 +2,15 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## Unreleased: visual guide
+
+- Expanded the README with two Panda GIFs, full-resolution video links, an
+  architecture diagram and eight explained result plots.
+- Added shared STIX typography, external legends, PNG/SVG exports and layout
+  checks that reject clipped labels or overlapping neighbouring panels.
+- Separated replay captions from scene images and constrained the time cursor
+  to the chart. Original evidence and prior release assets remain preserved.
+
 ## v2.3.1: Panda demonstration and reference environment
 
 - Added a hash-checked replay of the first retained payload/friction pair,

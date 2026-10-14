@@ -9,6 +9,8 @@ from pathlib import Path
 
 import numpy as np
 
+from tools.figure_style import apply_style, save_figure
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
@@ -28,6 +30,8 @@ def main(argv=None):
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
+    apply_style()
 
     fig, axes = plt.subplots(2, 2, figsize=(13, 9))
     colors = {"adaptive": "#4c78a8", "bank_align": "#54a24b", "bank_predict": "#087e8b"}
@@ -75,9 +79,8 @@ def main(argv=None):
     ax.grid(alpha=0.2)
     ax.legend()
     fig.suptitle("Panda frozen-controller posture/delay grid: noisy conditions", fontsize=15)
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(args.output, dpi=160)
+    save_figure(fig, args.output)
     plt.close(fig)
     print(args.output)
 

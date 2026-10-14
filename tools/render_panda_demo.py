@@ -7,9 +7,12 @@ import gzip
 import hashlib
 import io
 import json
+import subprocess
 from pathlib import Path
 
 import numpy as np
+
+from tools.figure_style import apply_style, check_bounds, font_path
 
 ARMS = ("fixed", "adaptive")
 COLORS = {"fixed": "#ca6d20", "adaptive": "#087e8b"}
@@ -50,7 +53,29 @@ def load_pair(directory: Path):
     return seed, records, traces, times
 
 
-def render(directory: Path, output: Path, poster: Path):
+def make_gif(video: Path, output: Path):
+    import imageio_ffmpeg
+
+    output.parent.mkdir(parents=True, exist_ok=True)
+    subprocess.run([
+        imageio_ffmpeg.get_ffmpeg_exe(), "-v", "error", "-n", "-i", str(video),
+        "-filter_complex",
+        "fps=8,scale=800:-1:flags=lanczos,split[a][b];"
+        "[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=sierra2_4a",
+        "-loop", "0", str(output),
+    ], check=True)
+
+
+def draw_label(draw, position, value, font, fill, bounds):
+    """Fail before writing a frame if a label crosses its reserved text band."""
+    box = draw.textbbox(position, value, font=font, anchor="lt")
+    left, top, right, bottom = bounds
+    if box[0] < left or box[1] < top or box[2] > right or box[3] > bottom:
+        raise ValueError(f"label does not fit its band: {value}")
+    draw.text(position, value, font=font, fill=fill, anchor="lt")
+
+
+def render(directory: Path, output: Path, poster: Path, gif: Path | None = None):
     import imageio_ffmpeg
     import matplotlib
     import mujoco
@@ -61,25 +86,26 @@ def render(directory: Path, output: Path, poster: Path):
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
 
+    apply_style()
     seed, records, traces, times = load_pair(directory)
     errors = {arm: 1000 * np.max(np.abs(
         np.array([r["q"] for r in traces[arm]])
         - np.array([r["reference"] for r in traces[arm]])), axis=1) for arm in ARMS}
-    fig, ax = plt.subplots(figsize=(9.6, 2.2), dpi=100)
+    fig, ax = plt.subplots(figsize=(9.6, 2.6), dpi=100)
     for arm in ARMS:
         ax.plot(times, errors[arm], color=COLORS[arm], label=arm.capitalize(), linewidth=2)
-    ax.set(xlabel="Physical time (s)", ylabel="Maximum joint error (mrad)", xlim=(0, times[-1]))
+    ax.set(xlabel="Physical time (s)", ylabel="Maximum error (mrad)", xlim=(0, times[-1]))
     ax.grid(alpha=0.2)
-    ax.legend(loc="upper right")
-    fig.subplots_adjust(left=0.105, right=0.975, top=0.95, bottom=0.25)
+    ax.legend(loc="upper right", bbox_to_anchor=(1, 1.18), ncol=2, fontsize=12)
+    fig.subplots_adjust(left=0.105, right=0.975, top=0.83, bottom=0.27)
+    check_bounds(fig, "replay chart")
     buffer = io.BytesIO()
     fig.savefig(buffer, format="png")
     buffer.seek(0)
     chart = Image.open(buffer).convert("RGB")
     plt.close(fig)
-    font_path = Path(matplotlib.get_data_path()) / "fonts/ttf/DejaVuSans.ttf"
-    heading = ImageFont.truetype(str(font_path), 24)
-    text = ImageFont.truetype(str(font_path), 16)
+    heading = ImageFont.truetype(font_path(), 30)
+    text = ImageFont.truetype(font_path(), 22)
     model = load_panda_model()
     data = mujoco.MjData(model)
     camera = mujoco.MjvCamera()
@@ -90,35 +116,39 @@ def render(directory: Path, output: Path, poster: Path):
     output.parent.mkdir(parents=True, exist_ok=True)
     poster.parent.mkdir(parents=True, exist_ok=True)
     writer = imageio_ffmpeg.write_frames(
-        str(output), (960, 720), fps=15, codec="libx264", pix_fmt_out="yuv420p",
+        str(output), (960, 880), fps=15, codec="libx264", pix_fmt_out="yuv420p",
         output_params=["-crf", "20", "-movflags", "+faststart"],
     )
     writer.send(None)
     try:
         with mujoco.Renderer(model, height=360, width=480) as renderer:
             for frame, index in enumerate(np.rint(np.linspace(0, len(times) - 1, 360)).astype(int)):
-                canvas = Image.new("RGB", (960, 720), "#f4f6f8")
+                canvas = Image.new("RGB", (960, 880), "#fafaf8")
                 draw = ImageDraw.Draw(canvas)
-                draw.text((24, 10), "Panda: fixed model vs online identification", font=heading,
-                          fill="#18232f")
-                draw.text((24, 43), f"Retained seed {seed} | 3 s trajectory replayed over 24 s",
-                          font=text, fill="#374151")
+                draw_label(draw, (24, 12), "Panda: fixed model and online identification",
+                           heading, "#18232f", (0, 0, 960, 48))
+                subtitle = f"Seed {seed}. Three physical seconds replayed over 24 s."
+                draw_label(draw, (24, 54), subtitle,
+                           text, "#374151", (0, 48, 960, 82))
                 for column, arm in enumerate(ARMS):
                     state = traces[arm][index]
                     data.qpos[:], data.qvel[:] = state["q"], state["qd"]
                     mujoco.mj_forward(model, data)
                     renderer.update_scene(data, camera=camera, scene_option=option)
-                    canvas.paste(Image.fromarray(renderer.render()), (480 * column, 95))
-                    draw.text((24 + 480 * column, 72), arm.capitalize(), font=text,
-                              fill=COLORS[arm])
-                    draw.text((24 + 480 * column, 462),
-                              f"Error at {times[index]:.2f} s: {errors[arm][index]:.3f} mrad",
-                              font=text, fill=COLORS[arm])
-                canvas.paste(chart, (0, 490))
-                x = round(100.8 + 835.2 * times[index] / times[-1])
-                draw.line((x, 501, x, 655), fill="#374151", width=2)
-                draw.text((24, 696), "Saved-data replay | Noise-free, no delay | Single episode",
-                          font=text, fill="#374151")
+                    canvas.paste(Image.fromarray(renderer.render()), (480 * column, 120))
+                    draw_label(draw, (24 + 480 * column, 90), arm.capitalize(),
+                               text, COLORS[arm], (480 * column, 82, 480 * (column + 1), 120))
+                    draw_label(draw, (24 + 480 * column, 494),
+                               f"Error at {times[index]:.2f} s: {errors[arm][index]:.3f} mrad",
+                               text, COLORS[arm], (480 * column, 480, 480 * (column + 1), 530))
+                canvas.paste(chart, (0, 540))
+                x = round(ax.bbox.x0 + ax.bbox.width * times[index] / times[-1])
+                cursor_top = round(540 + chart.height - ax.bbox.y1)
+                cursor_bottom = round(540 + chart.height - ax.bbox.y0)
+                draw.line((x, cursor_top, x, cursor_bottom), fill="#374151", width=2)
+                footer = "Saved-data replay. Noise-free, no delay. Single episode."
+                draw_label(draw, (24, 827), footer,
+                           text, "#374151", (0, 810, 960, 880))
                 writer.send(np.asarray(canvas))
                 if frame == 359:
                     canvas.save(poster)
@@ -126,6 +156,8 @@ def render(directory: Path, output: Path, poster: Path):
                     print(f"Rendered {frame}/360 frames", flush=True)
     finally:
         writer.close()
+    if gif is not None:
+        make_gif(output, gif)
     print(json.dumps({"seed": seed, "source": str(directory), "video": str(output),
                       "poster": str(poster), "physical_simulation_steps": 0,
                       "final_errors_mrad": {a: float(errors[a][-1]) for a in ARMS}}, indent=2))
@@ -134,14 +166,17 @@ def render(directory: Path, output: Path, poster: Path):
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--input", type=Path, default=Path("results/panda_adaptation_pilot"))
-    parser.add_argument("--output", type=Path, default=Path("assets/panda_demo.mp4"))
-    parser.add_argument("--poster", type=Path, default=Path("assets/panda_demo.png"))
+    parser.add_argument("--output", type=Path, default=Path("assets/replays/panda_control.mp4"))
+    parser.add_argument("--poster", type=Path, default=Path("assets/replays/panda_control.png"))
+    parser.add_argument("--gif", type=Path)
     args = parser.parse_args(argv)
-    if args.output.exists() or args.poster.exists():
+    if args.output.exists() or args.poster.exists() or (args.gif and args.gif.exists()):
         parser.error("output already exists; choose new video and poster paths")
     if args.output.suffix.lower() != ".mp4" or args.poster.suffix.lower() != ".png":
         parser.error("use an .mp4 video and a .png poster")
-    render(args.input, args.output, args.poster)
+    if args.gif and args.gif.suffix.lower() != ".gif":
+        parser.error("use a .gif animation path")
+    render(args.input, args.output, args.poster, args.gif)
 
 
 if __name__ == "__main__":

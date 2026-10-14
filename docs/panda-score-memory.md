@@ -206,7 +206,7 @@ how candidate parameter fitting and trajectory excitation distinguish age
 hypotheses before choosing another memory length; the current data do not
 establish the cause of the clean/noisy difference.
 
-![Saved-data score-memory comparison](../assets/panda_score_memory_pilot.png)
+![Saved-data score-memory comparison](../assets/figures/panda_score_memory.png)
 
 The lower panels use the first seed chosen before execution. It happens
 to contain the cumulative bank's only successful changing-profile final

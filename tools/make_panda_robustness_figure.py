@@ -10,6 +10,8 @@ from pathlib import Path
 
 import numpy as np
 
+from tools.figure_style import apply_style, save_figure
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
@@ -34,6 +36,8 @@ def main(argv=None):
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
+    apply_style()
 
     fig, axes = plt.subplots(2, 2, figsize=(12, 8.5))
     ax = axes[0, 0]
@@ -111,9 +115,8 @@ def main(argv=None):
     ax.legend(fontsize=9)
     ax.grid(alpha=0.2)
     fig.suptitle("Panda sensor-noise / command-delay engineering pilot", fontsize=15)
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(args.output, dpi=160)
+    save_figure(fig, args.output)
     plt.close(fig)
     print(args.output)
 

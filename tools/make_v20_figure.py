@@ -5,7 +5,7 @@ The left panels replay one decision-block episode on the MuJoCo plant with the
 frozen v2.0 configuration, fixed nominal against identified nominal behind the
 same HOCBF filter. The seed is the first motor-fault decision seed on which the
 retained campaign log records a timeout for the fixed arm and a clean success
-for the identified one, so the episode is typical rather than chosen. The right
+for the identified one, so the selection rule is explicit and outcome-conditioned. The right
 panel reads the retained episode table and plots the selected actuator time
 constant against the true one for every adaptive decision episode.
 
@@ -40,6 +40,7 @@ from sarrl.evaluation.planar_v12 import planar_safety_config
 from sarrl.evaluation.planar_v13 import v13_scenarios
 from sarrl.evaluation.safety_audit import evaluate_safety_episodes
 from sarrl.safety import HOCBFSafetyFilter
+from tools.figure_style import apply_style, save_figure
 
 ROOT = Path(__file__).resolve().parents[1]
 TABLE = ROOT / V20_OUTPUT / "episodes.csv"
@@ -130,6 +131,7 @@ def main() -> int:
     parser.add_argument("--output", type=Path, default=ROOT / "assets" / "v20_mujoco_results.png")
     args = parser.parse_args()
 
+    apply_style()
     rows = read_table()
     seed = pick_seed(rows)
     traces = {arm: replay(arm, seed) for arm in ("fixed_hocbf", "adaptive_hocbf")}
@@ -137,7 +139,7 @@ def main() -> int:
     grid = np.asarray(V20_ACTUATOR_GRID)
     abs_error_ms = float(np.mean(np.abs(selected_tau - true_tau))) * 1e3
 
-    plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.right": False})
+    plt.rcParams.update({"axes.spines.top": False, "axes.spines.right": False})
     fig, axes = plt.subplots(1, 3, figsize=(12.0, 3.4), constrained_layout=True)
 
     dt = traces["fixed_hocbf"]["dt"]
@@ -190,7 +192,7 @@ def main() -> int:
     ax.set_title(f"identified time constant, mean error {abs_error_ms:.1f} ms", loc="left")
 
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(args.output, dpi=160)
+    save_figure(fig, args.output)
     print(f"seed {seed}: fixed success {traces['fixed_hocbf']['success']}, ", end="")
     print(f"adaptive success {traces['adaptive_hocbf']['success']}")
     print(f"true tau {traces['adaptive_hocbf']['true_time_constant'] * 1e3:.1f} ms, ", end="")

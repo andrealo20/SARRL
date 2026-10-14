@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-FFD43B.svg?logo=python&logoColor=white&labelColor=3776AB)](https://www.python.org/)
 [![license](https://img.shields.io/badge/license-MIT-f39c12.svg)](LICENSE)
 
-![SARRL banner](assets/banner.png)
+![SARRL and the packaged seven-joint model](assets/figures/project_header.png)
 
 **SARRL** (Safe Adaptive Residual Reinforcement Learning) is a research stack for robotic control under model mismatch. It combines model-based control with bounded residual reinforcement learning, learned dynamics context, uncertainty-aware policy authority and HOCBF safety filtering.
 
@@ -21,9 +21,9 @@ and frozen-data audits. Hardware and sim-to-real results are not claimed.
 
 ## Panda demo
 
-[![Fixed and adaptive Panda replay](assets/panda_demo.png)](assets/panda_demo.mp4)
+[![Fixed and adaptive Panda replay](assets/replays/panda_control.gif)](assets/replays/panda_control.mp4)
 
-[Watch the 24-second comparison](assets/panda_demo.mp4). Both controllers
+[Watch the 24-second comparison](assets/replays/panda_control.mp4). Both controllers
 follow the same joint reference with the same added payload and friction.
 The video replays the first retained paired case, seed `9804300`; three
 seconds of physical time are slowed to twenty-four seconds. The graph shows
@@ -31,6 +31,18 @@ the maximum joint-reference error. This single, noise-free episode illustrates
 the [adaptation pilot](docs/panda-adaptation.md), which retained twenty pairs
 per condition. See [demo reproduction](docs/demo.md) for hashes, dependencies
 and rendering commands.
+
+### Robot motion and recorded path
+
+[![Nominal Panda motion and tip path](assets/replays/panda_motion.gif)](assets/replays/panda_motion.mp4)
+
+[Watch the 12-second motion replay](assets/replays/panda_motion.mp4). The teal
+line follows the recorded attachment-site path; the orange point marks the
+target. This is the first nominal pilot episode, seed `9804000`, with three
+physical seconds slowed to twelve seconds. It demonstrates joint-trajectory
+tracking with a matched model, without adaptation, residual learning or a
+safety certificate. Both animations use saved states rather than new physical
+simulation steps. Full-resolution MP4 files are linked from the GIFs.
 
 ## Selected evidence
 
@@ -49,6 +61,14 @@ executed checks are recorded in [verification](docs/verification.md).
 
 ## How it works
 
+[![Planar and Panda control paths](assets/figures/control_paths.png)](assets/figures/control_paths.svg)
+
+The two paths have different evaluated scope. The planar stack combines
+model-based control, residual SAC and HOCBF projection. Panda identification
+updates the computed-torque model from causal measured transitions and sent
+commands. The diagram shows these components, not a seven-joint safety claim.
+
+
 SARRL starts from a physics-based controller and lets SAC learn only a bounded correction:
 
 ```math
@@ -56,6 +76,81 @@ SARRL starts from a physics-based controller and lets SAC learn only a bounded c
 ```
 
 This narrows the learning problem to compensating for model mismatch. The repository also includes domain randomization, fault injection, a causal GRU context encoder, residual-dynamics ensembles, uncertainty gating and hard HOCBF projection. Components are modular and independently testable.
+
+## Experiments in pictures
+
+Each figure below comes from retained evidence. Click a plot for its scalable
+SVG version. Full protocols describe the conditions, sampling and limits.
+
+### Nominal model and seven-joint tracking
+
+[![Panda model, recorded tip path and joint tracking errors](assets/figures/panda_nominal.png)](assets/figures/panda_nominal.svg)
+
+The first nominal episode shows the packaged collision geometry and tip path.
+The adjacent panel separates the tracking error of all seven joints.
+[Nominal protocol](docs/panda.md).
+
+### Payload and friction identification
+
+[![Paired controller results and online parameter estimates](assets/figures/panda_adaptation.png)](assets/figures/panda_adaptation.svg)
+
+The pilot separates payload and added friction, then combines them. Every
+paired endpoint error is shown, together with a first-seed trace and parameter
+estimates. Accurate tracking does not imply accurate identification of every
+joint's friction. [Adaptation protocol](docs/panda-adaptation.md).
+
+### Sensor noise and command delay
+
+[![Noise and delay effects on Panda tracking and estimates](assets/figures/panda_robustness.png)](assets/figures/panda_robustness.svg)
+
+Noise and transport delay stress the same fixed and adaptive controllers.
+The plots distinguish tracking from parameter estimation under the tested
+conditions. [Noise and delay protocol](docs/panda-robustness.md).
+
+### Command alignment and queued-command prediction
+
+[![Panda delay identification and prediction comparison](assets/figures/panda_delay.png)](assets/figures/panda_delay.svg)
+
+The comparison separates alignment, selection of a delay hypothesis and
+prediction through the command queue. Prediction is experimental; alignment
+alone remains the reference. [Delay protocol](docs/panda-delay.md).
+
+### Wider postures and constant delays
+
+[![Tracking and identification across two postures and five delays](assets/figures/panda_posture_delay.png)](assets/figures/panda_posture_delay.svg)
+
+Two sampled posture ranges and delays from 0 to 40 ms test the frozen
+controllers. The noisy-condition plots show final error, tracking RMS and
+payload error; the final panel shows two coordinates of the paired start poses.
+[Posture and delay protocol](docs/panda-posture-delay.md).
+
+### Changing packet latency
+
+[![Warm startup and changing-latency comparison](assets/figures/panda_variable_delay.png)](assets/figures/panda_variable_delay.svg)
+
+Reaching the target and identifying the active delay are separate outcomes.
+The cumulative bank tracks the tasks while retaining the initial delay in the
+changing cases. Applied command age is a labelled diagnostic, not an input
+available to the bank. [Variable-latency protocol](docs/panda-variable-delay.md).
+
+### Finite score memory and its tracking cost
+
+[![Cumulative, exponential and window score-memory comparison](assets/figures/panda_score_memory.png)](assets/figures/panda_score_memory.svg)
+
+Shorter memory recovers the final age in some changing cases, but both tested
+variants worsen noisy tracking. The first-seed transition panels show why a
+correct final selection alone is insufficient to assess the controller.
+[Score-memory protocol](docs/panda-score-memory.md).
+
+### Planar adaptive control under a motor fault
+
+[![Planar motor-fault replay and actuator time-constant identification](assets/figures/planar_mujoco.png)](assets/figures/planar_mujoco.svg)
+
+An illustrative motor-fault replay compares fixed and identified control
+behind the same HOCBF filter. Its seed is selected by the documented
+timeout-versus-success rule; it is not an unselected population sample.
+The third panel includes all 5,700 adaptive decision episodes from v2.0.
+[Campaign results](docs/results.md) and [visual reproduction](docs/visuals.md).
 
 ## Quick start
 

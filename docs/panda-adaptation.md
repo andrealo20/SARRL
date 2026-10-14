@@ -186,7 +186,7 @@ MuJoCo 3.15.0 changes the first nominal episode's maximum torque by
 verify exact equivalence of the original and zero-parameter XML-loading
 paths within each engine; they do not relax the pilot's reproduction guard.
 
-![Paired tracking and parameter estimates](../assets/panda_adaptation_pilot.png)
+![Paired tracking and parameter estimates](../assets/figures/panda_adaptation.png)
 
 The figure uses only the retained episodes and traces, without new physical
 steps. To generate another copy:

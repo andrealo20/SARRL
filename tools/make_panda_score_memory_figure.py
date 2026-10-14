@@ -8,6 +8,8 @@ import hashlib
 import json
 from pathlib import Path
 
+from tools.figure_style import apply_style, save_figure
+
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
@@ -27,6 +29,8 @@ def main(argv=None):
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
+    apply_style()
 
     fig, axes = plt.subplots(2, 2, figsize=(13, 9))
     profiles = ("fixed10", "fixed40", "up", "down")
@@ -85,9 +89,8 @@ def main(argv=None):
         ax.grid(alpha=0.2)
         ax.legend(fontsize=8)
     fig.suptitle("Panda delay-score memory comparison", fontsize=15)
-    fig.tight_layout(rect=(0, 0, 1, 0.96))
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(args.output, dpi=160)
+    save_figure(fig, args.output)
     plt.close(fig)
     print(args.output)
 

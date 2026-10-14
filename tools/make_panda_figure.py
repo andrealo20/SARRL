@@ -10,6 +10,7 @@ from pathlib import Path
 import numpy as np
 
 from sarrl.robots.panda import load_panda_model, model_provenance, mujoco
+from tools.figure_style import apply_style, save_figure
 
 
 def main(argv=None) -> None:
@@ -33,6 +34,8 @@ def main(argv=None) -> None:
 
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
+
+    apply_style()
 
     model = load_panda_model(manifest["config"]["timestep"])
     data = mujoco.MjData(model)
@@ -82,12 +85,11 @@ def main(argv=None) -> None:
     axes[1].legend(fontsize=8, ncol=2)
     first = episodes[0]
     axes[1].set_title(
-        f"Seed {first['seed']}; contacts: {first['contact_substeps']}\n"
-        f"Final tip error {1000 * first['tip_error_m']:.2g} mm"
+        f"Seed {first['seed']}; contact substeps: {first['contact_substeps']}\n"
+        f"Final tip error: {1000 * first['tip_error_m']:.6f} mm"
     )
-    fig.tight_layout()
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    fig.savefig(args.output, dpi=160)
+    save_figure(fig, args.output)
     plt.close(fig)
     print(args.output)
 

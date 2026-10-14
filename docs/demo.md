@@ -52,10 +52,14 @@ are never overwritten:
 ```bash
 python -m tools.render_panda_demo \
   --output demo-output/panda.mp4 \
-  --poster demo-output/panda.png
+  --poster demo-output/panda.png \
+  --gif demo-output/panda.gif
 ```
 
 On headless Linux with EGL support, set `MUJOCO_GL=egl` before starting Python.
 The renderer requires a working OpenGL backend. FFmpeg is supplied by the
 `imageio-ffmpeg` dependency. The command prints its evidence directory,
 episode seed, final errors and zero physical simulation steps.
+
+The README also includes a nominal motion replay with its recorded tip path.
+See [visual reproduction](visuals.md) for both animations and all plot commands.

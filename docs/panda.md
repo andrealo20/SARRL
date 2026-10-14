@@ -104,7 +104,7 @@ records the then-uncommitted changes. All eight recorded source hashes were
 subsequently checked against that commit, as recorded in `source_link.json`.
 The original manifest and completion marker are retained unchanged.
 
-![Panda and joint tracking on the first pilot seed](../assets/panda_nominal_tracking.png)
+![Panda and joint tracking on the first pilot seed](../assets/figures/panda_nominal.png)
 
 The figure replays the first recorded episode; rendering does not advance
 the simulator. To write a fresh copy, install the `figures` extra and run:
