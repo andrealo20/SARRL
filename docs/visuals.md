@@ -1,8 +1,8 @@
 # Visual reproduction
 
 The result figures and replay captions use a shared
-STIX General serif family, supplied by Matplotlib. The README uses the original
-project banner.
+STIX General serif family, supplied by Matplotlib. The README uses the supplied
+`assets/banner.svg` artwork without changes to its lettering or geometry.
 Figures have larger type, external
 legends, separate title bands and both PNG and scalable SVG exports. The
 README architecture uses two native Mermaid diagrams rendered by GitHub. Its

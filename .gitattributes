@@ -9,6 +9,7 @@
 *.png binary
 *.pt binary
 *.npz binary
+assets/banner.svg -text
 
 # The packaged Panda model and meshes are checked by their exact bytes.
 sarrl/assets/panda/** -text
