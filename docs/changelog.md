@@ -4,8 +4,8 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: visual guide
 
-- Added two Panda GIFs, full-resolution video links, a native Mermaid
-  architecture diagram and three explained result plots to the README.
+- Added two Panda GIFs, full-resolution video links, two native Mermaid
+  architecture diagrams and three explained result plots to the README.
   The results documentation indexes all eight figures.
 - Added shared STIX typography, external legends, PNG/SVG exports and layout
   checks that reject clipped labels or overlapping neighbouring panels.

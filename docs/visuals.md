@@ -4,7 +4,7 @@ The result figures and replay captions use a shared
 STIX General serif family, supplied by Matplotlib. The README keeps the
 original project banner. Figures have larger type, external
 legends, separate title bands and both PNG and scalable SVG exports. The
-README architecture is a native Mermaid diagram rendered by GitHub. Its
+README architecture uses two native Mermaid diagrams rendered by GitHub. Its
 three result figures cover payload/friction adaptation, posture/delay limits
 and the planar motor-fault comparison. All eight result figures are indexed
 in [results](results.md). Plot

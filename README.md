@@ -67,29 +67,32 @@ executed checks are recorded in [verification](docs/verification.md).
 
 ## How it works
 
+### Planar: residual learning and safety
+
 ```mermaid
-flowchart TB
-    subgraph planar["Planar arm: residual learning and safety"]
-        direction LR
-        nominal["Model-based control"] --> correction["Add bounded SAC correction"]
-        correction --> filter["HOCBF filter"]
-        filter --> arm["2-DoF plant"]
-        arm -. "Measured state" .-> nominal
-    end
-    subgraph panda["Panda: joint control and identification"]
-        direction LR
-        reference["Joint reference"] --> torque["Computed-torque control"]
-        torque --> robot["Seven-joint plant"]
-        robot -. "Positions and velocities" .-> estimate["Payload / friction estimate"]
-        torque -. "Sent commands" .-> estimate
-        estimate -. "Updated model" .-> torque
-    end
+flowchart LR
+    nominal["Model-based control"] --> correction["Add bounded SAC correction"]
+    correction --> filter["HOCBF filter"]
+    filter --> arm["2-DoF plant"]
+    arm -. "Measured state" .-> nominal
+```
+
+### Panda: joint control and identification
+
+```mermaid
+flowchart LR
+    reference["Joint reference"] --> torque["Computed-torque control"]
+    torque --> robot["Seven-joint plant"]
+    robot -. "Positions and velocities" .-> estimate["Payload / friction estimate"]
+    torque -. "Sent commands" .-> estimate
+    estimate -. "Updated model" .-> torque
 ```
 
 The two paths have different evaluated scope. The planar stack combines
 model-based control, residual SAC and HOCBF projection. Panda identification
 updates the computed-torque model from causal measured transitions and sent
-commands. The diagram shows these components, not a seven-joint safety claim.
+commands. The diagrams show the evaluated components. Seven-joint safety
+filtering remains future work.
 
 
 SARRL starts from a physics-based controller and lets SAC learn only a bounded correction:

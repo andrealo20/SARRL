@@ -8,7 +8,7 @@ planned.
 ### Focused README and Panda endpoint comparison
 
 The README now selects three result figures and uses native Mermaid for
-the control diagram. The other figures remain indexed in the result document.
+the two control diagrams. The other figures remain indexed in the result document.
 The original banner is unchanged.
 
 The revised paired replay retains seed `9804300` and all saved joint states.
