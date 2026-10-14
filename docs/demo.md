@@ -8,10 +8,9 @@ protocol, without ranking outcomes. The adaptive controller's recorded inputs
 are causal positions, velocities and sent commands; plant parameters remain
 diagnostics.
 
-The comparison MP4 is rendered at 1920 by 2016 pixels; its GIF preview is
-1200 pixels wide. The nominal motion MP4 is 1920 by 1600. Scenes, captions
-and curves use the higher native resolution. See [visual reproduction](visuals.md)
-for the dimensions and preview settings.
+Both MP4s are rendered at 3840 by 2160 pixels, with native scenes, captions
+and curves. The existing portrait GIF previews remain 1200 pixels wide.
+See [visual reproduction](visuals.md) for the dimensions and preview settings.
 
 The trace covers three seconds in 301 samples. The 24-second video slows
 playback to one eighth of physical speed and repeats the nearest saved state.
@@ -23,9 +22,9 @@ Both arms follow the same commanded trajectory. Their actual joint states
 differ, but the shared camera view makes a few centimetres of endpoint offset
 hard to see. The revised replay adds a gold target cross and colored tip trails
 to each robot view. During the final settling second, both cameras zoom
-toward the same target with identical settings. Below them, the joint-error
-plot reports degrees and a
-close-up plots the actual tip in the X-Z plane relative to the target, in mm.
+toward the same target with identical settings. In the 4K MP4, plots to the
+right report joint error in degrees and tip position in the X-Z plane relative
+to the target, in mm. The portrait GIF keeps these plots below the robot views.
 Its black cross marks the target. The axes have equal physical scale; no
 joint displacement is amplified.
 The tip dot, target cross and connecting line are projected with the rendered
@@ -77,10 +76,9 @@ the release's full source archive. Choose new paths because existing outputs
 are never overwritten:
 
 ```bash
-python -m tools.render_panda_demo \
-  --output demo-output/panda.mp4 \
-  --poster demo-output/panda.png \
-  --gif demo-output/panda.gif --gif-width 1200
+python -m tools.render_panda_4k --mode comparison \
+  --output demo-output/panda-4k.mp4 \
+  --poster demo-output/panda-4k.png
 ```
 
 On headless Linux with EGL support, set `MUJOCO_GL=egl` before starting Python.

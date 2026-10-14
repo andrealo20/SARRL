@@ -23,11 +23,15 @@ with the model; the payload changes inertia without adding a visible object.
 
 ## Media resolution
 
-The comparison video is 1920 by 2016 pixels; the nominal motion video is
-1920 by 1600. Robot scenes, plot paths and captions are rendered at these
-dimensions from saved states. Both dimensions are twice the previous size,
-giving four times as many pixels. Playback remains 15 fps over 24 and 12
-seconds respectively. GIF previews use 1200-pixel width and 8 fps.
+Both MP4s are rendered natively at 3840 by 2160 pixels. The comparison uses
+two robot views beside vertically stacked plots; the nominal replay uses a
+wide robot viewport. Captions and curves are rendered at the output size.
+The encoder uses H.264 High, level 5.1, YUV 4:2:0, CRF 18 and fast-start
+metadata. Playback remains 15 fps over 24 and 12 seconds respectively.
+
+The existing portrait GIFs and posters are preserved. GIF previews use
+1200-pixel width and 8 fps. Their original renderers remain available for
+reproduction; the 4K renderer produces MP4s and optional fresh posters.
 
 The README embeds the three vector plots directly. PNG copies remain available
 from the result index. The original banner and the native Mermaid diagrams
@@ -40,12 +44,26 @@ From a repository checkout, install `.[demo]`, or use the Python 3.12
 Existing outputs are not overwritten, so use a fresh destination:
 
 ```bash
+python -m tools.render_panda_4k --mode comparison \
+  --output visual-output/control-4k.mp4
+python -m tools.render_panda_4k --mode motion \
+  --output visual-output/motion-4k.mp4
+```
+
+To reproduce the existing portrait previews and posters:
+
+```bash
 python -m tools.render_panda_demo \
   --output visual-output/control.mp4 --poster visual-output/control.png \
   --gif visual-output/control.gif --gif-width 1200
 python -m tools.render_panda_motion \
   --output visual-output/motion.mp4 --poster visual-output/motion.png \
   --gif visual-output/motion.gif --gif-width 1200
+```
+
+To reproduce the result figures:
+
+```bash
 python -m tools.make_visual_overview --output visual-output/overview
 python -m tools.make_panda_figure --output visual-output/nominal.png
 python -m tools.make_panda_adaptation_figure --output visual-output/adaptation.png

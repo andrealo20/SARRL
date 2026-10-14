@@ -5,6 +5,24 @@ planned.
 
 ## v2.3.1 demonstration checks
 
+### Native 4K video playback
+
+Both MP4s were regenerated at 3840 by 2160 pixels with H.264 High level 5.1,
+YUV 4:2:0 and CRF 18. The comparison arranges two native robot viewports beside
+the error plots. Its 360 frames cover 24 seconds; nominal motion uses 180
+frames over 12 seconds. Both remain 15 fps. The encoded files are 3,905,792
+and 1,041,916 bytes, each below 10 MB.
+
+All 540 frames decoded successfully. Sampled initial, middle, settling and
+final frames were inspected; caption bands and chart canvas bounds passed.
+Both videos completed browser playback with decoded dimensions of 3840 by
+2160 and no media error. Local links and all seven completion markers passed.
+The 32-test targeted suite and lint passed. Final paired tip errors remain
+37.918834 mm and 0.008527 mm. Rendering performed no physical simulation steps.
+
+The existing banner, PNG/SVG figures, posters and GIF previews are unchanged.
+The portrait preview renderers remain available alongside the new MP4 renderer.
+
 ### Native higher-resolution replays and vector figures
 
 Both replays were regenerated from the same hash-verified saved states.

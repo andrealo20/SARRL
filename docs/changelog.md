@@ -15,6 +15,8 @@ This file records implemented release increments. Performance evidence is kept s
   X-Z close-up to show the fixed/adaptive Panda tracking difference.
 - Doubled both video dimensions using native scene, chart and caption rendering.
   GIF previews are wider, and the README embeds its three result plots as SVG.
+- Added native 3840-by-2160 MP4 replays, with a landscape comparison layout
+  and H.264 High level 5.1 encoding. Existing images and GIF previews are preserved.
 
 ## v2.3.1: Panda demonstration and reference environment
 

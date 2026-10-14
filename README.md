@@ -23,16 +23,16 @@ and frozen-data audits. Hardware and sim-to-real results are not claimed.
 
 [![Fixed and adaptive Panda replay](assets/replays/panda_control.gif)](assets/replays/panda_control.mp4)
 
-[Watch the 24-second comparison, 1920 × 2016](assets/replays/panda_control.mp4). Both controllers
+[Watch the 24-second comparison in 4K, 3840 × 2160](assets/replays/panda_control.mp4). Both controllers
 follow the same joint reference with the same added payload and friction.
 The video replays the first retained paired case, seed `9804300`; three
 seconds of physical time are slowed to twenty-four seconds. Both arms move
 toward the same target, but the fixed model leaves a visible offset: its tip
 ends 37.919 mm from the target, versus 0.009 mm for adaptive. The gold cross
 marks the target, colored trails show the actual motion, and both cameras
-zoom toward the same target during settling. The lower-right panel plots the
-final approach in physical millimetres. The lower-left
-graph shows the maximum joint-reference error in degrees. This single,
+zoom toward the same target during settling. The right-hand plots show
+maximum joint-reference error in degrees and the final approach in physical
+millimetres. The GIF preview keeps the same plots below the robot views. This single,
 noise-free episode illustrates
 the [adaptation pilot](docs/panda-adaptation.md), which retained twenty pairs
 per condition. See [demo reproduction](docs/demo.md) for hashes, dependencies
@@ -42,7 +42,7 @@ and rendering commands.
 
 [![Nominal Panda motion and tip path](assets/replays/panda_motion.gif)](assets/replays/panda_motion.mp4)
 
-[Watch the 12-second motion replay, 1920 × 1600](assets/replays/panda_motion.mp4). The teal
+[Watch the 12-second motion replay in 4K, 3840 × 2160](assets/replays/panda_motion.mp4). The teal
 line follows the recorded attachment-site path; the orange point marks the
 target. This is the first nominal pilot episode, seed `9804000`, with three
 physical seconds slowed to twelve seconds. It demonstrates joint-trajectory
