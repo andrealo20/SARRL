@@ -1,7 +1,8 @@
 # Visual reproduction
 
-The README uses a shared STIX General serif family, supplied by Matplotlib,
-for labels, plots and replay captions. Figures have larger type, external
+The result figures, architecture diagram and replay captions use a shared
+STIX General serif family, supplied by Matplotlib. The README keeps the
+original project banner. Figures have larger type, external
 legends, separate title bands and both PNG and scalable SVG exports. Plot
 generators check canvas bounds and separation of neighbouring panels before
 writing. Replay captions have reserved text bands whose bounds are checked
