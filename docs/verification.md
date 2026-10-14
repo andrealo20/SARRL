@@ -3,6 +3,30 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## v2.3.1 demonstration checks
+
+The paired video was rendered from the hash-verified adaptation pilot's first
+payload/friction case, seed `9804300`, without new physical simulation steps.
+Its final error values match the retained episode records. All 360 encoded
+frames decoded at 960 by 720 pixels and 15 fps, giving a 24-second video;
+the initial, middle and final images were inspected. Documentation links passed.
+Rendering used Python 3.12.3, MuJoCo 3.13.0 with EGL, Matplotlib 3.11.2,
+Pillow 12.3.0 and imageio-ffmpeg 0.6.0.
+
+The targeted release, demo-integrity, Panda model and adaptation suite passed
+31 tests. The complete lint check passed. The demo tests reject modified
+evidence and check that the replay uses the first retained paired case.
+The reference file's direct dependency versions match the installed runtime.
+Only the package version changed under `sarrl/`; controller arithmetic and
+original evidence files remain unchanged.
+
+The wheel and source distribution built successfully. The installed wheel,
+outside the checkout with numerical dependencies reused, reported package and
+distribution version 2.3.1, verified all twelve model files and ran the nominal
+example successfully for 300 control steps without clipping or an unsafe event.
+All seven pilot completion markers and 173 frozen source blobs passed again,
+covering 7,060 retained new episode records.
+
 ## v2.3 release checks
 
 The release tree passed 558 tests with one skip for unavailable local
