@@ -1957,3 +1957,12 @@ within-phase bounded fits distinguish the final age in all 24 changing
 traces in both post-switch phases. The next controlled comparison should
 isolate candidate estimator memory while holding score memory fixed.
 These offline findings do not establish improved closed-loop tracking.
+
+## Panda candidate parameter memory
+
+The [frozen comparison](panda-estimator-memory.md) changes candidate RLS
+memory while keeping exponential score memory at fifty transitions.
+Twenty new paired seeds cover sixteen conditions and six arms, after
+reproducing all 1,920 previous records. Per-joint tracking, constant-age
+selection and physical outcomes must pass alongside changing-age gains
+before a separate confirmation study can consider the candidate.

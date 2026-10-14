@@ -4,6 +4,10 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: latency diagnostics
 
+- Added bounded candidate parameter forgetting with fixed score memory,
+  a reproduce-first paired comparison and causal evidence auditing.
+- Defined per-joint tracking, age-selection and physical-violation gates
+  before opening the reserved seed block.
 - Adopted the supplied SVG banner in the README.
 - Added causal replay, phase-specific parameter fits and information
   diagnostics for retained Panda delay-bank traces. Inputs and controller

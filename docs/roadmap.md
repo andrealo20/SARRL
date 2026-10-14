@@ -22,7 +22,8 @@ conditioning in the retained traces.
 
 The [saved-trace diagnosis](panda-latency-diagnosis.md) defines this first
 stage of v2.4. Its retrospective fits and score resets are diagnostic;
-the next controller comparison requires a separate frozen protocol.
+the [candidate parameter-memory comparison](panda-estimator-memory.md)
+holds score memory fixed and defines its decision rule before new episodes.
 
 The first Panda safety increment targets joint constraints. General collision
 avoidance requires a separate formulation and evaluation. Hardware and
