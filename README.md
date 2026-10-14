@@ -71,8 +71,8 @@ executed checks are recorded in [verification](docs/verification.md).
 
 ```mermaid
 flowchart LR
-    nominal["Model-based control"] --> correction["Add bounded SAC correction"]
-    correction --> filter["HOCBF filter"]
+    nominal["Model-based<br/>control"] --> correction["Bounded SAC<br/>correction"]
+    correction --> filter["HOCBF<br/>filter"]
     filter --> arm["2-DoF plant"]
     arm -. "Measured state" .-> nominal
 ```
@@ -81,9 +81,9 @@ flowchart LR
 
 ```mermaid
 flowchart LR
-    reference["Joint reference"] --> torque["Computed-torque control"]
-    torque --> robot["Seven-joint plant"]
-    robot -. "Positions and velocities" .-> estimate["Payload / friction estimate"]
+    reference["Joint<br/>reference"] --> torque["Computed-torque<br/>control"]
+    torque --> robot["Seven-joint<br/>plant"]
+    robot -. "Joint state" .-> estimate["Payload /<br/>friction<br/>estimate"]
     torque -. "Sent commands" .-> estimate
     estimate -. "Updated model" .-> torque
 ```
