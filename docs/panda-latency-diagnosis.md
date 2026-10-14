@@ -30,6 +30,9 @@ NumPy/MuJoCo versions must match. Every bank is replayed causally from measured
 states and sent commands. Selected parameters, final candidate estimates,
 scores, bound hits and the entire selection history must reproduce the
 retained records. No delivered torque or true parameter enters that replay.
+Floating-point replay checks use the existing reproduction tolerances
+(`rtol=1e-9`, `atol=1e-10`); candidate choices, counts and hashes remain exact.
+The original diagnosis artifacts and source commit remain unchanged.
 
 Retrospective diagnostics use the recorded applied ages and true parameters
 only after replay validation:

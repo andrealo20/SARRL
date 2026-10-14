@@ -50,6 +50,8 @@ execution. First reproduce all 1,920 retained score-memory episodes. Every
 record field must match within the existing reproduction tolerances before
 opening a new seed. Sources, numerical runtime and the packaged robot model
 are checked against the retained reference.
+Saved-state estimator replay uses the same numerical tolerances
+(`rtol=1e-9`, `atol=1e-10`); hashes and categorical outcomes remain exact.
 
 The new run retains every episode, first-seed traces for all 96 cells,
 reproduction and decision reports, source hashes and completion hashes.

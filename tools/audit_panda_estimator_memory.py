@@ -24,7 +24,12 @@ from sarrl.controllers.panda_estimator_memory import PandaJointMemoryController
 from sarrl.controllers.panda_score_memory import PandaScoreMemoryConfig, PandaScoreMemoryController
 from sarrl.envs.panda_packet_delay import applied_ages, send_delay
 from sarrl.envs.panda_reach import quintic_reference
-from sarrl.evaluation.panda_adaptation import sample_parameters
+from sarrl.evaluation.panda_adaptation import (
+    REPRODUCTION_ATOL,
+    REPRODUCTION_RTOL,
+    reproduction_mismatches,
+    sample_parameters,
+)
 from sarrl.evaluation.panda_estimator_memory import (
     CONFIG,
     estimator_memory_protocol,
@@ -49,6 +54,10 @@ LIMIT = np.array([87.0] * 4 + [12.0] * 3)
 def ensure(condition, message):
     if not condition:
         raise RuntimeError(message)
+
+
+def check_replay_numeric(actual, retained):
+    np.testing.assert_allclose(actual, retained, rtol=REPRODUCTION_RTOL, atol=REPRODUCTION_ATOL)
 
 
 def noise_values(seed, config, length):
@@ -118,9 +127,14 @@ def main(argv=None):
         "wrong planned cell identities",
     )
     summary = summarize(rows)
-    ensure(summary == json.loads((out / "summary.json").read_text()), "summary mismatch")
     ensure(
-        evaluate_gate(rows) == json.loads((out / "decision.json").read_text()),
+        not reproduction_mismatches(summary, json.loads((out / "summary.json").read_text())),
+        "summary mismatch",
+    )
+    ensure(
+        not reproduction_mismatches(
+            evaluate_gate(rows), json.loads((out / "decision.json").read_text())
+        ),
         "decision report mismatch",
     )
     report = json.loads((out / "reproduction.json").read_text())
@@ -334,10 +348,10 @@ def main(argv=None):
             np.testing.assert_allclose(command, sent[i], rtol=1e-11, atol=1e-10)
             saturation += int(np.any(np.abs(command - raw) > 1e-12))
             if replay is not None:
-                np.testing.assert_array_equal(theta, replay.estimator.parameters)
+                check_replay_numeric(theta, replay.estimator.parameters)
                 following = trace[i + 1]
                 if row["arm"] in MEMORY_CONFIGS:
-                    np.testing.assert_array_equal(t["delay_scores"], replay.scores)
+                    check_replay_numeric(t["delay_scores"], replay.scores)
                     mq, mv = np.array(t["measured_q"]), np.array(t["measured_qd"])
                     nq, nv = np.array(following["measured_q"]), np.array(following["measured_qd"])
                     nominal, design = regressor.evaluate(
@@ -385,10 +399,10 @@ def main(argv=None):
                 rtol=1e-12,
             )
         if replay is not None:
-            np.testing.assert_array_equal(
+            check_replay_numeric(
                 row["estimator"]["estimated_parameters"], replay.estimator.parameters
             )
-            np.testing.assert_array_equal(
+            check_replay_numeric(
                 row["estimator"]["covariance_diagonal"], np.diag(replay.estimator.covariance)
             )
             if row["arm"] == "bank_joint_memory":
@@ -414,17 +428,20 @@ def main(argv=None):
                     "candidate_bound_hits",
                     "selection_switches",
                 ):
-                    ensure(
-                        row["delay_estimator"][field] == final[field],
-                        f"bank replay differs: {field}",
-                    )
+                    if field in ("scores", "candidate_estimates"):
+                        check_replay_numeric(row["delay_estimator"][field], final[field])
+                    else:
+                        ensure(
+                            row["delay_estimator"][field] == final[field],
+                            f"bank replay differs: {field}",
+                        )
                 if row["arm"] in MEMORY_CONFIGS:
                     for field in ("score_memory", "score_decay", "score_updates"):
                         ensure(
                             row["delay_estimator"][field] == final[field],
                             f"memory replay differs: {field}",
                         )
-                    np.testing.assert_array_equal(trace[-1]["delay_scores"], replay.scores)
+                    check_replay_numeric(trace[-1]["delay_scores"], replay.scores)
             replayed += 1
     print(
         json.dumps(

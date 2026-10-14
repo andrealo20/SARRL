@@ -8,6 +8,8 @@ This file records implemented release increments. Performance evidence is kept s
   a reproduce-first paired comparison and causal evidence auditing.
 - Defined per-joint tracking, age-selection and physical-violation gates
   before opening the reserved seed block.
+- Applied recorded reproduction tolerances to floating-point diagnostic
+  replay while preserving exact hashes and categorical checks.
 - Adopted the supplied SVG banner in the README.
 - Added causal replay, phase-specific parameter fits and information
   diagnostics for retained Panda delay-bank traces. Inputs and controller

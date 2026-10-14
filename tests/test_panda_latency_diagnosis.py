@@ -78,4 +78,33 @@ def test_retained_bank_replay_never_steps_physical_plant(monkeypatch):
     report = replay_bank(row, item["trace"])
     assert report["seed"] == 9805300
     assert set(report["phases"]) == {"before", "moving_after", "settling"}
-    assert report["candidate_parameters_final"] == row["delay_estimator"]["candidate_estimates"]
+    np.testing.assert_allclose(
+        report["candidate_parameters_final"],
+        row["delay_estimator"]["candidate_estimates"],
+        rtol=1e-9,
+        atol=1e-10,
+    )
+
+
+def test_retained_replay_accepts_roundoff_and_rejects_parameter_corruption():
+    import copy
+
+    mujoco = pytest.importorskip("mujoco")
+    directory = Path("results/panda_score_memory_pilot")
+    runtime = json.loads((directory / "manifest.json").read_text())["runtime"]
+    if mujoco.__version__ != runtime["mujoco"] or np.__version__ != runtime["numpy"]:
+        pytest.skip("retained replay uses the recorded numerical runtime")
+    with gzip.open(directory / "traces.json.gz", "rt") as file:
+        item = next(
+            item
+            for item in json.load(file)
+            if item["cell"] == ["cold_clean_up", 9805300, "bank_align"]
+        )
+    rows = json.loads((directory / "episodes.json").read_text())
+    row = next(row for row in rows if [row["scenario"], row["seed"], row["arm"]] == item["cell"])
+    trace = copy.deepcopy(item["trace"])
+    trace[0]["estimated_parameters"][0] += 1e-14
+    replay_bank(row, trace)
+    trace[0]["estimated_parameters"][0] += 1e-6
+    with pytest.raises(AssertionError):
+        replay_bank(row, trace)

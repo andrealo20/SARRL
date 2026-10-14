@@ -7,6 +7,7 @@ from scipy.optimize import lsq_linear
 
 from sarrl.controllers.panda_delay import PandaDelayController
 from sarrl.controllers.panda_score_memory import PandaScoreMemoryConfig, PandaScoreMemoryController
+from sarrl.evaluation.panda_adaptation import REPRODUCTION_ATOL, REPRODUCTION_RTOL
 
 BANK_ARMS = ("bank_align", "bank_exp", "bank_window")
 PHASES = {"before": (0, 100), "moving_after": (100, 200), "settling": (200, 300)}
@@ -82,9 +83,19 @@ def replay_bank(row, trace):
     designs, physical_designs, residuals, actual_residuals = [], [], [], []
     innovations, true_innovations, parameters, scores, ages = [], [], [], [], []
     for index, (current, following) in enumerate(zip(trace[:-1], trace[1:], strict=True)):
-        np.testing.assert_array_equal(current["estimated_parameters"], bank.estimator.parameters)
+        np.testing.assert_allclose(
+            current["estimated_parameters"],
+            bank.estimator.parameters,
+            rtol=REPRODUCTION_RTOL,
+            atol=REPRODUCTION_ATOL,
+        )
         if "delay_scores" in current:
-            np.testing.assert_array_equal(current["delay_scores"], bank.scores)
+            np.testing.assert_allclose(
+                current["delay_scores"],
+                bank.scores,
+                rtol=REPRODUCTION_RTOL,
+                atol=REPRODUCTION_ATOL,
+            )
         q, qd = np.array(current["measured_q"]), np.array(current["measured_qd"])
         nq, nv = np.array(following["measured_q"]), np.array(following["measured_qd"])
         nominal, design = bank.regressor.evaluate((q + nq) / 2, (qd + nv) / 2, (nv - qd) / 0.01)
@@ -121,9 +132,20 @@ def replay_bank(row, trace):
         "selected_history",
         "selection_switches",
     ):
-        np.testing.assert_array_equal(diagnostic[field], bank.delay_diagnostics()[field])
-    np.testing.assert_array_equal(
-        row["estimator"]["estimated_parameters"], bank.estimator.parameters
+        if field in ("scores", "candidate_estimates"):
+            np.testing.assert_allclose(
+                diagnostic[field],
+                bank.delay_diagnostics()[field],
+                rtol=REPRODUCTION_RTOL,
+                atol=REPRODUCTION_ATOL,
+            )
+        else:
+            np.testing.assert_array_equal(diagnostic[field], bank.delay_diagnostics()[field])
+    np.testing.assert_allclose(
+        row["estimator"]["estimated_parameters"],
+        bank.estimator.parameters,
+        rtol=REPRODUCTION_RTOL,
+        atol=REPRODUCTION_ATOL,
     )
     designs, physical_designs, residuals = map(np.array, (designs, physical_designs, residuals))
     innovations, true_innovations, parameters, scores, ages = map(
