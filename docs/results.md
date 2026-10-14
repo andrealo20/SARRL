@@ -1,5 +1,22 @@
 # Retained results
 
+## Figure index
+
+The README selects three figures. The full set is linked here; SVG versions
+retain legible labels when enlarged. Each protocol states the conditions and
+limits of its comparison.
+
+| Figure | What it measures | Protocol |
+|---|---|---|
+| [Nominal tracking](../assets/figures/panda_nominal.png), [SVG](../assets/figures/panda_nominal.svg) | Recorded tip path and the seven joint errors with a matched model | [Nominal Panda](panda.md) |
+| [Payload and friction](../assets/figures/panda_adaptation.png), [SVG](../assets/figures/panda_adaptation.svg) | Paired endpoint errors and online physical-parameter estimates | [Adaptation](panda-adaptation.md) |
+| [Noise and delay](../assets/figures/panda_robustness.png), [SVG](../assets/figures/panda_robustness.svg) | Tracking and estimation under sensor noise and delayed commands | [Noise and delay](panda-robustness.md) |
+| [Delay alignment and prediction](../assets/figures/panda_delay.png), [SVG](../assets/figures/panda_delay.svg) | Delay selection, command alignment and experimental queue prediction | [Delay identification](panda-delay.md) |
+| [Posture and delay](../assets/figures/panda_posture_delay.png), [SVG](../assets/figures/panda_posture_delay.svg) | Tracking and payload error across two posture ranges and five delays | [Posture grid](panda-posture-delay.md) |
+| [Changing latency](../assets/figures/panda_variable_delay.png), [SVG](../assets/figures/panda_variable_delay.svg) | Task tracking and failure to recover the changing command age | [Variable latency](panda-variable-delay.md) |
+| [Score memory](../assets/figures/panda_score_memory.png), [SVG](../assets/figures/panda_score_memory.svg) | Partial delay recovery and the noisy tracking cost of shorter memory | [Score memory](panda-score-memory.md) |
+| [Planar motor fault](../assets/figures/planar_mujoco.png), [SVG](../assets/figures/planar_mujoco.svg) | An outcome-selected task/torque replay and all retained actuator estimates | [Planar campaign](experiments.md) |
+
 
 ### Task success
 

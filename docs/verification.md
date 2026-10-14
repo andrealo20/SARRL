@@ -5,6 +5,27 @@ planned.
 
 ## v2.3.1 demonstration checks
 
+### Focused README and Panda endpoint comparison
+
+The README now selects three result figures and uses native Mermaid for
+the control diagram. The other figures remain indexed in the result document.
+The original banner is unchanged.
+
+The revised paired replay retains seed `9804300` and all saved joint states.
+Target crosses, projected tip markers, physical-scale paths and identical
+camera zooms expose the endpoint difference. Forward kinematics reproduces
+the retained final tip errors: fixed 37.918834 mm, adaptive 0.008527 mm.
+The close-up uses equal X/Z scales and the last physical second's paths.
+No physical simulation step or parameter fit was performed.
+
+All 360 MP4 frames decoded at 960 by 1008 pixels and 15 fps, giving 24 seconds.
+All 192 GIF frames decoded at 800 by 840 pixels, giving 24.01 seconds with
+looping enabled. Initial, middle, settling and final frames were inspected;
+text bands and chart canvas bounds passed. All local links and the seven
+original completion markers passed. The targeted release, demo, model and
+adaptation suite passed 32 tests, including endpoint-error reproduction.
+Lint passed. Controller sources and retained evidence are unchanged.
+
 ### Visual guide refinement
 
 The README visual guide contains ten static figures and two animated GIFs,

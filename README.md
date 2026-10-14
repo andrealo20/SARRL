@@ -26,8 +26,14 @@ and frozen-data audits. Hardware and sim-to-real results are not claimed.
 [Watch the 24-second comparison](assets/replays/panda_control.mp4). Both controllers
 follow the same joint reference with the same added payload and friction.
 The video replays the first retained paired case, seed `9804300`; three
-seconds of physical time are slowed to twenty-four seconds. The graph shows
-the maximum joint-reference error. This single, noise-free episode illustrates
+seconds of physical time are slowed to twenty-four seconds. Both arms move
+toward the same target, but the fixed model leaves a visible offset: its tip
+ends 37.919 mm from the target, versus 0.009 mm for adaptive. The gold cross
+marks the target, colored trails show the actual motion, and both cameras
+zoom toward the same target during settling. The lower-right panel plots the
+final approach in physical millimetres. The lower-left
+graph shows the maximum joint-reference error in degrees. This single,
+noise-free episode illustrates
 the [adaptation pilot](docs/panda-adaptation.md), which retained twenty pairs
 per condition. See [demo reproduction](docs/demo.md) for hashes, dependencies
 and rendering commands.
@@ -61,7 +67,24 @@ executed checks are recorded in [verification](docs/verification.md).
 
 ## How it works
 
-[![Planar and Panda control paths](assets/figures/control_paths.png)](assets/figures/control_paths.svg)
+```mermaid
+flowchart TB
+    subgraph planar["Planar arm: residual learning and safety"]
+        direction LR
+        nominal["Model-based control"] --> correction["Add bounded SAC correction"]
+        correction --> filter["HOCBF filter"]
+        filter --> arm["2-DoF plant"]
+        arm -. "Measured state" .-> nominal
+    end
+    subgraph panda["Panda: joint control and identification"]
+        direction LR
+        reference["Joint reference"] --> torque["Computed-torque control"]
+        torque --> robot["Seven-joint plant"]
+        robot -. "Positions and velocities" .-> estimate["Payload / friction estimate"]
+        torque -. "Sent commands" .-> estimate
+        estimate -. "Updated model" .-> torque
+    end
+```
 
 The two paths have different evaluated scope. The planar stack combines
 model-based control, residual SAC and HOCBF projection. Panda identification
@@ -82,75 +105,57 @@ This narrows the learning problem to compensating for model mismatch. The reposi
 Each figure below comes from retained evidence. Click a plot for its scalable
 SVG version. Full protocols describe the conditions, sampling and limits.
 
-### Nominal model and seven-joint tracking
-
-[![Panda model, recorded tip path and joint tracking errors](assets/figures/panda_nominal.png)](assets/figures/panda_nominal.svg)
-
-The first nominal episode shows the packaged collision geometry and tip path.
-The adjacent panel separates the tracking error of all seven joints.
-[Nominal protocol](docs/panda.md).
-
 ### Payload and friction identification
 
 [![Paired controller results and online parameter estimates](assets/figures/panda_adaptation.png)](assets/figures/panda_adaptation.svg)
 
-The pilot separates payload and added friction, then combines them. Every
-paired endpoint error is shown, together with a first-seed trace and parameter
-estimates. Accurate tracking does not imply accurate identification of every
-joint's friction. [Adaptation protocol](docs/panda-adaptation.md).
-
-### Sensor noise and command delay
-
-[![Noise and delay effects on Panda tracking and estimates](assets/figures/panda_robustness.png)](assets/figures/panda_robustness.svg)
-
-Noise and transport delay stress the same fixed and adaptive controllers.
-The plots distinguish tracking from parameter estimation under the tested
-conditions. [Noise and delay protocol](docs/panda-robustness.md).
-
-### Command alignment and queued-command prediction
-
-[![Panda delay identification and prediction comparison](assets/figures/panda_delay.png)](assets/figures/panda_delay.svg)
-
-The comparison separates alignment, selection of a delay hypothesis and
-prediction through the command queue. Prediction is experimental; alignment
-alone remains the reference. [Delay protocol](docs/panda-delay.md).
+The first panel compares final joint error for twenty paired tasks in each
+load condition: added payload, added friction, and both together. Each dot is
+one episode; the vertical axis is logarithmic. Fixed and adaptive control are
+compared with an oracle given the true parameters. The second and third
+panels follow the first combined case's tracking error and payload estimate.
+The fourth compares true and estimated friction across all combined cases.
+In the combined condition, adaptive succeeds in 20/20 tasks and fixed
+in 0/20. This tests whether updating the controller's model compensates for
+physical mismatch. Tracking can improve even when some friction estimates
+remain inaccurate. These tasks have no sensor noise or command delay.
+[Adaptation protocol](docs/panda-adaptation.md).
 
 ### Wider postures and constant delays
 
 [![Tracking and identification across two postures and five delays](assets/figures/panda_posture_delay.png)](assets/figures/panda_posture_delay.svg)
 
-Two sampled posture ranges and delays from 0 to 40 ms test the frozen
-controllers. The noisy-condition plots show final error, tracking RMS and
-payload error; the final panel shows two coordinates of the paired start poses.
+The first three panels show mean final joint error, tracking RMS and payload error
+under sensor noise, across two sampled posture ranges and constant command
+delays from 0 to 40 ms. The fourth panel locates the paired starting postures
+using two joint coordinates. Each curve averages twenty paired tasks per cell;
+RMS measures error over the trajectory, rather than only at the endpoint.
+At wide postures and 40 ms delay, the original
+adaptive controller succeeds in 10/20 tasks at each noise level; delay-aware
+controllers succeed in all tested cells. This exposes the cost of ignoring
+when a command reaches the robot. Constant delays match the bank's candidate
+grid; changing latency remains unresolved. Prediction variants are experimental.
 [Posture and delay protocol](docs/panda-posture-delay.md).
-
-### Changing packet latency
-
-[![Warm startup and changing-latency comparison](assets/figures/panda_variable_delay.png)](assets/figures/panda_variable_delay.svg)
-
-Reaching the target and identifying the active delay are separate outcomes.
-The cumulative bank tracks the tasks while retaining the initial delay in the
-changing cases. Applied command age is a labelled diagnostic, not an input
-available to the bank. [Variable-latency protocol](docs/panda-variable-delay.md).
-
-### Finite score memory and its tracking cost
-
-[![Cumulative, exponential and window score-memory comparison](assets/figures/panda_score_memory.png)](assets/figures/panda_score_memory.svg)
-
-Shorter memory recovers the final age in some changing cases, but both tested
-variants worsen noisy tracking. The first-seed transition panels show why a
-correct final selection alone is insufficient to assess the controller.
-[Score-memory protocol](docs/panda-score-memory.md).
 
 ### Planar adaptive control under a motor fault
 
 [![Planar motor-fault replay and actuator time-constant identification](assets/figures/planar_mujoco.png)](assets/figures/planar_mujoco.svg)
 
-An illustrative motor-fault replay compares fixed and identified control
-behind the same HOCBF filter. Its seed is selected by the documented
-timeout-versus-success rule; it is not an unselected population sample.
-The third panel includes all 5,700 adaptive decision episodes from v2.0.
+The first two panels compare fixed and identified control under a motor fault,
+behind the same HOCBF filter: one shows distance to the target, the other
+shows the filtered torque command for joint 2. The fixed controller times out
+in this example while the adaptive controller reaches the target. The third
+panel compares true and
+estimated actuator time constants across all 5,700 adaptive decision episodes
+from v2.0. Together they connect model identification to task execution on
+the planar platform, where safety filtering is implemented. The replay seed
+was selected by the documented timeout-versus-success rule; its outcome is
+illustrative, and model-based filtering does not guarantee physical safety
+under mismatch.
 [Campaign results](docs/results.md) and [visual reproduction](docs/visuals.md).
+
+The [complete results](docs/results.md) retain the remaining figures and
+protocols, including sensor noise, changing latency and score-memory failures.
 
 ## Quick start
 

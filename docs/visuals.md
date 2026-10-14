@@ -1,9 +1,13 @@
 # Visual reproduction
 
-The result figures, architecture diagram and replay captions use a shared
+The result figures and replay captions use a shared
 STIX General serif family, supplied by Matplotlib. The README keeps the
 original project banner. Figures have larger type, external
-legends, separate title bands and both PNG and scalable SVG exports. Plot
+legends, separate title bands and both PNG and scalable SVG exports. The
+README architecture is a native Mermaid diagram rendered by GitHub. Its
+three result figures cover payload/friction adaptation, posture/delay limits
+and the planar motor-fault comparison. All eight result figures are indexed
+in [results](results.md). Plot
 generators check canvas bounds and separation of neighbouring panels before
 writing. Replay captions have reserved text bands whose bounds are checked
 in every frame.
@@ -11,7 +15,9 @@ in every frame.
 The two GIFs replay the first retained cases. The nominal motion uses seed
 `9804000` at one quarter speed, with the saved tip path and target. The paired
 control comparison uses seed `9804300` at one eighth speed, with joint-reference
-error. Full-resolution MP4 files accompany both. Neither renderer advances
+error, target markers, recorded tip trails and a Cartesian close-up. The
+close-up uses millimetres and equal X/Z scales; saved joint motions are not
+amplified. Full-resolution MP4 files accompany both. Neither renderer advances
 the physical plant or opens new seeds. Collision meshes are those packaged
 with the model; the payload changes inertia without adding a visible object.
 

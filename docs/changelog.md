@@ -4,12 +4,15 @@ This file records implemented release increments. Performance evidence is kept s
 
 ## Unreleased: visual guide
 
-- Expanded the README with two Panda GIFs, full-resolution video links, an
-  architecture diagram and eight explained result plots.
+- Added two Panda GIFs, full-resolution video links, a native Mermaid
+  architecture diagram and three explained result plots to the README.
+  The results documentation indexes all eight figures.
 - Added shared STIX typography, external legends, PNG/SVG exports and layout
   checks that reject clipped labels or overlapping neighbouring panels.
 - Separated replay captions from scene images and constrained the time cursor
   to the chart. Original evidence and prior release assets remain preserved.
+- Added target crosses, actual tip trails, endpoint distances and a physical-scale
+  X-Z close-up to show the fixed/adaptive Panda tracking difference.
 
 ## v2.3.1: Panda demonstration and reference environment
 

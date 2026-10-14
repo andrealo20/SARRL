@@ -14,16 +14,38 @@ Rendering calls forward kinematics only, without advancing the physical plant
 or fitting an estimator. The original records, traces and completion marker
 remain unchanged. Every completion hash is verified before rendering.
 
+Both arms follow the same commanded trajectory. Their actual joint states
+differ, but the shared camera view makes a few centimetres of endpoint offset
+hard to see. The revised replay adds a gold target cross and colored tip trails
+to each robot view. During the final settling second, both cameras zoom
+toward the same target with identical settings. Below them, the joint-error
+plot reports degrees and a
+close-up plots the actual tip in the X-Z plane relative to the target, in mm.
+Its black cross marks the target. The axes have equal physical scale; no
+joint displacement is amplified.
+The tip dot, target cross and connecting line are projected with the rendered
+camera and drawn over the scene so the wrist mesh cannot hide them. The
+attachment site lies inside the collision geometry; these overlays mark
+its coordinates rather than adding a physical gripper or payload.
+The close-up retains the last physical second's paths. Instantaneous markers
+are shown earlier when they fall inside that view. The on-screen tip error
+is the full three-dimensional distance to the current reference tip, computed
+by forward kinematics of the saved joint reference.
+
 The graph shows maximum absolute error across the seven joints relative to
 the reference at each physical timestamp. Final errors for this single case
 are 136.334532 mrad for fixed and 0.029262 mrad for adaptive. They are not the
-twenty-pair averages reported in the pilot. There is no sensor noise or command
+twenty-pair averages reported in the pilot. The corresponding final tip errors
+are 37.918834 mm and 0.008527 mm, and the largest joint errors are 7.811393
+and 0.001677 degrees. The target is stationary during the final second.
+There is no sensor noise or command
 delay in this case, and no residual learning or HOCBF filtering on the Panda.
 The video displays the model's collision meshes, without a gripper.
 
 ## Reference environment
 
-Use Python 3.12 and a checkout of v2.3.1. The reference file pins the direct
+Use Python 3.12 and a checkout of the current repository. The reference file
+pins the direct
 numerical and rendering dependencies used for the demo. Transitive dependencies
 are resolved by pip; the file is not a complete environment lock. The checked
 Linux runtime uses Python 3.12.3 and a Torch `2.12.0+cu130` wheel, compatible
