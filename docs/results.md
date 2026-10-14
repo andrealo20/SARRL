@@ -1,5 +1,20 @@
 # Retained results
 
+## v2.4 Panda parameter memory
+
+The [parameter-memory comparison](panda-estimator-memory.md) reproduced
+1,920 prior records and retained 1,920 new paired episodes. Joint memory
+completed 320/320 tasks and identified the final age in 99/160 changing
+cases, against 83/160 for score-only memory. All three banks identified
+160/160 constant final ages. The candidate failed its frozen changing-age
+gain and per-joint tracking criteria; cumulative alignment remains the
+reference. The protocol links every episode, trace, decision and source hash.
+
+The preceding [saved-trace diagnosis](panda-latency-diagnosis.md) distinguishes
+score persistence, candidate parameter compensation and phase-dependent
+excitation without new physical episodes. Neither result establishes
+reliable changing-latency identification.
+
 ## Figure index
 
 The README selects three figures. The full set is linked here; SVG versions
