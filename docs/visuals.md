@@ -1,8 +1,9 @@
 # Visual reproduction
 
 The result figures and replay captions use a shared
-STIX General serif family, supplied by Matplotlib. The README keeps the
-original project banner. Figures have larger type, external
+STIX General serif family, supplied by Matplotlib. The README uses a vector
+banner with the original composition, outlined lettering and metallic gradients.
+Figures have larger type, external
 legends, separate title bands and both PNG and scalable SVG exports. The
 README architecture uses two native Mermaid diagrams rendered by GitHub. Its
 three result figures are embedded as SVG and cover payload/friction adaptation, posture/delay limits

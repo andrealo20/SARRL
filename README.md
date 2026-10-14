@@ -6,7 +6,7 @@
 [![Python](https://img.shields.io/badge/python-3.10%2B-FFD43B.svg?logo=python&logoColor=white&labelColor=3776AB)](https://www.python.org/)
 [![license](https://img.shields.io/badge/license-MIT-f39c12.svg)](LICENSE)
 
-![SARRL banner](assets/banner.png)
+![SARRL banner](assets/banner-vector.svg)
 
 **SARRL** (Safe Adaptive Residual Reinforcement Learning) is a research stack for robotic control under model mismatch. It combines model-based control with bounded residual reinforcement learning, learned dynamics context, uncertainty-aware policy authority and HOCBF safety filtering.
 
