@@ -10,7 +10,7 @@ are retained and can change the scope of subsequent releases.
 | v2.3.1 | Saved-data Panda demo, reference environment and documentation | A reproducible paired replay and an accessible installation example |
 | v2.3.2 | Replay and documentation consolidation | Release-specific demo commands, installed-package checks and preserved controller evidence |
 | v2.4 | Completed changing-latency diagnosis | Saved-trace diagnosis and a frozen 1,920-episode parameter-memory comparison; the candidate fails its age and per-joint tracking criteria |
-| v2.5 | Panda reference validation and latency identifiability | Paired validation of the cumulative reference on fresh constant-delay seeds, per-cycle profiling, and a separately frozen comparison that limits candidate-specific parameter compensation |
+| v2.5 | Completed Panda reference validation and shared scoring | Reference criteria passed on 4,000 fresh episodes; 30,000 saved-input timing cycles retained; separate 1,920-episode shared-scoring candidate failed its screen |
 | v2.6 | Seven-joint safety filtering | QP formulation for joint position, velocity and torque constraints; numerical validation, explicit infeasibility and paired physical-violation/tracking measurements |
 | v2.7 | Residual learning on an adaptive baseline | Planar comparison of fixed, adaptive and adaptive-plus-residual control, with at least five training seeds and separate held-out evaluation |
 | v3.0, conditional | Integrated Panda stack | Residual learning justified by preceding results, seven-joint filter integration, component ablations and consolidated APIs |
@@ -30,10 +30,12 @@ candidate is scheduled on the strength of those results.
 
 The reference validation passed its frozen constant-delay criteria and
 saved-input timing check. A [separate shared-scoring comparison](panda-shared-scoring.md)
-now tests one causally acquired physical parameter vector against separate
-candidate fits. Its acquisition rule, decision criteria and new seed block
-are frozen separately. Multiple switches and off-grid latency remain separate
-evaluations; their scope depends on the preceding result.
+tested one causally acquired physical parameter vector against separate
+candidate fits. It recovered 96/160 changing final ages against 79/160 for
+score-only memory, but failed age, constant-age, success and tracking criteria.
+It does not advance to confirmation. A separately calibrated estimate remains
+a hypothesis requiring a new protocol and unused seeds. Multiple switches
+and off-grid latency remain separate evaluations.
 
 The first Panda safety increment targets joint constraints. General collision
 avoidance requires a separate formulation and evaluation. Hardware and

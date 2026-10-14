@@ -191,6 +191,10 @@ collision assets, attribution and file hashes are packaged with the code.
 | Two postures, constant delays 0 to 40 ms | Bank alignment succeeded in 400/400 and selected every final delay correctly | [Posture/delay grid](panda-posture-delay.md) |
 | Warm startup and changing latency | Bank alignment succeeded in 320/320 but kept the initial delay in all 160 changing cases | [Variable latency](panda-variable-delay.md) |
 | Exponential/window score memory | All banks succeeded in 320/320; final age recovery improved but noisy tracking regressed | [Score memory](panda-score-memory.md) |
+| Candidate parameter memory | 320/320 successes and 99/160 changing final ages; frozen age/tracking criteria failed | [Parameter memory](panda-estimator-memory.md) |
+| Fresh constant-delay validation | 1,000/1,000 bank successes and correct final ages; all reference criteria passed | [Validation and timing](panda-reference-results.md) |
+| Saved-input control-cycle timing | 30,000 cycles; p99 1.827530 ms, maximum 3.928535 ms, no cycle above 10 ms | [Timing scope](panda-reference-results.md#saved-input-control-cycle-timing) |
+| Shared-parameter scoring | 316/320 successes and 96/160 changing final ages; frozen screen failed | [Shared scoring](panda-shared-scoring-results.md) |
 
 These pilots use different fresh seed blocks; their rows are separate
 engineering checks. Final joint error is the maximum over joints, averaged
@@ -208,6 +212,12 @@ and 72/160 changing episodes. Both finite-memory variants increased mean
 final error and RMS after 1 s in every noisy changing condition, despite
 reaching all targets. Seven-joint residual learning and HOCBF filtering
 remain future work.
+
+The v2.5 shared-scoring comparison improves changing final ages from 79/160
+to 96/160 on its own fresh block, but loses task successes and constant-age
+correctness and exceeds the per-joint tracking tolerance. That candidate
+does not advance to confirmation. The separate constant-delay reference
+validation passes all criteria; it does not resolve changing latency.
 
 ![Panda posture and delay comparison](../assets/figures/panda_posture_delay.png)
 

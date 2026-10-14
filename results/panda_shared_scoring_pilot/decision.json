@@ -1,0 +1,498 @@
+{
+ "candidate_advances": false,
+ "candidate_arm": "bank_shared_score",
+ "failures": [
+  {
+   "condition": "cold_clean_up",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0001939792395084572,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_clean_up",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.00023756860750131503,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00020564729371018602,
+   "joint": 5,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00018550442662262331,
+   "joint": 6,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_clean_down",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.00043423495219477857,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00020518651851610982,
+   "joint": 5,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00018576269055161702,
+   "joint": 6,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_clean_down",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0004420469466707044,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00011937428930288095,
+   "joint": 1,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0001175027008366425,
+   "joint": 3,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00023240944630586072,
+   "joint": 4,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0001534451144187527,
+   "joint": 5,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0005602478161298182,
+   "joint": 6,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_up",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0005408069448135531,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "success_count",
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00022183849154739835,
+   "joint": 1,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00039530092121922293,
+   "joint": 2,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00021915155313375817,
+   "joint": 3,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0026131797197787394,
+   "joint": 4,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.003570402928879296,
+   "joint": 5,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.005014907985437708,
+   "joint": 6,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.006095071093225231,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00015418427968120384,
+   "joint": 1,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0003379241769812439,
+   "joint": 2,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.000145943076291819,
+   "joint": 3,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.001847548538333799,
+   "joint": 4,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0024289876582968056,
+   "joint": 5,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0033425515724717415,
+   "joint": 6,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "cold_noise_down",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.001418267990968941,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_fixed10",
+   "criterion": "constant_final_age_count",
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_fixed10",
+   "criterion": "constant_final_age_count",
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_fixed40",
+   "criterion": "constant_final_age_count",
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_fixed40",
+   "criterion": "constant_final_age_count",
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0001850246743443377,
+   "joint": 4,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00026789310921925295,
+   "joint": 5,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00028589730582850967,
+   "joint": 6,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_up",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0005138227485549374,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.000176072099746843,
+   "joint": 4,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00026850719045052717,
+   "joint": 5,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0003020677802014051,
+   "joint": 6,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_up",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0005418105664780875,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "success_count",
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00016694564559738897,
+   "joint": 1,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0005168566883439335,
+   "joint": 4,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.000931155418138054,
+   "joint": 5,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0014227190509332758,
+   "joint": 6,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0016559355692240929,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "success_count",
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0001736168234826464,
+   "joint": 1,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0005118068527257555,
+   "joint": 4,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0009261442753452526,
+   "joint": 5,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0014219003273120373,
+   "joint": 6,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_clean_down",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0016530699508169656,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00024801292436267043,
+   "joint": 1,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0002307545009557984,
+   "joint": 2,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00015002560059973246,
+   "joint": 3,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0006715441079888174,
+   "joint": 4,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0013789246633993375,
+   "joint": 5,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0011708509648521786,
+   "joint": 6,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_up",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0008313517236929831,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_up",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00011840173639328503,
+   "joint": 5,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "success_count",
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0001511613729340204,
+   "joint": 1,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00016103067551643125,
+   "joint": 2,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0011035394857055246,
+   "joint": 4,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0012217049543787515,
+   "joint": 5,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.002081718658371879,
+   "joint": 6,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "joint_error_max_rad",
+   "difference_rad": 0.0019641754064001664,
+   "reference": "bank_align"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00015403948018635294,
+   "joint": 1,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.00048289649266780154,
+   "joint": 4,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0004449383592262715,
+   "joint": 5,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "warm_noise_down",
+   "criterion": "after_tracking_rms_rad",
+   "difference_rad": 0.0007689000336287844,
+   "joint": 6,
+   "reference": "bank_exp"
+  },
+  {
+   "condition": "all_changing",
+   "criterion": "final_age_gain",
+   "gain": 0.10625
+  },
+  {
+   "condition": "cold_clean_down",
+   "criterion": "final_age_gain",
+   "gain": 0.0
+  }
+ ],
+ "final_age_gains_over_score_only": {
+  "all_changing": 0.10625,
+  "cold_clean_down": 0.0,
+  "warm_clean_down": 0.3
+ },
+ "interpretation": "exploratory screen; independent confirmation precedes default changes",
+ "reference_controller": "bank_align"
+}

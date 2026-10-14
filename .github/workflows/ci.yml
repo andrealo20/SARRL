@@ -69,3 +69,11 @@ jobs:
             python -m tools.audit_panda_reference_validation --input "$GITHUB_WORKSPACE/results/panda_reference_validation"
             python -m tools.profile_panda_reference --audit --input "$GITHUB_WORKSPACE/results/panda_reference_validation" --output "$GITHUB_WORKSPACE/results/panda_reference_profile"
           fi
+      - name: Audit retained shared-parameter scoring
+        shell: bash
+        run: |
+          if [ -f results/panda_shared_scoring_pilot/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-shared-audit" 1a47469c052c0f4dc2a14ff11e1a99839645bae7
+            cd "$RUNNER_TEMP/panda-shared-audit"
+            python -m tools.audit_panda_shared_scoring --input "$GITHUB_WORKSPACE/results/panda_shared_scoring_pilot"
+          fi

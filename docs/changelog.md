@@ -2,7 +2,7 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## Unreleased: Panda validation
+## v2.5.0: Panda reference validation and shared scoring
 
 - Added a paired constant-delay reference validation protocol, causal audit
   and saved-input control-cycle profiling.
@@ -12,6 +12,10 @@ This file records implemented release increments. Performance evidence is kept s
   the constant-delay reference passed its frozen acceptance criteria.
 - Added causal shared-parameter scoring, a separate reproduce-first protocol
   and innovation auditing while preserving cumulative control estimators.
+- Reproduced all 4,000 validation records before retaining 1,920 shared-scoring
+  episodes. The candidate failed its frozen screen; cumulative alignment
+  remains the reference.
+- Added archival CI audits, a release runbook and complete per-condition results.
 
 ## v2.4.0: changing-latency diagnosis and parameter memory
 

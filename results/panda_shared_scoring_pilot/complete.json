@@ -1,0 +1,12 @@
+{
+ "episodes": 1920,
+ "hashes": {
+  "decision.json": "0101c84fa0e8a7b47148111d9fc2fd51af6e65490fe2d1d5803dd9ab98c2a2dc",
+  "episodes.json": "7f6ab0c59ee141f4a9c39aee164b383986a9cc566bb4441de357a41a3bd2bfc0",
+  "manifest.json": "285a259d32e0465b097d0c5d86fb36f53f8140590d0c53e4a0c413c8253c0077",
+  "reproduction.json": "a7c3ff630bc09d780245719c27ed609345f05bb9a222474f5cc199c1898364b1",
+  "summary.json": "332f61d318fc58f66a9f695d21a779e74cc69b46a9261d3b1416b863b71c9f54",
+  "traces.json.gz": "fa9efa9d87617fce08e5fc7f1c518a64a32d5edc278861101404f2682e88ecf2"
+ },
+ "reproduction_episodes": 4000
+}

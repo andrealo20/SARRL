@@ -3,6 +3,51 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## v2.5 reference validation and shared scoring
+
+Source `09858a7` reproduced all 1,920 v2.4 records and retained 4,000 fresh
+constant-delay episodes. The reference passed every frozen criterion, with
+1,000/1,000 bank successes and correct final ages. Its audit verified all
+records, eighty first-seed traces and sixty causal estimator replays. Saved-input
+profiling retained and audited 30,000 cycles: p50 0.976287 ms, p95 1.378157 ms,
+p99 1.827530 ms and maximum 3.928535 ms, with no duration above the 10 ms
+period. Host, runtime and excluded costs are documented in the
+[reference results](panda-reference-results.md).
+
+Source `1a47469` then reproduced all 4,000 validation records before retaining
+1,920 fresh shared-scoring episodes. The audit verified all records, 96 traces
+and eighty causal estimator replays, including pre-update innovations and
+the fixed scoring copy. The candidate failed its frozen age, constant-age,
+success and tracking criteria. The [complete results](panda-shared-scoring-results.md)
+retain every condition and failed comparison. Both phases together used
+17,952,000 physical substeps including reproduction, with zero prediction
+virtual substeps. Profiling added no physical steps or seeds.
+
+Thirty-five focused tests passed. The complete local suite passed 599 cases
+with one skip on Python 3.12.3, NumPy 2.5.2 and MuJoCo 3.13.0. New checks cover
+unchanged bootstrap arithmetic, acquisition timing and a read-only independent
+parameter copy, causal prefix invariance, one-joint tracking regressions,
+unknown arms, reproduction refusal and canonical output/worker guards.
+Lint, compilation and whitespace checks passed. All five CI jobs passed for
+the frozen comparison sources, including the recorded-runtime archival audit
+of reference validation and profiling; the MuJoCo job passed 594 tests with
+six skips. Final retained-data CI additionally audits shared scoring from
+its recorded source worktree.
+
+The ten retained Panda campaigns contain 14,900 new episode records.
+Completion hashes and 418 frozen-source blob references, including profiling,
+were verified against Git history. Original Python sources from `09858a7`
+remain unchanged; shared scoring adds separate modules. The supplied SVG
+retains SHA-256 `7479624165f1eda00cca9702ba5eb968dc9654afe7e21803dd878aab5f1b61e4`.
+
+The wheel and source distribution built successfully. All 87 packaged files
+matched the checkout; the installed package reported version 2.5.0 and loaded
+the twelve-file Panda model. Its nominal example completed 300 control steps
+with success, no clipping and no unsafe event on an existing test seed.
+Numerical dependencies were reused, so this was not a clean dependency-resolution
+test. The source archive includes the supplied SVG byte for byte and excludes
+local working instructions.
+
 ## v2.4 parameter-memory comparison
 
 Source `cee94b2` reproduced all 1,920 prior score-memory records, then

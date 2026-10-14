@@ -1991,6 +1991,8 @@ profiling retained 30,000 cycles, with p99 1.827530 ms against a 10 ms period.
 The [separate comparison](panda-shared-scoring.md) acquires one physical
 parameter vector causally for all age scores after fifty updates, twenty-five
 stable selections and information rank eight. All five control RLS models
-remain cumulative. Twenty new seeds are reserved; all 4,000 reference records
-must reproduce before those seeds are opened. The unchanged v2.4 exploratory
-screen determines whether independent confirmation is warranted.
+remain cumulative. The completed comparison reproduced all 4,000 reference
+records and retained 1,920 fresh episodes. Shared scoring recovered 96/160
+changing final ages against 79/160 for score-only memory, but failed its age,
+constant-delay, success and tracking criteria. The [full results](panda-shared-scoring-results.md)
+retain every cell; the candidate does not advance to confirmation.
