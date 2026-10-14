@@ -2,6 +2,12 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## Unreleased: latency diagnostics
+
+- Added causal replay, phase-specific parameter fits and information
+  diagnostics for retained Panda delay-bank traces. Inputs and controller
+  sources are hash-checked; diagnostic outputs are never overwritten.
+
 ## v2.3.2: replay and documentation consolidation
 
 - Added two Panda GIFs, full-resolution video links, two native Mermaid
