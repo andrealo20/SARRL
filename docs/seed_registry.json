@@ -40,6 +40,6 @@
     {"label": "Panda warm-start and variable-delay engineering pilot", "low": 9805100, "high": 9805199, "status": "used", "kind": "local"},
     {"label": "Panda delay-score memory engineering tests", "low": 9805200, "high": 9805299, "status": "used", "kind": "local"},
     {"label": "Panda delay-score memory engineering pilot", "low": 9805300, "high": 9805399, "status": "used", "kind": "local"},
-    {"label": "Panda estimator-memory engineering pilot", "low": 9805400, "high": 9805499, "status": "reserved", "kind": "local"}
+    {"label": "Panda estimator-memory engineering pilot", "low": 9805400, "high": 9805499, "status": "used", "kind": "local"}
   ]
 }

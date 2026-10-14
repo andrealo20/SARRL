@@ -3,6 +3,38 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## v2.4 parameter-memory comparison
+
+Source `cee94b2` reproduced all 1,920 prior score-memory records, then
+completed 1,920 fresh paired episodes. Both stages used 2,976,000 physical
+substeps including warmup. The audit verified all 1,920 new records,
+96 traces and 80 causal estimator replays, completion hashes, frozen Git
+sources and the recomputed decision. No prediction virtual
+substeps were performed. The [protocol and results](panda-estimator-memory.md)
+retain all conditions and the failed age/per-joint tracking screen.
+
+The local full suite passed 581 cases with one skip for unavailable local
+diagnostic records. After applying recorded floating-point replay tolerances,
+the diagnostic and parameter-memory tests passed all 21 cases. These check
+weighted batch equivalence without clipping, exact legacy arithmetic when
+forgetting is disabled, numerical rollback, bounds, covariance positivity,
+causal prefix invariance, reproduction refusal and per-joint gate failures.
+A replay accepts rounding-scale differences and rejects an altered parameter.
+Lint, compilation and whitespace checks passed.
+
+All five CI jobs passed for the frozen campaign sources: Python 3.10,
+3.11 and 3.12, MuJoCo tests, and the pinned saved-input replay. CI also
+audits the retained parameter-memory data from its recorded source worktree,
+keeping that replay separate from future package changes.
+
+The final wheel and source distribution built successfully. All 84 packaged
+files matched the checkout, the installed controller reported version 2.4.0,
+and the twelve-file Panda model loaded. The nominal installation example
+completed 300 control steps with success, no clipping and no unsafe event,
+using an existing engineering-test seed. Numerical dependencies were reused;
+this was not a clean dependency-resolution test. The source archive includes
+the supplied banner byte for byte and excludes local working instructions.
+
 ## Panda latency diagnosis
 
 The saved-input analysis reproduced all 48 bank traces from seed 9805300,

@@ -1966,3 +1966,9 @@ Twenty new paired seeds cover sixteen conditions and six arms, after
 reproducing all 1,920 previous records. Per-joint tracking, constant-age
 selection and physical outcomes must pass alongside changing-age gains
 before a separate confirmation study can consider the candidate.
+The completed comparison reproduced every reference record. Joint memory
+reached 320/320 task successes and 99/160 correct changing final ages, against
+319/320 and 83/160 for score-only memory. All banks retained 160/160 correct
+constant final ages. The candidate fails the frozen changing-age gain and
+per-joint RMS criteria, so it does not advance to confirmation. All outcomes
+and the retained reference decision are documented with the raw records.

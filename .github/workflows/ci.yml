@@ -52,3 +52,11 @@ jobs:
       - run: pip install -e '.[mujoco]' 'numpy==2.5.2' 'mujoco==3.13.0' pytest
       - run: pytest tests/test_panda_latency_diagnosis.py tests/test_panda_estimator_memory.py
       - run: python -m tools.diagnose_panda_latency --output "$RUNNER_TEMP/panda-latency"
+      - name: Audit retained parameter memory
+        shell: bash
+        run: |
+          if [ -f results/panda_estimator_memory_pilot/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-memory-audit" cee94b2e0f8af416502fcd45c38c94e8b4234d0d
+            cd "$RUNNER_TEMP/panda-memory-audit"
+            python -m tools.audit_panda_estimator_memory --input "$GITHUB_WORKSPACE/results/panda_estimator_memory_pilot"
+          fi

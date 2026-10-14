@@ -2,7 +2,7 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## Unreleased: latency diagnostics
+## v2.4.0: changing-latency diagnosis and parameter memory
 
 - Added bounded candidate parameter forgetting with fixed score memory,
   a reproduce-first paired comparison and causal evidence auditing.
@@ -15,7 +15,12 @@ This file records implemented release increments. Performance evidence is kept s
   diagnostics for retained Panda delay-bank traces. Inputs and controller
   sources are hash-checked; diagnostic outputs are never overwritten.
 - Retained 48 trace replays and diagnostic findings that motivate a separate
-  candidate-memory comparison. No new physical episodes were opened.
+  candidate-memory comparison. The saved-input diagnosis opens no new
+  physical episodes.
+- Reproduced 1,920 prior records and retained 1,920 paired parameter-memory
+  episodes. Changing-age correctness rose from 83/160 to 99/160 against
+  score-only memory; the frozen age and per-joint tracking criteria failed.
+  Cumulative bank alignment remains the reference.
 
 ## v2.3.2: replay and documentation consolidation
 

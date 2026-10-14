@@ -16,8 +16,11 @@ reference platform for residual learning and HOCBF remains the reproducible
 **2-DoF planar arm**, available as an analytical model and a MuJoCo plant.
 The Panda release covers joint-trajectory engineering benchmarks across two
 sampled posture ranges. Prediction and changing-latency variants remain
-experimental. See the [v2.3 guide](docs/v2.3.md) for scope, a short example
-and frozen-data audits. Hardware and sim-to-real results are not claimed.
+experimental. Version 2.4 adds a latency diagnosis and a controlled
+candidate parameter-memory comparison. Its frozen decision retains the
+cumulative alignment reference. See the [v2.4 guide](docs/v2.4.md) for the
+new evidence and the [v2.3 guide](docs/v2.3.md) for the Panda platform.
+Hardware and sim-to-real results are not claimed.
 
 ## Demo
 
@@ -180,7 +183,7 @@ python examples/panda_reach.py
 ```
 
 The example prints a JSON result and writes no files. It is an installation
-check using an existing engineering-test seed. See the [release guide](docs/v2.3.md)
+check using an existing engineering-test seed. See the [release guide](docs/v2.4.md)
 for the controller scope, complete evidence and source/runtime requirements
 for audits.
 
@@ -202,8 +205,9 @@ The planar stack requires NumPy, SciPy and PyTorch. The MuJoCo plant needs the o
 Residual learning and HOCBF are evaluated on the planar stack. The Panda
 supports joint-trajectory control and online payload/friction identification;
 constant on-grid delay alignment is the reference. Changing latency remains
-unresolved, and finite score memory worsened noisy tracking in the retained
-comparison. Panda residual learning, seven-joint HOCBF, hardware and sim-to-real
+unresolved. Score-only memory worsened noisy tracking in its retained pilot;
+joint score/parameter memory failed its changing-age and per-joint tracking
+screen. Panda residual learning, seven-joint HOCBF, hardware and sim-to-real
 remain future work.
 
 HOCBF guarantees are relative to the controller model; physical violations
