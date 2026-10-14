@@ -2006,3 +2006,9 @@ infeasibility latches bounded braking and counts as an abort. The reserved
 twenty-seed comparison covers ordinary/fast moves, clean/noisy measurements
 and three delays after reproducing all 4,000 reference-validation records.
 Its decision precedes the separate planar residual-learning study in v2.6.
+
+The completed [filter results](panda-joint-filter-results.md) retain all 480
+episodes. Fast unsafe episodes fell from 104/120 to 20/120, with 107/120 aborts
+and three fewer task successes. Ordinary tasks retained 120/120 successes
+without measured violations or aborts. The candidate fails its frozen screen
+and does not advance to confirmation.

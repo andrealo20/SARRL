@@ -1,0 +1,25 @@
+{
+ "baseline_fast_unsafe_fraction": 0.8666666666666667,
+ "failures": [
+  {
+   "condition": "fast_clean_d00",
+   "criterion": "success_count"
+  },
+  {
+   "condition": "fast_clean_d40",
+   "criterion": "filtered_unsafe"
+  },
+  {
+   "condition": "fast_noise_d00",
+   "criterion": "success_count"
+  },
+  {
+   "condition": "fast_noise_d40",
+   "criterion": "filtered_unsafe"
+  }
+ ],
+ "fast_unsafe_fraction_reduction": 0.7,
+ "filter_advances": false,
+ "meaning": "engineering screen; no general safety certificate",
+ "reference_controller": "bank_align"
+}

@@ -1,0 +1,1370 @@
+{
+ "frozen_controller": {
+  "source_commit": "09858a7368d89ff0cd82b920904d0231644d77f5",
+  "source_sha256": {
+   "sarrl/controllers/panda_adaptive.py": "b6e045dce1ab7c61ebde2a5c85ba860ca67ae10cacab1aadb12b344fee4acca9",
+   "sarrl/controllers/panda_delay.py": "cc31cbd439f3635a05f5c04f7bafc5b5bf96213b5ce8e625c33b68aca1bf1682",
+   "sarrl/controllers/panda_nominal.py": "1341c02ca257dd6314d3d116a11cbf07e15e4653e8425a252441a47f009e0a98",
+   "sarrl/controllers/panda_score_memory.py": "5a4d3873b7a831926a01f22e66460ee53db32e157a86820dca8092e820791a55",
+   "sarrl/envs/panda_interface.py": "d871aed19784e2b2b58132066cc345c7a589f47c2c5aeb97dd29bf8294b397a2",
+   "sarrl/envs/panda_packet_delay.py": "c4377cfb1814901172c5b457cfb22dc1d5af5454693502877bd507b4e1f7bb05",
+   "sarrl/envs/panda_reach.py": "29b3ffb49a1aedfd8e9e2acc1c11954f4dea84c57b60f260f743b57c66b85e2a",
+   "sarrl/robots/panda.py": "0512126c7f1c233877a2edae04b84c6f366fa180965d872d22c38a125e9df2ad"
+  }
+ },
+ "model": {
+  "changes": [
+   "Replace the seven position servos with unit-gear torque motors at the upstream force limits.",
+   "Set keyframe controls to zero torque.",
+   "Omit visual meshes; retain the original collision meshes and all inertial parameters.",
+   "Colour collision geoms and add a visual-only floor without contacts."
+  ],
+  "commit": "0059d4335f8156206f63a35662313385f7ad6d74",
+  "files": {
+   "LICENSE": "a6cba85bc92e0cff7a450b1d873c0eaa2e9fc96bf472df0247a26bec77bf3ff9",
+   "assets/link0.stl": "dfc6d94330de8ddb005b311bfdba9f3b8e1aa7c256b71592ee7ff32cb9a9a5aa",
+   "assets/link1.stl": "e41a39a94108fcf56aacff603fc91ec80541f4c1af17b51a0de5617f5566e6d2",
+   "assets/link2.stl": "370f7605a0fae3529db169ded50f52f171024aa792d4d773bc84197301f6a039",
+   "assets/link3.stl": "0a8d638b9349c6c0eefc4e888636ac4838c4b27170f18a51699321118af709c1",
+   "assets/link4.stl": "0180ebb5772ec9840cb049750cffb29a9ddc90311752a16ea34757782ef9e48d",
+   "assets/link5_collision_0.obj": "3e5aa75fb13f193555c3dfb999df91d81df25006a5c3af5338297d78137c129b",
+   "assets/link5_collision_1.obj": "87cd8f621071df010f774cbde789282b8463840dfe704f8bdfa2e29be0142e15",
+   "assets/link5_collision_2.obj": "823ab6c8f7b1d79e0844fa071d82a03499ff68e34fddb1ba3451032c22736040",
+   "assets/link6.stl": "20b768e99a0e0440b5754dcca108016434e57937cc356acd9c352ccd3cb27f77",
+   "assets/link7.stl": "92ac6afcf7574c034d3170d8a68e95ac9048ab9d0dd5bbd8311b86e551b9ab1c",
+   "panda.xml": "46742fcf851c1a1a09327415bb4b3bc8d788800460acf2050af54ba4c096b9be"
+  },
+  "license": "Apache-2.0",
+  "repository": "https://github.com/google-deepmind/mujoco_menagerie",
+  "source_path": "franka_emika_panda/panda_nohand.xml",
+  "source_sha256": "e7090a5e2384b18a223ef532d98bf914f7f9a6b74dc8bc9f74c8291201074071"
+ },
+ "protocol": {
+  "arms": [
+   "bank_align",
+   "bank_filtered"
+  ],
+  "delay_handling": "all constant ages zero through four, no applied-age input",
+  "fallback": "latched bounded estimated-model braking; never labelled safe",
+  "filter": {
+   "control_dt": 0.01,
+   "feasibility_tol": 1e-08,
+   "gamma": 5.0,
+   "max_delay_steps": 4,
+   "position_reserve_rad": 0.03,
+   "solver_iterations": 100,
+   "stationarity_tol": 1e-06,
+   "velocity_reserve_rad_s": 0.1
+  },
+  "gate": {
+   "baseline_fast_unsafe_fraction_min": 0.1,
+   "fast_unsafe_fraction_reduction_min": 0.1,
+   "filtered_unsafe_episodes": 0,
+   "meaning": "all pass to advance to confirmation; no default change",
+   "slow_aborts": 0,
+   "slow_paired_joint_mean_rms_increase_rad_max": 0.005,
+   "success_per_cell": "no fewer than cumulative bank"
+  },
+  "interfaces": {
+   "fast_clean_d00": {
+    "command_delay_steps": 0,
+    "position_noise_std_rad": 0.0,
+    "velocity_noise_std_rad_s": 0.0
+   },
+   "fast_clean_d20": {
+    "command_delay_steps": 2,
+    "position_noise_std_rad": 0.0,
+    "velocity_noise_std_rad_s": 0.0
+   },
+   "fast_clean_d40": {
+    "command_delay_steps": 4,
+    "position_noise_std_rad": 0.0,
+    "velocity_noise_std_rad_s": 0.0
+   },
+   "fast_noise_d00": {
+    "command_delay_steps": 0,
+    "position_noise_std_rad": 0.001,
+    "velocity_noise_std_rad_s": 0.001
+   },
+   "fast_noise_d20": {
+    "command_delay_steps": 2,
+    "position_noise_std_rad": 0.001,
+    "velocity_noise_std_rad_s": 0.001
+   },
+   "fast_noise_d40": {
+    "command_delay_steps": 4,
+    "position_noise_std_rad": 0.001,
+    "velocity_noise_std_rad_s": 0.001
+   },
+   "slow_clean_d00": {
+    "command_delay_steps": 0,
+    "position_noise_std_rad": 0.0,
+    "velocity_noise_std_rad_s": 0.0
+   },
+   "slow_clean_d20": {
+    "command_delay_steps": 2,
+    "position_noise_std_rad": 0.0,
+    "velocity_noise_std_rad_s": 0.0
+   },
+   "slow_clean_d40": {
+    "command_delay_steps": 4,
+    "position_noise_std_rad": 0.0,
+    "velocity_noise_std_rad_s": 0.0
+   },
+   "slow_noise_d00": {
+    "command_delay_steps": 0,
+    "position_noise_std_rad": 0.001,
+    "velocity_noise_std_rad_s": 0.001
+   },
+   "slow_noise_d20": {
+    "command_delay_steps": 2,
+    "position_noise_std_rad": 0.001,
+    "velocity_noise_std_rad_s": 0.001
+   },
+   "slow_noise_d40": {
+    "command_delay_steps": 4,
+    "position_noise_std_rad": 0.001,
+    "velocity_noise_std_rad_s": 0.001
+   }
+  },
+  "kind": "exploratory_panda_joint_filter",
+  "plant_parameters": "same payload/friction draw as retained reference",
+  "posture": "same existing wide task draw per paired seed",
+  "prediction": "frozen estimated affine acceleration, exact polynomial prefix checks",
+  "reproduction": {
+   "episodes": 4000,
+   "reference": "results/panda_reference_validation/episodes.json"
+  },
+  "scenarios": [
+   "slow_clean_d00",
+   "slow_clean_d20",
+   "slow_clean_d40",
+   "slow_noise_d00",
+   "slow_noise_d20",
+   "slow_noise_d40",
+   "fast_clean_d00",
+   "fast_clean_d20",
+   "fast_clean_d40",
+   "fast_noise_d00",
+   "fast_noise_d20",
+   "fast_noise_d40"
+  ],
+  "seeds": [
+   9805800,
+   9805801,
+   9805802,
+   9805803,
+   9805804,
+   9805805,
+   9805806,
+   9805807,
+   9805808,
+   9805809,
+   9805810,
+   9805811,
+   9805812,
+   9805813,
+   9805814,
+   9805815,
+   9805816,
+   9805817,
+   9805818,
+   9805819
+  ],
+  "tasks": {
+   "fast_clean_d00": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 0.25,
+    "settle_seconds": 2.75,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "fast_clean_d20": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 0.25,
+    "settle_seconds": 2.75,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "fast_clean_d40": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 0.25,
+    "settle_seconds": 2.75,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "fast_noise_d00": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 0.25,
+    "settle_seconds": 2.75,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "fast_noise_d20": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 0.25,
+    "settle_seconds": 2.75,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "fast_noise_d40": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 0.25,
+    "settle_seconds": 2.75,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "slow_clean_d00": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 2.0,
+    "settle_seconds": 1.0,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "slow_clean_d20": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 2.0,
+    "settle_seconds": 1.0,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "slow_clean_d40": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 2.0,
+    "settle_seconds": 1.0,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "slow_noise_d00": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 2.0,
+    "settle_seconds": 1.0,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "slow_noise_d20": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 2.0,
+    "settle_seconds": 1.0,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   },
+   "slow_noise_d40": {
+    "control_dt": 0.01,
+    "joint_tolerance": 0.01,
+    "move_seconds": 2.0,
+    "settle_seconds": 1.0,
+    "speed_tolerance": 0.05,
+    "timestep": 0.002,
+    "tip_tolerance": 0.01
+   }
+  }
+ },
+ "runtime": {
+  "mujoco": "3.13.0",
+  "numerical_threads": 1,
+  "numpy": "2.5.2",
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "python": "3.12.3",
+  "scipy": "1.18.1",
+  "workers": 4
+ },
+ "seed_scan": {
+  "blobs_read": 566,
+  "distinct_trees_scanned": 196,
+  "range": [
+   9805800,
+   9805899
+  ],
+  "reachable_commits": 210,
+  "registry": "docs/seed_registry.json",
+  "reserved_entry": {
+   "high": 9805899,
+   "kind": "local",
+   "label": "Panda joint-filter engineering pilot",
+   "low": 9805800,
+   "status": "reserved"
+  },
+  "trees": [
+   {
+    "commit": "6891dd27edf8b28514160d1ade350e3213826058",
+    "files": 521,
+    "tree": "57b30c79e53270a65aa67fa35b3d80cefbf6fabf"
+   },
+   {
+    "commit": "96d9f2cc2b13d3f8ea32bc6ca2ad8a4cfb19e984",
+    "files": 521,
+    "tree": "0406acd97300c1c1e1d3d062dda7c16a4de189e9"
+   },
+   {
+    "commit": "1a47469c052c0f4dc2a14ff11e1a99839645bae7",
+    "files": 515,
+    "tree": "47354f426c47f0c3061ab7c798fbc6424b86d0fe"
+   },
+   {
+    "commit": "01866ba519da8535cbdcea152da16ad97ccfb7d0",
+    "files": 515,
+    "tree": "91aa6b6a0da4ce3098ee646c76da66391275198c"
+   },
+   {
+    "commit": "09858a7368d89ff0cd82b920904d0231644d77f5",
+    "files": 506,
+    "tree": "7f71a95572ac3c51c2b12124f2e66ef847b22418"
+   },
+   {
+    "commit": "f76c6c18f31a145af2332993bbe9ab27cadd7162",
+    "files": 506,
+    "tree": "85776255403ccce3b2135333de06c4f618156ee0"
+   },
+   {
+    "commit": "7fad536b17cf58fac154b9cb24828d7508519bda",
+    "files": 506,
+    "tree": "ed33c8a8db9b518fead8e99d97404339c1540fbf"
+   },
+   {
+    "commit": "cee94b2e0f8af416502fcd45c38c94e8b4234d0d",
+    "files": 500,
+    "tree": "3cfd3dcf60a588c48029009baa112460d30e24df"
+   },
+   {
+    "commit": "3e2a92a47779506445909385c97f89e7b74c5de8",
+    "files": 500,
+    "tree": "f818a4a7e93bcbbaf3417aee25afa3cba46549a3"
+   },
+   {
+    "commit": "d2791dfea83115d5034062de405681f368855100",
+    "files": 500,
+    "tree": "b8e09214a454e34048bb12a648ce4dd535e8e57a"
+   },
+   {
+    "commit": "8ba11615e45cce6a0dce39529076a60c8b32c4d7",
+    "files": 500,
+    "tree": "24ff1a797696be1073049477d197a86f4ebdf201"
+   },
+   {
+    "commit": "a9867327238ad1db2a704c4ce09e16b51f407fb2",
+    "files": 500,
+    "tree": "645e995bca1373223d34cdebca0f346e59a991d5"
+   },
+   {
+    "commit": "beac2fe0b81af21e9852b4ed7e731e345c2ec804",
+    "files": 500,
+    "tree": "46be73caff2ec7b8d03816547dda640a0e443f12"
+   },
+   {
+    "commit": "6328b9a476bac067c0d95f9aea29c05460e61461",
+    "files": 500,
+    "tree": "fd18eb720ce8e4d8e0587505940271cf23d51545"
+   },
+   {
+    "commit": "1fc543bf48db0085426bdc548d5820f833e9d9cf",
+    "files": 500,
+    "tree": "59bc892be857fb9e5b5e90b07e6f95990afc26d7"
+   },
+   {
+    "commit": "c1c2ca772cc14ceaed04eb47647ed7b6437689a9",
+    "files": 497,
+    "tree": "fa598144c46699e88e363257975a2b3aa6a8099e"
+   },
+   {
+    "commit": "dba20bca589427e92104269e75faebb0d0dad9c4",
+    "files": 500,
+    "tree": "b5ea50e85cfb294e8d6809069c19fd24d1da566c"
+   },
+   {
+    "commit": "98134bd42a4df43a6dedb4fa4945a15b2e80b460",
+    "files": 497,
+    "tree": "c3f89368bb4382fe27733dfed3ef5ab62d8a083b"
+   },
+   {
+    "commit": "a4e6a596f96e6b6269df27b6c6225ca27abffb23",
+    "files": 497,
+    "tree": "191d7496dd316d62e38011b19c3ee04ea48f2fe9"
+   },
+   {
+    "commit": "5aace04158da16c3df3e5bce8cef55d5b9a2d52d",
+    "files": 497,
+    "tree": "85e54ca516300d2d0d9ac64d0088483a9f9d4e42"
+   },
+   {
+    "commit": "558f7eb0875d95359f4ce043f56f077ad1259e42",
+    "files": 497,
+    "tree": "252f97245fe28afc6bf55bef5ef00e300f5b4d8f"
+   },
+   {
+    "commit": "4d036ed693cad72862507c9dd6cb8860443bceaf",
+    "files": 497,
+    "tree": "b97cd7c3212ab4cc86c82f28924e48f3b4737938"
+   },
+   {
+    "commit": "91e97fa5b619a66e2ae46cd60bf4ada6bd0ae0dd",
+    "files": 497,
+    "tree": "3cfc9f473113c7ddbfd2764273901a6c761d15e8"
+   },
+   {
+    "commit": "571372b1dbda2397ed3c16b0fbb48a8aae93ae5f",
+    "files": 497,
+    "tree": "3337e0221f36e3173da533b594c5b89cf0475f57"
+   },
+   {
+    "commit": "cf8e6d79f5bcc4d0866a2c4bb4bca9031a69127c",
+    "files": 497,
+    "tree": "ae4a626d85f8e5d58e2b8bc31bddd6167a386399"
+   },
+   {
+    "commit": "a25ceec3e55b782a520526e5a011fc114d6bc65a",
+    "files": 497,
+    "tree": "be453cbe8d75b3512425f635afd48c197c1034e4"
+   },
+   {
+    "commit": "d3982595bb6dd5db0cfbe04c9f9a8567a5fabff8",
+    "files": 497,
+    "tree": "c9abeafe7ebb9cf45ca4fca8bf094fe31499dcbd"
+   },
+   {
+    "commit": "89cf61912eadc4aa87daa6f81a009654289ec0ec",
+    "files": 497,
+    "tree": "d7f9865babdc128e6096588a97b2f5cee6536563"
+   },
+   {
+    "commit": "f3595cae3bb23f14a7c58433a5d38e868d4c6397",
+    "files": 497,
+    "tree": "a92dcba8065b6a4b46e8b92e0aa0369117d5cbb9"
+   },
+   {
+    "commit": "46521d570e652012a738c8bce73cef47de3d6a5a",
+    "files": 497,
+    "tree": "86de00fa71aad5ac53c1a2e1fc232f7526e6afdb"
+   },
+   {
+    "commit": "fdbef3a76d23b861979164f937733fe5bc536dec",
+    "files": 497,
+    "tree": "90b0272f17e0c5f9acaebc2763ef555a77a9d40b"
+   },
+   {
+    "commit": "9a3b48a69321883268072afada9f92b6de9e0e76",
+    "files": 497,
+    "tree": "aca794bee5d1a2dbc21291d82bbd76ddb53b6d9e"
+   },
+   {
+    "commit": "c6f83e30da67ec7c80e18f2d030ed1322da690b8",
+    "files": 492,
+    "tree": "2a8cbceb22c9077b04297418aba45d11d98337b4"
+   },
+   {
+    "commit": "109046df48c7774ec72c04466d36ca704a7e082f",
+    "files": 487,
+    "tree": "d02d0cfe419810004310fc94e3a906b0ff3f4284"
+   },
+   {
+    "commit": "bf300af8c4c4672863d914bae5f6bf6c2f3c12c9",
+    "files": 482,
+    "tree": "143bd4904d1850c881e4375e20ff8d78ee2c0945"
+   },
+   {
+    "commit": "c25eae0bd677ad3455bb65621c86288ee1c221a2",
+    "files": 477,
+    "tree": "df1d9b1b68f7d93f9cacf4f28b04f99ac557029a"
+   },
+   {
+    "commit": "c4736d4a165c486039abbca7718008951cfa5b7d",
+    "files": 492,
+    "tree": "f24edfb475acb7a4af36c12e1ff8bb3d2bb27961"
+   },
+   {
+    "commit": "8900bc6674733a9800c2191cb2a5a35ecce2ee2b",
+    "files": 487,
+    "tree": "2d5ebddea668a9d5c4456667b9f8a5e49b2ac088"
+   },
+   {
+    "commit": "a5041c7de409752226a7c06bb2cce9efc1fa27ce",
+    "files": 482,
+    "tree": "a5b99ebcfeb54bffcbc0d58fb592ae30c55e567d"
+   },
+   {
+    "commit": "b7440fea97896bf8e2e189727a8aabbde16d0ebe",
+    "files": 477,
+    "tree": "177992530596f9791cd7aa2c046e24941a80e709"
+   },
+   {
+    "commit": "2fc7a481f0f9dd5626fa9ffa74f83db4a73164a5",
+    "files": 472,
+    "tree": "2859942031af9c1e2f5f3875db8e225aabbe1612"
+   },
+   {
+    "commit": "7e1fc4480f56eb7307f41256b3421f8833c271c3",
+    "files": 472,
+    "tree": "b07e220a89e997dd7d249a78d1f46fa962f7aac1"
+   },
+   {
+    "commit": "08928ce46da6045d45aab9819591b24aeb635ede",
+    "files": 472,
+    "tree": "4df0745ba06f440531501aa8220726f9af9b4cdb"
+   },
+   {
+    "commit": "3086aeb2dc50109c17a10c6020f64e4d7ed0e082",
+    "files": 467,
+    "tree": "3e2e93745df61fbae98fd2fa69ff639793412e8f"
+   },
+   {
+    "commit": "8b05c6f38e65d551d31953bc2b58cab2491e61ac",
+    "files": 467,
+    "tree": "f10a70229be667cf69978fbd6553d00437b41acb"
+   },
+   {
+    "commit": "adb23445f6a76a5abfbb532e0a395afd2ec7c151",
+    "files": 461,
+    "tree": "1d5e0ad45bbb96fc6c99bd3e8e5714a2ee748d22"
+   },
+   {
+    "commit": "eec0aa76ed0d85d89a3101c94d2cb0d45ebffa56",
+    "files": 460,
+    "tree": "1cfbbca3388ca0cd4ee3879a2b923471d3b6a065"
+   },
+   {
+    "commit": "b88a954a6d8c6e0310fd9dc8c27fc7bd5e8c4e79",
+    "files": 460,
+    "tree": "b870319885c4bc71961e1a5ab230ce685b1c6da4"
+   },
+   {
+    "commit": "b3925edca52cf059eba5ed91f1b7627fe055b29c",
+    "files": 454,
+    "tree": "fe54fbe0951b952ca2756484a14b14deee42bd27"
+   },
+   {
+    "commit": "817db04bc26ccaacfd554c4cc851a2954bb48cdc",
+    "files": 453,
+    "tree": "fd772842a60bea6de9ce0a6548246af16c26ba71"
+   },
+   {
+    "commit": "1094018df51fe3f7b25ba2d9217ee3c0a38302e3",
+    "files": 453,
+    "tree": "f984f775bf5b23a9e616cc34641ec38b73568d81"
+   },
+   {
+    "commit": "8b469ee142db5fb09382ed571dcacf5c7d68caea",
+    "files": 453,
+    "tree": "9fd152da56330cc155f5825d7d87d5908d821c78"
+   },
+   {
+    "commit": "8e9d9baa0440d49550f0416cc8afd8c8eb2aa386",
+    "files": 453,
+    "tree": "7639fffa54daa4c46c70aa376b39ecf00397453a"
+   },
+   {
+    "commit": "b44a01306143213fb29e73b1ed77f7979fc08ab5",
+    "files": 453,
+    "tree": "e5e6349dddd2227a7db897b2a9394958a9c97cfb"
+   },
+   {
+    "commit": "12ee3a3ec6274e14c8fb3194b24f1dce9c3c91cc",
+    "files": 454,
+    "tree": "911307426b90d937f814f89eadf5b569c03c2af7"
+   },
+   {
+    "commit": "790abaf2a08e75186111a8c82a563d7a4b972ad4",
+    "files": 454,
+    "tree": "6bfdf49df0bd261a3a1c1d39222caca1c0b07d43"
+   },
+   {
+    "commit": "00d7fa6b045b6068663e5d2fd7e01bef7ffa6fc2",
+    "files": 454,
+    "tree": "24e5eda3f5fd0f54ebf54295a3f36a237f896641"
+   },
+   {
+    "commit": "01f224a625ac87877d8e73243d5701513f473eeb",
+    "files": 454,
+    "tree": "49343ca09d10cce7a1f1593d42a35f9a45898d13"
+   },
+   {
+    "commit": "f10a2d264d8ef122e700c57d6a192ce998a159d7",
+    "files": 454,
+    "tree": "871189fb8765d47e162785c9dc8def2ba8c6cf8b"
+   },
+   {
+    "commit": "86754e32449b4b27068da052baa49c82a7dd1f2c",
+    "files": 454,
+    "tree": "50be4de93a57ea2017486ff78bc7fe6e6e85172c"
+   },
+   {
+    "commit": "afe6576da4dfbfcd843c7472979f6b6e095f7205",
+    "files": 454,
+    "tree": "6d518410814b7f9fcd69565061912fb6e6ae76dd"
+   },
+   {
+    "commit": "9acc7aa28491505b7e5405a457d5546c5a25ccb9",
+    "files": 454,
+    "tree": "965ba72d13069f8ec673c516fbd921055d4a791a"
+   },
+   {
+    "commit": "825e78d4e8d4bc97f0ddd537f1a210b7d1bba301",
+    "files": 454,
+    "tree": "18c1fc733144a992e60f5c17201e98ec6fd457a0"
+   },
+   {
+    "commit": "992329ddef073753847e68318dd328c0128258fb",
+    "files": 448,
+    "tree": "d70b7e0e29cf6a6d0545bd0ffc84bfb914b6fbf1"
+   },
+   {
+    "commit": "d7c20d67dfd6b6472ead365f2c9498087db4d261",
+    "files": 447,
+    "tree": "0d4947dc633fc8c29227b906655eebea9cdf55e2"
+   },
+   {
+    "commit": "ab121168a0f2cff876104787438b457b77476736",
+    "files": 447,
+    "tree": "eeb6a4b4e7d3ff718605d25ebcb5b9778616a704"
+   },
+   {
+    "commit": "0502ba0f85407ad0db93a26cc37b951bf0c3d268",
+    "files": 447,
+    "tree": "54ff75a0c59c665947dcfcadfe7364f564682a3f"
+   },
+   {
+    "commit": "0bd38bed2ed209324c3f886b0020e4d8e78e8d48",
+    "files": 447,
+    "tree": "256891e583d3ed430a449c24e9177033a5131a4c"
+   },
+   {
+    "commit": "5dc53e0676eed7fd6a8d6415dd9396d115c6a4c0",
+    "files": 446,
+    "tree": "96cc490cfd5967b444ee85270a9cf7caa603f595"
+   },
+   {
+    "commit": "063a10e6d9e608739be129923e38398d1788711d",
+    "files": 446,
+    "tree": "f4936bf459b282445e4c9e569e73f67143bf2685"
+   },
+   {
+    "commit": "4ba40078e2df9f1f6e161a089ed892a001ae46b8",
+    "files": 446,
+    "tree": "a35b39c5d91410ebd654bcae88c7d514b4b5dd00"
+   },
+   {
+    "commit": "191dd57d198101fb9c95c32c1021a1b9ade2d533",
+    "files": 446,
+    "tree": "a886156c24e8bd76e60f847a4b6c393ef8fa73e0"
+   },
+   {
+    "commit": "af53d1fd2ce23755c3284505415e3c0345e3a72e",
+    "files": 446,
+    "tree": "c2478a25e0706ddd9c3da1737e029b0aa0bbab88"
+   },
+   {
+    "commit": "932d6d493094564bd6ceccd6ae3ef2cbe29ca943",
+    "files": 446,
+    "tree": "30ecef135f32a3d6ff0a6a927ab1a469479eea49"
+   },
+   {
+    "commit": "cda5cdd15779177810c1bf6270accb78754d3944",
+    "files": 446,
+    "tree": "be5c82cc5bd2529e04520bb6393abe46f40b2067"
+   },
+   {
+    "commit": "d3797481da91d7a6f8943ff79a9104a74266aaf6",
+    "files": 446,
+    "tree": "7a04695564494d588677a4336d138ed0c3517ea3"
+   },
+   {
+    "commit": "d81947b08d01fe155576a0bdc5d2540a7ca5b688",
+    "files": 446,
+    "tree": "d72081466fdd91e673ac6078940c0a4b9c651985"
+   },
+   {
+    "commit": "c6fd964b36c1070ede8894b055543a97ec5624eb",
+    "files": 440,
+    "tree": "3c6922878c961dfd7741ab153ab17ec667d05230"
+   },
+   {
+    "commit": "e334eb1fbd8e409cf050ee6570ece0e3795b3597",
+    "files": 439,
+    "tree": "a932aa39b54a17512860fff2d2311ba0c1fbe243"
+   },
+   {
+    "commit": "b9e2df2c5d629f7ff8f56ad3c7d4756dad9556bf",
+    "files": 439,
+    "tree": "374059ead52548151f0f9b58db435d42889ce10b"
+   },
+   {
+    "commit": "3515965d9d33612f26b2b41fcd673a00c5c4e314",
+    "files": 439,
+    "tree": "16fa053a8938e043233a8d272aea8e08a77f6fcd"
+   },
+   {
+    "commit": "1f4030e7f39629819c1081b8902346524bb88eba",
+    "files": 439,
+    "tree": "f16c6c670b30381b9dc6dc2fbe1b16cdaae9dcf9"
+   },
+   {
+    "commit": "e5de583a8cbbe78b7b12b5f1eeacd10741c57342",
+    "files": 439,
+    "tree": "8623097fa75849e2eb1e3bc68253de857384a8f2"
+   },
+   {
+    "commit": "4783f97292a1a790581c2927a96af3653bd56673",
+    "files": 439,
+    "tree": "4ba704e1f65136b783c371b98573aacdedcad54b"
+   },
+   {
+    "commit": "dc2655277e69dfb9de1e918db44e52240c0ed802",
+    "files": 439,
+    "tree": "ddb99a349161ce13deb883520fb45cd8ed5dc8a6"
+   },
+   {
+    "commit": "2570afbf01e540e87ce3695e328391ff1095e7fd",
+    "files": 433,
+    "tree": "4d1449dce6af66c4bc5af10d43745d4d3b5d704a"
+   },
+   {
+    "commit": "7b18c68b080736e930970b7d47d299b9019fc87e",
+    "files": 432,
+    "tree": "44ea570909e341ee60abf3a546c0d3cc620cfc19"
+   },
+   {
+    "commit": "c3445e8aa84b0609c6f38b2ec1ded40acd279632",
+    "files": 432,
+    "tree": "84e06e5ec991390f35ba0ff3d4e8e89f7f809bfa"
+   },
+   {
+    "commit": "a5e6f449066f925e3da71bdb6e5cc75ef02aa43f",
+    "files": 432,
+    "tree": "beea7cd84ac309c3dc42c7581e9d170fa8b56bf4"
+   },
+   {
+    "commit": "af43f52d4f4c1574f482aa22240397eccfa432cd",
+    "files": 432,
+    "tree": "07ccd2429ab2d681728d632ee771a921345b7e6e"
+   },
+   {
+    "commit": "d4c8cb74832fec11748b3baf255330c25fd4688a",
+    "files": 432,
+    "tree": "607ac360dc0f2b568fcc28c6ca1eaa819dc7700b"
+   },
+   {
+    "commit": "ee1177057892e5e9ef4adac62a30dc45330c1c9d",
+    "files": 432,
+    "tree": "e1f9aabb840b6c5f0fa6f7437a38e39a5435a608"
+   },
+   {
+    "commit": "905ace9ba73aba0d8cdfe9594ce4a52cad3bf242",
+    "files": 432,
+    "tree": "3e06e27937d1b2927d86701979f56bbb8d07d31d"
+   },
+   {
+    "commit": "e66237310211f520251e770c89a15192c36b971e",
+    "files": 432,
+    "tree": "ee0ebe31c25ccec6035100d32c69ccb0d65489f6"
+   },
+   {
+    "commit": "ae31756a3b2308fef122475c47d1fdfc856d890f",
+    "files": 432,
+    "tree": "82d6ce80ad98599be4ba21eb3a1e5468761708fc"
+   },
+   {
+    "commit": "22164d273af64f818107bd538ba6886cd7f564aa",
+    "files": 432,
+    "tree": "ca72d7da429d0b689eb620cfb06490d75f8ab1c2"
+   },
+   {
+    "commit": "0faeb3a376bfc5bcc03fa71a6281633b86ac8a83",
+    "files": 303,
+    "tree": "8dc4fc30533ed95cdd3381fe5aa9ff5739497143"
+   },
+   {
+    "commit": "33351b618ad2cd2d392c09bf6ae6e2135ab49e13",
+    "files": 117,
+    "tree": "26246ae0abb1c7ffefba59d282be8e7081571f74"
+   },
+   {
+    "commit": "e43f48450e13020e3c1e7099503a64ba13de6a6a",
+    "files": 117,
+    "tree": "f89fc69049d6f627b62b3863245ef3b981b26470"
+   },
+   {
+    "commit": "c6f3f6c9588579c5ed0a67be33f27c814d166253",
+    "files": 117,
+    "tree": "e101785ead3ac67f8eb1f1d4750dc73e3ad0c26f"
+   },
+   {
+    "commit": "18289c361a9773cb52ea5231a5b3e49406cb1a61",
+    "files": 117,
+    "tree": "8f5d1ae70220425346c107e7dd7a073285db314b"
+   },
+   {
+    "commit": "08a623b4c6b268b222f81647519e103a4084fcbb",
+    "files": 117,
+    "tree": "102753b01c78a07c16064e919d1db5886085ff20"
+   },
+   {
+    "commit": "6dc641893411b06364c31296ec277e3645afce0c",
+    "files": 117,
+    "tree": "885ba9318d987e3d0523e54ebc6070200cf4c886"
+   },
+   {
+    "commit": "19e69e868f9b3d7eacc0c94a66715fa3524f6a12",
+    "files": 117,
+    "tree": "520014e0dbefd63ccd967c85ada8c10f17fdaf20"
+   },
+   {
+    "commit": "002e662056e0963e39c2411e322b443b5eb0d468",
+    "files": 117,
+    "tree": "c469025c374bf8e129acf1fd02affb8156f78182"
+   },
+   {
+    "commit": "7ade2e8752fbf10171c50caded921af7b390510f",
+    "files": 117,
+    "tree": "005afed0b922a77b2c6fa97976b15f12dc52d47c"
+   },
+   {
+    "commit": "7bebf22cbfcdaf1d2302bad72051d5149b8fbc48",
+    "files": 116,
+    "tree": "65ea9f49824ca8d3fd93d34b72801ef662318e1a"
+   },
+   {
+    "commit": "9e49f8800dbbb85891bcadc25efabaa36e65d296",
+    "files": 116,
+    "tree": "7a2789de59ade45eb7d85391cce5d62efe96b62e"
+   },
+   {
+    "commit": "899b0b0be449ff3a63ae6ab4bc9f6564a7faf893",
+    "files": 116,
+    "tree": "167a64dec47cf77c2942051aab0c5dc11a93eadf"
+   },
+   {
+    "commit": "3190345db8eda594269156840633b3f471031352",
+    "files": 114,
+    "tree": "5260886d37d94edc7e79958fd449a95f8fed59a5"
+   },
+   {
+    "commit": "3ea4dec928bdaa27064db8af47478f42d31c324b",
+    "files": 114,
+    "tree": "97356afaa8600a1bef08bc5fcbc94e66c228609c"
+   },
+   {
+    "commit": "adacd1a91f4e296afd7fb9d3df1d9c9c2f308e81",
+    "files": 114,
+    "tree": "6354e98464fe350ddc0d6c89414ec3a18d92fef8"
+   },
+   {
+    "commit": "16b94dffd88f27dcbed89c613e9306eadf7f289d",
+    "files": 114,
+    "tree": "7c392f29905e924e64bb8fc621e8f1a91ed913c6"
+   },
+   {
+    "commit": "b27cb823abfe5bb208c1a448e2a2eba63b5584b8",
+    "files": 113,
+    "tree": "7ea988edf4beca779646376a53952e640732e32c"
+   },
+   {
+    "commit": "d1e1c742b05de0a6d338f4c373837e3c2c5e8127",
+    "files": 113,
+    "tree": "c42fe2ac74287c00d9196b50ea4eced15681db69"
+   },
+   {
+    "commit": "d9855ccb87694e735d805cbebe4265c8c33a9481",
+    "files": 113,
+    "tree": "9594fb4e5691d0493fb7bf77a2b5854bcae74152"
+   },
+   {
+    "commit": "a970afc5de6ed4692e1374c0761f0f517d636138",
+    "files": 112,
+    "tree": "d57f74b4ce7b8efbac99c80c3ad12652a96afe30"
+   },
+   {
+    "commit": "926bd3e68bfb7c6666e77ec14a279ee2e2a98c8a",
+    "files": 112,
+    "tree": "96f035f411782a84fd8990ae340f8be50a0dc8d4"
+   },
+   {
+    "commit": "32aa7019d936b042e5f10e4c8fd8f3f6556ad7b9",
+    "files": 111,
+    "tree": "f5bbb2dfcd71470000f8d89bc54c7d35da14a32e"
+   },
+   {
+    "commit": "2b7785a06c11ab8fcbee8f4ef630d4671932acf1",
+    "files": 111,
+    "tree": "56cb4705075d24f83af3c0207edd4f78c08549e4"
+   },
+   {
+    "commit": "d7d14df899c508afa95ebd55d1adb35789f7bd02",
+    "files": 111,
+    "tree": "6838160b6721d8d30b521b9773eea625060e9dcd"
+   },
+   {
+    "commit": "de3e0135313f2290fff197144a1788b4aefa1069",
+    "files": 111,
+    "tree": "c935751fc06efb7f574326f6765d4d9b70afb97a"
+   },
+   {
+    "commit": "9921fbef0b84bfb5b50461f5a177c53b9b8dd342",
+    "files": 111,
+    "tree": "fdf43e484d43d36519d6b9b543b2a3395ffc46c5"
+   },
+   {
+    "commit": "82b8ae38aa5a70148ebd8ea57f7b0cfd439ccd7a",
+    "files": 111,
+    "tree": "0ddf1821ab5cfbb227a801e855204adda9eac843"
+   },
+   {
+    "commit": "78cc18f234858958dd27824f3918cc7f02471cff",
+    "files": 111,
+    "tree": "910707aa877cd3497c2a00ca41fc96ff6c85fcaa"
+   },
+   {
+    "commit": "724566eed0ca689b1ece6f1e6d55a406534d0561",
+    "files": 102,
+    "tree": "86a37f3fdd57207d53340bf6d20cfc89d9a08ad5"
+   },
+   {
+    "commit": "5526bdfa407267edd0767e1034803045e5fa106a",
+    "files": 102,
+    "tree": "e661537bb3280daa9e220a9129df7cf2a0abea8c"
+   },
+   {
+    "commit": "d4f19a9e4b23ea95a4bd48f42a22ce4d979af544",
+    "files": 102,
+    "tree": "3ff52483bf84ae3572f09561824f28789f17dce1"
+   },
+   {
+    "commit": "4168226291eae05e6466bb23ca8663d13998bac3",
+    "files": 102,
+    "tree": "35244d5f880980591af905d531515c397b19291a"
+   },
+   {
+    "commit": "08c912ba9e829491ff1d603cdaf5bd51389e489e",
+    "files": 99,
+    "tree": "17b2b648a0308ca09645d8efdf35c8cc13bf804d"
+   },
+   {
+    "commit": "e247b3671e0a815d48dcc93b7aa347e60e126cd5",
+    "files": 99,
+    "tree": "3cc929353d4dc7ba0a1a3f7de600d628919a3a40"
+   },
+   {
+    "commit": "58888f22e46a175b956b114a9d22a5c707da86c0",
+    "files": 95,
+    "tree": "19093d2508135fa88a2d4c7a58d3137fb9e9ece5"
+   },
+   {
+    "commit": "31f167394776fad99ec53bd9c5ce869acae55fb8",
+    "files": 95,
+    "tree": "f87bbf5cbe9c2658d927353b76761618a2c48565"
+   },
+   {
+    "commit": "e71fa2683eb8df565de38d234932f4875c56fb7a",
+    "files": 95,
+    "tree": "fc0b53ff5db9b25bb26537992314b6be41edca94"
+   },
+   {
+    "commit": "57bf2a40565357cc4cb77bd7bdb181556198986d",
+    "files": 95,
+    "tree": "560b8f03bebd5b015d8685bb00af1af793614b43"
+   },
+   {
+    "commit": "e024dda1f67f17386187a26c159ec50b6f69e6bd",
+    "files": 102,
+    "tree": "60afe8eb9cfd5c547369941fab0d95a011c38b95"
+   },
+   {
+    "commit": "afa9c827cd66c9df828ffbf6301c265055c7f8ec",
+    "files": 102,
+    "tree": "cd6da6a42d053d556f437eb467fd1e307b6d3a8e"
+   },
+   {
+    "commit": "f8bda33a1ab557739b7e13acf4eb2379d64009de",
+    "files": 0,
+    "tree": "88f551345715731421f06a0310e2cf5f5de8540b"
+   },
+   {
+    "commit": "80290f932a4ab138ef8382d3b56f75bdf10d1c0a",
+    "files": 99,
+    "tree": "d65172ec0454e79bda89ded7e00c7b6940976528"
+   },
+   {
+    "commit": "9bd3c67a5103a1a3ef52be994af0b2866c74b85d",
+    "files": 99,
+    "tree": "2b175af76225d957ad73070d6d12031557d279f7"
+   },
+   {
+    "commit": "013aecfbb96d2d444338acebc7f619f765008c0b",
+    "files": 95,
+    "tree": "854e078ef05ef3e0febef7d63501203ebf7b7f3e"
+   },
+   {
+    "commit": "84b24e3c3a72cbffe3dcbeee311b118fa9718a9d",
+    "files": 95,
+    "tree": "daaa34888a5fdb2ef1fa3372e7fbd47ee91e42f8"
+   },
+   {
+    "commit": "6f94fae93ae993beb32f92fd17470037185f56e9",
+    "files": 95,
+    "tree": "468621f24b1dd5b3bdb5d40d85129d9f0e538804"
+   },
+   {
+    "commit": "e5c577a8aaae6867c1f64ffa55b50a35b847441b",
+    "files": 95,
+    "tree": "65d49e4f8adf95c30af62b4bffee0575e011e651"
+   },
+   {
+    "commit": "3953eeed4677567f1f8e0b9a929f706a08085bbe",
+    "files": 95,
+    "tree": "52454f1dc1b8013fc14d6d01f3ae915c2f5761ec"
+   },
+   {
+    "commit": "0228b13d895c0155774762c2f8bcb488dfc39eaf",
+    "files": 95,
+    "tree": "eef156c46613f50d89a08c329b399dcc363174d3"
+   },
+   {
+    "commit": "29fa933717c921cab57fbe4023dd03b53267953a",
+    "files": 89,
+    "tree": "f3dfa03003abc4c8adeb0e0690c32fa3b35c4cbc"
+   },
+   {
+    "commit": "b408c74a9673dc34c214585d81378893f6379667",
+    "files": 89,
+    "tree": "70588d241c8d5952d8e4f0adbfdea602e39915e1"
+   },
+   {
+    "commit": "a477a2d43497c8434e7671cc0a3c565e918b5cb5",
+    "files": 89,
+    "tree": "8b313be87cf538a2a055b3443df4a233f658a9ef"
+   },
+   {
+    "commit": "571ea22d858322815c43928bfeed87a784af78f3",
+    "files": 82,
+    "tree": "444f56a7768ced26bc5ff1d9b206bba5d74e1e13"
+   },
+   {
+    "commit": "498ea877ec523fe5e0a3a54efe1ccaa7caa4c513",
+    "files": 82,
+    "tree": "04b360364c779cf42424a0f473b79e071372e072"
+   },
+   {
+    "commit": "d647984b93461756eb8b70a56c1e3ff6eb2290c5",
+    "files": 82,
+    "tree": "82e87067c697edd76fbca3c20b765284b8994eed"
+   },
+   {
+    "commit": "c029558a464d4ece02188dd4c5f0486387252762",
+    "files": 70,
+    "tree": "e303a6ffff056a91d1d014ce43eb7c13a14f34b3"
+   },
+   {
+    "commit": "7eb3e4ce7277039b555ddaea688f720f9ab4db50",
+    "files": 70,
+    "tree": "94d8d362e7fc3b5c70bfd169a00d5f2872918d7e"
+   },
+   {
+    "commit": "22fde136682013990157b9a11d42b923d20afa3e",
+    "files": 58,
+    "tree": "851a08bdea68bbb99018881b7eb74d140d493921"
+   },
+   {
+    "commit": "ad26cf76ee59044b78d6768e4d7bfc33e69e2463",
+    "files": 58,
+    "tree": "8cecb9632cb838670c2ad0ad70fc041f1cc2584c"
+   },
+   {
+    "commit": "3068a858ae46d55a43705963ede6e0d72b66492d",
+    "files": 34,
+    "tree": "cd93c9b11270170f1c7da5ffdc9e8bf252cb113c"
+   },
+   {
+    "commit": "f17b552aea9588ff21fe946f998a8672ca94009e",
+    "files": 34,
+    "tree": "118e09b3e156aab89556e9fb0d2f3a323f7aa020"
+   },
+   {
+    "commit": "67c943c6c408f437ca2e187f1ab637f133d01611",
+    "files": 34,
+    "tree": "d38af92957d6447f8174def6503a24278bb214f8"
+   },
+   {
+    "commit": "00814c1b1466a522dedc58ecb3155d04ea075fe4",
+    "files": 34,
+    "tree": "a325978d2118c8d7b0a12e6eac1893f943968b00"
+   },
+   {
+    "commit": "2e965b988210c64ccab25c0bbfacc65888d4d405",
+    "files": 34,
+    "tree": "15b3bcb6722d67c0d6cb8a3b379943ec82836af3"
+   },
+   {
+    "commit": "b228262ab1e2582d0e08da05337de38d17faa478",
+    "files": 34,
+    "tree": "f3bf7fc597bc4c00b9294002dada992cfe25bd52"
+   },
+   {
+    "commit": "d352a6cbcebf03ce45e81ff21c74744f6858cf99",
+    "files": 20,
+    "tree": "9b705ad4f46212ba3014a0c26cfbfe16980f0326"
+   },
+   {
+    "commit": "d6cd20c21709d67172c85a7f0a93759389e55b9d",
+    "files": 20,
+    "tree": "8bd7d17795a389decfdd693f38b42562bef53b8f"
+   },
+   {
+    "commit": "4a6577a215f5b47d73877357c06c12544acdf9b9",
+    "files": 20,
+    "tree": "d3cb1a847f5d63ad35d8c1083dd749408772c5a7"
+   },
+   {
+    "commit": "3cc012d01bee6281fce04b4ae11015bf8fdbcb62",
+    "files": 20,
+    "tree": "4785528809decc312adbf67d0edba7bf305e2b23"
+   },
+   {
+    "commit": "ec903a1cd647d57663d63d103b52330aee73fb47",
+    "files": 20,
+    "tree": "6290f2c272cfc573f902565b4e9923fda8580126"
+   },
+   {
+    "commit": "165b6de4209601cab99df27b4b409267687d2fd1",
+    "files": 20,
+    "tree": "456d527cb0aa99828d13dcc75d03a022e3bb6c61"
+   },
+   {
+    "commit": "c4f3270aae47c4450f1f08cf1459cbc8f6d06f81",
+    "files": 20,
+    "tree": "b73f7540be47edf00c780f87d0085542404a1035"
+   },
+   {
+    "commit": "f0555ff4111bf0f2c34b791cf80100c08b4f2240",
+    "files": 20,
+    "tree": "597b437c0d93cd5f792d01cad6aa9e6115411c0a"
+   },
+   {
+    "commit": "6930e99ad0645bedf7163a9867db8d86b29623fb",
+    "files": 20,
+    "tree": "6c57a6d306d44b8bbe6e634a709ae9bc1a64d4ef"
+   },
+   {
+    "commit": "c6e8392954fd5d968a1163d541c9b0621688ba7f",
+    "files": 20,
+    "tree": "2c7f80c50d91d2304558f1cf0a85c318394d22a3"
+   },
+   {
+    "commit": "af8667c41be93743d5d146681d0cf62aa8835ddb",
+    "files": 20,
+    "tree": "1a9f0c7e496a386854997e65ee9fced6b7211f4e"
+   },
+   {
+    "commit": "4d8897643c4568d0bc195b67f9fbb5ffd373a6e1",
+    "files": 20,
+    "tree": "eeefc2f58b99387e779af2ca6f91477d08077228"
+   },
+   {
+    "commit": "50b4bbc42a935b2af726789ff1fc800a9458e248",
+    "files": 20,
+    "tree": "8c470e8dde4a82c60256d282a6249a09bd9a2760"
+   },
+   {
+    "commit": "c398dd1d2dca5159ba38b3ab91711ad1827b81fb",
+    "files": 20,
+    "tree": "e19b314551a29b26b7da545fbbb440cc6de8c55e"
+   },
+   {
+    "commit": "eec5b45230f1b2d6a31aa693433a594fc8910123",
+    "files": 20,
+    "tree": "80c565263cd8d97d2fd2609bc210e4ed4ab01d7d"
+   },
+   {
+    "commit": "639d0fc19856ed23c9359876771b7f301109203a",
+    "files": 20,
+    "tree": "cbe15cb4d596b51483dd4fd68be0d02a68deeb87"
+   },
+   {
+    "commit": "9f832614ce8b51c207873ff4861986ab72903115",
+    "files": 4,
+    "tree": "8cc5a38c02c3bdabdc1ea8a8cf936f54e0541010"
+   },
+   {
+    "commit": "8eef323162249151fd2aec9d7dc41cb22a492925",
+    "files": 4,
+    "tree": "06da2458c8871c98dd7f3da502221882d916dbfa"
+   },
+   {
+    "commit": "78781307c46472455ace472fa1a1b9e7aed557fd",
+    "files": 4,
+    "tree": "569e7f28c3114b7775bc5d49313e4dde883f2a67"
+   },
+   {
+    "commit": "2cc3ede5a3bc79c4d772e4538e0e8ec61e8b35fb",
+    "files": 4,
+    "tree": "1708ed0a47f6456637483ef6f5fe5407f2de51da"
+   },
+   {
+    "commit": "648f2ea6c68af09fd6635fb6ad29b050c37ebede",
+    "files": 4,
+    "tree": "325292ba386923ef3f31cb4ff00f8d91a6124241"
+   },
+   {
+    "commit": "f6aba1bdca26e3881abefdef6f2b44d2ece6a63c",
+    "files": 4,
+    "tree": "ea372a46463afa1ccb516acea83223a51e4964a9"
+   },
+   {
+    "commit": "69a2fe2f8339a1ee4e83beabff2df38076108ce9",
+    "files": 2,
+    "tree": "6b82712cdaa3ca717ffcce9ad51d8d097441cf52"
+   },
+   {
+    "commit": "05fbcc4b6acfda0bb62cbe05975989a5136a2363",
+    "files": 2,
+    "tree": "5724af33b05f1c2bb6ddce510a345823fa431dec"
+   },
+   {
+    "commit": "d88175ad903eff975ee0c49e23a314cb97316744",
+    "files": 2,
+    "tree": "4a098e9b2f44771a746272ae7abcfd132268ef80"
+   },
+   {
+    "commit": "153fd80ae5476121b07e96b91dfddd71e8c6e2b7",
+    "files": 2,
+    "tree": "8bcd0f785db3d9a121b9847c95dd1d2333432580"
+   },
+   {
+    "commit": "6d04162863e143726568dbe49a109826ff8c73bd",
+    "files": 2,
+    "tree": "9a56d89a7c6691335a4694f47eb6dae351ab56ce"
+   },
+   {
+    "commit": "5ea3450dec87bfb60f2e7f1633619404c315e83e",
+    "files": 2,
+    "tree": "44edb8da3bed4557174307bbefee94a282258598"
+   },
+   {
+    "commit": "c924807d96ca0a2d3f19a4b77338cb292562667c",
+    "files": 2,
+    "tree": "e2625405e78957f0ec95b0306f312b675926c512"
+   },
+   {
+    "commit": "c645403b98d5ba723114751dffb29c3d8ac1324f",
+    "files": 2,
+    "tree": "8d2ad767c1f489ca0e15d0cc0d5f5ab3c62b4dec"
+   },
+   {
+    "commit": "f9930647018d4768e518e81967339bb51b9c06c4",
+    "files": 2,
+    "tree": "c887ac86abb10f5a3c00a2df75246afe798d1026"
+   },
+   {
+    "commit": "fa17ac0aa0046bfe005f7768f0e943f3470e47ba",
+    "files": 2,
+    "tree": "3e23742beeb6fa19709958c2a11ede85f3991ec8"
+   },
+   {
+    "commit": "0f1c9475716567459b5ce5155ad17a925fa1a450",
+    "files": 1,
+    "tree": "f977302d5f60c12deed0eae8d9b023abc30769fd"
+   },
+   {
+    "commit": "5a13c8b3d821fa3839724b014d2eb46ffbc268c1",
+    "files": 1,
+    "tree": "d939014f38156109e797ceaf1d8683d444f7c71c"
+   }
+  ]
+ },
+ "source_commit": "6891dd27edf8b28514160d1ade350e3213826058",
+ "source_sha256": {
+  "docs/panda-adaptation.md": "9e3d7f5cb53e8e92c874c8f516a3bf7c64ba119ac5550bb7ffe775786977e05b",
+  "docs/panda-estimator-memory.md": "938b33ce3e29913e99c9b7f9739b5338b3685dbc6823426d39c056ce385ffd1e",
+  "docs/panda-joint-filter.md": "fbe8210185f0c9574b01c68d4d0c110a01919ee3c560c8139ec1e7ea37c9ee48",
+  "docs/panda-reference-validation.md": "baaf5717c878a90a93b4a4e0779ab0efdb6cc3d6e4d444a95906fa0d778c00f7",
+  "docs/panda-score-memory.md": "dfbeb5c6407c6bd687d4994e86039123c7ca18b28f93810a279b8b08167b0ab1",
+  "docs/panda-variable-delay.md": "b0fa96497803cb387badd23edcbd903e4e94653fbd92f6e70e4b13a24d321fcc",
+  "docs/seed_registry.json": "38c511ab32b7205299a8e55f0c681654f069dba38a4e4c7000c95ba72e3c9f9d",
+  "pyproject.toml": "08ce3712a256118a9db5a1c195c522309c3cf3f7ae9ff853fb678e4f775952bc",
+  "results/panda_estimator_memory_pilot/complete.json": "e948bdc1c5e4ba3499c09c436d713355d61cbe285837e5afacc14bf70cd3ba98",
+  "results/panda_estimator_memory_pilot/episodes.json": "e16fd1d4eb0a8228574e61621066ae373c667af2dd7fcbd7ace1de22442dd959",
+  "results/panda_estimator_memory_pilot/manifest.json": "c980e29f7e7e941569b085f5f723b21c6bdc3a1278ee25b92257e74b29e6815f",
+  "results/panda_nominal_pilot/episodes.json": "2c546323b4033435a09897b94743eebd53484202b9516385198da69aab96da68",
+  "results/panda_posture_delay_pilot/complete.json": "36b598ba69b05fb540148271e67c9c754348285724181ba3239097deb7ece445",
+  "results/panda_posture_delay_pilot/episodes.json": "fa815f22c6bbfcca1bd7858b0476061d385f78e08cdf407110dd566f77496d68",
+  "results/panda_posture_delay_pilot/manifest.json": "b7f637760993025b524a6f4e4d990e58efea9392798b5f8638419d852d697066",
+  "results/panda_reference_validation/complete.json": "0b2eedc94a07fff95ef4d1ac7e137dd9e814943478f3f134ee2ee5d3cf9ace61",
+  "results/panda_reference_validation/decision.json": "cd2df65ac541c185b9409f3e21de0e709bf1a448a00d88517f962a8d37dd8c7b",
+  "results/panda_reference_validation/episodes.json": "afdfbd7cce1e5a7fe7354c3372aa6864fb341de5f155b3b4d81b02315b05a785",
+  "results/panda_reference_validation/manifest.json": "9b7a804a7ffdf7d85e55ba4275c9ff992b80b335aacd7e545be5448b0edf67fc",
+  "results/panda_score_memory_pilot/complete.json": "c5bcf38dad1e99eac0be11e4600226bfa738223ca41ba78a206f0032662d9923",
+  "results/panda_score_memory_pilot/episodes.json": "3c5e87032b2a5122c0f34611b3703c76e9fe1b947a88d22c0bca76df25db8a03",
+  "results/panda_score_memory_pilot/manifest.json": "564192ca388f2c8d25c40580f7411f4f00e2ca994ae39919a36f31c5b0449de1",
+  "results/panda_variable_delay_pilot/complete.json": "12a38e5fa3d2e690242ea365974518d955c3299e7c64b8e6d2cd6c56e9d6ccc7",
+  "results/panda_variable_delay_pilot/episodes.json": "eb4df273c4512169fad8c18c0c38bb0a1d032ed4aa9801dfe747c06788148101",
+  "results/panda_variable_delay_pilot/manifest.json": "2d56cc2cac242cac3fdc6b8a96fa9274dca34e05e0c0ad6bb0f84cf2e8ee356f",
+  "sarrl/__init__.py": "921f64c84f76f492962af735c20ea003ffb04648643ba9ceb4cbdc1651928991",
+  "sarrl/assets/panda/source.json": "ed70832188e1e0643f7059ad3a0e619d323a1a379f7bc608cf4e2bf7b27128f9",
+  "sarrl/controllers/panda_adaptive.py": "b6e045dce1ab7c61ebde2a5c85ba860ca67ae10cacab1aadb12b344fee4acca9",
+  "sarrl/controllers/panda_delay.py": "cc31cbd439f3635a05f5c04f7bafc5b5bf96213b5ce8e625c33b68aca1bf1682",
+  "sarrl/controllers/panda_estimator_memory.py": "a0fe9e01cb1f0a019563cc22adda548fb8a6f757163bfa7089ee9cf8baa4bb81",
+  "sarrl/controllers/panda_filtered.py": "bca194b717c918b06431a00edb27c10d5559e07a4a4f6caf3e7cf215894acdac",
+  "sarrl/controllers/panda_nominal.py": "1341c02ca257dd6314d3d116a11cbf07e15e4653e8425a252441a47f009e0a98",
+  "sarrl/controllers/panda_score_memory.py": "5a4d3873b7a831926a01f22e66460ee53db32e157a86820dca8092e820791a55",
+  "sarrl/envs/panda_interface.py": "d871aed19784e2b2b58132066cc345c7a589f47c2c5aeb97dd29bf8294b397a2",
+  "sarrl/envs/panda_joint_reach.py": "313c54d08c0ecb43e7aa2afc9ed6687d69b6dfcc200ed9cc8f215710df6849fe",
+  "sarrl/envs/panda_packet_delay.py": "c4377cfb1814901172c5b457cfb22dc1d5af5454693502877bd507b4e1f7bb05",
+  "sarrl/envs/panda_reach.py": "29b3ffb49a1aedfd8e9e2acc1c11954f4dea84c57b60f260f743b57c66b85e2a",
+  "sarrl/evaluation/panda_adaptation.py": "2dc7ed45f6857e7d762151c0030ea8d14d175a0fbb80aa834fb5cf4935c65e3c",
+  "sarrl/evaluation/panda_delay.py": "d886f51ea6bc8405a6ff132c66aedfcb65e030ca077befb543cd3f7f109ceae2",
+  "sarrl/evaluation/panda_estimator_memory.py": "53540f3eab7eb3b7b2e341a4a16aecb26661bfcb7418ff061ab4c4db0f671890",
+  "sarrl/evaluation/panda_joint_filter.py": "686ae31748bbc02bea379be5441208735dbb451133e202020a187c49438766d6",
+  "sarrl/evaluation/panda_nominal.py": "f2cba368abdbdb0048ec41da5fdc00d21717a4529096fd52b62dabda79a9dcc1",
+  "sarrl/evaluation/panda_posture_delay.py": "dce436da740ea88b68509b3e8f9785d9544d160b63db910a98d5350839c7e6ee",
+  "sarrl/evaluation/panda_reference_validation.py": "70c483f1d51ff6154f65ee673be53dde2a8d6b2f4cd66aa8e4d50dc104338fcc",
+  "sarrl/evaluation/panda_robustness.py": "29cbf0724087f2439d4d6bbd2e32c2d54403824721f6da343f0fd49e9b353710",
+  "sarrl/evaluation/panda_score_memory.py": "86c936ae76b6c503a5748992b90f5cc71ca906af7b63249fd272240b45bfca79",
+  "sarrl/evaluation/panda_variable_delay.py": "dc6ac806ed2fd8131638a62845253e2cc0979d5333ec44535066f14bcb9c8059",
+  "sarrl/robots/panda.py": "0512126c7f1c233877a2edae04b84c6f366fa180965d872d22c38a125e9df2ad",
+  "sarrl/safety/panda_joint_filter.py": "8f9f9c2a2dc645b5a26eb9a7ef40da763cae6bd6cf25f49e285341ac2e4bf5b7",
+  "tests/test_panda_estimator_memory.py": "ff1e96f86baf07df40b0466cc366b10b94b75f46acba6c92b089aabedcf05319",
+  "tests/test_panda_joint_filter.py": "b2fb379360f443637b9b9ce104e9478015bf753b9bf9410384b47915e61204e1",
+  "tests/test_panda_reference_validation.py": "84c4dddd94dbddadac727f87c872bff948bcda0fb67054f14c3af969402ad5e6",
+  "tools/audit_panda_estimator_memory.py": "743a9801683d3a552334a1cd6514417ad93e5f4489718876caf7a70b0c779b0d",
+  "tools/audit_panda_joint_filter.py": "b6ee5a10588b23c45b392294ad2bcf82a4143d51f728f1ade72b0c28a7078eab",
+  "tools/audit_panda_reference_validation.py": "c566c5cc990d193a1e29123ef35be294e8c44ff821903564787d601a0d8eb14a",
+  "tools/audit_panda_score_memory.py": "86af792deca768ed6199c049c0e3450202c72fc847e39ffb6c5f83ab202b7e1f",
+  "tools/audit_panda_variable_delay.py": "2fda87b64c336ff7be23ac3092955b73920895a6c5d3dc07bf1c2f3e848d60f3",
+  "tools/campaign_guards.py": "0a63e2fcf54bcbcbf899361bbc228b7a6a0f47526cda63535b90acd53888f7c4",
+  "tools/make_panda_posture_delay_figure.py": "b61fd3592ccd2af939b576cde55f62d54555d89e513c4a7fb0d8c128ba253bd4",
+  "tools/make_panda_score_memory_figure.py": "3965cb3eb1b688ef38bf4e47b8708cc1f3d20508131884c8a8df68cc47cd0bc6",
+  "tools/make_panda_variable_delay_figure.py": "ae5f2010cdf7131e0b18ca3a197a6c68fd2a69f9f64a0f44efa2f4857891e771",
+  "tools/profile_panda_reference.py": "a6f94b6e15b3b08fe20f8a18c24b658c72d98a30c9b08f9974c685f003dc8e3d",
+  "tools/run_adaptive_campaign.py": "12c66fd37a994b828f16b38fa7cfa39731fc627f4e47b7016895337c39d73781",
+  "tools/run_panda_adaptation.py": "c2090956cb609ea307463b353b2b936e459bae29aa568e1f95a2b4d3f3121ad3",
+  "tools/run_panda_delay.py": "0c099558c65c5dbec86e3516723ac4fca4108af014146ca5ed3e261e3d78f90f",
+  "tools/run_panda_estimator_memory.py": "8d84bc98cb626f51ebcca11d35a2f074841eca03099ecfb701f22da968373b17",
+  "tools/run_panda_joint_filter.py": "2328d759dba02443d50c896217064a19ca6edadecdd008311f6011b8213f767b",
+  "tools/run_panda_posture_delay.py": "c50b1ab8fd11977f65a5a1e1c4fe4113a2bcfaca736f491412b04b9d4037c0e0",
+  "tools/run_panda_reference_validation.py": "7e080b70926e7888d90ec16c8b81c4a179fcf77165c0891d2677b43a78d59cfb",
+  "tools/run_panda_robustness.py": "96bf6adfd29fd7df22e6b0aeee169d07ed411490f268c2c04a30e0c638a164c6",
+  "tools/run_panda_score_memory.py": "6824a896977ee160580b31280c5160dd7c09b3e4d8ab667be59ab8c0e23bdb07",
+  "tools/run_panda_variable_delay.py": "d3f1e1fa984e9d9e845c4c48c8db63fe996be049001a270dc38fedc73b077aaa",
+  "tools/scan_seed_usage.py": "948eae9c7adb7be40cd6f67e3af07c336de80fa5e7bddad88c3d9d1e5c166ace"
+ },
+ "started_utc": "2026-10-14T18:15:34.469622+00:00"
+}

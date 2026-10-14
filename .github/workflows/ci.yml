@@ -77,3 +77,11 @@ jobs:
             cd "$RUNNER_TEMP/panda-shared-audit"
             python -m tools.audit_panda_shared_scoring --input "$GITHUB_WORKSPACE/results/panda_shared_scoring_pilot"
           fi
+      - name: Audit retained Panda joint filtering
+        shell: bash
+        run: |
+          if [ -f results/panda_joint_filter_pilot/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-joint-audit" 6891dd27edf8b28514160d1ade350e3213826058
+            cd "$RUNNER_TEMP/panda-joint-audit"
+            python -m tools.audit_panda_joint_filter --input "$GITHUB_WORKSPACE/results/panda_joint_filter_pilot"
+          fi

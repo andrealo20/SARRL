@@ -1,0 +1,415 @@
+{
+ "cells": {
+  "fast_clean_d00/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.00010092554584262559,
+   "mean_tracking_rms_rad": [
+    0.0036634939301290457,
+    0.005037686480572618,
+    0.005032244207448564,
+    0.005849378250958102,
+    0.00617407530873681,
+    0.004997319574634255,
+    0.002513437852775566
+   ],
+   "successes": 4,
+   "unsafe_episodes": 16
+  },
+  "fast_clean_d00/bank_filtered": {
+   "aborts": 18,
+   "episodes": 20,
+   "mean_final_error_rad": 0.2514313409003724,
+   "mean_tracking_rms_rad": [
+    0.14857965356012995,
+    0.08325192120202381,
+    0.17484572433604897,
+    0.09483776135926289,
+    0.12932461273215531,
+    0.10294408565768379,
+    0.11632885165746878
+   ],
+   "successes": 2,
+   "unsafe_episodes": 0
+  },
+  "fast_clean_d20/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.00018580818568044165,
+   "mean_tracking_rms_rad": [
+    0.012473446622049397,
+    0.020050647415367016,
+    0.017356036228417422,
+    0.023471204291075014,
+    0.013800693866495883,
+    0.015565976868793532,
+    0.00899323231095531
+   ],
+   "successes": 2,
+   "unsafe_episodes": 18
+  },
+  "fast_clean_d20/bank_filtered": {
+   "aborts": 18,
+   "episodes": 20,
+   "mean_final_error_rad": 0.2616111300911067,
+   "mean_tracking_rms_rad": [
+    0.1462462295683169,
+    0.07243167156455095,
+    0.16667549904046053,
+    0.09938437210395024,
+    0.1316035651923311,
+    0.10844002811716769,
+    0.10827894266383889
+   ],
+   "successes": 2,
+   "unsafe_episodes": 0
+  },
+  "fast_clean_d40/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.0004498056856482441,
+   "mean_tracking_rms_rad": [
+    0.03167009034617973,
+    0.05615791144137251,
+    0.05052430380519026,
+    0.06976869837995676,
+    0.027464811001725604,
+    0.03140296158011425,
+    0.015800573631631402
+   ],
+   "successes": 2,
+   "unsafe_episodes": 18
+  },
+  "fast_clean_d40/bank_filtered": {
+   "aborts": 17,
+   "episodes": 20,
+   "mean_final_error_rad": 0.2297069695524665,
+   "mean_tracking_rms_rad": [
+    0.10901125524956756,
+    0.07059779136086194,
+    0.147757570647851,
+    0.12071788548033684,
+    0.09815986326925384,
+    0.10757546110408626,
+    0.06842456019089173
+   ],
+   "successes": 3,
+   "unsafe_episodes": 10
+  },
+  "fast_noise_d00/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.000319222002673579,
+   "mean_tracking_rms_rad": [
+    0.0036274196285407978,
+    0.005065544213394892,
+    0.005002152512750236,
+    0.005888477993261166,
+    0.00620823282590601,
+    0.005002717557472692,
+    0.0025145192494652685
+   ],
+   "successes": 4,
+   "unsafe_episodes": 16
+  },
+  "fast_noise_d00/bank_filtered": {
+   "aborts": 18,
+   "episodes": 20,
+   "mean_final_error_rad": 0.2535498659042579,
+   "mean_tracking_rms_rad": [
+    0.14992198111947413,
+    0.08487535227606377,
+    0.17643297925157955,
+    0.09485443129999621,
+    0.13232889565022482,
+    0.10449232884665079,
+    0.11780833829316124
+   ],
+   "successes": 2,
+   "unsafe_episodes": 0
+  },
+  "fast_noise_d20/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.00039250685688478127,
+   "mean_tracking_rms_rad": [
+    0.012410818553021003,
+    0.02011928948021502,
+    0.017366227587910964,
+    0.023588069679314747,
+    0.013862631535724552,
+    0.015694954885027354,
+    0.009000722039692408
+   ],
+   "successes": 2,
+   "unsafe_episodes": 18
+  },
+  "fast_noise_d20/bank_filtered": {
+   "aborts": 18,
+   "episodes": 20,
+   "mean_final_error_rad": 0.2609549755625091,
+   "mean_tracking_rms_rad": [
+    0.14754822044207724,
+    0.07289366590872941,
+    0.16843827907984238,
+    0.09940763773515142,
+    0.13061105258623423,
+    0.10906494313907786,
+    0.10715272419451387
+   ],
+   "successes": 2,
+   "unsafe_episodes": 0
+  },
+  "fast_noise_d40/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.0006443690847876188,
+   "mean_tracking_rms_rad": [
+    0.03161395067105099,
+    0.056042596412207865,
+    0.05030277860805599,
+    0.0697888045301902,
+    0.027203044272738248,
+    0.0316403884927141,
+    0.01580565983389106
+   ],
+   "successes": 2,
+   "unsafe_episodes": 18
+  },
+  "fast_noise_d40/bank_filtered": {
+   "aborts": 18,
+   "episodes": 20,
+   "mean_final_error_rad": 0.24661785722863616,
+   "mean_tracking_rms_rad": [
+    0.12329756807882719,
+    0.07191143280109258,
+    0.16220078039579416,
+    0.12522684129697687,
+    0.1076472919125248,
+    0.11092511497115595,
+    0.07467885827471285
+   ],
+   "successes": 2,
+   "unsafe_episodes": 10
+  },
+  "slow_clean_d00/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 5.790290308315127e-05,
+   "mean_tracking_rms_rad": [
+    0.0006841708672255338,
+    0.0003111972024862475,
+    0.000720009354007832,
+    0.0005794130595627865,
+    0.0014400725581673187,
+    0.0012544371270926153,
+    0.0019575895255892475
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d00/bank_filtered": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 5.790290308315127e-05,
+   "mean_tracking_rms_rad": [
+    0.0006841708672255338,
+    0.0003111972024862475,
+    0.000720009354007832,
+    0.0005794130595627865,
+    0.0014400725581673187,
+    0.0012544371270926153,
+    0.0019575895255892475
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d20/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 3.344859834908398e-05,
+   "mean_tracking_rms_rad": [
+    0.0013016017000533633,
+    0.0021058059643602077,
+    0.0014973318352473992,
+    0.004797587994951698,
+    0.0021464453831630554,
+    0.0024710006995245126,
+    0.002735030290740584
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d20/bank_filtered": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 3.344859834908398e-05,
+   "mean_tracking_rms_rad": [
+    0.0013016017000533633,
+    0.0021058059643602077,
+    0.0014973318352473992,
+    0.004797587994951698,
+    0.0021464453831630554,
+    0.0024710006995245126,
+    0.002735030290740584
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d40/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 3.798866722545466e-05,
+   "mean_tracking_rms_rad": [
+    0.0020920671925272827,
+    0.004731549667325764,
+    0.0025360661008957015,
+    0.01017888286165711,
+    0.0029006412798506884,
+    0.004039058367789091,
+    0.003673636677110556
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d40/bank_filtered": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 3.798866722545466e-05,
+   "mean_tracking_rms_rad": [
+    0.0020920671925272827,
+    0.004731549667325764,
+    0.0025360661008957015,
+    0.01017888286165711,
+    0.0029006412798506884,
+    0.004039058367789091,
+    0.003673636677110556
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d00/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.00036005929664631036,
+   "mean_tracking_rms_rad": [
+    0.000696997182499393,
+    0.00036833146627959096,
+    0.0007466408799672445,
+    0.000643378971323644,
+    0.0014806509060582103,
+    0.0013193468916271871,
+    0.0019844556892838357
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d00/bank_filtered": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.00036005929664631036,
+   "mean_tracking_rms_rad": [
+    0.000696997182499393,
+    0.00036833146627959096,
+    0.0007466408799672445,
+    0.000643378971323644,
+    0.0014806509060582103,
+    0.0013193468916271871,
+    0.0019844556892838357
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d20/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.0003497159655795612,
+   "mean_tracking_rms_rad": [
+    0.001299666003868359,
+    0.002155663526762001,
+    0.0014971481985541382,
+    0.004921644619386037,
+    0.0022121125072875666,
+    0.002580254450617033,
+    0.00276286529081132
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d20/bank_filtered": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.0003497159655795612,
+   "mean_tracking_rms_rad": [
+    0.001299666003868359,
+    0.002155663526762001,
+    0.0014971481985541382,
+    0.004921644619386037,
+    0.0022121125072875666,
+    0.002580254450617033,
+    0.00276286529081132
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d40/bank_align": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.00037746509074201433,
+   "mean_tracking_rms_rad": [
+    0.002075092854020859,
+    0.004789759641937739,
+    0.002532768066271177,
+    0.010469922507643089,
+    0.003144749165044778,
+    0.004214573544634964,
+    0.0037016263861633044
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d40/bank_filtered": {
+   "aborts": 0,
+   "episodes": 20,
+   "mean_final_error_rad": 0.00037746509074201433,
+   "mean_tracking_rms_rad": [
+    0.002075092854020859,
+    0.004789759641937739,
+    0.002532768066271177,
+    0.010469922507643089,
+    0.003144749165044778,
+    0.004214573544634964,
+    0.0037016263861633044
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  }
+ },
+ "episodes": 480,
+ "exploratory_gate": {
+  "baseline_fast_unsafe_fraction": 0.8666666666666667,
+  "failures": [
+   {
+    "condition": "fast_clean_d00",
+    "criterion": "success_count"
+   },
+   {
+    "condition": "fast_clean_d40",
+    "criterion": "filtered_unsafe"
+   },
+   {
+    "condition": "fast_noise_d00",
+    "criterion": "success_count"
+   },
+   {
+    "condition": "fast_noise_d40",
+    "criterion": "filtered_unsafe"
+   }
+  ],
+  "fast_unsafe_fraction_reduction": 0.7,
+  "filter_advances": false,
+  "meaning": "engineering screen; no general safety certificate",
+  "reference_controller": "bank_align"
+ },
+ "physical_steps": 720000
+}
