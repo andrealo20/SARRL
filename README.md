@@ -19,7 +19,7 @@ sampled posture ranges. Prediction and changing-latency variants remain
 experimental. See the [v2.3 guide](docs/v2.3.md) for scope, a short example
 and frozen-data audits. Hardware and sim-to-real results are not claimed.
 
-## Panda demo
+## Demo
 
 [![Fixed and adaptive Panda replay](assets/replays/panda_control.gif)](assets/replays/panda_control.mp4)
 
