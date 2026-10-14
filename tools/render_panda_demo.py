@@ -16,6 +16,7 @@ from tools.figure_style import apply_style, check_bounds, font_path
 
 ARMS = ("fixed", "adaptive")
 COLORS = {"fixed": "#ca6d20", "adaptive": "#087e8b"}
+REPLAY_SCALE = 2
 
 
 def load_pair(directory: Path):
@@ -121,7 +122,7 @@ def project_marker(scene, point, width, height):
             height / 2 - scale * np.dot(relative, up) / depth)
 
 
-def tip_overlay(image, scene, tip, target, color):
+def tip_overlay(image, scene, tip, target, color, scale=1):
     """Keep projected tip and target markers visible over occluding wrist meshes."""
     from PIL import ImageDraw
 
@@ -129,31 +130,37 @@ def tip_overlay(image, scene, tip, target, color):
     tip_pixel = project_marker(scene, tip, *image.size)
     target_pixel = project_marker(scene, target, *image.size)
     if tip_pixel is not None and target_pixel is not None:
-        draw.line((*tip_pixel, *target_pixel), fill="#f6c85f", width=2)
+        draw.line((*tip_pixel, *target_pixel), fill="#f6c85f", width=2 * scale)
     if target_pixel is not None:
         x, y = target_pixel
-        draw.line((x - 9, y, x + 9, y), fill="#f6c85f", width=3)
-        draw.line((x, y - 9, x, y + 9), fill="#f6c85f", width=3)
+        draw.line((x - 9 * scale, y, x + 9 * scale, y), fill="#f6c85f", width=3 * scale)
+        draw.line((x, y - 9 * scale, x, y + 9 * scale), fill="#f6c85f", width=3 * scale)
     if tip_pixel is not None:
         x, y = tip_pixel
-        draw.ellipse((x - 4, y - 4, x + 4, y + 4), fill=color, outline="white", width=1)
+        radius = 4 * scale
+        draw.ellipse((x - radius, y - radius, x + radius, y + radius),
+                     fill=color, outline="white", width=scale)
 
 
-def make_gif(video: Path, output: Path):
+def make_gif(video: Path, output: Path, width=1200):
     import imageio_ffmpeg
 
+    if not 1 <= width <= 1920:
+        raise ValueError("GIF width must be between 1 and 1920 pixels")
     output.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run([
         imageio_ffmpeg.get_ffmpeg_exe(), "-v", "error", "-n", "-i", str(video),
         "-filter_complex",
-        "fps=8,scale=800:-1:flags=lanczos,split[a][b];"
+        f"fps=8,scale={width}:-1:flags=lanczos,split[a][b];"
         "[a]palettegen=stats_mode=diff[p];[b][p]paletteuse=dither=sierra2_4a",
         "-loop", "0", str(output),
     ], check=True)
 
 
-def draw_label(draw, position, value, font, fill, bounds):
+def draw_label(draw, position, value, font, fill, bounds, scale=1):
     """Fail before writing a frame if a label crosses its reserved text band."""
+    position = tuple(coordinate * scale for coordinate in position)
+    bounds = tuple(coordinate * scale for coordinate in bounds)
     box = draw.textbbox(position, value, font=font, anchor="lt")
     left, top, right, bottom = bounds
     if box[0] < left or box[1] < top or box[2] > right or box[3] > bottom:
@@ -161,7 +168,7 @@ def draw_label(draw, position, value, font, fill, bounds):
     draw.text(position, value, font=font, fill=fill, anchor="lt")
 
 
-def render(directory: Path, output: Path, poster: Path, gif: Path | None = None):
+def render(directory: Path, output: Path, poster: Path, gif: Path | None = None, gif_width=1200):
     import imageio_ffmpeg
     import matplotlib
     import mujoco
@@ -178,6 +185,8 @@ def render(directory: Path, output: Path, poster: Path, gif: Path | None = None)
     if manifest["model"]["files"] != model_provenance()["files"]:
         raise ValueError("packaged model differs from the retained trajectory model")
     model = load_panda_model()
+    model.vis.global_.offwidth = 480 * REPLAY_SCALE
+    model.vis.global_.offheight = 360 * REPLAY_SCALE
     paths = tip_paths(model, traces)
     target = np.asarray(records["fixed"]["target_xyz_m"])
     tip_errors = {arm: 1000 * np.linalg.norm(paths[arm] - paths["reference"], axis=1)
@@ -185,7 +194,7 @@ def render(directory: Path, output: Path, poster: Path, gif: Path | None = None)
     errors = {arm: np.rad2deg(np.max(np.abs(
         np.array([r["q"] for r in traces[arm]])
         - np.array([r["reference"] for r in traces[arm]])), axis=1)) for arm in ARMS}
-    fig = plt.figure(figsize=(9.6, 3.6), dpi=100)
+    fig = plt.figure(figsize=(9.6, 3.6), dpi=100 * REPLAY_SCALE)
     ax = fig.add_axes((0.085, 0.29, 0.37, 0.55))
     zoom = fig.add_axes((0.62, 0.29, 0.35, 0.55))
     for arm in ARMS:
@@ -212,8 +221,8 @@ def render(directory: Path, output: Path, poster: Path, gif: Path | None = None)
     zoom.legend(loc="upper center", bbox_to_anchor=(0.5, -0.26), fontsize=12)
     cursor = ax.axvline(0, color="#374151", linewidth=1)
     check_bounds(fig, "replay chart")
-    heading = ImageFont.truetype(font_path(), 30)
-    text = ImageFont.truetype(font_path(), 22)
+    heading = ImageFont.truetype(font_path(), 30 * REPLAY_SCALE)
+    text = ImageFont.truetype(font_path(), 22 * REPLAY_SCALE)
     data = mujoco.MjData(model)
     camera = mujoco.MjvCamera()
     wide_lookat = np.array([0.2, 0.0, 0.5])
@@ -224,24 +233,26 @@ def render(directory: Path, output: Path, poster: Path, gif: Path | None = None)
     output.parent.mkdir(parents=True, exist_ok=True)
     poster.parent.mkdir(parents=True, exist_ok=True)
     writer = imageio_ffmpeg.write_frames(
-        str(output), (960, 1008), fps=15, codec="libx264", pix_fmt_out="yuv420p",
+        str(output), (960 * REPLAY_SCALE, 1008 * REPLAY_SCALE),
+        fps=15, codec="libx264", pix_fmt_out="yuv420p",
         output_params=["-crf", "20", "-movflags", "+faststart"],
     )
     writer.send(None)
     try:
-        with mujoco.Renderer(model, height=360, width=480) as renderer:
+        with mujoco.Renderer(model, height=360 * REPLAY_SCALE,
+                             width=480 * REPLAY_SCALE) as renderer:
             for frame, index in enumerate(np.rint(np.linspace(0, len(times) - 1, 360)).astype(int)):
                 zoom_fraction = np.clip((times[index] - 2.0) / 0.35, 0, 1)
                 zoom_fraction = zoom_fraction ** 2 * (3 - 2 * zoom_fraction)
                 camera.lookat[:] = (1 - zoom_fraction) * wide_lookat + zoom_fraction * target
                 camera.distance = 1.6 - zoom_fraction
-                canvas = Image.new("RGB", (960, 1008), "#fafaf8")
+                canvas = Image.new("RGB", (960 * REPLAY_SCALE, 1008 * REPLAY_SCALE), "#fafaf8")
                 draw = ImageDraw.Draw(canvas)
                 draw_label(draw, (24, 12), "Panda: fixed model and online identification",
-                           heading, "#18232f", (0, 0, 960, 48))
+                           heading, "#18232f", (0, 0, 960, 48), scale=REPLAY_SCALE)
                 subtitle = f"Seed {seed}. Three physical seconds replayed over 24 s."
                 draw_label(draw, (24, 54), subtitle,
-                           text, "#374151", (0, 48, 960, 82))
+                           text, "#374151", (0, 48, 960, 82), scale=REPLAY_SCALE)
                 for column, arm in enumerate(ARMS):
                     state = traces[arm][index]
                     data.qpos[:], data.qvel[:] = state["q"], state["qd"]
@@ -251,13 +262,15 @@ def render(directory: Path, output: Path, poster: Path, gif: Path | None = None)
                     scene_markers(renderer.scene, paths[arm][:index + 1], target, color)
                     robot_view = Image.fromarray(renderer.render())
                     tip_overlay(robot_view, renderer.scene, paths[arm][index],
-                                target, COLORS[arm])
-                    canvas.paste(robot_view, (480 * column, 120))
+                                target, COLORS[arm], scale=REPLAY_SCALE)
+                    canvas.paste(robot_view, (480 * column * REPLAY_SCALE, 120 * REPLAY_SCALE))
                     draw_label(draw, (24 + 480 * column, 90), arm.capitalize(),
-                               text, COLORS[arm], (480 * column, 82, 480 * (column + 1), 120))
+                               text, COLORS[arm], (480 * column, 82, 480 * (column + 1), 120),
+                               scale=REPLAY_SCALE)
                     draw_label(draw, (24 + 480 * column, 494),
-                               f"Tip error: {tip_errors[arm][index]:.3f} mm",
-                               text, COLORS[arm], (480 * column, 480, 480 * (column + 1), 530))
+                               f"Tip tracking error: {tip_errors[arm][index]:.3f} mm",
+                               text, COLORS[arm], (480 * column, 480, 480 * (column + 1), 530),
+                               scale=REPLAY_SCALE)
                     selected = (times[:index + 1] >= 2)
                     points = offsets[arm][:index + 1][selected]
                     trails[arm].set_data(points[:, 0], points[:, 2])
@@ -265,15 +278,15 @@ def render(directory: Path, output: Path, poster: Path, gif: Path | None = None)
                 draw_label(draw, (24, 532),
                            f"t = {times[index]:.2f} s. Gold cross: target. "
                            "Colored trails: actual tip.",
-                           text, "#374151", (0, 530, 960, 572))
+                           text, "#374151", (0, 530, 960, 572), scale=REPLAY_SCALE)
                 cursor.set_xdata([times[index], times[index]])
                 buffer = io.BytesIO()
                 fig.savefig(buffer, format="png")
                 buffer.seek(0)
-                canvas.paste(Image.open(buffer).convert("RGB"), (0, 580))
+                canvas.paste(Image.open(buffer).convert("RGB"), (0, 580 * REPLAY_SCALE))
                 footer = "Saved-data replay. Noise-free, no delay. Single episode."
                 draw_label(draw, (24, 970), footer,
-                           text, "#374151", (0, 950, 960, 1008))
+                           text, "#374151", (0, 950, 960, 1008), scale=REPLAY_SCALE)
                 writer.send(np.asarray(canvas))
                 if frame == 359:
                     canvas.save(poster)
@@ -283,7 +296,7 @@ def render(directory: Path, output: Path, poster: Path, gif: Path | None = None)
         writer.close()
         plt.close(fig)
     if gif is not None:
-        make_gif(output, gif)
+        make_gif(output, gif, width=gif_width)
     print(json.dumps({"seed": seed, "source": str(directory), "video": str(output),
                       "poster": str(poster), "physical_simulation_steps": 0,
                       "final_errors_mrad": {a: float(np.deg2rad(errors[a][-1]) * 1000)
@@ -298,6 +311,7 @@ def main(argv=None):
     parser.add_argument("--output", type=Path, default=Path("assets/replays/panda_control.mp4"))
     parser.add_argument("--poster", type=Path, default=Path("assets/replays/panda_control.png"))
     parser.add_argument("--gif", type=Path)
+    parser.add_argument("--gif-width", type=int, default=1200)
     args = parser.parse_args(argv)
     if args.output.exists() or args.poster.exists() or (args.gif and args.gif.exists()):
         parser.error("output already exists; choose new video and poster paths")
@@ -305,7 +319,9 @@ def main(argv=None):
         parser.error("use an .mp4 video and a .png poster")
     if args.gif and args.gif.suffix.lower() != ".gif":
         parser.error("use a .gif animation path")
-    render(args.input, args.output, args.poster, args.gif)
+    if not 1 <= args.gif_width <= 1920:
+        parser.error("GIF width must be between 1 and 1920 pixels")
+    render(args.input, args.output, args.poster, args.gif, gif_width=args.gif_width)
 
 
 if __name__ == "__main__":

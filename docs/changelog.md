@@ -13,6 +13,8 @@ This file records implemented release increments. Performance evidence is kept s
   to the chart. Original evidence and prior release assets remain preserved.
 - Added target crosses, actual tip trails, endpoint distances and a physical-scale
   X-Z close-up to show the fixed/adaptive Panda tracking difference.
+- Doubled both video dimensions using native scene, chart and caption rendering.
+  GIF previews are wider, and the README embeds its three result plots as SVG.
 
 ## v2.3.1: Panda demonstration and reference environment
 

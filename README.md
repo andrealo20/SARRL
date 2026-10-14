@@ -23,7 +23,7 @@ and frozen-data audits. Hardware and sim-to-real results are not claimed.
 
 [![Fixed and adaptive Panda replay](assets/replays/panda_control.gif)](assets/replays/panda_control.mp4)
 
-[Watch the 24-second comparison](assets/replays/panda_control.mp4). Both controllers
+[Watch the 24-second comparison, 1920 × 2016](assets/replays/panda_control.mp4). Both controllers
 follow the same joint reference with the same added payload and friction.
 The video replays the first retained paired case, seed `9804300`; three
 seconds of physical time are slowed to twenty-four seconds. Both arms move
@@ -42,7 +42,7 @@ and rendering commands.
 
 [![Nominal Panda motion and tip path](assets/replays/panda_motion.gif)](assets/replays/panda_motion.mp4)
 
-[Watch the 12-second motion replay](assets/replays/panda_motion.mp4). The teal
+[Watch the 12-second motion replay, 1920 × 1600](assets/replays/panda_motion.mp4). The teal
 line follows the recorded attachment-site path; the orange point marks the
 target. This is the first nominal pilot episode, seed `9804000`, with three
 physical seconds slowed to twelve seconds. It demonstrates joint-trajectory
@@ -107,12 +107,13 @@ This narrows the learning problem to compensating for model mismatch. The reposi
 
 ## Experiments in pictures
 
-Each figure below comes from retained evidence. Click a plot for its scalable
-SVG version. Full protocols describe the conditions, sampling and limits.
+Each figure below comes from retained evidence and is displayed as a scalable
+SVG. Click a plot to open it at full size. Full protocols describe the
+conditions, sampling and limits.
 
 ### Payload and friction identification
 
-[![Paired controller results and online parameter estimates](assets/figures/panda_adaptation.png)](assets/figures/panda_adaptation.svg)
+[![Paired controller results and online parameter estimates](assets/figures/panda_adaptation.svg)](assets/figures/panda_adaptation.svg)
 
 The first panel compares final joint error for twenty paired tasks in each
 load condition: added payload, added friction, and both together. Each dot is
@@ -128,7 +129,7 @@ remain inaccurate. These tasks have no sensor noise or command delay.
 
 ### Wider postures and constant delays
 
-[![Tracking and identification across two postures and five delays](assets/figures/panda_posture_delay.png)](assets/figures/panda_posture_delay.svg)
+[![Tracking and identification across two postures and five delays](assets/figures/panda_posture_delay.svg)](assets/figures/panda_posture_delay.svg)
 
 The first three panels show mean final joint error, tracking RMS and payload error
 under sensor noise, across two sampled posture ranges and constant command
@@ -144,7 +145,7 @@ grid; changing latency remains unresolved. Prediction variants are experimental.
 
 ### Planar adaptive control under a motor fault
 
-[![Planar motor-fault replay and actuator time-constant identification](assets/figures/planar_mujoco.png)](assets/figures/planar_mujoco.svg)
+[![Planar motor-fault replay and actuator time-constant identification](assets/figures/planar_mujoco.svg)](assets/figures/planar_mujoco.svg)
 
 The first two panels compare fixed and identified control under a motor fault,
 behind the same HOCBF filter: one shows distance to the target, the other

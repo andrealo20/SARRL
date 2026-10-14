@@ -5,6 +5,26 @@ planned.
 
 ## v2.3.1 demonstration checks
 
+### Native higher-resolution replays and vector figures
+
+Both replays were regenerated from the same hash-verified saved states.
+Robot viewports, chart DPI, caption fonts and projected markers render at
+twice their previous dimensions. The paired MP4 is 1920 by 2016 pixels;
+the nominal MP4 is 1920 by 1600. All 540 encoded frames decoded successfully,
+at 15 fps over 24 and 12 seconds. Posters have matching native dimensions.
+
+The GIFs are 1200 by 1260 and 1200 by 1000 pixels. All 288 frames decoded,
+with looping enabled and durations of 24.01 and 12.01 seconds. The files
+are 8,372,396 and 3,987,580 bytes, both below 10 MB. Caption bands and chart
+bounds passed during rendering. Sampled video and GIF frames were inspected.
+
+The three README result figures now embed the existing SVG files directly.
+Their XML parsed successfully and contains no raster image elements. Local
+documentation links and all seven retained completion markers passed. The
+32-test targeted suite and lint passed. Final paired tip errors remain
+37.918834 mm for fixed and 0.008527 mm for adaptive. No controller, model
+asset, evidence file or original banner changed.
+
 ### Focused README and Panda endpoint comparison
 
 The README now selects three result figures and uses native Mermaid for

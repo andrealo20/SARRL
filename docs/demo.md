@@ -8,6 +8,11 @@ protocol, without ranking outcomes. The adaptive controller's recorded inputs
 are causal positions, velocities and sent commands; plant parameters remain
 diagnostics.
 
+The comparison MP4 is rendered at 1920 by 2016 pixels; its GIF preview is
+1200 pixels wide. The nominal motion MP4 is 1920 by 1600. Scenes, captions
+and curves use the higher native resolution. See [visual reproduction](visuals.md)
+for the dimensions and preview settings.
+
 The trace covers three seconds in 301 samples. The 24-second video slows
 playback to one eighth of physical speed and repeats the nearest saved state.
 Rendering calls forward kinematics only, without advancing the physical plant
@@ -75,7 +80,7 @@ are never overwritten:
 python -m tools.render_panda_demo \
   --output demo-output/panda.mp4 \
   --poster demo-output/panda.png \
-  --gif demo-output/panda.gif
+  --gif demo-output/panda.gif --gif-width 1200
 ```
 
 On headless Linux with EGL support, set `MUJOCO_GL=egl` before starting Python.

@@ -5,7 +5,7 @@ STIX General serif family, supplied by Matplotlib. The README keeps the
 original project banner. Figures have larger type, external
 legends, separate title bands and both PNG and scalable SVG exports. The
 README architecture uses two native Mermaid diagrams rendered by GitHub. Its
-three result figures cover payload/friction adaptation, posture/delay limits
+three result figures are embedded as SVG and cover payload/friction adaptation, posture/delay limits
 and the planar motor-fault comparison. All eight result figures are indexed
 in [results](results.md). Plot
 generators check canvas bounds and separation of neighbouring panels before
@@ -21,6 +21,18 @@ amplified. Full-resolution MP4 files accompany both. Neither renderer advances
 the physical plant or opens new seeds. Collision meshes are those packaged
 with the model; the payload changes inertia without adding a visible object.
 
+## Media resolution
+
+The comparison video is 1920 by 2016 pixels; the nominal motion video is
+1920 by 1600. Robot scenes, plot paths and captions are rendered at these
+dimensions from saved states. Both dimensions are twice the previous size,
+giving four times as many pixels. Playback remains 15 fps over 24 and 12
+seconds respectively. GIF previews use 1200-pixel width and 8 fps.
+
+The README embeds the three vector plots directly. PNG copies remain available
+from the result index. The original banner and the native Mermaid diagrams
+are preserved.
+
 ## Commands
 
 From a repository checkout, install `.[demo]`, or use the Python 3.12
@@ -30,10 +42,10 @@ Existing outputs are not overwritten, so use a fresh destination:
 ```bash
 python -m tools.render_panda_demo \
   --output visual-output/control.mp4 --poster visual-output/control.png \
-  --gif visual-output/control.gif
+  --gif visual-output/control.gif --gif-width 1200
 python -m tools.render_panda_motion \
   --output visual-output/motion.mp4 --poster visual-output/motion.png \
-  --gif visual-output/motion.gif
+  --gif visual-output/motion.gif --gif-width 1200
 python -m tools.make_visual_overview --output visual-output/overview
 python -m tools.make_panda_figure --output visual-output/nominal.png
 python -m tools.make_panda_adaptation_figure --output visual-output/adaptation.png
