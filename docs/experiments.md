@@ -2012,3 +2012,13 @@ episodes. Fast unsafe episodes fell from 104/120 to 20/120, with 107/120 aborts
 and three fewer task successes. Ordinary tasks retained 120/120 successes
 without measured violations or aborts. The candidate fails its frozen screen
 and does not advance to confirmation.
+
+## Planar residual on the covariance-margin reference
+
+The [separate planar protocol](adaptive-residual-comparison.md) reproduces 300 v2.2 reference
+records before five independent 200,000-call SAC runs. It evaluates every
+final policy against the same adaptive/covariance-margin stack and a
+descriptive fixed baseline on one hundred fresh paired seeds across three
+scenarios. Crossed model/task resampling and success, unsafe and abort gates
+are frozen before training and held-out evaluation. Model tensors stay local;
+public statistical auditing is distinguished from local inference verification.

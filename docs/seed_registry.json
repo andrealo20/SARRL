@@ -43,6 +43,9 @@
     {"label": "Panda estimator-memory engineering pilot", "low": 9805400, "high": 9805499, "status": "used", "kind": "local"},
     {"label": "Panda constant-delay reference validation", "low": 9805500, "high": 9805599, "status": "used", "kind": "local"},
     {"label": "Panda shared-parameter scoring engineering pilot", "low": 9805600, "high": 9805699, "status": "used", "kind": "local"},
-    {"label": "Panda joint-filter engineering pilot", "low": 9805800, "high": 9805899, "status": "used", "kind": "local"}
+    {"label": "Panda joint-filter engineering pilot", "low": 9805800, "high": 9805899, "status": "used", "kind": "local"},
+    {"label": "v2.6 adaptive residual training seeds", "low": 9806000, "high": 9806099, "status": "reserved", "kind": "training"},
+    {"label": "v2.6 adaptive residual held-out tasks", "low": 9806100, "high": 9806199, "status": "reserved", "kind": "evaluation"},
+    {"label": "v2.6 crossed-bootstrap generator and statistical unit tests", "low": 260000, "high": 260000, "status": "used", "kind": "generator"}
   ]
 }

@@ -9,6 +9,8 @@ This file records implemented release increments. Performance evidence is kept s
 - Added physical substep recording, a paired joint-filter protocol and causal
   audit while preserving the original Panda integration and estimators.
 - Combined Panda filtering and the separate planar residual comparison in v2.6.
+- Added residual training on the retained covariance-margin baseline, exact
+  checkpoint continuation and crossed model/task evaluation without model selection.
 
 ## v2.5.0: Panda reference validation and shared scoring
 

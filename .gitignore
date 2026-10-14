@@ -216,6 +216,17 @@ results/panda_joint_filter_pilot/*
 !results/panda_joint_filter_pilot/*.json
 !results/panda_joint_filter_pilot/traces.json.gz
 
+!results/planar_residual_v26/
+results/planar_residual_v26/*
+!results/planar_residual_v26/*.json
+!results/planar_residual_v26/traces.json.gz
+!results/planar_residual_v26/training/
+results/planar_residual_v26/training/*
+!results/planar_residual_v26/training/seed_*/
+results/planar_residual_v26/training/seed_*/*
+!results/planar_residual_v26/training/seed_*/*.json
+!results/planar_residual_v26/training/seed_*/episodes.csv
+
 # Canonical retained evidence for the v2.2 uncertainty-margin campaign;
 # the lock file is runtime state.
 !results/uncertainty_margin_v22/
