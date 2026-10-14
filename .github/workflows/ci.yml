@@ -50,7 +50,7 @@ jobs:
           python-version: "3.12"
       - run: python -m pip install --upgrade pip
       - run: pip install -e '.[mujoco]' 'numpy==2.5.2' 'mujoco==3.13.0' pytest
-      - run: pytest tests/test_panda_latency_diagnosis.py tests/test_panda_estimator_memory.py tests/test_panda_reference_validation.py
+      - run: pytest tests/test_panda_latency_diagnosis.py tests/test_panda_estimator_memory.py tests/test_panda_reference_validation.py tests/test_panda_shared_scoring.py
       - run: python -m tools.diagnose_panda_latency --output "$RUNNER_TEMP/panda-latency"
       - name: Audit retained parameter memory
         shell: bash
@@ -59,4 +59,13 @@ jobs:
             git worktree add --detach "$RUNNER_TEMP/panda-memory-audit" cee94b2e0f8af416502fcd45c38c94e8b4234d0d
             cd "$RUNNER_TEMP/panda-memory-audit"
             python -m tools.audit_panda_estimator_memory --input "$GITHUB_WORKSPACE/results/panda_estimator_memory_pilot"
+          fi
+      - name: Audit retained reference validation and profiling
+        shell: bash
+        run: |
+          if [ -f results/panda_reference_validation/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-reference-audit" 09858a7368d89ff0cd82b920904d0231644d77f5
+            cd "$RUNNER_TEMP/panda-reference-audit"
+            python -m tools.audit_panda_reference_validation --input "$GITHUB_WORKSPACE/results/panda_reference_validation"
+            python -m tools.profile_panda_reference --audit --input "$GITHUB_WORKSPACE/results/panda_reference_validation" --output "$GITHUB_WORKSPACE/results/panda_reference_profile"
           fi

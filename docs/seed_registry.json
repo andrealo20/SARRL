@@ -41,6 +41,7 @@
     {"label": "Panda delay-score memory engineering tests", "low": 9805200, "high": 9805299, "status": "used", "kind": "local"},
     {"label": "Panda delay-score memory engineering pilot", "low": 9805300, "high": 9805399, "status": "used", "kind": "local"},
     {"label": "Panda estimator-memory engineering pilot", "low": 9805400, "high": 9805499, "status": "used", "kind": "local"},
-    {"label": "Panda constant-delay reference validation", "low": 9805500, "high": 9805599, "status": "used", "kind": "local"}
+    {"label": "Panda constant-delay reference validation", "low": 9805500, "high": 9805599, "status": "used", "kind": "local"},
+    {"label": "Panda shared-parameter scoring engineering pilot", "low": 9805600, "high": 9805699, "status": "reserved", "kind": "local"}
   ]
 }

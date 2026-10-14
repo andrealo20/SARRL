@@ -8,6 +8,10 @@ This file records implemented release increments. Performance evidence is kept s
   and saved-input control-cycle profiling.
 - Defined per-joint reference criteria and seed-block bootstrap contrasts
   before opening the reserved validation seeds.
+- Retained 4,000 reference episodes and 30,000 saved-input timing cycles;
+  the constant-delay reference passed its frozen acceptance criteria.
+- Added causal shared-parameter scoring, a separate reproduce-first protocol
+  and innovation auditing while preserving cumulative control estimators.
 
 ## v2.4.0: changing-latency diagnosis and parameter memory
 

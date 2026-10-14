@@ -28,12 +28,12 @@ That comparison is complete. Joint memory improves final age selection from
 The reference remains cumulative. No independent confirmation of this
 candidate is scheduled on the strength of those results.
 
-The next latency comparison should test a shared or independently calibrated
-physical parameter estimate against separate candidate fits. This is a
-hypothesis motivated by the saved-trace diagnosis, not an implemented or
-validated improvement. Freeze its causal update rule, decision criteria and
-new seed block separately. Multiple switches and off-grid latency remain
-separate evaluations; their scope depends on the preceding result.
+The reference validation passed its frozen constant-delay criteria and
+saved-input timing check. A [separate shared-scoring comparison](panda-shared-scoring.md)
+now tests one causally acquired physical parameter vector against separate
+candidate fits. Its acquisition rule, decision criteria and new seed block
+are frozen separately. Multiple switches and off-grid latency remain separate
+evaluations; their scope depends on the preceding result.
 
 The first Panda safety increment targets joint constraints. General collision
 avoidance requires a separate formulation and evaluation. Hardware and

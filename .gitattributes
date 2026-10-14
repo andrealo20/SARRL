@@ -23,6 +23,7 @@ results/panda_score_memory_pilot/** -text
 results/panda_estimator_memory_pilot/** -text
 results/panda_reference_validation/** -text
 results/panda_reference_profile/** -text
+results/panda_shared_scoring_pilot/** -text
 
 # The v1.7 and v1.8 training tables were written with CRLF terminators and
 # are hash-bound in the retained inventories; keep their bytes unchanged.

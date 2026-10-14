@@ -1981,3 +1981,16 @@ conditions and four arms after reproducing all 1,920 parameter-memory records.
 Its per-joint acceptance rule, uncertainty unit and saved-input profiling
 scope are frozen before new data. Changing-latency identification remains
 a separate comparison.
+
+The completed reference [results](panda-reference-results.md) passed every
+criterion, with 1,000/1,000 bank successes and correct final ages. Saved-input
+profiling retained 30,000 cycles, with p99 1.827530 ms against a 10 ms period.
+
+## Panda shared-parameter scoring
+
+The [separate comparison](panda-shared-scoring.md) acquires one physical
+parameter vector causally for all age scores after fifty updates, twenty-five
+stable selections and information rank eight. All five control RLS models
+remain cumulative. Twenty new seeds are reserved; all 4,000 reference records
+must reproduce before those seeds are opened. The unchanged v2.4 exploratory
+screen determines whether independent confirmation is warranted.

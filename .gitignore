@@ -206,6 +206,11 @@ results/panda_reference_profile/*
 !results/panda_reference_profile/*.json
 !results/panda_reference_profile/timings.json.gz
 
+!results/panda_shared_scoring_pilot/
+results/panda_shared_scoring_pilot/*
+!results/panda_shared_scoring_pilot/*.json
+!results/panda_shared_scoring_pilot/traces.json.gz
+
 # Canonical retained evidence for the v2.2 uncertainty-margin campaign;
 # the lock file is runtime state.
 !results/uncertainty_margin_v22/
