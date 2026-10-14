@@ -70,8 +70,9 @@ executed checks are recorded in [verification](docs/verification.md).
 ### Planar: residual learning and safety
 
 ```mermaid
+%%{init: {"flowchart": {"diagramPadding": 60}}}%%
 flowchart LR
-    nominal["Model-based<br/>control"] --> correction["Bounded SAC<br/>correction"]
+    nominal["Model-based<br/>control"] --> correction["Add bounded<br/>SAC residual"]
     correction --> filter["HOCBF<br/>filter"]
     filter --> arm["2-DoF plant"]
     arm -. "Measured state" .-> nominal
@@ -80,8 +81,9 @@ flowchart LR
 ### Panda: joint control and identification
 
 ```mermaid
+%%{init: {"flowchart": {"diagramPadding": 60}}}%%
 flowchart LR
-    reference["Joint<br/>reference"] --> torque["Computed-torque<br/>control"]
+    reference["Joint<br/>reference"] --> torque["Computed<br/>torque control"]
     torque --> robot["Seven-joint<br/>plant"]
     robot -. "Joint state" .-> estimate["Payload /<br/>friction<br/>estimate"]
     torque -. "Sent commands" .-> estimate
