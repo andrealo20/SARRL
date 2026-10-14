@@ -15,9 +15,13 @@ for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ[variable] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-import mujoco
 import numpy as np
 import torch
+
+try:
+    import mujoco
+except ImportError:
+    mujoco = None
 
 from sarrl.evaluation.adaptive_pilot import build_arm
 from sarrl.evaluation.margin_campaign import v22_config
@@ -101,7 +105,8 @@ def main(argv=None):
     policies = {}
     if args.models is not None:
         ensure(
-            mujoco.__version__ == manifest["runtime"]["mujoco"]
+            mujoco is not None
+            and mujoco.__version__ == manifest["runtime"]["mujoco"]
             and torch.__version__ == manifest["runtime"]["torch"],
             "recorded model runtime required",
         )

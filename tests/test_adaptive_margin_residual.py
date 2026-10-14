@@ -211,3 +211,15 @@ def test_study_runner_refuses_alternate_outputs_and_invalid_workers(tmp_path):
             main(args)
         assert error.value.code == 2
     assert not (tmp_path / "other").exists()
+
+
+def test_study_commands_help_without_optional_simulator():
+    import subprocess
+    import sys
+
+    for module in ("tools.run_planar_residual", "tools.audit_planar_residual"):
+        script = (
+            f"import sys; sys.modules['mujoco']=None; from {module} import main; main(['--help'])"
+        )
+        result = subprocess.run([sys.executable, "-c", script], capture_output=True, text=True)
+        assert result.returncode == 0, result.stderr

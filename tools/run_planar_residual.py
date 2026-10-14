@@ -18,9 +18,13 @@ for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ[variable] = "1"
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
-import mujoco
 import numpy as np
 import torch
+
+try:
+    import mujoco
+except ImportError:
+    mujoco = None
 
 import sarrl
 from sarrl.evaluation.adaptive_pilot import run_case
@@ -220,6 +224,8 @@ def main(argv=None):
         parser.error("completed study is retained and never replaced")
     if output.exists() != args.resume:
         parser.error("existing interrupted output requires --resume")
+    if mujoco is None:
+        parser.error("install the recorded MuJoCo runtime before execution")
     fingerprint = source_fingerprint()
     fingerprint["runtime"]["workers"] = args.workers
     for name, version in study_protocol()["runtime"].items():
