@@ -2,6 +2,14 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## Unreleased: joint filtering and residual evaluation
+
+- Added a seven-variable weighted torque projection with primal/dual checks,
+  constant-delay command-history prediction and explicit braking on failure.
+- Added physical substep recording, a paired joint-filter protocol and causal
+  audit while preserving the original Panda integration and estimators.
+- Combined Panda filtering and the separate planar residual comparison in v2.6.
+
 ## v2.5.0: Panda reference validation and shared scoring
 
 - Added a paired constant-delay reference validation protocol, causal audit

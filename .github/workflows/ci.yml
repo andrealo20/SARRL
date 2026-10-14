@@ -49,8 +49,8 @@ jobs:
         with:
           python-version: "3.12"
       - run: python -m pip install --upgrade pip
-      - run: pip install -e '.[mujoco]' 'numpy==2.5.2' 'mujoco==3.13.0' pytest
-      - run: pytest tests/test_panda_latency_diagnosis.py tests/test_panda_estimator_memory.py tests/test_panda_reference_validation.py tests/test_panda_shared_scoring.py
+      - run: pip install -e '.[mujoco]' 'numpy==2.5.2' 'mujoco==3.13.0' 'scipy==1.18.1' pytest
+      - run: pytest tests/test_panda_latency_diagnosis.py tests/test_panda_estimator_memory.py tests/test_panda_reference_validation.py tests/test_panda_shared_scoring.py tests/test_panda_joint_filter.py
       - run: python -m tools.diagnose_panda_latency --output "$RUNNER_TEMP/panda-latency"
       - name: Audit retained parameter memory
         shell: bash

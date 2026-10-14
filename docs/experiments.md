@@ -1996,3 +1996,13 @@ records and retained 1,920 fresh episodes. Shared scoring recovered 96/160
 changing final ages against 79/160 for score-only memory, but failed its age,
 constant-delay, success and tracking criteria. The [full results](panda-shared-scoring-results.md)
 retain every cell; the candidate does not advance to confirmation.
+
+## Panda joint filtering
+
+The [frozen joint-filter protocol](panda-joint-filter.md) projects the cumulative
+bank's sent command over all constant delays from zero through four periods.
+Model feasibility is checked independently of physical substep outcomes;
+infeasibility latches bounded braking and counts as an abort. The reserved
+twenty-seed comparison covers ordinary/fast moves, clean/noisy measurements
+and three delays after reproducing all 4,000 reference-validation records.
+Its decision precedes the separate planar residual-learning study in v2.6.

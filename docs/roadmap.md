@@ -11,9 +11,20 @@ are retained and can change the scope of subsequent releases.
 | v2.3.2 | Replay and documentation consolidation | Release-specific demo commands, installed-package checks and preserved controller evidence |
 | v2.4 | Completed changing-latency diagnosis | Saved-trace diagnosis and a frozen 1,920-episode parameter-memory comparison; the candidate fails its age and per-joint tracking criteria |
 | v2.5 | Completed Panda reference validation and shared scoring | Reference criteria passed on 4,000 fresh episodes; 30,000 saved-input timing cycles retained; separate 1,920-episode shared-scoring candidate failed its screen |
-| v2.6 | Seven-joint safety filtering | QP formulation for joint position, velocity and torque constraints; numerical validation, explicit infeasibility and paired physical-violation/tracking measurements |
-| v2.7 | Residual learning on an adaptive baseline | Planar comparison of fixed, adaptive and adaptive-plus-residual control, with at least five training seeds and separate held-out evaluation |
+| v2.6 | Seven-joint safety filtering and residual-learning evaluation | Panda QP for joint constraints, explicit delay/infeasibility handling and paired physical-violation/tracking evaluation; separate planar comparison of fixed, adaptive and adaptive-plus-residual control, with at least five training seeds and held-out evaluation |
 | v3.0, conditional | Integrated Panda stack | Residual learning justified by preceding results, seven-joint filter integration, component ablations and consolidated APIs |
+
+Version 2.6 combines the previously separate v2.6 and v2.7 increments in one
+release. First freeze the Panda filter formulation and its comparison protocol,
+then implement and evaluate position, velocity and torque constraints against
+the cumulative reference. Evaluate the frozen filter decision before starting
+the separately preregistered planar residual-learning comparison. Each study
+has its own seed blocks, metrics and decision rule; both retain all outcomes.
+
+The combined release includes code, evidence, audits, documentation and CI
+for both studies. A residual candidate advances to Panda integration only if
+its declared comparison supports the move. Version 3.0 remains conditional on
+the preceding results. Public presentation follows project consolidation.
 
 The constant-delay cumulative bank remains the reference while changing
 latency is unresolved. Innovation histories, parameter estimates and
