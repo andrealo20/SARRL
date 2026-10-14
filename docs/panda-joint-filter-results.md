@@ -49,6 +49,15 @@ polynomial-interval checks reconstruct the causal inputs; braking is never
 accepted as predicted-feasible. The production run used 6,720,000 physical
 substeps including reproduction. Auditing opens no new physical episode.
 
+The portable auditor checks the original source hashes in a frozen checkout.
+Regenerated commands and references use the existing reproduction tolerance
+(`rtol=1e-9`, `atol=1e-10`). Delivered torque is checked exactly against the
+retained sent-command FIFO. This avoids comparing a recorded command with a
+regenerated value bit for bit across hosts; the remote runner differed by
+4.4e-16 N m. Data hashes, recorded FIFO equality, physical-substep equality,
+projection tolerances and the decision criteria remain unchanged. The audit
+reports its own implementation hash separately from the production source.
+
 This concludes the first study in the combined v2.6 scope. The separately
 frozen planar residual-learning comparison follows with its own seeds and
 criteria; this filter result adds no seven-joint residual policy.

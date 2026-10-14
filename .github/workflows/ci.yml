@@ -83,5 +83,5 @@ jobs:
           if [ -f results/panda_joint_filter_pilot/complete.json ]; then
             git worktree add --detach "$RUNNER_TEMP/panda-joint-audit" 6891dd27edf8b28514160d1ade350e3213826058
             cd "$RUNNER_TEMP/panda-joint-audit"
-            python -m tools.audit_panda_joint_filter --input "$GITHUB_WORKSPACE/results/panda_joint_filter_pilot"
+            python "$GITHUB_WORKSPACE/tools/audit_panda_joint_filter_portable.py" --source-checkout "$RUNNER_TEMP/panda-joint-audit" --input "$GITHUB_WORKSPACE/results/panda_joint_filter_pilot"
           fi
