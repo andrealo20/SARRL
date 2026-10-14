@@ -2,6 +2,18 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v2.3.1: Panda demonstration and reference environment
+
+- Added a hash-checked replay of the first retained payload/friction pair,
+  with side-by-side Panda rendering and joint-reference error. The video
+  uses saved states without new physical simulation steps or new seeds.
+- Added a Python 3.12 reference dependency file and demo reproduction guide.
+- Moved the detailed result chronology to `docs/results.md`, keeping scope,
+  a short evidence index and runnable examples in the README.
+- Documented the staged roadmap from latency diagnosis through Panda
+  validation and conditional integration of safety and residual learning.
+  Controller arithmetic and retained campaign evidence are unchanged.
+
 ## v2.3.0: seven-joint Panda control and identification
 
 - Added a short nominal Panda example and a release guide separating the

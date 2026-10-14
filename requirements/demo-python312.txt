@@ -1,0 +1,8 @@
+# Direct dependency versions used for the Python 3.12 reference demo.
+numpy==2.5.2
+scipy==1.18.1
+torch==2.12.0
+mujoco==3.13.0
+matplotlib==3.11.2
+pillow==12.3.0
+imageio-ffmpeg==0.6.0

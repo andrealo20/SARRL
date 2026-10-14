@@ -1,1 +1,2 @@
 include examples/panda_reach.py
+include requirements/demo-python312.txt
