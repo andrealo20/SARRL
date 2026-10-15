@@ -29,6 +29,33 @@ PyTorch 2.12.0+cpu, with two workers and one numerical thread per worker.
 The residual failed seven advancement checks; neither v2.6 candidate replaces
 the established reference or advances to Panda integration.
 
+The eleven Panda campaigns retain 15,380 new records. Completion hashes and
+491 frozen-source blob references, including the 30,000-cycle profile, passed
+verification against Git history. The planar study's 2,100 held-out records
+and 217 frozen-source blob references passed separately. Ignored models and
+older archives are preserved. The supplied SVG retains SHA-256
+`7479624165f1eda00cca9702ba5eb968dc9654afe7e21803dd878aab5f1b61e4`.
+All 127 checked local documentation links resolve, and the README retains
+its three selected SVG figures and existing replay assets.
+
+The wheel and source distribution built successfully. All 94 packaged files
+matched the checkout; an isolated installation reported version 2.6.0 and
+loaded all twelve Panda model files. The new controller and training-wrapper
+constructors passed their installation probes. The nominal example completed
+300 steps with success, no clipping and no unsafe event on an existing test
+seed. Numerical dependencies were reused; this was not a clean dependency
+resolution test. The source archive preserves the supplied SVG byte for byte
+and excludes local working instructions.
+
+The complete local suite passed 625 tests with two skips: unavailable local
+diagnostic episode records and the CPU runtime's absent CUDA device. The
+three release/command tests passed separately after making the portable
+auditor's help available before source-checkout validation. Lint, compilation
+and whitespace checks passed. CI runs Python 3.10, 3.11 and 3.12, MuJoCo and
+the pinned archival audits, including planar statistics in a separate NumPy
+2.4.6 environment. Numerical replay and decision rules are unchanged by the
+command-help adjustment.
+
 ## v2.5 reference validation and shared scoring
 
 Source `09858a7` reproduced all 1,920 v2.4 records and retained 4,000 fresh

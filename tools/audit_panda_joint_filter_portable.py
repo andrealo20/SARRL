@@ -15,8 +15,11 @@ from pathlib import Path
 for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ[variable] = "1"
 
-bootstrap = argparse.ArgumentParser(add_help=False)
+bootstrap = argparse.ArgumentParser(description=__doc__)
 bootstrap.add_argument("--source-checkout", type=Path, required=True)
+bootstrap.add_argument(
+    "--input", type=Path, help="retained results; defaults to the frozen checkout"
+)
 source_checkout, _ = bootstrap.parse_known_args()
 ROOT = source_checkout.source_checkout.resolve()
 if not (ROOT / "tools/audit_panda_joint_filter.py").is_file():
