@@ -1,0 +1,8 @@
+{
+  "audit_physical_steps": 0,
+  "causal_control_cycles": 6000,
+  "causal_controller_replays": 20,
+  "independent_feasible_projection_checks": 206,
+  "physical_trace_substeps": 30000,
+  "verified_cases": 20
+}

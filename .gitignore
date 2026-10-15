@@ -238,3 +238,12 @@ results/uncertainty_margin_v22/campaign.lock
 # models used to produce the evaluation records.
 results/**/*.pt
 results/**/*.npz
+
+!results/control_failure_diagnosis_v26/
+results/control_failure_diagnosis_v26/*
+!results/control_failure_diagnosis_v26/*.json
+
+!results/panda_failure_replay_v26/
+results/panda_failure_replay_v26/*
+!results/panda_failure_replay_v26/*.json
+!results/panda_failure_replay_v26/traces.json.gz

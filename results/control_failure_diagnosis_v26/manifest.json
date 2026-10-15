@@ -1,0 +1,33 @@
+{
+  "analysis_commit": "2e88aa0c6284418859cf8ec37c7e25c4cfc5b81e",
+  "input_completion_sha256": {
+    "panda_joint_filter_pilot": "e7f62d3732b20c9ef49dbdaa6777ebd3ee50672ae616d5ab18ebce411c0318c8",
+    "planar_residual_v26": "bc29d1f1b7b3ad0a69bc21a044bcfb8683a732994ffce5435738bb8920850889"
+  },
+  "new_episode_seeds": [],
+  "physical_simulation_steps": 0,
+  "runtime": {
+    "mujoco": "3.13.0",
+    "numpy": "2.5.2",
+    "python": "3.12.3",
+    "scipy": "1.18.1"
+  },
+  "selection": "all 2580 retained episodes and all 45 first-seed traces",
+  "source_sha256": {
+    "docs/control-failure-methods.md": "30cee6922520f02114dadda1b18a581cff53969b33cde007ba990aed0b96b12c",
+    "sarrl/controllers/panda_adaptive.py": "b6e045dce1ab7c61ebde2a5c85ba860ca67ae10cacab1aadb12b344fee4acca9",
+    "sarrl/controllers/panda_nominal.py": "1341c02ca257dd6314d3d116a11cbf07e15e4653e8425a252441a47f009e0a98",
+    "sarrl/dynamics/planar_arm.py": "96c848ef142bed931b69d2a97daaf4e1834a6cf838c75e509585a2fb45528f92",
+    "sarrl/envs/adaptive_projected.py": "d701fbca446ef2136996f34997d3dd37fa0467324bc0a741758b9ec3741dd41d",
+    "sarrl/envs/mujoco_planar.py": "b44a91a4c8e64bac4b315b2b44a80b86296954c7f2849906f1d73e9e992957c5",
+    "sarrl/envs/planar_reach.py": "07415ca98cd474004d72d9fefaee324cea486c5e75698a89ee05c654e522c139",
+    "sarrl/evaluation/control_diagnosis.py": "b955210d5e3fac3471c422453eece795f94f48d513f01e75d5e9375937f3ef1d",
+    "sarrl/evaluation/safety_audit.py": "d9dccf1af7c0e966624a2b9cf57ae3c4dbd02ed2ce31d071a3850ec0dbde9e82",
+    "sarrl/robots/panda.py": "0512126c7f1c233877a2edae04b84c6f366fa180965d872d22c38a125e9df2ad",
+    "sarrl/runtime/control_stack.py": "99527023d7f882c26361e9ce238ea371f8423b5314a910a43b5c3a0b22188b15",
+    "sarrl/safety/filter.py": "1163d37eed99cffbc509c7ca0389704e02ca7a8671d6495dbbf01cbb35e73293",
+    "sarrl/safety/panda_joint_filter.py": "8f9f9c2a2dc645b5a26eb9a7ef40da763cae6bd6cf25f49e285341ac2e4bf5b7",
+    "tests/test_control_diagnosis.py": "c9472e4470c795d058219e00033bf2a865fdade871c25ed33abed87aa4c46624",
+    "tools/diagnose_control_failures.py": "00d4df22d2938b70c96c8a57c05fcf4d255ebf987fd5631979e96ef8cc01f74e"
+  }
+}

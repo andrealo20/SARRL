@@ -1,0 +1,1431 @@
+{
+  "new_episode_seeds": [],
+  "panda_evidence_commit": "6891dd27edf8b28514160d1ade350e3213826058",
+  "panda_filter_outcomes": {
+    "fast_clean_d00": {
+      "abort_step_range": [
+        5,
+        13
+      ],
+      "aborts": 18,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "pending_command_violation": 18,
+        "projected": 47,
+        "unchanged": 679
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "fast_clean_d20": {
+      "abort_step_range": [
+        6,
+        12
+      ],
+      "aborts": 18,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "pending_command_violation": 18,
+        "projected": 57,
+        "unchanged": 672
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "fast_clean_d40": {
+      "abort_step_range": [
+        7,
+        13
+      ],
+      "aborts": 17,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "pending_command_violation": 17,
+        "projected": 122,
+        "unchanged": 953
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 10,
+      "velocity_violation_episodes": 10
+    },
+    "fast_noise_d00": {
+      "abort_step_range": [
+        5,
+        13
+      ],
+      "aborts": 18,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "pending_command_violation": 18,
+        "projected": 44,
+        "unchanged": 680
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "fast_noise_d20": {
+      "abort_step_range": [
+        6,
+        13
+      ],
+      "aborts": 18,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "pending_command_violation": 18,
+        "projected": 57,
+        "unchanged": 673
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "fast_noise_d40": {
+      "abort_step_range": [
+        7,
+        13
+      ],
+      "aborts": 18,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "pending_command_violation": 18,
+        "projected": 115,
+        "unchanged": 669
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 10,
+      "velocity_violation_episodes": 10
+    },
+    "slow_clean_d00": {
+      "abort_step_range": null,
+      "aborts": 0,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "unchanged": 6000
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "slow_clean_d20": {
+      "abort_step_range": null,
+      "aborts": 0,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "unchanged": 6000
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "slow_clean_d40": {
+      "abort_step_range": null,
+      "aborts": 0,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "unchanged": 6000
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "slow_noise_d00": {
+      "abort_step_range": null,
+      "aborts": 0,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "unchanged": 6000
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "slow_noise_d20": {
+      "abort_step_range": null,
+      "aborts": 0,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "unchanged": 6000
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    },
+    "slow_noise_d40": {
+      "abort_step_range": null,
+      "aborts": 0,
+      "contact_episodes": 0,
+      "episodes": 20,
+      "filter_attempt_reasons": {
+        "unchanged": 6000
+      },
+      "position_violation_episodes": 0,
+      "unsafe_episodes": 0,
+      "velocity_violation_episodes": 0
+    }
+  },
+  "panda_first_seed_traces": [
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_clean_d00",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_clean_d00",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": null,
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_clean_d20",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_clean_d20",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": null,
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_clean_d40",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_clean_d40",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": null,
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_noise_d00",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_noise_d00",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": null,
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_noise_d20",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_noise_d20",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": null,
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_noise_d40",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "slow_noise_d40",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": null,
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "fast_clean_d00",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 8,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.084,
+        "velocity_rad_s": 0.007612930717347588
+      },
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 44,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.7044839609927296
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 6,
+      "abort_time_s": 0.06,
+      "cell": [
+        "fast_clean_d00",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": {
+        "actual_delay_bound_reason": "ready",
+        "reasons_by_maximum_delay_steps": [
+          "ready",
+          "ready",
+          "ready",
+          "pending_command_violation",
+          "pending_command_violation"
+        ],
+        "scope": "same saved state; privileged delay diagnostic; no QP or trajectory claim"
+      },
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "fast_clean_d20",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 9,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.09999999999999999,
+        "velocity_rad_s": 0.0683702527435801
+      },
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 47,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 1.664450931912529
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 6,
+      "abort_time_s": 0.06,
+      "cell": [
+        "fast_clean_d20",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": {
+        "actual_delay_bound_reason": "ready",
+        "reasons_by_maximum_delay_steps": [
+          "ready",
+          "ready",
+          "ready",
+          "ready",
+          "pending_command_violation"
+        ],
+        "scope": "same saved state; privileged delay diagnostic; no QP or trajectory claim"
+      },
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "fast_clean_d40",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 11,
+        "position_rad": 0.0,
+        "substep": 2,
+        "time_s": 0.116,
+        "velocity_rad_s": 0.08705632577435463
+      },
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 117,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 2.6627808219185605
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 11,
+      "abort_time_s": 0.11,
+      "cell": [
+        "fast_clean_d40",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": {
+        "actual_delay_bound_reason": "pending_command_violation",
+        "reasons_by_maximum_delay_steps": [
+          "ready",
+          "ready",
+          "ready",
+          "pending_command_violation",
+          "pending_command_violation"
+        ],
+        "scope": "same saved state; privileged delay diagnostic; no QP or trajectory claim"
+      },
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "fast_noise_d00",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 8,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.084,
+        "velocity_rad_s": 0.011407083001320206
+      },
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 44,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.7062197894938627
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 6,
+      "abort_time_s": 0.06,
+      "cell": [
+        "fast_noise_d00",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": {
+        "actual_delay_bound_reason": "ready",
+        "reasons_by_maximum_delay_steps": [
+          "ready",
+          "ready",
+          "ready",
+          "pending_command_violation",
+          "pending_command_violation"
+        ],
+        "scope": "same saved state; privileged delay diagnostic; no QP or trajectory claim"
+      },
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "fast_noise_d20",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 9,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.09999999999999999,
+        "velocity_rad_s": 0.05691537597402485
+      },
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 47,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 1.664762742439708
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 6,
+      "abort_time_s": 0.06,
+      "cell": [
+        "fast_noise_d20",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": {
+        "actual_delay_bound_reason": "ready",
+        "reasons_by_maximum_delay_steps": [
+          "ready",
+          "ready",
+          "ready",
+          "ready",
+          "pending_command_violation"
+        ],
+        "scope": "same saved state; privileged delay diagnostic; no QP or trajectory claim"
+      },
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    },
+    {
+      "abort_reason": null,
+      "abort_step": null,
+      "abort_time_s": null,
+      "cell": [
+        "fast_noise_d40",
+        9805800,
+        "bank_align"
+      ],
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 11,
+        "position_rad": 0.0,
+        "substep": 2,
+        "time_s": 0.116,
+        "velocity_rad_s": 0.05990364244465196
+      },
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 118,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 2.663232361739502
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 11,
+      "abort_time_s": 0.11,
+      "cell": [
+        "fast_noise_d40",
+        9805800,
+        "bank_filtered"
+      ],
+      "delay_prefix_diagnostic": {
+        "actual_delay_bound_reason": "pending_command_violation",
+        "reasons_by_maximum_delay_steps": [
+          "ready",
+          "ready",
+          "ready",
+          "pending_command_violation",
+          "pending_command_violation"
+        ],
+        "scope": "same saved state; privileged delay diagnostic; no QP or trajectory claim"
+      },
+      "first_physical_violation": null,
+      "unsafe_substeps_at_or_after_abort": 0,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.0
+      }
+    }
+  ],
+  "physical_simulation_steps": 0,
+  "planar_evidence_commit": "b41e167c2a609849c01031010e5710aa4801670f",
+  "planar_first_seed_traces": [
+    {
+      "attempts": 250,
+      "cell": [
+        "id_reference",
+        9806100,
+        "fixed"
+      ],
+      "closest_distance_m": 0.17408933272754673,
+      "executed_steps": 250,
+      "final_distance_m": 0.2733699289829094,
+      "final_speed_norm_rad_s": 9.344255350840304e-05,
+      "last_half_mean_residual_nm": [
+        0.0,
+        0.0
+      ],
+      "mean_projection_correction_nm": 8.572197423765108,
+      "outcome": "timeout",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 248,
+      "reconstructed_reward": -218.8874255183115,
+      "residual_near_bound_attempts": 0,
+      "residual_rms_nm": 0.0,
+      "reward_terms": {
+        "distance": 178.25684354269998,
+        "speed": 13.540525052182762,
+        "success_bonus": 0.0,
+        "torque": 27.090056923428744
+      },
+      "timeout_blocker": "distance",
+      "training_penalty_adjusted_return": -218.8874255183115
+    },
+    {
+      "attempts": 99,
+      "cell": [
+        "id_reference",
+        9806100,
+        "adaptive"
+      ],
+      "closest_distance_m": 0.047135087020844395,
+      "executed_steps": 99,
+      "final_distance_m": 0.047135087020844395,
+      "final_speed_norm_rad_s": 0.2034932945634874,
+      "last_half_mean_residual_nm": [
+        0.0,
+        0.0
+      ],
+      "mean_projection_correction_nm": 8.128170559459724,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 52,
+      "reconstructed_reward": -115.0227138899856,
+      "residual_near_bound_attempts": 0,
+      "residual_rms_nm": 0.0,
+      "reward_terms": {
+        "distance": 102.66216258038777,
+        "speed": 7.486574966122717,
+        "success_bonus": 10.0,
+        "torque": 14.873976343475103
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -115.0227138899856
+    },
+    {
+      "attempts": 92,
+      "cell": [
+        "id_reference",
+        9806100,
+        "residual_9806000"
+      ],
+      "closest_distance_m": 0.049651141653243615,
+      "executed_steps": 92,
+      "final_distance_m": 0.049651141653243615,
+      "final_speed_norm_rad_s": 0.1863467792964114,
+      "last_half_mean_residual_nm": [
+        -1.267627967764502,
+        0.49194529620201694
+      ],
+      "mean_projection_correction_nm": 8.00547870780291,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 57,
+      "reconstructed_reward": -101.82699960339983,
+      "residual_near_bound_attempts": 16,
+      "residual_rms_nm": 5.374478972444909,
+      "reward_terms": {
+        "distance": 90.6495129141494,
+        "speed": 6.5834622590535705,
+        "success_bonus": 10.0,
+        "torque": 14.594024430196848
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -101.82699960339983
+    },
+    {
+      "attempts": 250,
+      "cell": [
+        "id_reference",
+        9806100,
+        "residual_9806001"
+      ],
+      "closest_distance_m": 0.05896359892753714,
+      "executed_steps": 250,
+      "final_distance_m": 0.2166053221602622,
+      "final_speed_norm_rad_s": 0.0017647509692508626,
+      "last_half_mean_residual_nm": [
+        2.4833240013122557,
+        4.791329479217529
+      ],
+      "mean_projection_correction_nm": 3.4387187866958513,
+      "outcome": "timeout",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 74,
+      "reconstructed_reward": -173.69387411442227,
+      "residual_near_bound_attempts": 25,
+      "residual_rms_nm": 6.351933171509867,
+      "reward_terms": {
+        "distance": 147.64206578145925,
+        "speed": 6.285436779461436,
+        "success_bonus": 0.0,
+        "torque": 19.7663715535016
+      },
+      "timeout_blocker": "distance",
+      "training_penalty_adjusted_return": -173.69387411442227
+    },
+    {
+      "attempts": 92,
+      "cell": [
+        "id_reference",
+        9806100,
+        "residual_9806002"
+      ],
+      "closest_distance_m": 0.007461361421135591,
+      "executed_steps": 92,
+      "final_distance_m": 0.012008821079872943,
+      "final_speed_norm_rad_s": 0.31040947795992485,
+      "last_half_mean_residual_nm": [
+        0.3490691115350827,
+        -0.44271951638486073
+      ],
+      "mean_projection_correction_nm": 7.954687516709709,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 7,
+      "projected_executed_steps": 48,
+      "reconstructed_reward": -118.52595304654129,
+      "residual_near_bound_attempts": 0,
+      "residual_rms_nm": 5.153474500442054,
+      "reward_terms": {
+        "distance": 104.81067023965196,
+        "speed": 7.1289645584832675,
+        "success_bonus": 10.0,
+        "torque": 16.586318248406073
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -118.52595304654129
+    },
+    {
+      "attempts": 250,
+      "cell": [
+        "id_reference",
+        9806100,
+        "residual_9806003"
+      ],
+      "closest_distance_m": 0.05375373241486285,
+      "executed_steps": 250,
+      "final_distance_m": 0.07590488849868417,
+      "final_speed_norm_rad_s": 0.00984707802276113,
+      "last_half_mean_residual_nm": [
+        -3.784996664047241,
+        0.10033721501938998
+      ],
+      "mean_projection_correction_nm": 3.4540396495097956,
+      "outcome": "timeout",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 73,
+      "reconstructed_reward": -142.5109063261117,
+      "residual_near_bound_attempts": 8,
+      "residual_rms_nm": 4.843279003357201,
+      "reward_terms": {
+        "distance": 115.32373219433565,
+        "speed": 7.575662346991203,
+        "success_bonus": 0.0,
+        "torque": 19.61151178478484
+      },
+      "timeout_blocker": "distance",
+      "training_penalty_adjusted_return": -142.5109063261117
+    },
+    {
+      "attempts": 98,
+      "cell": [
+        "id_reference",
+        9806100,
+        "residual_9806004"
+      ],
+      "closest_distance_m": 0.01486273729224917,
+      "executed_steps": 98,
+      "final_distance_m": 0.03515931837617003,
+      "final_speed_norm_rad_s": 0.34954121411796374,
+      "last_half_mean_residual_nm": [
+        -1.45403090925241,
+        2.18273155832169
+      ],
+      "mean_projection_correction_nm": 8.59044703320002,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 9,
+      "projected_executed_steps": 57,
+      "reconstructed_reward": -116.94269742720122,
+      "residual_near_bound_attempts": 19,
+      "residual_rms_nm": 6.183444921878237,
+      "reward_terms": {
+        "distance": 104.48006779168949,
+        "speed": 6.729385257887126,
+        "success_bonus": 10.0,
+        "torque": 15.733244377624597
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -116.94269742720122
+    },
+    {
+      "attempts": 250,
+      "cell": [
+        "ood_compound",
+        9806100,
+        "fixed"
+      ],
+      "closest_distance_m": 0.6077061695158672,
+      "executed_steps": 250,
+      "final_distance_m": 0.660434232640707,
+      "final_speed_norm_rad_s": 0.026275225618943705,
+      "last_half_mean_residual_nm": [
+        0.0,
+        0.0
+      ],
+      "mean_projection_correction_nm": 3.9668915613577833,
+      "outcome": "timeout",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 114,
+      "reconstructed_reward": -363.37512684479293,
+      "residual_near_bound_attempts": 0,
+      "residual_rms_nm": 0.0,
+      "reward_terms": {
+        "distance": 295.0363883147041,
+        "speed": 19.154896789836044,
+        "success_bonus": 0.0,
+        "torque": 49.18384174025275
+      },
+      "timeout_blocker": "distance",
+      "training_penalty_adjusted_return": -363.37512684479293
+    },
+    {
+      "attempts": 136,
+      "cell": [
+        "ood_compound",
+        9806100,
+        "adaptive"
+      ],
+      "closest_distance_m": 0.04973276579993379,
+      "executed_steps": 136,
+      "final_distance_m": 0.04973276579993379,
+      "final_speed_norm_rad_s": 0.18300517405885383,
+      "last_half_mean_residual_nm": [
+        0.0,
+        0.0
+      ],
+      "mean_projection_correction_nm": 10.147513279673582,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 72,
+      "reconstructed_reward": -189.33760999898283,
+      "residual_near_bound_attempts": 0,
+      "residual_rms_nm": 0.0,
+      "reward_terms": {
+        "distance": 161.15910351579555,
+        "speed": 6.609480628720133,
+        "success_bonus": 10.0,
+        "torque": 31.56902585446717
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -189.33760999898283
+    },
+    {
+      "attempts": 159,
+      "cell": [
+        "ood_compound",
+        9806100,
+        "residual_9806000"
+      ],
+      "closest_distance_m": 0.04988531562262176,
+      "executed_steps": 159,
+      "final_distance_m": 0.04988531562262176,
+      "final_speed_norm_rad_s": 0.1442523915606314,
+      "last_half_mean_residual_nm": [
+        -0.7745126430876553,
+        -1.0635128331836312
+      ],
+      "mean_projection_correction_nm": 11.147068002332778,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 89,
+      "reconstructed_reward": -220.84674097017376,
+      "residual_near_bound_attempts": 29,
+      "residual_rms_nm": 6.990698442477209,
+      "reward_terms": {
+        "distance": 187.4061937173367,
+        "speed": 10.632816365507585,
+        "success_bonus": 10.0,
+        "torque": 32.807730887329484
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -220.84674097017376
+    },
+    {
+      "attempts": 130,
+      "cell": [
+        "ood_compound",
+        9806100,
+        "residual_9806001"
+      ],
+      "closest_distance_m": 0.03284724274732037,
+      "executed_steps": 130,
+      "final_distance_m": 0.03284724274732037,
+      "final_speed_norm_rad_s": 0.3215041691086878,
+      "last_half_mean_residual_nm": [
+        4.634071749907274,
+        5.323452986203707
+      ],
+      "mean_projection_correction_nm": 10.293856511272672,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 4,
+      "projected_executed_steps": 76,
+      "reconstructed_reward": -190.95599935402834,
+      "residual_near_bound_attempts": 45,
+      "residual_rms_nm": 7.703759808659634,
+      "reward_terms": {
+        "distance": 164.0736683048343,
+        "speed": 7.142966305055967,
+        "success_bonus": 10.0,
+        "torque": 29.739364744138058
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -190.95599935402834
+    },
+    {
+      "attempts": 159,
+      "cell": [
+        "ood_compound",
+        9806100,
+        "residual_9806002"
+      ],
+      "closest_distance_m": 0.048182875327542875,
+      "executed_steps": 159,
+      "final_distance_m": 0.048182875327542875,
+      "final_speed_norm_rad_s": 0.24321633256722772,
+      "last_half_mean_residual_nm": [
+        2.410506846383214,
+        -0.8174734240863473
+      ],
+      "mean_projection_correction_nm": 8.733078336712577,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 64,
+      "reconstructed_reward": -227.3211847006435,
+      "residual_near_bound_attempts": 40,
+      "residual_rms_nm": 6.7982966946953045,
+      "reward_terms": {
+        "distance": 197.41699814720215,
+        "speed": 9.058156529639627,
+        "success_bonus": 10.0,
+        "torque": 30.846030023801728
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -227.3211847006435
+    },
+    {
+      "attempts": 136,
+      "cell": [
+        "ood_compound",
+        9806100,
+        "residual_9806003"
+      ],
+      "closest_distance_m": 0.04515717625652562,
+      "executed_steps": 136,
+      "final_distance_m": 0.04515717625652562,
+      "final_speed_norm_rad_s": 0.3313234931880695,
+      "last_half_mean_residual_nm": [
+        -1.1402211241862352,
+        0.8470071534872713
+      ],
+      "mean_projection_correction_nm": 10.366103587432837,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 1,
+      "projected_executed_steps": 68,
+      "reconstructed_reward": -194.81513850618265,
+      "residual_near_bound_attempts": 11,
+      "residual_rms_nm": 6.342827478499258,
+      "reward_terms": {
+        "distance": 167.42680003902174,
+        "speed": 6.373435029596269,
+        "success_bonus": 10.0,
+        "torque": 31.014903437564648
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -194.81513850618265
+    },
+    {
+      "attempts": 124,
+      "cell": [
+        "ood_compound",
+        9806100,
+        "residual_9806004"
+      ],
+      "closest_distance_m": 0.038073876191775075,
+      "executed_steps": 124,
+      "final_distance_m": 0.038073876191775075,
+      "final_speed_norm_rad_s": 0.3313607844362012,
+      "last_half_mean_residual_nm": [
+        -0.8993523657291888,
+        2.557672826392997
+      ],
+      "mean_projection_correction_nm": 12.080210840939275,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 1,
+      "projected_executed_steps": 79,
+      "reconstructed_reward": -186.98267943755542,
+      "residual_near_bound_attempts": 31,
+      "residual_rms_nm": 7.037970366837876,
+      "reward_terms": {
+        "distance": 159.09970100488934,
+        "speed": 7.1234411221714256,
+        "success_bonus": 10.0,
+        "torque": 30.75953731049467
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -186.98267943755542
+    },
+    {
+      "attempts": 250,
+      "cell": [
+        "motor_fault",
+        9806100,
+        "fixed"
+      ],
+      "closest_distance_m": 0.027791612270211395,
+      "executed_steps": 250,
+      "final_distance_m": 0.3043050333794782,
+      "final_speed_norm_rad_s": 0.003954702721882318,
+      "last_half_mean_residual_nm": [
+        0.0,
+        0.0
+      ],
+      "mean_projection_correction_nm": 6.790583660325826,
+      "outcome": "timeout",
+      "position_reached_but_too_fast_steps": 2,
+      "projected_executed_steps": 248,
+      "reconstructed_reward": -225.2214638771203,
+      "residual_near_bound_attempts": 0,
+      "residual_rms_nm": 0.0,
+      "reward_terms": {
+        "distance": 182.0017515091601,
+        "speed": 17.647470421766613,
+        "success_bonus": 0.0,
+        "torque": 25.572241946193586
+      },
+      "timeout_blocker": "distance",
+      "training_penalty_adjusted_return": -225.2214638771203
+    },
+    {
+      "attempts": 98,
+      "cell": [
+        "motor_fault",
+        9806100,
+        "adaptive"
+      ],
+      "closest_distance_m": 0.048321016202500615,
+      "executed_steps": 98,
+      "final_distance_m": 0.048321016202500615,
+      "final_speed_norm_rad_s": 0.2242241009098514,
+      "last_half_mean_residual_nm": [
+        0.0,
+        0.0
+      ],
+      "mean_projection_correction_nm": 6.4771847832769405,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 50,
+      "reconstructed_reward": -115.62595141304745,
+      "residual_near_bound_attempts": 0,
+      "residual_rms_nm": 0.0,
+      "reward_terms": {
+        "distance": 100.03353498224283,
+        "speed": 8.211679979908476,
+        "success_bonus": 10.0,
+        "torque": 17.38073645089614
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -115.62595141304745
+    },
+    {
+      "attempts": 250,
+      "cell": [
+        "motor_fault",
+        9806100,
+        "residual_9806000"
+      ],
+      "closest_distance_m": 0.6551292125313297,
+      "executed_steps": 250,
+      "final_distance_m": 0.7643016370125568,
+      "final_speed_norm_rad_s": 0.05486329644299201,
+      "last_half_mean_residual_nm": [
+        7.412050609588623,
+        -6.669893920898438
+      ],
+      "mean_projection_correction_nm": 31.32836417966008,
+      "outcome": "timeout",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 250,
+      "reconstructed_reward": -270.1802992253377,
+      "residual_near_bound_attempts": 107,
+      "residual_rms_nm": 9.727187813411442,
+      "reward_terms": {
+        "distance": 233.67484188775472,
+        "speed": 8.445545776740671,
+        "success_bonus": 0.0,
+        "torque": 28.059911560842302
+      },
+      "timeout_blocker": "distance",
+      "training_penalty_adjusted_return": -270.1802992253377
+    },
+    {
+      "attempts": 85,
+      "cell": [
+        "motor_fault",
+        9806100,
+        "residual_9806001"
+      ],
+      "closest_distance_m": 0.04040696117594396,
+      "executed_steps": 85,
+      "final_distance_m": 0.046842216654984836,
+      "final_speed_norm_rad_s": 0.29619003366867114,
+      "last_half_mean_residual_nm": [
+        3.6481748204245124,
+        5.380966879600702
+      ],
+      "mean_projection_correction_nm": 6.67044226195912,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 5,
+      "projected_executed_steps": 57,
+      "reconstructed_reward": -114.10476635523698,
+      "residual_near_bound_attempts": 27,
+      "residual_rms_nm": 7.435142570899709,
+      "reward_terms": {
+        "distance": 98.51607300893707,
+        "speed": 9.017221127467064,
+        "success_bonus": 10.0,
+        "torque": 16.571472218832838
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -114.10476635523698
+    },
+    {
+      "attempts": 250,
+      "cell": [
+        "motor_fault",
+        9806100,
+        "residual_9806002"
+      ],
+      "closest_distance_m": 0.6536212122824355,
+      "executed_steps": 250,
+      "final_distance_m": 0.6875964809248789,
+      "final_speed_norm_rad_s": 0.05446236611895835,
+      "last_half_mean_residual_nm": [
+        -0.18500058526545762,
+        7.977689777374268
+      ],
+      "mean_projection_correction_nm": 26.390301458915875,
+      "outcome": "timeout",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 249,
+      "reconstructed_reward": -291.888440516133,
+      "residual_near_bound_attempts": 194,
+      "residual_rms_nm": 8.223865971801963,
+      "reward_terms": {
+        "distance": 251.2787072675905,
+        "speed": 7.803540288636017,
+        "success_bonus": 0.0,
+        "torque": 32.80619295990649
+      },
+      "timeout_blocker": "distance",
+      "training_penalty_adjusted_return": -291.888440516133
+    },
+    {
+      "attempts": 250,
+      "cell": [
+        "motor_fault",
+        9806100,
+        "residual_9806003"
+      ],
+      "closest_distance_m": 0.061158163476241145,
+      "executed_steps": 250,
+      "final_distance_m": 0.07664801466279667,
+      "final_speed_norm_rad_s": 0.011368714816986548,
+      "last_half_mean_residual_nm": [
+        -3.7881728782653807,
+        0.08659339679032564
+      ],
+      "mean_projection_correction_nm": 2.67668375822438,
+      "outcome": "timeout",
+      "position_reached_but_too_fast_steps": 0,
+      "projected_executed_steps": 61,
+      "reconstructed_reward": -143.53293460753753,
+      "residual_near_bound_attempts": 3,
+      "residual_rms_nm": 4.872352577121342,
+      "reward_terms": {
+        "distance": 106.85528629352885,
+        "speed": 9.851905995086375,
+        "success_bonus": 0.0,
+        "torque": 26.8257423189223
+      },
+      "timeout_blocker": "distance",
+      "training_penalty_adjusted_return": -143.53293460753753
+    },
+    {
+      "attempts": 91,
+      "cell": [
+        "motor_fault",
+        9806100,
+        "residual_9806004"
+      ],
+      "closest_distance_m": 0.038337871909217426,
+      "executed_steps": 91,
+      "final_distance_m": 0.038337871909217426,
+      "final_speed_norm_rad_s": 0.32861082810662834,
+      "last_half_mean_residual_nm": [
+        -2.685367699712515,
+        2.4342310600306676
+      ],
+      "mean_projection_correction_nm": 8.80310588119104,
+      "outcome": "success",
+      "position_reached_but_too_fast_steps": 1,
+      "projected_executed_steps": 54,
+      "reconstructed_reward": -117.36597706022454,
+      "residual_near_bound_attempts": 26,
+      "residual_rms_nm": 6.939980578687484,
+      "reward_terms": {
+        "distance": 102.4571406633164,
+        "speed": 7.579343998327007,
+        "success_bonus": 10.0,
+        "torque": 17.329492398581145
+      },
+      "timeout_blocker": "success",
+      "training_penalty_adjusted_return": -117.36597706022454
+    }
+  ],
+  "planar_paired_outcomes": {
+    "id_reference": {
+      "contingency": {
+        "both_fail": 49,
+        "both_success": 309,
+        "gain": 1,
+        "loss": 141
+      },
+      "lost_success_outcomes": {
+        "abort": 4,
+        "timeout": 137
+      },
+      "mean_paired_differences": {
+        "reward": -11.328812164005488,
+        "safety_intervention_fraction": -0.050076879194517504,
+        "steps": 51.712
+      },
+      "paired_model_tasks": 500,
+      "residual_outcomes": {
+        "abort": 32,
+        "success": 310,
+        "timeout": 158
+      }
+    },
+    "motor_fault": {
+      "contingency": {
+        "both_fail": 45,
+        "both_success": 349,
+        "gain": 0,
+        "loss": 106
+      },
+      "lost_success_outcomes": {
+        "abort": 6,
+        "timeout": 100
+      },
+      "mean_paired_differences": {
+        "reward": -8.747587507599619,
+        "safety_intervention_fraction": 0.02113081789846669,
+        "steps": 36.096
+      },
+      "paired_model_tasks": 500,
+      "residual_outcomes": {
+        "abort": 25,
+        "success": 349,
+        "timeout": 126
+      }
+    },
+    "ood_compound": {
+      "contingency": {
+        "both_fail": 116,
+        "both_success": 324,
+        "gain": 9,
+        "loss": 51
+      },
+      "lost_success_outcomes": {
+        "abort": 4,
+        "timeout": 47
+      },
+      "mean_paired_differences": {
+        "reward": -2.8450966916390246,
+        "safety_intervention_fraction": 0.09886921147055958,
+        "steps": 13.322
+      },
+      "paired_model_tasks": 500,
+      "residual_outcomes": {
+        "abort": 35,
+        "success": 333,
+        "timeout": 132
+      }
+    }
+  },
+  "scope": "retrospective saved-data diagnosis; no confirmation or candidate selection"
+}

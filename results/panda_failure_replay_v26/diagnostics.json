@@ -1,0 +1,821 @@
+{
+  "cases": [
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 9,
+      "abort_time_s": 0.09,
+      "cell": [
+        "fast_clean_d40",
+        9805801,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 13,
+      "first_braking_delivery_time_s": 0.13,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 12,
+        "position_rad": 0.0,
+        "substep": 3,
+        "time_s": 0.128,
+        "velocity_rad_s": 0.025614361540875485
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 8,
+      "first_violation_minus_braking_delivery_s": -0.0020000000000000018,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        3
+      ],
+      "last_measured_violation_time_s": 0.132,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 3,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 1,
+        "pending_after_abort": 2
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.053790572693985794
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 12,
+      "abort_time_s": 0.12,
+      "cell": [
+        "fast_clean_d40",
+        9805806,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 16,
+      "first_braking_delivery_time_s": 0.16,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 14,
+        "position_rad": 0.0,
+        "substep": 2,
+        "time_s": 0.14600000000000002,
+        "velocity_rad_s": 0.014246241499277001
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 10,
+      "first_violation_minus_braking_delivery_s": -0.013999999999999985,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        1
+      ],
+      "last_measured_violation_time_s": 0.184,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 20,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 12,
+        "pending_after_abort": 8
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.16618061864612388
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 10,
+      "abort_time_s": 0.1,
+      "cell": [
+        "fast_clean_d40",
+        9805807,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 14,
+      "first_braking_delivery_time_s": 0.14,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 13,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.134,
+        "velocity_rad_s": 0.010110591962610549
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 9,
+      "first_violation_minus_braking_delivery_s": -0.006000000000000005,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        2
+      ],
+      "last_measured_violation_time_s": 0.252,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 60,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 56,
+        "pending_after_abort": 4
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.8148259728729981
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 9,
+      "abort_time_s": 0.09,
+      "cell": [
+        "fast_clean_d40",
+        9805809,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 13,
+      "first_braking_delivery_time_s": 0.13,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 12,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.124,
+        "velocity_rad_s": 0.014111466570781772
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 8,
+      "first_violation_minus_braking_delivery_s": -0.006000000000000005,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        2
+      ],
+      "last_measured_violation_time_s": 0.264,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 71,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 67,
+        "pending_after_abort": 4
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 2.6646466527148274
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 9,
+      "abort_time_s": 0.09,
+      "cell": [
+        "fast_clean_d40",
+        9805810,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 13,
+      "first_braking_delivery_time_s": 0.13,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 12,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.124,
+        "velocity_rad_s": 0.03356278492127496
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 8,
+      "first_violation_minus_braking_delivery_s": -0.006000000000000005,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        2
+      ],
+      "last_measured_violation_time_s": 0.138,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 8,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 4,
+        "pending_after_abort": 4
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.16865823286403803
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 12,
+      "abort_time_s": 0.12,
+      "cell": [
+        "fast_clean_d40",
+        9805811,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 16,
+      "first_braking_delivery_time_s": 0.16,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 14,
+        "position_rad": 0.0,
+        "substep": 3,
+        "time_s": 0.14800000000000002,
+        "velocity_rad_s": 0.008976103755559794
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 10,
+      "first_violation_minus_braking_delivery_s": -0.011999999999999983,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        1
+      ],
+      "last_measured_violation_time_s": 0.164,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 9,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 2,
+        "pending_after_abort": 7
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.1729703799857094
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 11,
+      "abort_time_s": 0.11,
+      "cell": [
+        "fast_clean_d40",
+        9805813,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 15,
+      "first_braking_delivery_time_s": 0.15,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 14,
+        "position_rad": 0.0,
+        "substep": 0,
+        "time_s": 0.14200000000000002,
+        "velocity_rad_s": 0.0038157658809905293
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 10,
+      "first_violation_minus_braking_delivery_s": -0.00799999999999998,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        3
+      ],
+      "last_measured_violation_time_s": 0.152,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 6,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 1,
+        "pending_after_abort": 5
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.05642666729645773
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 10,
+      "abort_time_s": 0.1,
+      "cell": [
+        "fast_clean_d40",
+        9805816,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 14,
+      "first_braking_delivery_time_s": 0.14,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 13,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.14,
+        "velocity_rad_s": 0.026268363630984393
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 9,
+      "first_violation_minus_braking_delivery_s": 0.0,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        3
+      ],
+      "last_measured_violation_time_s": 0.14,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 1,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 0,
+        "pending_after_abort": 1
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.026268363630984393
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 12,
+      "abort_time_s": 0.12,
+      "cell": [
+        "fast_clean_d40",
+        9805817,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 16,
+      "first_braking_delivery_time_s": 0.16,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 15,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.154,
+        "velocity_rad_s": 0.003916259991095572
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 11,
+      "first_violation_minus_braking_delivery_s": -0.006000000000000005,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        4
+      ],
+      "last_measured_violation_time_s": 0.16,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 4,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 0,
+        "pending_after_abort": 4
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.03316399105539425
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 10,
+      "abort_time_s": 0.1,
+      "cell": [
+        "fast_clean_d40",
+        9805818,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 14,
+      "first_braking_delivery_time_s": 0.14,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 13,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.14,
+        "velocity_rad_s": 0.04144452201608484
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 9,
+      "first_violation_minus_braking_delivery_s": 0.0,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        3
+      ],
+      "last_measured_violation_time_s": 0.14,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 1,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 0,
+        "pending_after_abort": 1
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.04144452201608484
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 9,
+      "abort_time_s": 0.09,
+      "cell": [
+        "fast_noise_d40",
+        9805801,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 13,
+      "first_braking_delivery_time_s": 0.13,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 12,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.13,
+        "velocity_rad_s": 0.013970389726015053
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 8,
+      "first_violation_minus_braking_delivery_s": 0.0,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        3
+      ],
+      "last_measured_violation_time_s": 0.13,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 1,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 0,
+        "pending_after_abort": 1
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.013970389726015053
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 10,
+      "abort_time_s": 0.1,
+      "cell": [
+        "fast_noise_d40",
+        9805804,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 14,
+      "first_braking_delivery_time_s": 0.14,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 13,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.14,
+        "velocity_rad_s": 0.016106945489384294
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 9,
+      "first_violation_minus_braking_delivery_s": 0.0,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        2
+      ],
+      "last_measured_violation_time_s": 0.14,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 1,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 0,
+        "pending_after_abort": 1
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.016106945489384294
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 11,
+      "abort_time_s": 0.11,
+      "cell": [
+        "fast_noise_d40",
+        9805805,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 15,
+      "first_braking_delivery_time_s": 0.15,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 14,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.15000000000000002,
+        "velocity_rad_s": 0.04710855386219004
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 10,
+      "first_violation_minus_braking_delivery_s": 2.7755575615628914e-17,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        1
+      ],
+      "last_measured_violation_time_s": 0.15000000000000002,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 1,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 0,
+        "pending_after_abort": 1
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.04710855386219004
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 12,
+      "abort_time_s": 0.12,
+      "cell": [
+        "fast_noise_d40",
+        9805806,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 16,
+      "first_braking_delivery_time_s": 0.16,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 14,
+        "position_rad": 0.0,
+        "substep": 2,
+        "time_s": 0.14600000000000002,
+        "velocity_rad_s": 0.006269704321944403
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 10,
+      "first_violation_minus_braking_delivery_s": -0.013999999999999985,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        1
+      ],
+      "last_measured_violation_time_s": 0.184,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 20,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 12,
+        "pending_after_abort": 8
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.1582244878312351
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 10,
+      "abort_time_s": 0.1,
+      "cell": [
+        "fast_noise_d40",
+        9805807,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 14,
+      "first_braking_delivery_time_s": 0.14,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 13,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.134,
+        "velocity_rad_s": 0.004204747683970389
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 9,
+      "first_violation_minus_braking_delivery_s": -0.006000000000000005,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        2
+      ],
+      "last_measured_violation_time_s": 0.252,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 60,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 56,
+        "pending_after_abort": 4
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.7929184845522572
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 9,
+      "abort_time_s": 0.09,
+      "cell": [
+        "fast_noise_d40",
+        9805809,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 13,
+      "first_braking_delivery_time_s": 0.13,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 12,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.124,
+        "velocity_rad_s": 0.013182513188862544
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 8,
+      "first_violation_minus_braking_delivery_s": -0.006000000000000005,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        2
+      ],
+      "last_measured_violation_time_s": 0.264,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 71,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 67,
+        "pending_after_abort": 4
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 2.663600318364666
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 9,
+      "abort_time_s": 0.09,
+      "cell": [
+        "fast_noise_d40",
+        9805810,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 13,
+      "first_braking_delivery_time_s": 0.13,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 12,
+        "position_rad": 0.0,
+        "substep": 1,
+        "time_s": 0.124,
+        "velocity_rad_s": 0.03712083531164634
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 8,
+      "first_violation_minus_braking_delivery_s": -0.006000000000000005,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        2
+      ],
+      "last_measured_violation_time_s": 0.138,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 8,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 4,
+        "pending_after_abort": 4
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.1703164179835639
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 12,
+      "abort_time_s": 0.12,
+      "cell": [
+        "fast_noise_d40",
+        9805811,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 16,
+      "first_braking_delivery_time_s": 0.16,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 14,
+        "position_rad": 0.0,
+        "substep": 3,
+        "time_s": 0.14800000000000002,
+        "velocity_rad_s": 0.030796726285638343
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 10,
+      "first_violation_minus_braking_delivery_s": -0.011999999999999983,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        1
+      ],
+      "last_measured_violation_time_s": 0.164,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 9,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 2,
+        "pending_after_abort": 7
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.1738184979509536
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 10,
+      "abort_time_s": 0.1,
+      "cell": [
+        "fast_noise_d40",
+        9805816,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 14,
+      "first_braking_delivery_time_s": 0.14,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 13,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.14,
+        "velocity_rad_s": 0.04211412538560744
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 9,
+      "first_violation_minus_braking_delivery_s": 0.0,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        3
+      ],
+      "last_measured_violation_time_s": 0.14200000000000002,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 2,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 1,
+        "pending_after_abort": 1
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.04211412538560744
+      }
+    },
+    {
+      "abort_reason": "pending_command_violation",
+      "abort_step": 10,
+      "abort_time_s": 0.1,
+      "cell": [
+        "fast_noise_d40",
+        9805818,
+        "bank_filtered"
+      ],
+      "first_braking_delivery_step": 14,
+      "first_braking_delivery_time_s": 0.14,
+      "first_physical_violation": {
+        "contacts": 0,
+        "control_step": 13,
+        "position_rad": 0.0,
+        "substep": 4,
+        "time_s": 0.14,
+        "velocity_rad_s": 0.06303232171967199
+      },
+      "first_violation_delivered_command_kind": "pre_abort_control",
+      "first_violation_delivered_command_origin_step": 9,
+      "first_violation_minus_braking_delivery_s": 0.0,
+      "first_violation_phase": "pending_after_abort",
+      "first_violation_velocity_joint_indices": [
+        3
+      ],
+      "last_measured_violation_time_s": 0.14200000000000002,
+      "scope": "recorded event ordering; delivered command identity does not establish causation",
+      "unsafe_substeps_at_or_after_abort": 2,
+      "unsafe_substeps_before_abort_or_without_abort": 0,
+      "unsafe_substeps_by_phase": {
+        "before_abort": 0,
+        "braking_delivered": 1,
+        "pending_after_abort": 1
+      },
+      "violation_maxima": {
+        "position_rad": 0.0,
+        "velocity_rad_s": 0.06303232171967199
+      }
+    }
+  ],
+  "summary": {
+    "earliest_first_violation_s": 0.124,
+    "first_violation_command_kinds": {
+      "braking": 0,
+      "initial_zero": 0,
+      "pre_abort_control": 20
+    },
+    "first_violation_phases": {
+      "before_abort": 0,
+      "braking_delivered": 0,
+      "pending_after_abort": 20
+    },
+    "latest_first_violation_s": 0.154,
+    "meaning": "reproduction on used seeds; no new candidate or confirmation claim",
+    "new_task_seeds": [],
+    "reproduced_cases": 20
+  }
+}

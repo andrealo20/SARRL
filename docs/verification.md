@@ -3,6 +3,37 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Panda failure-trace recovery
+
+Recovery source `f29dd97` reproduced all twenty unsafe filtered v2.6 records
+using production source `6891dd2`, with finite floats checked at `rtol=1e-9`,
+`atol=1e-10` and exact discrete values/types. This adds 30,000 retained physical
+integration calls on used seeds. No new seed, controller or training run was
+introduced. A separate public-output audit reproduced all event diagnostics,
+twenty causal controller replays, 6,000 control cycles, 30,000 saved substeps
+and 206 independently checked feasible QP projections without physical stepping.
+
+Twenty focused recovery, diagnosis and release tests passed. They include
+boundary ownership at braking arrival, strict record reproduction, public
+auditing without local cell shards and a resume guard that permits only the
+recovery's own untracked output. The completed evidence remains tied to the
+original frozen recovery source. See the [timing findings](panda-failure-replay-results.md).
+
+## Saved-data control failure diagnosis
+
+Source `2e88aa0` analyzed all 2,100 planar and 480 Panda v2.6 records and all
+45 retained traces. A separate audit reproduced the output, including every
+planar trace reward/endpoint, Panda substep violation maxima and six fast
+filtered abort-prefix reconstructions. Input completion identities and data
+hashes are fixed, and diagnostic source hashes are retained. Physical stepping
+is prohibited; no new episode, training run or policy inference occurred.
+Eight diagnostic tests and three release/command tests passed. They check
+input tampering, output preservation, paired loss accounting, reward and
+projection reconstruction, abort-return conventions, physical event ordering
+and the limited meaning of a narrower saved-state delay bound. The
+[findings](control-failure-results.md) distinguish that initial missing-trace
+limitation from the subsequent unchanged-source recovery above.
+
 ## v2.6 joint filtering and adaptive residuals
 
 The [Panda filter study](panda-joint-filter-results.md), frozen at `6891dd2`,
