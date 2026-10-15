@@ -242,3 +242,8 @@ results/**/*.npz
 !results/control_failure_diagnosis_v26/
 results/control_failure_diagnosis_v26/*
 !results/control_failure_diagnosis_v26/*.json
+
+!results/panda_failure_replay_v26/
+results/panda_failure_replay_v26/*
+!results/panda_failure_replay_v26/*.json
+!results/panda_failure_replay_v26/traces.json.gz
