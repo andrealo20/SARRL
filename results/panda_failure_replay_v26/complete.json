@@ -1,0 +1,11 @@
+{
+  "episodes": 20,
+  "hashes": {
+    "audit.json": "5dc2a585fe39cc700b4121a4c3fa77c77f5e1f6368c4717bfde07189b1eff374",
+    "diagnostics.json": "750e8228d23f2c0cdea3455252e2d37485a37512675fa397941457c15535ea64",
+    "episodes.json": "ce3abd443fdbe904ee3a155879d8b091e8bc287ebd419d3507b6922c22caa7e5",
+    "manifest.json": "d3d6168061d53338af294d9ac12db092b2029e18cde9794b2f8c35f48e98e233",
+    "traces.json.gz": "80b5a576c58aeedc0e2810de88994c0be156c72df113ef511e857b61d16cb021"
+  },
+  "physical_steps": 30000
+}

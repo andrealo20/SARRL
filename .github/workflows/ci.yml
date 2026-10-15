@@ -107,3 +107,11 @@ jobs:
             cd "$RUNNER_TEMP/control-failure-audit"
             python -m tools.diagnose_control_failures --audit --output "$GITHUB_WORKSPACE/results/control_failure_diagnosis_v26"
           fi
+      - name: Audit recovered Panda failure traces
+        shell: bash
+        run: |
+          if [ -f results/panda_failure_replay_v26/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-failure-recovery-audit" f29dd979d3ef66d894a918935d252cb606dd73e7
+            cd "$RUNNER_TEMP/panda-failure-recovery-audit"
+            python -m tools.recover_panda_failures --source-checkout "$RUNNER_TEMP/panda-joint-audit" --output "$GITHUB_WORKSPACE/results/panda_failure_replay_v26" --audit
+          fi

@@ -29,12 +29,13 @@ therefore deferred pending evidence from a new, independently frozen design.
 The [saved-data diagnosis](control-failure-results.md) is complete. Of 298
 model/task success losses, 284 become timeouts. Five failed residual traces
 stop outside the target radius. Panda aborts reject predicted pending-command
-intervals before QP construction; the complete traces needed to time the
-remaining 20 unsafe filtered episodes were not retained.
+intervals before QP construction. A separate [failure-trace recovery](panda-failure-replay-results.md)
+reproduces all twenty unsafe filtered cases. Their first violations occur
+after abort while previously sent commands are still executing.
 
-Next, specify one settling-preserving residual hypothesis and recover the
-missing Panda failure traces through a separately documented unchanged-source
-replay. Any resulting candidate requires a new protocol and untouched
+Next, specify one settling-preserving residual hypothesis and a Panda design
+that checks command admissibility in flight and delayed braking authority.
+Any resulting candidate requires a new protocol and untouched
 confirmation seeds. Current held-out data may support diagnosis but cannot
 confirm a design tuned on those same results.
 

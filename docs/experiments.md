@@ -2039,3 +2039,15 @@ task seeds. The [findings](control-failure-results.md) distinguish lost
 successes, terminal settling, projection interactions and Panda pending-command
 rejections. Privileged delay-bound checks remain saved-state diagnostics;
 they neither generate alternative trajectories nor confirm a new controller.
+
+## Recovery of retained Panda failures
+
+The separately [frozen recovery](panda-failure-replay-methods.md) reproduces
+every episode field for all twenty unsafe filtered cases from the original
+joint-filter comparison. It uses the unchanged production source and adds
+30,000 retained integration calls on used seeds. The [full traces](panda-failure-replay-results.md)
+place every first violation after abort under a command sent before braking
+latched. Thirteen occur strictly before braking delivery and seven at the
+preceding command interval's right boundary. Fourteen cases continue violating
+after delivery. The causal audit executes no physical steps; no new candidate
+or fresh confirmation seed is introduced.

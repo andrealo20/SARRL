@@ -88,10 +88,14 @@ All six fast filtered first-seed trajectories have zero measured physical
 violations, including the two at 40 ms. Their paired unfiltered trajectories first violate velocity
 limits at 0.084 s, 0.100 s and 0.116 s for delays 0, 20 and 40 ms. These are
 illustrative paired records. The 20 filtered unsafe episodes belong to other
-seeds for which complete physical substep traces were not retained. Their
-violation timing relative to braking cannot be recovered from the available
-episode summaries. It would be incorrect to attribute all of them to braking
-delay or model error using this trace subset.
+seeds for which complete physical substep traces were not retained in the
+original campaign. Episode summaries alone cannot recover their timing.
+A subsequent [unchanged-source recovery](panda-failure-replay-results.md)
+reproduces all twenty records and retains full substep traces. Every first
+violation occurs after abort under a command sent before braking latched.
+Thirteen precede braking arrival strictly; seven occur at the preceding
+interval's right boundary. This establishes event order and command identity,
+without isolating a unique cause or validating a different fallback.
 
 ## Next design work
 
@@ -100,10 +104,10 @@ delay or model error using this trace subset.
    attenuation or estimator-aware input are hypotheses, not accepted remedies.
    Choose one before a new protocol and independent seed block; do not tune
    several variants on these held-out outcomes.
-2. Before redesigning Panda fallback, recover full traces for the already
-   retained unsafe cases by a separately documented replay of the unchanged
-   source. Require record reproduction before interpreting new trace fields.
-   This would be additional simulation on used seeds, not fresh confirmation.
+2. Full Panda failure-trace recovery is complete: twenty reproduced records
+   and 30,000 additional retained integration calls on used seeds. Use the
+   recovered event order to specify how a future filter preserves admissible
+   commands in flight and delayed braking authority before accepting a move.
 3. A future delay-aware filter needs a defensible causal delay set and explicit
    treatment of commands in flight. An accurate final delay estimate on the
    ordinary reference tasks does not establish that the set may be narrowed

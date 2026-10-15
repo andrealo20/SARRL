@@ -1,0 +1,136 @@
+{
+  "input_completion_sha256": "e7f62d3732b20c9ef49dbdaa6777ebd3ee50672ae616d5ab18ebce411c0318c8",
+  "new_task_seeds": [],
+  "production_commit": "6891dd27edf8b28514160d1ade350e3213826058",
+  "record_tolerance": {
+    "atol": 1e-10,
+    "discrete_types": "exact",
+    "rtol": 1e-09
+  },
+  "recovery_commit": "f29dd979d3ef66d894a918935d252cb606dd73e7",
+  "retained_replay_physical_steps": 30000,
+  "runtime": {
+    "mujoco": "3.13.0",
+    "numerical_threads": 1,
+    "numpy": "2.5.2",
+    "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+    "python": "3.12.3",
+    "scipy": "1.18.1",
+    "workers": 4
+  },
+  "scope": "unchanged-source reproduction on used seeds; no new candidate",
+  "selected_cells": [
+    [
+      "fast_clean_d40",
+      9805801,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805806,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805807,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805809,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805810,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805811,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805813,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805816,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805817,
+      "bank_filtered"
+    ],
+    [
+      "fast_clean_d40",
+      9805818,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805801,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805804,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805805,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805806,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805807,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805809,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805810,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805811,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805816,
+      "bank_filtered"
+    ],
+    [
+      "fast_noise_d40",
+      9805818,
+      "bank_filtered"
+    ]
+  ],
+  "source_sha256": {
+    "docs/panda-failure-replay-methods.md": "da1eda2bba895b239f3d52245779787d0ddf9cea6d7b7c2349072518819636d3",
+    "sarrl/evaluation/control_diagnosis.py": "b955210d5e3fac3471c422453eece795f94f48d513f01e75d5e9375937f3ef1d",
+    "sarrl/evaluation/panda_failure_timing.py": "d100891e350859d4128d20b3bf3367aafe55a9b61635a54c2a27805d6b68762c",
+    "sarrl/robots/panda.py": "0512126c7f1c233877a2edae04b84c6f366fa180965d872d22c38a125e9df2ad",
+    "tests/test_panda_failure_replay.py": "738ffb8cbdb6bf60ebabd0602fe501e7a97477716209cfd59f9aa0952bcfe272",
+    "tools/audit_panda_joint_filter_portable.py": "87a66e3f822b6c81cbcc8eb3fae11fbc8bebeb9d2204b6c0538916793a007233",
+    "tools/campaign_guards.py": "0a63e2fcf54bcbcbf899361bbc228b7a6a0f47526cda63535b90acd53888f7c4",
+    "tools/recover_panda_failures.py": "ac25a3e69b69242c1f2fff19b9382ba1ddb0a1ff3c4f704ffb1c59ae8b239760",
+    "tools/run_adaptive_campaign.py": "12c66fd37a994b828f16b38fa7cfa39731fc627f4e47b7016895337c39d73781"
+  },
+  "workers": 1
+}

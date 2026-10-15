@@ -50,6 +50,15 @@ def write(path, value):
     temp.replace(path)
 
 
+def source_changes(status):
+    """Allow only the recovery's own untracked state while resuming."""
+    return [
+        line
+        for line in status.splitlines()
+        if not (line.startswith("?? results/panda_failure_replay_v26/"))
+    ]
+
+
 def mismatches(actual, expected, path=""):
     if type(actual) is not type(expected):
         return [path]
@@ -394,7 +403,8 @@ def main(argv=None):
         return 0
     if out != OUTPUT.resolve() or (out / "complete.json").exists() or out.exists() != args.resume:
         parser.error("use the canonical unfinished output; interrupted runs require --resume")
-    if subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).strip():
+    status = subprocess.check_output(["git", "status", "--porcelain"], cwd=ROOT).decode()
+    if source_changes(status):
         parser.error("commit the recovery implementation before execution")
     provenance = {
         "recovery_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT)

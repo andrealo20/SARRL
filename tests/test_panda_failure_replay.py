@@ -5,7 +5,15 @@ import numpy as np
 import pytest
 
 from sarrl.evaluation.panda_failure_timing import failure_timing
-from tools.recover_panda_failures import mismatches, read_items, select_cases
+from tools.recover_panda_failures import mismatches, read_items, select_cases, source_changes
+
+
+def test_resume_allows_only_its_own_untracked_recovery_state():
+    assert not source_changes("?? results/panda_failure_replay_v26/\n")
+    assert source_changes(" M tools/recover_panda_failures.py\n")
+    assert source_changes("?? local_controller.py\n")
+    assert source_changes("?? results/panda_failure_replay_v26_other/\n")
+    assert source_changes(" M results/panda_failure_replay_v26/manifest.json\n")
 
 
 def selected():
