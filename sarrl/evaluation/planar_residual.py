@@ -31,6 +31,84 @@ ARMS = ("fixed", "adaptive", *[f"residual_{seed}" for seed in TRAINING_SEEDS])
 TRAINING_STEPS = 200000
 BOOTSTRAP_DRAWS = 5000
 BOOTSTRAP_SEED = 260000
+HISTORICAL_RTOL = 1e-7
+HISTORICAL_ATOL = 1e-9
+
+
+def historical_reproduction_mismatches(actual, retained):
+    """Compare portable floating values while retaining exact discrete evidence."""
+
+    def matches(value, expected):
+        if isinstance(expected, (bool, int)):
+            return type(value) is type(expected) and value == expected
+        if isinstance(expected, float):
+            return (
+                isinstance(value, (float, np.floating))
+                and np.isfinite(value)
+                and np.isfinite(expected)
+                and bool(np.isclose(value, expected, rtol=HISTORICAL_RTOL, atol=HISTORICAL_ATOL))
+            )
+        if isinstance(expected, dict):
+            return (
+                isinstance(value, dict)
+                and set(value) == set(expected)
+                and all(matches(value[key], item) for key, item in expected.items())
+            )
+        if isinstance(expected, (list, tuple)):
+            return (
+                isinstance(value, (list, tuple))
+                and len(value) == len(expected)
+                and all(matches(a, b) for a, b in zip(value, expected, strict=True))
+            )
+        return type(value) is type(expected) and value == expected
+
+    return sorted(
+        name
+        for name in set(actual) | set(retained)
+        if name not in actual or name not in retained or not matches(actual[name], retained[name])
+    )
+
+
+def historical_reproduction_report(actual, retained, reference_sha256):
+    from sarrl.evaluation.panda_adaptation import reproduction_mismatches
+
+    def key(row):
+        return row["scenario"], row["seed"], row["arm"]
+
+    expected = {
+        (condition, seed, "adaptive_hocbf_margin")
+        for condition in SCENARIOS
+        for seed in range(56200, 56300)
+    }
+    actual_lookup, reference_lookup = ({key(r): r for r in rows} for rows in (actual, retained))
+    if (
+        len(actual) != len(retained)
+        or len(actual) != 300
+        or set(actual_lookup) != expected
+        or set(reference_lookup) != expected
+    ):
+        raise ValueError("historical reproduction requires all 300 unique reference cells")
+    differences = {}
+    for name, compare in (
+        ("portable", historical_reproduction_mismatches),
+        ("strict", reproduction_mismatches),
+    ):
+        differences[name] = [
+            [*identity, field]
+            for identity in sorted(expected)
+            for field in compare(actual_lookup[identity], reference_lookup[identity])
+        ]
+    return {
+        "compared": 300,
+        "matched": 300 - len({tuple(item[:3]) for item in differences["portable"]}),
+        "mismatches": differences["portable"],
+        "strict_matched": 300 - len({tuple(item[:3]) for item in differences["strict"]}),
+        "strict_mismatches": differences["strict"],
+        "floating_tolerance": {"relative": HISTORICAL_RTOL, "absolute": HISTORICAL_ATOL},
+        "reference_sha256": reference_sha256,
+        "control_steps": sum(row["steps"] for row in actual),
+        "runtime_note": "different host with historical libraries; strict comparison retained",
+    }
 
 
 def study_protocol():
@@ -62,12 +140,17 @@ def study_protocol():
             "arm": "adaptive_hocbf_margin",
             "seeds": list(range(56200, 56300)),
             "reference": "results/uncertainty_margin_v22/episodes.jsonl",
+            "relative_tolerance": HISTORICAL_RTOL,
+            "absolute_tolerance": HISTORICAL_ATOL,
+            "discrete_fields": "exact types and values",
+            "strict_diagnostic_retained": True,
         },
         "runtime": {
-            "python_major_minor": "3.12",
+            "python": "3.11.15",
             "numpy": "2.4.6",
+            "scipy": "1.17.1",
             "mujoco": "3.14.0",
-            "torch": "2.12.0+cu130",
+            "torch": "2.12.0+cpu",
             "numerical_threads": 1,
         },
         "bootstrap": {

@@ -26,7 +26,12 @@ except ImportError:
 from sarrl.evaluation.adaptive_pilot import build_arm
 from sarrl.evaluation.margin_campaign import v22_config
 from sarrl.evaluation.panda_adaptation import reproduction_mismatches
-from sarrl.evaluation.planar_residual import RecordingStack, analyze, study_protocol
+from sarrl.evaluation.planar_residual import (
+    RecordingStack,
+    analyze,
+    historical_reproduction_report,
+    study_protocol,
+)
 from sarrl.rl.sac import SACAgent
 from tools.campaign_guards import valid_completion_marker
 from tools.run_adaptive_campaign import sha
@@ -85,6 +90,16 @@ def main(argv=None):
         "decision mismatch",
     )
     report = json.loads((out / "reproduction.json").read_text())
+    reference_path = ROOT / "results/uncertainty_margin_v22/episodes.jsonl"
+    retained = [json.loads(line) for line in reference_path.read_text().splitlines()]
+    retained = [
+        r for r in retained if r["arm"] == "adaptive_hocbf_margin" and 56200 <= r["seed"] < 56300
+    ]
+    replayed = json.loads((out / "reproduction_records.json").read_text())
+    ensure(
+        report == historical_reproduction_report(replayed, retained, sha(reference_path)),
+        "historical reproduction report differs from retained records",
+    )
     ensure(
         report["compared"] == report["matched"] == 300 and not report["mismatches"],
         "historical reproduction incomplete",
@@ -237,6 +252,8 @@ def main(argv=None):
         json.dumps(
             {
                 "verified_episodes": len(rows),
+                "verified_historical_records": report["compared"],
+                "historical_strict_matches": report["strict_matched"],
                 "verified_traces": len(traces),
                 "policy_action_checks": inferred,
                 "causal_stack_replays": causal,

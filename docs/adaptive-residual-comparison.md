@@ -36,11 +36,36 @@ The covariance margin is empirical and is not calibrated population uncertainty.
 Commit implementation, tests, this protocol and the reserved registry before
 execution. Reproduce the first hundred v2.2 covariance-margin decision seeds
 `56200..56299` across all three scenarios, 300 records, before opening a new
-training seed. Use historical NumPy 2.4.6 and MuJoCo 3.14.0 in a separate
-Python 3.12 environment, with PyTorch 2.12.0+cu130 on CPU. The original records
-used Python 3.11.15; reproduction compares every retained field with the
-declared `rtol=1e-9`, `atol=1e-10` rather than claiming an identical host.
+training seed. Use Python 3.11.15, NumPy 2.4.6, MuJoCo 3.14.0, SciPy 1.17.1
+and PyTorch 2.12.0+cpu in a separate environment. The CPU-only installation
+is fixed before training and avoids loading unused accelerator libraries.
+Historical reproduction compares every floating
+field with `rtol=1e-7`, `atol=1e-9`; discrete values and their types must match
+exactly. It also retains the stricter `rtol=1e-9`, `atol=1e-10` comparison as a
+separate diagnostic. No identical-host or bitwise reproduction claim is made.
 The same declared libraries run the new planar training and evaluation.
+
+### Historical portability amendment, 15 October 2026
+
+Before opening any new training or evaluation seed, the historical preflight
+found an incorrect provenance label and one numerically sensitive episode.
+The label is restored to the retained `official` value. With that metadata
+corrected, 299 of 300 records meet the original floating tolerance. The five
+remaining differences occur in `id_reference`, seed `56212`: final distance
+differs by 1.96e-10 m, maximum speed by 2.10e-8 rad/s, and estimated parameters,
+mean margin and prediction RMS by at most 2.37e-8 in their respective units.
+Python 3.11.15 and alternative BLAS/SIMD checks do not recover the original
+tolerance on this host. These trials do not identify a single underlying cause.
+
+The revised historical bound is fixed before fresh seeds. All 300 recalculated
+records are published in `reproduction_records.json`, alongside both comparisons,
+so the original strict failure remains visible and independently auditable.
+Success, unsafe flags, counters, seed identities and metadata retain exact
+comparison. Nonfinite values fail. This amendment changes only historical
+floating-value comparison; the training budget, held-out grid, confidence
+intervals and every advancement criterion below remain unchanged.
+
+### Fixed training budget
 
 Five independent training seeds are `9806000..9806004`, inside the reserved
 `9806000..9806099` block. Every model receives 200,000 environment calls,
@@ -95,12 +120,21 @@ criterion, budget, model choice or action bound changes after opening seeds.
 
 ## Run and audit
 
-From the frozen checkout with the recorded runtime:
+Create a separate environment using Python 3.11.15:
 
 ```bash
-python -m tools.run_planar_residual --workers 5 --reproduce-only
-python -m tools.run_planar_residual --workers 5 --resume --train-only
-python -m tools.run_planar_residual --workers 5 --resume
+python3.11 -m venv ../sarrl-residual-env
+source ../sarrl-residual-env/bin/activate
+python -m pip install 'torch==2.12.0+cpu' --index-url https://download.pytorch.org/whl/cpu
+python -m pip install -e '.[mujoco]' 'numpy==2.4.6' 'scipy==1.17.1' 'mujoco==3.14.0'
+```
+
+From the frozen checkout with that runtime:
+
+```bash
+python -m tools.run_planar_residual --workers 2 --reproduce-only
+python -m tools.run_planar_residual --workers 2 --resume --train-only
+python -m tools.run_planar_residual --workers 2 --resume
 python -m tools.audit_planar_residual \
   --models results/planar_residual_v26/training
 ```
@@ -113,7 +147,8 @@ are retained. The dedicated runner restores this wrapper's checkpoints.
 
 The public audit without `--models` verifies source/data hashes, complete
 pairing, endpoint definitions, bounded trace actions and recomputed crossed
-bootstrap/decision. It explicitly reports that policy inference was not
+bootstrap/decision. It recomputes both historical comparisons from the public
+reproduction records. It explicitly reports that policy inference was not
 verified. The full local audit also checks all five checkpoint hashes,
 policy actions and causal nominal/filter/estimator replays. Reproducing
 inference elsewhere requires the recorded local policies or retraining the

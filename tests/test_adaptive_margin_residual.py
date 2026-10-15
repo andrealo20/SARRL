@@ -223,3 +223,67 @@ def test_study_commands_help_without_optional_simulator():
         )
         result = subprocess.run([sys.executable, "-c", script], capture_output=True, text=True)
         assert result.returncode == 0, result.stderr
+
+
+def test_portable_historical_replay_preserves_discrete_safety_and_metadata():
+    from sarrl.evaluation.panda_adaptation import reproduction_mismatches
+    from sarrl.evaluation.planar_residual import historical_reproduction_mismatches
+
+    retained = {
+        "origin": "official",
+        "steps": 90,
+        "success": True,
+        "unsafe_episode": False,
+        "final_distance": 0.046629755911213266,
+        "parameters": [[1.0, 0.5]],
+    }
+    actual = copy.deepcopy(retained)
+    actual["final_distance"] += 2e-10
+    actual["parameters"][0][1] += 1e-8
+    assert not historical_reproduction_mismatches(actual, retained)
+    assert reproduction_mismatches(actual, retained)
+    for field, value in (
+        ("origin", "decision"),
+        ("steps", 91),
+        ("success", 1),
+        ("unsafe_episode", True),
+    ):
+        changed = {**actual, field: value}
+        assert field in historical_reproduction_mismatches(changed, retained)
+    for value in (0.047, float("nan"), float("inf")):
+        assert "final_distance" in historical_reproduction_mismatches(
+            {**actual, "final_distance": value}, retained
+        )
+    assert "parameters" in historical_reproduction_mismatches(
+        {**actual, "parameters": [[1.0]]}, retained
+    )
+
+
+def test_historical_report_retains_strict_failure_and_rejects_changed_safety():
+    from sarrl.evaluation.planar_residual import SCENARIOS, historical_reproduction_report
+
+    reference = [
+        {
+            "scenario": c,
+            "seed": s,
+            "arm": "adaptive_hocbf_margin",
+            "steps": 1,
+            "origin": "official",
+            "unsafe_episode": False,
+            "final_distance": 0.05,
+        }
+        for c in SCENARIOS
+        for s in range(56200, 56300)
+    ]
+    actual = copy.deepcopy(reference)
+    actual[0]["final_distance"] += 2e-10
+    report = historical_reproduction_report(actual, reference, "reference-digest")
+    assert report["matched"] == 300 and report["strict_matched"] == 299
+    assert report["strict_mismatches"] == [
+        ["id_reference", 56200, "adaptive_hocbf_margin", "final_distance"]
+    ]
+    actual[0]["unsafe_episode"] = True
+    report = historical_reproduction_report(actual, reference, "reference-digest")
+    assert report["matched"] == 299 and report["mismatches"][0][-1] == "unsafe_episode"
+    with pytest.raises(ValueError, match="unique"):
+        historical_reproduction_report(actual[:-1] + [actual[0]], reference, "reference-digest")

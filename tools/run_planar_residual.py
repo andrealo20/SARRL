@@ -19,6 +19,7 @@ for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
 os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
 
 import numpy as np
+import scipy
 import torch
 
 try:
@@ -29,13 +30,13 @@ except ImportError:
 import sarrl
 from sarrl.evaluation.adaptive_pilot import run_case
 from sarrl.evaluation.margin_campaign import V22_MARGINS, V22_PLANT_OPTIONS, v22_config
-from sarrl.evaluation.panda_adaptation import reproduction_mismatches
 from sarrl.evaluation.planar_residual import (
     ARMS,
     EVALUATION_SEEDS,
     SCENARIOS,
     TRAINING_SEEDS,
     analyze,
+    historical_reproduction_report,
     run_episode,
     study_protocol,
 )
@@ -52,6 +53,7 @@ REFERENCE = ROOT / "results/uncertainty_margin_v22/episodes.jsonl"
 OUTPUT_FILES = (
     "manifest.json",
     "reproduction.json",
+    "reproduction_records.json",
     "models.json",
     "episodes.json",
     "summary.json",
@@ -88,6 +90,7 @@ def source_fingerprint():
         "runtime": {
             "python": platform.python_version(),
             "numpy": np.__version__,
+            "scipy": scipy.__version__,
             "mujoco": mujoco.__version__,
             "torch": torch.__version__,
             "platform": platform.platform(),
@@ -105,7 +108,7 @@ def reproduce_case(seed, scenario, arm, *, retain_trace=False):
             arm,
             scenario,
             seed,
-            "decision",
+            "official",
             v22_config(),
             True,
             "mujoco",
@@ -130,27 +133,22 @@ def reproduce_previous(output, workers):
         execute=reproduce_case,
         workers=min(workers, 4),
     )
-    mismatches = [
-        [*cell_key(retained), field]
-        for p, retained in zip(payloads, reference, strict=True)
-        for field in reproduction_mismatches(p["record"], retained)
-    ]
-    report = {
-        "compared": 300,
-        "matched": 300 - len({tuple(m[:3]) for m in mismatches}),
-        "mismatches": mismatches,
-        "reference_sha256": sha(REFERENCE),
-        "control_steps": sum(p["record"]["steps"] for p in payloads),
-        "runtime_note": "historical NumPy/MuJoCo libraries on Python 3.12",
-    }
+    records = [p["record"] for p in payloads]
+    report = historical_reproduction_report(records, reference, sha(REFERENCE))
+    record_path = output / "reproduction_records.json"
+    if record_path.exists() and json.loads(record_path.read_text()) != records:
+        raise RuntimeError("reproduction records differ from their checked cells")
+    if not record_path.exists():
+        write_json(record_path, records)
     existing = output / "reproduction.json"
     if existing.exists() and json.loads(existing.read_text()) != report:
         raise RuntimeError("reproduction report differs from its checked cells")
     if not existing.exists():
         write_json(existing, report)
-    if mismatches:
+    if report["mismatches"]:
         raise RuntimeError(
-            f"historical reproduction failed; no new training seed opened: {mismatches[:6]}"
+            "historical reproduction failed; no new training seed opened: "
+            f"{report['mismatches'][:6]}"
         )
     return report
 
@@ -231,10 +229,11 @@ def main(argv=None):
     fingerprint["runtime"]["reproduction_workers"] = min(args.workers, 4)
     fingerprint["runtime"]["evaluation_workers"] = min(args.workers, 4)
     for name, version in study_protocol()["runtime"].items():
-        if name in ("numpy", "mujoco", "torch") and fingerprint["runtime"][name] != version:
+        if (
+            name in ("python", "numpy", "mujoco", "torch", "scipy")
+            and fingerprint["runtime"][name] != version
+        ):
             parser.error(f"this study requires {name}=={version}")
-    if not fingerprint["runtime"]["python"].startswith("3.12."):
-        parser.error("this study requires Python 3.12")
     # The independent Panda study must have completed and its decision evaluated.
     from tools.run_panda_joint_filter import OUTPUT_FILES as PANDA_FILES
 
