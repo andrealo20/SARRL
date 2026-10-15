@@ -99,3 +99,11 @@ jobs:
             cd "$RUNNER_TEMP/planar-residual-audit"
             "$stats_python" -m tools.audit_planar_residual --input "$GITHUB_WORKSPACE/results/planar_residual_v26"
           fi
+      - name: Audit retained control failure diagnosis
+        shell: bash
+        run: |
+          if [ -f results/control_failure_diagnosis_v26/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/control-failure-audit" 2e88aa0c6284418859cf8ec37c7e25c4cfc5b81e
+            cd "$RUNNER_TEMP/control-failure-audit"
+            python -m tools.diagnose_control_failures --audit --output "$GITHUB_WORKSPACE/results/control_failure_diagnosis_v26"
+          fi

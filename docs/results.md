@@ -1,5 +1,15 @@
 # Retained results
 
+## Control failure diagnosis
+
+The [retrospective analysis](control-failure-results.md) finds that 284/298
+model/task successes lost by the planar residual become timeouts. Five failed
+first-seed residual traces stop outside the target radius. All 107 Panda
+filter aborts reject predicted pending-command intervals before constructing
+the QP. Missing complete traces for the 20 unsafe filtered cases prevent
+assigning their timing or cause. All 2,580 records and 45 available traces
+are retained and audited without new physical steps or confirmation claims.
+
 ## v2.6 joint filtering and adaptive residuals
 
 Two separate comparisons fail their frozen advancement criteria. The

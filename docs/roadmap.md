@@ -26,11 +26,17 @@ on the primary ID/fault success endpoint, with all five models below the
 adaptive reference. Neither candidate advances. Version 3.0 integration is
 therefore deferred pending evidence from a new, independently frozen design.
 
-The next step is saved-data diagnosis: inspect failed residual trajectories,
-reward and action/projection histories, and delayed Panda constraint failures.
-Any resulting candidate requires a new protocol and untouched confirmation
-seeds. Current held-out data may support diagnosis but cannot confirm a
-design tuned on those same results.
+The [saved-data diagnosis](control-failure-results.md) is complete. Of 298
+model/task success losses, 284 become timeouts. Five failed residual traces
+stop outside the target radius. Panda aborts reject predicted pending-command
+intervals before QP construction; the complete traces needed to time the
+remaining 20 unsafe filtered episodes were not retained.
+
+Next, specify one settling-preserving residual hypothesis and recover the
+missing Panda failure traces through a separately documented unchanged-source
+replay. Any resulting candidate requires a new protocol and untouched
+confirmation seeds. Current held-out data may support diagnosis but cannot
+confirm a design tuned on those same results.
 
 The combined release includes code, evidence, audits, documentation and CI
 for both studies. A residual candidate advances to Panda integration only if
