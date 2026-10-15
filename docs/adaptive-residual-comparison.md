@@ -58,6 +58,10 @@ most five workers are permitted; CUDA is disabled. An interruption resumes
 the same source/runtime, policy/optimizer, replay, environment, margin counters
 and every RNG from atomic checkpoints saved every 25,000 calls. Resume parity
 is tested against uninterrupted training. Existing checkpoints are preserved.
+The cell executor uses at most four workers for historical reproduction and
+held-out evaluation; training permits five. The manifest records both phase
+limits separately from the requested maximum. Worker count does not change
+the seed/model budget or pairing.
 
 ## Held-out grid and uncertainty unit
 

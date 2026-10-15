@@ -128,7 +128,7 @@ def reproduce_previous(output, workers):
         [cell_key(r) for r in reference],
         -1,
         execute=reproduce_case,
-        workers=workers,
+        workers=min(workers, 4),
     )
     mismatches = [
         [*cell_key(retained), field]
@@ -228,6 +228,8 @@ def main(argv=None):
         parser.error("install the recorded MuJoCo runtime before execution")
     fingerprint = source_fingerprint()
     fingerprint["runtime"]["workers"] = args.workers
+    fingerprint["runtime"]["reproduction_workers"] = min(args.workers, 4)
+    fingerprint["runtime"]["evaluation_workers"] = min(args.workers, 4)
     for name, version in study_protocol()["runtime"].items():
         if name in ("numpy", "mujoco", "torch") and fingerprint["runtime"][name] != version:
             parser.error(f"this study requires {name}=={version}")
@@ -283,7 +285,7 @@ def main(argv=None):
             planned,
             EVALUATION_SEEDS[0],
             execute=evaluate_case,
-            workers=args.workers,
+            workers=min(args.workers, 4),
         )
         rows = [p["record"] for p in payloads]
         if any(
