@@ -3,6 +3,23 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Queue-aware Panda backup prototype
+
+The [backup verifier](panda-backup-design.md) has deterministic tests for
+exact FIFO dynamics at delays zero through four, stable terminal maps,
+independent Lyapunov-identity rejection, coupled mass/bias compensation,
+unrecoverable pending commands and a terminal condition beyond one safe
+interval. Boundary directions of each terminal ellipsoid are propagated
+for 300 intervals, with independent dense checks of positions, velocities
+and raw feedback torque. Policy copies preserve the accepted model context.
+
+The backup and existing joint-filter test files passed 44 cases. Batched
+matrix-power predictions agree with a sequential FIFO/feedback reconstruction
+on moving, coupled-bias, pending-violation and outside-domain fixtures. The new
+verifier tests require no physical robot simulation or task seeds. They do
+not evaluate closed-loop tracking, noise robustness or candidate advancement.
+The supervisor and campaign are not yet implemented.
+
 ## Panda failure-trace recovery
 
 Recovery source `f29dd97` reproduced all twenty unsafe filtered v2.6 records

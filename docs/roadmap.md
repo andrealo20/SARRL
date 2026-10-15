@@ -35,6 +35,9 @@ after abort while previously sent commands are still executing.
 
 Next, specify one settling-preserving residual hypothesis and a Panda design
 that checks command admissibility in flight and delayed braking authority.
+The [queue-aware backup prototype](panda-backup-design.md) implements the
+Panda witness and terminal-set calculation. Causal supervisor integration,
+independent auditing and a frozen comparison remain outstanding.
 Any resulting candidate requires a new protocol and untouched
 confirmation seeds. Current held-out data may support diagnosis but cannot
 confirm a design tuned on those same results.
