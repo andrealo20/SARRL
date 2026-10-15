@@ -84,8 +84,8 @@ conservatism at those saved states. No QP is solved, and narrower construction
 does not establish feasible control or a safe alternative trajectory. The
 recorded delay must not become a controller input.
 
-All six fast filtered first-seed trajectories remain physically safe, including
-the two at 40 ms. Their paired unfiltered trajectories first violate velocity
+All six fast filtered first-seed trajectories have zero measured physical
+violations, including the two at 40 ms. Their paired unfiltered trajectories first violate velocity
 limits at 0.084 s, 0.100 s and 0.116 s for delays 0, 20 and 40 ms. These are
 illustrative paired records. The 20 filtered unsafe episodes belong to other
 seeds for which complete physical substep traces were not retained. Their
