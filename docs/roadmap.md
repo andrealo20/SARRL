@@ -11,15 +11,26 @@ are retained and can change the scope of subsequent releases.
 | v2.3.2 | Replay and documentation consolidation | Release-specific demo commands, installed-package checks and preserved controller evidence |
 | v2.4 | Completed changing-latency diagnosis | Saved-trace diagnosis and a frozen 1,920-episode parameter-memory comparison; the candidate fails its age and per-joint tracking criteria |
 | v2.5 | Completed Panda reference validation and shared scoring | Reference criteria passed on 4,000 fresh episodes; 30,000 saved-input timing cycles retained; separate 1,920-episode shared-scoring candidate failed its screen |
-| v2.6 | Seven-joint safety filtering and residual-learning evaluation | Panda QP for joint constraints, explicit delay/infeasibility handling and paired physical-violation/tracking evaluation; separate planar comparison of fixed, adaptive and adaptive-plus-residual control, with at least five training seeds and held-out evaluation |
+| v2.6 | Completed joint filtering and residual-learning evaluation | 480 Panda episodes and 2,100 planar held-out episodes after five complete training runs; both candidates fail their frozen screens |
 | v3.0, conditional | Integrated Panda stack | Residual learning justified by preceding results, seven-joint filter integration, component ablations and consolidated APIs |
 
 Version 2.6 combines the previously separate v2.6 and v2.7 increments in one
-release. First freeze the Panda filter formulation and its comparison protocol,
-then implement and evaluate position, velocity and torque constraints against
-the cumulative reference. Evaluate the frozen filter decision before starting
-the separately preregistered planar residual-learning comparison. Each study
-has its own seed blocks, metrics and decision rule; both retain all outcomes.
+release. The Panda position/velocity/torque filter completed its frozen
+comparison before the separate planar adaptive-residual study began. Each
+study retains its own seed blocks, metrics, decision rule and every outcome.
+
+The [Panda filter](panda-joint-filter-results.md) reduces fast-move unsafe
+episodes but fails success and physical-violation criteria. The
+[planar residual](adaptive-residual-results.md) loses 24.6 percentage points
+on the primary ID/fault success endpoint, with all five models below the
+adaptive reference. Neither candidate advances. Version 3.0 integration is
+therefore deferred pending evidence from a new, independently frozen design.
+
+The next step is saved-data diagnosis: inspect failed residual trajectories,
+reward and action/projection histories, and delayed Panda constraint failures.
+Any resulting candidate requires a new protocol and untouched confirmation
+seeds. Current held-out data may support diagnosis but cannot confirm a
+design tuned on those same results.
 
 The combined release includes code, evidence, audits, documentation and CI
 for both studies. A residual candidate advances to Panda integration only if

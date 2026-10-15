@@ -2,7 +2,7 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
-## Unreleased: joint filtering and residual evaluation
+## v2.6.0: joint filtering and residual evaluation
 
 - Added a seven-variable weighted torque projection with primal/dual checks,
   constant-delay command-history prediction and explicit braking on failure.
@@ -11,6 +11,11 @@ This file records implemented release increments. Performance evidence is kept s
 - Combined Panda filtering and the separate planar residual comparison in v2.6.
 - Added residual training on the retained covariance-margin baseline, exact
   checkpoint continuation and crossed model/task evaluation without model selection.
+- Retained 480 Panda filter episodes and 2,100 planar held-out episodes after
+  reproduction and five complete 200,000-call training runs. Both candidates
+  failed their frozen screens; the reference controllers remain unchanged.
+- Retained both historical replay tolerances, local policy/causal audits,
+  public statistical auditing and release-specific reproduction instructions.
 
 ## v2.5.0: Panda reference validation and shared scoring
 

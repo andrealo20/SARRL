@@ -1,0 +1,253 @@
+{
+ "bootstrap_draws": 5000,
+ "cells": {
+  "id_reference/adaptive": {
+   "aborts": 7,
+   "episodes": 100,
+   "mean_final_distance_m": 0.1757814004347128,
+   "successes": 90,
+   "unsafe_episodes": 1
+  },
+  "id_reference/fixed": {
+   "aborts": 5,
+   "episodes": 100,
+   "mean_final_distance_m": 0.37983661286989795,
+   "successes": 14,
+   "unsafe_episodes": 10
+  },
+  "id_reference/residual_9806000": {
+   "aborts": 8,
+   "episodes": 100,
+   "mean_final_distance_m": 0.20854373345343086,
+   "successes": 65,
+   "unsafe_episodes": 1
+  },
+  "id_reference/residual_9806001": {
+   "aborts": 7,
+   "episodes": 100,
+   "mean_final_distance_m": 0.19807353334895816,
+   "successes": 72,
+   "unsafe_episodes": 2
+  },
+  "id_reference/residual_9806002": {
+   "aborts": 7,
+   "episodes": 100,
+   "mean_final_distance_m": 0.18777337295636204,
+   "successes": 54,
+   "unsafe_episodes": 1
+  },
+  "id_reference/residual_9806003": {
+   "aborts": 4,
+   "episodes": 100,
+   "mean_final_distance_m": 0.15041056778524173,
+   "successes": 55,
+   "unsafe_episodes": 3
+  },
+  "id_reference/residual_9806004": {
+   "aborts": 6,
+   "episodes": 100,
+   "mean_final_distance_m": 0.1788073607679329,
+   "successes": 64,
+   "unsafe_episodes": 2
+  },
+  "motor_fault/adaptive": {
+   "aborts": 4,
+   "episodes": 100,
+   "mean_final_distance_m": 0.13863744548810006,
+   "successes": 91,
+   "unsafe_episodes": 0
+  },
+  "motor_fault/fixed": {
+   "aborts": 4,
+   "episodes": 100,
+   "mean_final_distance_m": 0.744533002270422,
+   "successes": 4,
+   "unsafe_episodes": 42
+  },
+  "motor_fault/residual_9806000": {
+   "aborts": 6,
+   "episodes": 100,
+   "mean_final_distance_m": 0.188176703968336,
+   "successes": 70,
+   "unsafe_episodes": 0
+  },
+  "motor_fault/residual_9806001": {
+   "aborts": 5,
+   "episodes": 100,
+   "mean_final_distance_m": 0.17747444569663365,
+   "successes": 78,
+   "unsafe_episodes": 2
+  },
+  "motor_fault/residual_9806002": {
+   "aborts": 4,
+   "episodes": 100,
+   "mean_final_distance_m": 0.15913191335233398,
+   "successes": 61,
+   "unsafe_episodes": 0
+  },
+  "motor_fault/residual_9806003": {
+   "aborts": 5,
+   "episodes": 100,
+   "mean_final_distance_m": 0.1656698202717688,
+   "successes": 66,
+   "unsafe_episodes": 1
+  },
+  "motor_fault/residual_9806004": {
+   "aborts": 5,
+   "episodes": 100,
+   "mean_final_distance_m": 0.1699193826853304,
+   "successes": 74,
+   "unsafe_episodes": 1
+  },
+  "ood_compound/adaptive": {
+   "aborts": 6,
+   "episodes": 100,
+   "mean_final_distance_m": 0.3047830966497214,
+   "successes": 75,
+   "unsafe_episodes": 15
+  },
+  "ood_compound/fixed": {
+   "aborts": 6,
+   "episodes": 100,
+   "mean_final_distance_m": 1.1504441539064532,
+   "successes": 1,
+   "unsafe_episodes": 22
+  },
+  "ood_compound/residual_9806000": {
+   "aborts": 8,
+   "episodes": 100,
+   "mean_final_distance_m": 0.34004016160318584,
+   "successes": 68,
+   "unsafe_episodes": 11
+  },
+  "ood_compound/residual_9806001": {
+   "aborts": 5,
+   "episodes": 100,
+   "mean_final_distance_m": 0.27558713572044685,
+   "successes": 64,
+   "unsafe_episodes": 12
+  },
+  "ood_compound/residual_9806002": {
+   "aborts": 6,
+   "episodes": 100,
+   "mean_final_distance_m": 0.31151781315249316,
+   "successes": 61,
+   "unsafe_episodes": 13
+  },
+  "ood_compound/residual_9806003": {
+   "aborts": 8,
+   "episodes": 100,
+   "mean_final_distance_m": 0.31900827902276907,
+   "successes": 67,
+   "unsafe_episodes": 9
+  },
+  "ood_compound/residual_9806004": {
+   "aborts": 8,
+   "episodes": 100,
+   "mean_final_distance_m": 0.33548921805033627,
+   "successes": 73,
+   "unsafe_episodes": 13
+  }
+ },
+ "decision": {
+  "failures": [
+   {
+    "condition": "id_reference",
+    "criterion": "success_noninferiority"
+   },
+   {
+    "condition": "id_reference",
+    "criterion": "unsafe_margin"
+   },
+   {
+    "condition": "ood_compound",
+    "criterion": "success_noninferiority"
+   },
+   {
+    "condition": "motor_fault",
+    "criterion": "success_noninferiority"
+   },
+   {
+    "condition": "motor_fault",
+    "criterion": "unsafe_margin"
+   },
+   {
+    "condition": "primary",
+    "criterion": "success_gain"
+   },
+   {
+    "condition": "primary",
+    "criterion": "training_model_consistency"
+   }
+  ],
+  "meaning": "controlled comparison; no default change",
+  "reference_controller": "adaptive",
+  "residual_advances": false
+ },
+ "episodes": 2100,
+ "paired_contrasts": {
+  "id_reference": {
+   "safety_infeasible": {
+    "difference": -0.006,
+    "lower95": -0.034,
+    "upper95": 0.018
+   },
+   "success": {
+    "difference": -0.28,
+    "lower95": -0.368,
+    "upper95": -0.196
+   },
+   "unsafe_episode": {
+    "difference": 0.008,
+    "lower95": -0.008,
+    "upper95": 0.03
+   }
+  },
+  "motor_fault": {
+   "safety_infeasible": {
+    "difference": 0.01,
+    "lower95": -0.004,
+    "upper95": 0.034
+   },
+   "success": {
+    "difference": -0.212,
+    "lower95": -0.292,
+    "upper95": -0.138
+   },
+   "unsafe_episode": {
+    "difference": 0.008,
+    "lower95": 0.0,
+    "upper95": 0.026
+   }
+  },
+  "ood_compound": {
+   "safety_infeasible": {
+    "difference": 0.01,
+    "lower95": -0.018,
+    "upper95": 0.044
+   },
+   "success": {
+    "difference": -0.084,
+    "lower95": -0.148,
+    "upper95": -0.026
+   },
+   "unsafe_episode": {
+    "difference": -0.034,
+    "lower95": -0.082,
+    "upper95": 0.008
+   }
+  }
+ },
+ "primary_success": {
+  "difference": -0.246,
+  "lower95": -0.322,
+  "per_model_difference": [
+   -0.23,
+   -0.155,
+   -0.33,
+   -0.3,
+   -0.215
+  ],
+  "upper95": -0.173
+ }
+}

@@ -1,0 +1,35 @@
+{
+ "failures": [
+  {
+   "condition": "id_reference",
+   "criterion": "success_noninferiority"
+  },
+  {
+   "condition": "id_reference",
+   "criterion": "unsafe_margin"
+  },
+  {
+   "condition": "ood_compound",
+   "criterion": "success_noninferiority"
+  },
+  {
+   "condition": "motor_fault",
+   "criterion": "success_noninferiority"
+  },
+  {
+   "condition": "motor_fault",
+   "criterion": "unsafe_margin"
+  },
+  {
+   "condition": "primary",
+   "criterion": "success_gain"
+  },
+  {
+   "condition": "primary",
+   "criterion": "training_model_consistency"
+  }
+ ],
+ "meaning": "controlled comparison; no default change",
+ "reference_controller": "adaptive",
+ "residual_advances": false
+}

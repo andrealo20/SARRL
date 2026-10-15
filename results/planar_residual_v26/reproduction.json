@@ -1,0 +1,45 @@
+{
+ "compared": 300,
+ "control_steps": 27853,
+ "floating_tolerance": {
+  "absolute": 1e-09,
+  "relative": 1e-07
+ },
+ "matched": 300,
+ "mismatches": [],
+ "reference_sha256": "6c66dcc1ed480500a7ecf3b5d2074ff3c33cce234b26460807797ad4a5bd5dee",
+ "runtime_note": "different host with historical libraries; strict comparison retained",
+ "strict_matched": 299,
+ "strict_mismatches": [
+  [
+   "id_reference",
+   56212,
+   "adaptive_hocbf_margin",
+   "estimated_parameters"
+  ],
+  [
+   "id_reference",
+   56212,
+   "adaptive_hocbf_margin",
+   "final_distance"
+  ],
+  [
+   "id_reference",
+   56212,
+   "adaptive_hocbf_margin",
+   "margin_mean_command"
+  ],
+  [
+   "id_reference",
+   56212,
+   "adaptive_hocbf_margin",
+   "max_speed"
+  ],
+  [
+   "id_reference",
+   56212,
+   "adaptive_hocbf_margin",
+   "prediction_error_rms"
+  ]
+ ]
+}

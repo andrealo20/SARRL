@@ -2022,3 +2022,11 @@ descriptive fixed baseline on one hundred fresh paired seeds across three
 scenarios. Crossed model/task resampling and success, unsafe and abort gates
 are frozen before training and held-out evaluation. Model tensors stay local;
 public statistical auditing is distinguished from local inference verification.
+
+The completed [results](adaptive-residual-results.md) retain all five final
+models' identities and 2,100 held-out episodes. Primary ID/fault mean success
+fell from 90.5% for adaptive control to 65.9% for the residual, a paired
+difference of -24.6 points (95% interval [-32.2, -17.3]). Every model has a
+negative primary difference. Seven frozen checks fail, so the candidate
+does not advance to Panda. Historical reproduction retains both 300/300
+portable matches and 299/300 matches under the original stricter tolerance.

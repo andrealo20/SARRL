@@ -1,5 +1,20 @@
 # Retained results
 
+## v2.6 joint filtering and adaptive residuals
+
+Two separate comparisons fail their frozen advancement criteria. The
+[Panda joint filter](panda-joint-filter-results.md) reduces fast unsafe
+episodes from 104/120 to 20/120, with 107/120 aborts and success falling
+from 16/120 to 13/120. Ordinary moves retain 120/120 successes per arm.
+
+The [planar residual comparison](adaptive-residual-results.md) retains five
+fixed-budget policies and 2,100 held-out episodes. ID/fault primary success
+is 65.9% for the residual mean against 90.5% for adaptive control. The paired
+difference is -24.6 percentage points, with crossed-bootstrap 95% interval
+[-32.2, -17.3]. No model has a nonnegative primary difference. The validated
+Panda bank and planar adaptive reference remain unchanged. See the
+[release guide](v2.6.md) for source, runtime and audit requirements.
+
 ## v2.4 Panda parameter memory
 
 The [parameter-memory comparison](panda-estimator-memory.md) reproduced

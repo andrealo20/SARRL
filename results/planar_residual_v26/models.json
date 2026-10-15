@@ -1,0 +1,47 @@
+{
+ "9806000": {
+  "abort_calls": 74,
+  "completion_sha256": "f033ad45dc8756e2a8b26236696936a448866e7d175cf6729dfc096fa29bb5ba",
+  "episodes": 1411,
+  "executed_control_steps": 199926,
+  "policy_sha256": "3dcc0226e19a4493236c9009fc57ddee9074deaa2ad84c9aeed9f343a578c934",
+  "steps": 200000,
+  "updates": 195000
+ },
+ "9806001": {
+  "abort_calls": 61,
+  "completion_sha256": "b79fa99c5616b786766fc9a4fdcf792b538cc1e894efc96107cf95db1117ea94",
+  "episodes": 1441,
+  "executed_control_steps": 199939,
+  "policy_sha256": "54597229035cebd2fcc7de001a840ed9606a3e6b5769a7e50aee5cb4a09cf4c0",
+  "steps": 200000,
+  "updates": 195000
+ },
+ "9806002": {
+  "abort_calls": 68,
+  "completion_sha256": "46f3e17764df97030045e1948f02d67850dde704ef8d799709b7f292071cbd01",
+  "episodes": 1304,
+  "executed_control_steps": 199932,
+  "policy_sha256": "b06c58b6bf29a0631d6a8501087a2e4a7c5f71b215b19dd0e85ce6f6ba217394",
+  "steps": 200000,
+  "updates": 195000
+ },
+ "9806003": {
+  "abort_calls": 62,
+  "completion_sha256": "5677e246da72a37d2c1ab55c68571919f7070c8a9b7628bee59f2299885b7dbe",
+  "episodes": 1230,
+  "executed_control_steps": 199938,
+  "policy_sha256": "c9321506eb9921e82e51dda1cc9624f05ec4970ff8de32183c529132594c30c5",
+  "steps": 200000,
+  "updates": 195000
+ },
+ "9806004": {
+  "abort_calls": 96,
+  "completion_sha256": "ad47227b51f4a7504c69416d45995281b0ee6a0118d8f553838edc9c6fc5d32f",
+  "episodes": 1550,
+  "executed_control_steps": 199904,
+  "policy_sha256": "22837dba49cdebdb30ee3625a1e2c2fa3d55f157b1ed8a03240a245b18a005a4",
+  "steps": 200000,
+  "updates": 195000
+ }
+}

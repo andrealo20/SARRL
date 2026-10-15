@@ -12,7 +12,7 @@ jobs:
     strategy:
       matrix:
         python-version: ["3.10", "3.11", "3.12"]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -25,7 +25,7 @@ jobs:
       - run: pytest
 
   mujoco:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -36,7 +36,7 @@ jobs:
       - run: pytest
 
   panda-replay:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     env:
       OMP_NUM_THREADS: "1"
       OPENBLAS_NUM_THREADS: "1"
@@ -84,4 +84,18 @@ jobs:
             git worktree add --detach "$RUNNER_TEMP/panda-joint-audit" 6891dd27edf8b28514160d1ade350e3213826058
             cd "$RUNNER_TEMP/panda-joint-audit"
             python "$GITHUB_WORKSPACE/tools/audit_panda_joint_filter_portable.py" --source-checkout "$RUNNER_TEMP/panda-joint-audit" --input "$GITHUB_WORKSPACE/results/panda_joint_filter_pilot"
+          fi
+      - name: Audit retained planar residual statistics
+        shell: bash
+        run: |
+          if [ -f results/planar_residual_v26/complete.json ]; then
+            base_site=$(python -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
+            python -m venv "$RUNNER_TEMP/planar-statistics-env"
+            stats_python="$RUNNER_TEMP/planar-statistics-env/bin/python"
+            "$stats_python" -m pip install 'numpy==2.4.6'
+            stats_site=$("$stats_python" -c 'import sysconfig; print(sysconfig.get_path("purelib"))')
+            printf '%s\n' "$base_site" > "$stats_site/reference-dependencies.pth"
+            git worktree add --detach "$RUNNER_TEMP/planar-residual-audit" b41e167c2a609849c01031010e5710aa4801670f
+            cd "$RUNNER_TEMP/planar-residual-audit"
+            "$stats_python" -m tools.audit_planar_residual --input "$GITHUB_WORKSPACE/results/planar_residual_v26"
           fi

@@ -3,6 +3,32 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## v2.6 joint filtering and adaptive residuals
+
+The [Panda filter study](panda-joint-filter-results.md), frozen at `6891dd2`,
+reproduced all 4,000 reference-validation records before retaining 480 fresh
+episodes. The portable audit passed 480 records, 24 causal controller replays,
+36,000 recorded physical substeps and 1,846 independently checked feasible
+projections. The production run used 6,720,000 physical substeps including
+reproduction. The candidate failed four frozen criteria and remains experimental.
+
+The [planar study](adaptive-residual-results.md), frozen at `b41e167`, retained
+five complete 200,000-call/195,000-update policies and all 2,100 held-out
+episodes. The full local audit passed 2,100 records, 21 first-seed traces,
+2,416 actor-action checks and 21 causal controller/estimator replays. It
+verified the five policy identities and training artifact hashes. The public
+audit separately passed all records, pairing, trace bounds, statistics and
+decision, explicitly reporting `policy_inference_verified: false`.
+
+Both audits recomputed the 300 historical comparisons: 300 portable matches
+and 299 matches under the original strict tolerance. The pre-training
+amendment and all recalculated records retain the strict failure. Discrete
+fields, source hashes, data hashes and metadata remain exact. The planar
+runtime was Python 3.11.15, NumPy 2.4.6, SciPy 1.17.1, MuJoCo 3.14.0 and
+PyTorch 2.12.0+cpu, with two workers and one numerical thread per worker.
+The residual failed seven advancement checks; neither v2.6 candidate replaces
+the established reference or advances to Panda integration.
+
 ## v2.5 reference validation and shared scoring
 
 Source `09858a7` reproduced all 1,920 v2.4 records and retained 4,000 fresh
