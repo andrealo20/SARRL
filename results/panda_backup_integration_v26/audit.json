@@ -1,0 +1,11 @@
+{
+  "audit_physical_steps": 0,
+  "control_cycles": 9600,
+  "delay_cases": 10390,
+  "episodes": 32,
+  "independent_backup_intervals": 429209,
+  "independent_feasible_projection_checks": 2046,
+  "physical_trace_substeps": 48000,
+  "reference_records": 64,
+  "witnesses": 2078
+}

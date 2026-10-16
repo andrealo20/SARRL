@@ -3,6 +3,47 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Causal Panda backup integration
+
+The new supervisor retains accepted backup context across model changes,
+latches rejection without clearing the FIFO, distinguishes witnessed backup
+from emergency initialization and records raw/clipped torques. All five RLS
+models continue observing the actual sent command. The independent auditor
+uses sequential trajectories, a Kronecker Lyapunov solve and full-joint
+terminal supports, with no call to the verifier's acceptance implementation.
+
+Sixty-six focused supervisor, witness, auditor, joint-filter, selection,
+timing and release tests passed. One already used first-seed ordinary case
+completed successfully without a physical violation or abort. Its saved-state
+audit passed 300 causal cycles, 301 witnesses, 1,505 delay cases, 50,288
+independent backup intervals and 300 feasible QP checks without physical
+stepping. The [frozen integration protocol](panda-backup-integration-methods.md)
+defines the separate 32-task run. It is now complete: all 64 original records
+matched before 32 candidate episodes. Its audit checked 9,600 causal cycles,
+2,078 witnesses, 10,390 delay cases, 429,209 independent backup intervals and
+2,046 feasible QP projections without physical stepping. The
+[results](panda-backup-integration-results.md) retain eighteen unsafe episodes,
+including two zero-delay regressions, and twelve control cycles over 10 ms.
+The candidate does not advance.
+
+## Queue-aware Panda backup prototype
+
+The [backup verifier](panda-backup-design.md) has deterministic tests for
+exact FIFO dynamics at delays zero through four, stable terminal maps,
+independent Lyapunov-identity rejection, coupled mass/bias compensation,
+unrecoverable pending commands and a terminal condition beyond one safe
+interval. Boundary directions of each terminal ellipsoid are propagated
+for 300 intervals, with independent dense checks of positions, velocities
+and raw feedback torque. Policy copies preserve the accepted model context.
+
+The backup and existing joint-filter test files passed 44 cases. Batched
+matrix-power predictions agree with a sequential FIFO/feedback reconstruction
+on moving, coupled-bias, pending-violation and outside-domain fixtures. The new
+verifier tests require no physical robot simulation or task seeds. They do
+not evaluate closed-loop tracking, noise robustness or candidate advancement.
+The subsequent causal integration is described above; this earlier test
+record concerns the standalone mathematical verifier.
+
 ## Panda failure-trace recovery
 
 Recovery source `f29dd97` reproduced all twenty unsafe filtered v2.6 records

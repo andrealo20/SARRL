@@ -1,0 +1,86 @@
+{
+  "aborted_episodes": 26,
+  "candidate_advances": false,
+  "cells": {
+    "fast_clean_d00": {
+      "aborts": 1,
+      "episodes": 1,
+      "successes": 0,
+      "unsafe": 1
+    },
+    "fast_clean_d20": {
+      "aborts": 1,
+      "episodes": 1,
+      "successes": 0,
+      "unsafe": 0
+    },
+    "fast_clean_d40": {
+      "aborts": 11,
+      "episodes": 11,
+      "successes": 0,
+      "unsafe": 8
+    },
+    "fast_noise_d00": {
+      "aborts": 1,
+      "episodes": 1,
+      "successes": 0,
+      "unsafe": 1
+    },
+    "fast_noise_d20": {
+      "aborts": 1,
+      "episodes": 1,
+      "successes": 0,
+      "unsafe": 0
+    },
+    "fast_noise_d40": {
+      "aborts": 11,
+      "episodes": 11,
+      "successes": 0,
+      "unsafe": 8
+    },
+    "slow_clean_d00": {
+      "aborts": 0,
+      "episodes": 1,
+      "successes": 1,
+      "unsafe": 0
+    },
+    "slow_clean_d20": {
+      "aborts": 0,
+      "episodes": 1,
+      "successes": 1,
+      "unsafe": 0
+    },
+    "slow_clean_d40": {
+      "aborts": 0,
+      "episodes": 1,
+      "successes": 1,
+      "unsafe": 0
+    },
+    "slow_noise_d00": {
+      "aborts": 0,
+      "episodes": 1,
+      "successes": 1,
+      "unsafe": 0
+    },
+    "slow_noise_d20": {
+      "aborts": 0,
+      "episodes": 1,
+      "successes": 1,
+      "unsafe": 0
+    },
+    "slow_noise_d40": {
+      "aborts": 0,
+      "episodes": 1,
+      "successes": 1,
+      "unsafe": 0
+    }
+  },
+  "control_cycles_over_10_ms": 12,
+  "emergency_episodes": 0,
+  "episodes": 32,
+  "new_task_seeds": [],
+  "scope": "selected used-task integration; no confirmation or general safety conclusion",
+  "successes": 6,
+  "task_successes_without_abort_rule": 6,
+  "unsafe_episodes": 18
+}

@@ -115,3 +115,11 @@ jobs:
             cd "$RUNNER_TEMP/panda-failure-recovery-audit"
             python -m tools.recover_panda_failures --source-checkout "$RUNNER_TEMP/panda-joint-audit" --output "$GITHUB_WORKSPACE/results/panda_failure_replay_v26" --audit
           fi
+      - name: Audit retained Panda backup integration
+        shell: bash
+        run: |
+          if [ -f results/panda_backup_integration_v26/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-backup-integration-audit" 9fa145b9cb1590b84b9db8749fba3332c7f39a0e
+            cd "$RUNNER_TEMP/panda-backup-integration-audit"
+            python -m tools.run_panda_backup_integration --source-checkout "$RUNNER_TEMP/panda-joint-audit" --output "$GITHUB_WORKSPACE/results/panda_backup_integration_v26" --audit
+          fi

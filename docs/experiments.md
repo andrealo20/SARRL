@@ -2051,3 +2051,13 @@ latched. Thirteen occur strictly before braking delivery and seven at the
 preceding command interval's right boundary. Fourteen cases continue violating
 after delivery. The causal audit executes no physical steps; no new candidate
 or fresh confirmation seed is introduced.
+
+## Queue-aware backup integration
+
+The [integration protocol](panda-backup-integration-methods.md) freezes the
+causal supervisor and independent audit before reproducing both original arms
+on 32 already used tasks. It retains 64 matching reference records and every
+new candidate trace, with a canonical budget of 144,000 physical calls.
+The [results](panda-backup-integration-results.md) report eighteen unsafe
+episodes, two new zero-delay regressions and twelve cycles above 10 ms.
+The candidate does not advance. No fresh seed block or training is opened.
