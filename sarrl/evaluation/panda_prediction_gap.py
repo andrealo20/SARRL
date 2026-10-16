@@ -67,14 +67,18 @@ def prediction_gap(row, frames, lower, upper, velocity):
     q = vector7(frames[start]["measured_q"], "measured_q").copy()
     v = vector7(frames[start]["measured_qd"], "measured_qd").copy()
     saved_v = v.copy()
+    saved_q = q.copy()
+    initial_position_offset = vector7(frames[start]["q"], "physical_q") - q
     initial_offset = vector7(frames[start]["qd"], "physical_qd") - v
     model_gap, command_gap = np.zeros(7), np.zeros(7)
+    model_position_gap, command_position_gap = np.zeros(7), np.zeros(7)
     history = [
         np.asarray(frames[i]["torque_nm"]) if i >= 0 else np.zeros(7)
         for i in range(start - lag, start)
     ]
     first = None
     maximum_closure = maximum_local_error = 0.0
+    maximum_position_closure = 0.0
     predicted_position_excess = predicted_velocity_excess = 0.0
     actual_max, predicted_max = np.zeros(7), np.zeros(7)
     curve = []
@@ -106,16 +110,39 @@ def prediction_gap(row, frames, lower, upper, velocity):
             predicted_v = v + elapsed * acceleration
             predicted_q = q + elapsed * v + 0.5 * elapsed**2 * acceleration
             recorded_model_v = saved_v + elapsed * saved_acceleration
+            recorded_model_q = saved_q + elapsed * saved_v + 0.5 * elapsed**2 * saved_acceleration
             actual_v, actual_q = (
                 vector7(sample["qd"], "physical_qd"),
                 vector7(sample["q"], "physical_q"),
             )
             observed_acceleration = (actual_v - previous_v) / subdt
+            acceleration_difference = matrix @ (recorded - delivered)
+            model_position_gap += (
+                subdt * model_gap
+                + actual_q
+                - previous_q
+                - subdt * previous_v
+                - 0.5 * subdt**2 * saved_acceleration
+            )
+            command_position_gap += subdt * command_gap + 0.5 * subdt**2 * acceleration_difference
             model_gap += actual_v - previous_v - subdt * saved_acceleration
-            command_gap += subdt * (matrix @ (recorded - delivered))
+            command_gap += subdt * acceleration_difference
             closure = actual_v - predicted_v - initial_offset - model_gap - command_gap
             maximum_closure = max(maximum_closure, float(np.max(np.abs(closure))))
             np.testing.assert_allclose(closure, np.zeros(7), rtol=0, atol=1e-9)
+            total_elapsed = (index - start) * dt + elapsed
+            position_closure = (
+                actual_q
+                - predicted_q
+                - initial_position_offset
+                - total_elapsed * initial_offset
+                - model_position_gap
+                - command_position_gap
+            )
+            maximum_position_closure = max(
+                maximum_position_closure, float(np.max(np.abs(position_closure)))
+            )
+            np.testing.assert_allclose(position_closure, np.zeros(7), rtol=0, atol=1e-9)
             position_excess = float(
                 max(0, np.max(np.maximum(lower - predicted_q, predicted_q - upper)))
             )
@@ -139,6 +166,17 @@ def prediction_gap(row, frames, lower, upper, velocity):
                     "velocity_joint_indices": (
                         np.flatnonzero(np.abs(actual_v) > velocity) + 1
                     ).tolist(),
+                    "position_joint_indices": (
+                        np.flatnonzero((actual_q < lower) | (actual_q > upper)) + 1
+                    ).tolist(),
+                    "actual_position_rad": actual_q.tolist(),
+                    "witness_position_rad": predicted_q.tolist(),
+                    "recorded_command_model_position_rad": recorded_model_q.tolist(),
+                    "initial_position_offset_rad": initial_position_offset.tolist(),
+                    "initial_velocity_propagation_rad": (total_elapsed * initial_offset).tolist(),
+                    "accumulated_model_position_discrepancy_rad": model_position_gap.tolist(),
+                    "accumulated_command_position_difference_rad": command_position_gap.tolist(),
+                    "position_identity_residual_rad": position_closure.tolist(),
                     "actual_velocity_rad_s": actual_v.tolist(),
                     "witness_velocity_rad_s": predicted_v.tolist(),
                     "recorded_command_model_velocity_rad_s": recorded_model_v.tolist(),
@@ -155,6 +193,9 @@ def prediction_gap(row, frames, lower, upper, velocity):
                 {
                     "time_s": time,
                     "actual_velocity": actual_v.tolist(),
+                    "actual_position": actual_q.tolist(),
+                    "witness_position": predicted_q.tolist(),
+                    "recorded_command_model_position": recorded_model_q.tolist(),
                     "witness_velocity": predicted_v.tolist(),
                     "recorded_command_model_velocity": recorded_model_v.tolist(),
                 }
@@ -166,6 +207,7 @@ def prediction_gap(row, frames, lower, upper, velocity):
         )
         q = q + dt * v + 0.5 * dt**2 * acceleration
         v = v + dt * acceleration
+        saved_q += dt * saved_v + 0.5 * dt**2 * saved_acceleration
         saved_v += dt * saved_acceleration
     if bool(first) != row["unsafe_episode"]:
         raise ValueError("saved first violation must lie after retained policy acceptance")
@@ -178,8 +220,10 @@ def prediction_gap(row, frames, lower, upper, velocity):
         "policy_sha256": witness["policy_sha256"],
         "recorded_delay_steps_for_diagnosis_only": lag,
         "initial_velocity_offset_rad_s": initial_offset.tolist(),
+        "initial_position_offset_rad": initial_position_offset.tolist(),
         "first_violation": first,
         "maximum_identity_residual_rad_s": maximum_closure,
+        "maximum_position_identity_residual_rad": maximum_position_closure,
         "maximum_local_one_period_velocity_discrepancy_rad_s": maximum_local_error,
         "actual_max_speed_rad_s": actual_max.tolist(),
         "witness_max_speed_rad_s": predicted_max.tolist(),

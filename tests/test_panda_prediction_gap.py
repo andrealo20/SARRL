@@ -73,6 +73,7 @@ def test_telescoping_velocity_identity_with_delay_measurement_offset_and_discrep
     report, curve = prediction_gap(row, frames, np.full(7, -2), np.full(7, 2), VELOCITY_LIMIT)
     assert len(curve) == 1500
     assert report["maximum_identity_residual_rad_s"] < 1e-9
+    assert report["maximum_position_identity_residual_rad"] < 1e-9
     np.testing.assert_allclose(report["initial_velocity_offset_rad_s"], -offset, atol=1e-14)
     assert (report["first_violation"] is not None) == row["unsafe_episode"]
     if not bias and not offset:
@@ -112,3 +113,20 @@ def test_acceleration_replacements_use_state_and_parameter_substitutions_only():
     np.testing.assert_allclose(result["refreshed_state_acceleration_rad_s2"], -2 * q)
     np.testing.assert_allclose(result["oracle_acceleration_rad_s2"], (-2 * q - 0.2 * v) / 2)
     np.testing.assert_allclose(result["identity_residual_rad_s2"], 0, atol=1e-12)
+
+
+def test_late_position_violation_is_not_labelled_a_velocity_violation():
+    row, frames = synthetic()
+    for index, frame in enumerate(frames):
+        frame["q"] = [0.0001 * index] * 7
+        frame["qd"] = [0.01] * 7
+        if index < 300:
+            for subindex, sample in enumerate(frame["physical_substeps"]):
+                sample["q"] = [0.01 * (index * 0.01 + (subindex + 1) * 0.002)] * 7
+                sample["qd"] = [0.01] * 7
+    row["unsafe_episode"] = True
+    report, _ = prediction_gap(row, frames, np.full(7, -0.02), np.full(7, 0.02), VELOCITY_LIMIT)
+    assert report["first_violation"]["position_joint_indices"] == list(range(1, 8))
+    assert report["first_violation"]["velocity_joint_indices"] == []
+    assert report["first_violation"]["time_s"] > 2
+    assert report["maximum_position_identity_residual_rad"] < 1e-12

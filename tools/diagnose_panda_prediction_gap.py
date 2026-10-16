@@ -19,7 +19,7 @@ from tools.recover_panda_failures import canonical, mismatches, sha, write
 
 ROOT = Path(__file__).resolve().parents[1]
 INPUT = ROOT / "results/panda_backup_integration_v26"
-OUTPUT = ROOT / "results/panda_prediction_gap_v26"
+OUTPUT = ROOT / "results/panda_prediction_gap_position_v26"
 INPUT_HASH = "351674a90849d64e7359fa101f72aee86ea1536ff2713b1b79d558b1d2f9831a"
 FILES = ("manifest.json", "diagnostics.json", "curves.json.gz")
 FOCUS = {("fast_clean_d00", 9805800), ("fast_noise_d00", 9805800)}
@@ -28,6 +28,7 @@ SOURCES = (
     "tools/diagnose_panda_prediction_gap.py",
     "tests/test_panda_prediction_gap.py",
     "docs/panda-prediction-gap-methods.md",
+    "docs/panda-prediction-gap-position-methods.md",
     "sarrl/controllers/panda_adaptive.py",
     "sarrl/controllers/panda_nominal.py",
     "sarrl/robots/panda.py",
@@ -95,8 +96,7 @@ def calculate():
     return (
         {
             "scope": (
-                "post-hoc used-task diagnosis; descriptive replacements "
-                "without causal attribution"
+                "post-hoc used-task diagnosis; descriptive replacements without causal attribution"
             ),
             "reviewed_episodes": 26,
             "unsafe_episodes": sum(r["first_violation"] is not None for r in reports),
@@ -104,6 +104,9 @@ def calculate():
             "new_task_seeds": [],
             "maximum_velocity_identity_residual_rad_s": max(
                 r["maximum_identity_residual_rad_s"] for r in reports
+            ),
+            "maximum_position_identity_residual_rad": max(
+                r["maximum_position_identity_residual_rad"] for r in reports
             ),
             "cases": reports,
         },
