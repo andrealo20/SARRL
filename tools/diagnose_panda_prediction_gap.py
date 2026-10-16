@@ -94,7 +94,10 @@ def calculate():
         raise ValueError("all aborted episodes and both zero-delay regressions are required")
     return (
         {
-            "scope": "post-hoc used-task diagnosis; descriptive replacements without causal attribution",
+            "scope": (
+                "post-hoc used-task diagnosis; descriptive replacements "
+                "without causal attribution"
+            ),
             "reviewed_episodes": 26,
             "unsafe_episodes": sum(r["first_violation"] is not None for r in reports),
             "new_physical_steps": 0,
