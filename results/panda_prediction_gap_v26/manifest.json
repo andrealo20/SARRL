@@ -1,0 +1,23 @@
+{
+  "analysis_commit": "b66f3ba8ae6db4ba0ba07cfe989aa143a09f395b",
+  "input_completion_sha256": "351674a90849d64e7359fa101f72aee86ea1536ff2713b1b79d558b1d2f9831a",
+  "new_task_seeds": [],
+  "physical_steps": 0,
+  "runtime": {
+    "mujoco": "3.13.0",
+    "numpy": "2.5.2",
+    "scipy": "1.18.1"
+  },
+  "selection": "All 26 aborted episodes; clean/noisy zero-delay regressions for curves",
+  "source_sha256": {
+    "docs/panda-prediction-gap-methods.md": "7b95b426dcbdee3e1955e1c8ca01281fa4c84d75fe98e3b7195769f0376a7787",
+    "sarrl/controllers/panda_adaptive.py": "b6e045dce1ab7c61ebde2a5c85ba860ca67ae10cacab1aadb12b344fee4acca9",
+    "sarrl/controllers/panda_nominal.py": "1341c02ca257dd6314d3d116a11cbf07e15e4653e8425a252441a47f009e0a98",
+    "sarrl/evaluation/panda_prediction_gap.py": "4d77cc12fc06ef4d9aa08efd379a7231e806703476c1d618942a1e26eef26eb9",
+    "sarrl/robots/panda.py": "0512126c7f1c233877a2edae04b84c6f366fa180965d872d22c38a125e9df2ad",
+    "tests/test_panda_prediction_gap.py": "b931bd55a86f22e40e73d8f873ae1ee4f8a352f17913fc9cd4feb32281c498e4",
+    "tools/campaign_guards.py": "0a63e2fcf54bcbcbf899361bbc228b7a6a0f47526cda63535b90acd53888f7c4",
+    "tools/diagnose_panda_prediction_gap.py": "4b6d68f17d934c4b26cdba073bc6e55087f00667d4f83981408f7ed72dd09d5f",
+    "tools/recover_panda_failures.py": "4889cc45f2963c1734a2dc5fc51f79e0382c95dd325b21617fbdaeda5a28dfbf"
+  }
+}
