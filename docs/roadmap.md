@@ -45,6 +45,12 @@ The [saved-state follow-up](panda-prediction-gap-results.md) now identifies
 late joint 4 position drift in both zero-delay regressions. The next design
 must define the retained model's validity region and error treatment before
 any new comparison; the selected traces cannot calibrate a safety reserve.
+The [bounded-error backup prototype](panda-backup-tube-design.md) now defines
+that contract and tests conditional terminal capacity. A justified Panda
+dynamics/propagation envelope and a compatible sensor guarantee remain
+prerequisites. The current Gaussian-noise interface has no finite deterministic
+sensor bound. Finite-prefix tube verification and supervisor integration are
+still pending; no fresh seed block is opened.
 Any resulting candidate requires a new protocol and untouched
 confirmation seeds. Current held-out data may support diagnosis but cannot
 confirm a design tuned on those same results.

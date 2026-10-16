@@ -1,8 +1,9 @@
 # Queue-aware Panda backup design
 
-Status: verifier and causal supervisor implemented; a separately frozen
-[used-task integration check](panda-backup-integration-methods.md) precedes
-any fresh comparison.
+Status: verifier and causal supervisor implemented; the separately frozen
+[used-task integration check](panda-backup-integration-results.md) failed.
+The [bounded-error design](panda-backup-tube-design.md) adds a separate
+conditional terminal calculation. It is not integrated into this controller.
 The cumulative bank and the published v2.6 filter remain unchanged.
 
 The [recovered failure traces](panda-failure-replay-results.md) place every
