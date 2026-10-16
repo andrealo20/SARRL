@@ -18,7 +18,13 @@ completed successfully without a physical violation or abort. Its saved-state
 audit passed 300 causal cycles, 301 witnesses, 1,505 delay cases, 50,288
 independent backup intervals and 300 feasible QP checks without physical
 stepping. The [frozen integration protocol](panda-backup-integration-methods.md)
-defines the separate 32-task run; its outcomes are pending.
+defines the separate 32-task run. It is now complete: all 64 original records
+matched before 32 candidate episodes. Its audit checked 9,600 causal cycles,
+2,078 witnesses, 10,390 delay cases, 429,209 independent backup intervals and
+2,046 feasible QP projections without physical stepping. The
+[results](panda-backup-integration-results.md) retain eighteen unsafe episodes,
+including two zero-delay regressions, and twelve control cycles over 10 ms.
+The candidate does not advance.
 
 ## Queue-aware Panda backup prototype
 

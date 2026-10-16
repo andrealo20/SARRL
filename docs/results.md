@@ -1,5 +1,15 @@
 # Retained results
 
+## Queue-aware Panda backup integration
+
+The [retained-backup candidate](panda-backup-integration-results.md) completes
+a separately frozen 32-task integration check after reproducing 64 original
+records. It retains eighteen unsafe episodes and no additional successes,
+including two new zero-delay violations absent with the original filter.
+Twelve complete control computations exceed 10 ms. Independent model-witness
+and causal audits pass, but the physical candidate does not advance. These
+selected used-task outcomes do not establish confirmation or population safety.
+
 ## Control failure diagnosis
 
 The [retrospective analysis](control-failure-results.md) finds that 284/298
