@@ -123,3 +123,19 @@ jobs:
             cd "$RUNNER_TEMP/panda-backup-integration-audit"
             python -m tools.run_panda_backup_integration --source-checkout "$RUNNER_TEMP/panda-joint-audit" --output "$GITHUB_WORKSPACE/results/panda_backup_integration_v26" --audit
           fi
+      - name: Audit retained Panda velocity discrepancy
+        shell: bash
+        run: |
+          if [ -f results/panda_prediction_gap_v26/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-velocity-gap-audit" b66f3ba8ae6db4ba0ba07cfe989aa143a09f395b
+            cd "$RUNNER_TEMP/panda-velocity-gap-audit"
+            python -m tools.diagnose_panda_prediction_gap --audit --output "$GITHUB_WORKSPACE/results/panda_prediction_gap_v26"
+          fi
+      - name: Audit retained Panda position discrepancy
+        shell: bash
+        run: |
+          if [ -f results/panda_prediction_gap_position_v26/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-position-gap-audit" e931139878240400bf2936c27d8621e0a5eefa29
+            cd "$RUNNER_TEMP/panda-position-gap-audit"
+            python -m tools.diagnose_panda_prediction_gap --audit --output "$GITHUB_WORKSPACE/results/panda_prediction_gap_position_v26"
+          fi

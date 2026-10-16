@@ -1,5 +1,15 @@
 # Retained results
 
+## Accepted Panda prediction discrepancy
+
+The [saved-state follow-up](panda-prediction-gap-results.md) locates both
+zero-delay regressions at joint 4's position limit after about 2.7 s. The
+accepted model still predicts about -1.25 rad while the recorded joint reaches
+about -0.069 rad. State and parameter substitutions describe the local
+acceleration discrepancy without executing a replacement controller. Separate
+position/velocity identities close on all 26 aborted traces with zero new
+physical steps; the candidate remains rejected.
+
 ## Queue-aware Panda backup integration
 
 The [retained-backup candidate](panda-backup-integration-results.md) completes

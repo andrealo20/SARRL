@@ -102,3 +102,8 @@ measure its full control cost. Preserve these failed outcomes and the original
 advancement criteria before considering a new frozen comparison. No fresh
 seed block, policy training, default-controller change or release follows
 from this integration result.
+
+The subsequent [saved-state prediction-gap review](panda-prediction-gap-results.md)
+identifies both zero-delay regressions as late joint 4 position violations.
+It retains separate velocity and position accounts and point model replacements
+without changing the controller or generating a physical trajectory.
