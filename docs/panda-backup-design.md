@@ -1,6 +1,8 @@
 # Queue-aware Panda backup design
 
-Status: mathematical prototype, with no closed-loop candidate campaign.
+Status: verifier and causal supervisor implemented; a separately frozen
+[used-task integration check](panda-backup-integration-methods.md) precedes
+any fresh comparison.
 The cumulative bank and the published v2.6 filter remain unchanged.
 
 The [recovered failure traces](panda-failure-replay-results.md) place every
@@ -11,8 +13,9 @@ bounded, queue-aware backup trajectory ending in an invariant terminal set
 before accepting a proposed torque.
 
 The implementation is [panda_backup.py](../sarrl/safety/panda_backup.py).
-It is a verifier, not a replacement controller. It neither changes the
-existing QP nor runs physical prediction through MuJoCo.
+It supplies the new [supervisor](../sarrl/safety/panda_supervisor.py) and
+[controller](../sarrl/controllers/panda_backup.py). The original controller and
+QP remain available unchanged. Prediction does not step MuJoCo.
 
 ## One observable-state backup law
 
@@ -105,16 +108,18 @@ estimate would invalidate the previous witness. RLS may keep observing sent
 commands without changing the retained backup context.
 
 At startup there is no previous witness. Verify an initial backup before
-accepting a task command. If neither the task proposal nor the initial backup
-is witnessed, record an unrecoverable initialization and a bounded emergency
+accepting a task command. If the initial backup is not witnessed, reject task
+commitment and record an unrecoverable initialization and a bounded emergency
 command; it cannot count as a successful or certified fallback. Likewise,
 clipping after model mismatch keeps actuator limits but does not extend the
 unsaturated terminal argument.
 
-This supervisor is not yet implemented. Its integration needs tests for
-startup, rejection on the following cycle, retained-context identity,
-complete FIFO continuity and simultaneous estimator updates. It must retain
-every witness failure and distinguish requested from clipped torques.
+The supervisor implements startup verification, latched rejection and
+retained-context identity. Tests cover rejection on the following cycle,
+simultaneous updates of the five estimators, sent-command ownership and
+emergency saturation. It retains every witness failure and distinguishes
+requested from clipped torques. The integration protocol specifies complete
+FIFO checks and independent sequential audits on saved traces.
 
 ## Gates before a fresh comparison
 

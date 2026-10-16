@@ -3,6 +3,23 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Causal Panda backup integration
+
+The new supervisor retains accepted backup context across model changes,
+latches rejection without clearing the FIFO, distinguishes witnessed backup
+from emergency initialization and records raw/clipped torques. All five RLS
+models continue observing the actual sent command. The independent auditor
+uses sequential trajectories, a Kronecker Lyapunov solve and full-joint
+terminal supports, with no call to the verifier's acceptance implementation.
+
+Sixty-six focused supervisor, witness, auditor, joint-filter, selection,
+timing and release tests passed. One already used first-seed ordinary case
+completed successfully without a physical violation or abort. Its saved-state
+audit passed 300 causal cycles, 301 witnesses, 1,505 delay cases, 50,288
+independent backup intervals and 300 feasible QP checks without physical
+stepping. The [frozen integration protocol](panda-backup-integration-methods.md)
+defines the separate 32-task run; its outcomes are pending.
+
 ## Queue-aware Panda backup prototype
 
 The [backup verifier](panda-backup-design.md) has deterministic tests for
@@ -18,7 +35,8 @@ matrix-power predictions agree with a sequential FIFO/feedback reconstruction
 on moving, coupled-bias, pending-violation and outside-domain fixtures. The new
 verifier tests require no physical robot simulation or task seeds. They do
 not evaluate closed-loop tracking, noise robustness or candidate advancement.
-The supervisor and campaign are not yet implemented.
+The subsequent causal integration is described above; this earlier test
+record concerns the standalone mathematical verifier.
 
 ## Panda failure-trace recovery
 
