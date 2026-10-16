@@ -1,5 +1,16 @@
 # Experiment protocol
 
+## Bounded-error backup design prerequisite
+
+The [conditional tube design](panda-backup-tube-design.md) follows the failed
+backup integration and saved-state prediction diagnosis. Its deterministic
+synthetic tests open no task seeds and produce no new physical evidence.
+Before a new candidate protocol, establish a bound over the declared plant,
+parameter and propagation domain, resolve the sensor/horizon contract, and
+independently verify finite-prefix tubes and robust terminal entry. The
+existing Gaussian-noise benchmark is unchanged. No new seed block, training
+run or comparison budget is assigned to this prototype.
+
 ## Seed populations
 
 Three seed populations have different roles and must remain disjoint:

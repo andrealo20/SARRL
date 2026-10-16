@@ -3,6 +3,24 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Conditional bounded-error backup
+
+The [tube prototype](panda-backup-tube-design.md) passed 56 focused tube,
+existing backup and release tests. Twenty-six new cases check zero/positive
+constant delays, the fixed first candidate, persistent error propagation,
+nonzero numerical defects, changing acceleration inside an interval, coupled
+torque boundaries with aligned sensor errors, immutable envelope copies and
+rejection of invalid or unusable bounds. Synthetic boundary states are
+propagated with an explicit FIFO and dense intersample checks. Ruff and
+compilation pass. No robot episode, model fitting or physical integration is
+performed by these tests.
+
+This verifies a conditional mathematical calculation. A Panda dynamics and
+propagation envelope is not established, the untruncated Gaussian interface
+has no deterministic sensor bound, and finite-prefix tube verification and
+supervisor integration remain pending. No controller or advancement decision
+changes.
+
 ## Saved-state Panda prediction discrepancy
 
 The [prediction-gap review](panda-prediction-gap-results.md) covers all 26
