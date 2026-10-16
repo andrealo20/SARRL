@@ -41,6 +41,10 @@ independent auditor are implemented. The [used-task integration](panda-backup-in
 retains eighteen unsafe episodes, including two new zero-delay violations,
 and twelve cycles over 10 ms. This design does not advance. Diagnose the
 accepted prediction's physical error before freezing a revised candidate.
+The [saved-state follow-up](panda-prediction-gap-results.md) now identifies
+late joint 4 position drift in both zero-delay regressions. The next design
+must define the retained model's validity region and error treatment before
+any new comparison; the selected traces cannot calibrate a safety reserve.
 Any resulting candidate requires a new protocol and untouched
 confirmation seeds. Current held-out data may support diagnosis but cannot
 confirm a design tuned on those same results.

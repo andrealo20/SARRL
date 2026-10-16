@@ -3,6 +3,19 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Saved-state Panda prediction discrepancy
+
+The [prediction-gap review](panda-prediction-gap-results.md) covers all 26
+aborted integration episodes. Its initial velocity report and subsequent
+position extension are retained separately from their own frozen source
+commits. Fourteen focused tests check delay queues, measurement offsets,
+injected transition discrepancy, provenance tampering, algebraic model
+substitutions and late positional violations without velocity violations.
+Both datasets reproduce through separate audits with physical stepping
+prohibited. Maximum position/velocity identity residuals are `3.27e-13 rad`
+and `3.13e-13 rad/s`. The chart was inspected for readable labels and full
+trajectory coverage. No controller, seed or physical result changed.
+
 ## Causal Panda backup integration
 
 The new supervisor retains accepted backup context across model changes,
