@@ -69,8 +69,10 @@ derivative, sensor and propagation contracts. Synthetic nonlinear trajectory
 checks pass. The [analytic Panda provider](panda-analytic-region-design.md)
 now derives coefficient variation from link lengths and inertias. Its static
 inverse comparison fails for joint position radii of 0.001 rad around HOME;
-regional bounds need tightening before a robot prefix campaign. Force,
-sensor/runtime contracts and a compatible terminal argument remain open.
+the later [center/Hessian refinement](panda-regional-derivatives-design.md)
+reduces that comparison norm from 1.4726 to 0.070362. At 0.01 rad the result
+remains inconclusive. Force, sensor/runtime and validated-arithmetic contracts
+and a compatible terminal argument remain open before a robot prefix campaign.
 Finite-prefix containment cannot advance the candidate or replace the
 failed evidence.
 Any resulting candidate requires a new protocol and untouched
