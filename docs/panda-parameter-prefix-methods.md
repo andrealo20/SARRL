@@ -60,6 +60,16 @@ each branch's causal queue and rational propagation inequalities. It reuses
 the coefficient/torque provider. Thus it does not independently derive the
 rigid-body equations or certify physical/runtime assumptions.
 
+Feedback replay uses the same outward measurement-box construction as the
+verifier and independently checks its coverage with exact rational endpoints.
+A tighter measurement box can yield a different, non-nested Arb enclosure
+after midpoint/radius rounding; comparing such a recomputation to the retained
+torque enclosure can falsely reject a valid record. The complete initial
+execution at `bf83f6b9f60e35ce7116dc54503b7b6a901cb952` stopped on this audit
+discrepancy before writing a report. The corrected replay is frozen again
+before rerunning the same complete screen. No inclusion tolerance, numerical
+budget, parameter range or decision criterion is relaxed.
+
 ## Frozen diagnostic comparison
 
 Freeze implementation and this protocol before executing the complete screen.

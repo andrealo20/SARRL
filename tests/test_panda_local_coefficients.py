@@ -245,3 +245,63 @@ def test_frozen_baseline_identity_is_checked():
     assert not baseline["decision"]["numerical_prefix_contained"]
     assert len(baseline["prefix"]["cases"]) == 5
     assert all(not case["intervals"] for case in baseline["prefix"]["cases"])
+
+
+def test_actual_panda_feedback_replay_checks_the_exact_measured_box_coverage(monkeypatch):
+    pytest.importorskip("flint")
+    pytest.importorskip("mujoco")
+    from sarrl.robots.panda import HOME
+    from sarrl.safety import panda_prefix_audit as audit
+    from sarrl.safety.panda_local_coefficients import PandaLocalDynamics
+    from tools.assess_panda_parameter_prefix import _baseline
+
+    inputs = _baseline()["inputs"]
+    full = PandaParameterBox(**inputs["parameters"])
+    parameters = parameter_cells(full, 16)[0]
+    qdomain, vdomain = VectorBox(**inputs["q_domain"]), VectorBox(**inputs["v_domain"])
+    dynamics = PandaLocalDynamics(
+        qdomain,
+        vdomain,
+        mass_remainder=np.zeros((7, 7)),
+        bias_remainder=np.zeros(7),
+        assumption="Normalized ideal model",
+        cells=1,
+    )
+    checker = PandaValidatedPrefix(
+        dynamics,
+        parameters,
+        qdomain.lower,
+        qdomain.upper,
+        vdomain.upper,
+        inputs["torque_limit"],
+        PandaPrefixErrors(**inputs["errors"]),
+        PandaPrefixConfig(max_delay_steps=0),
+    )
+    context = PandaStructuredContext(**inputs["context"])
+    result = checker.verify_prefix(
+        context, HOME, np.zeros(7), inputs["candidate"], inputs["history"], intervals=2
+    )
+    assert result.prefix_contained
+    report = audit.audit_prefix(
+        checker,
+        context,
+        HOME,
+        np.zeros(7),
+        inputs["candidate"],
+        inputs["history"],
+        result,
+        intervals=2,
+    )
+    assert report["checked_intervals"] == 2
+    monkeypatch.setattr(audit, "inflate", lambda domain, width, **kw: VectorBox.point(domain.lower))
+    with pytest.raises(ValueError, match="measurement position coverage"):
+        audit.audit_prefix(
+            checker,
+            context,
+            HOME,
+            np.zeros(7),
+            inputs["candidate"],
+            inputs["history"],
+            result,
+            intervals=2,
+        )

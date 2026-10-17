@@ -8,6 +8,7 @@ import numpy as np
 
 from sarrl.safety.panda_center_arithmetic import _outward
 from sarrl.safety.panda_state_region import VectorBox
+from sarrl.safety.panda_validated_dynamics import inflate
 
 
 def _fraction(value):
@@ -111,10 +112,27 @@ def audit_prefix(
             if step == 0:
                 _require(_same(record.sent, candidate), "first send differs from known candidate")
             else:
+                # Replay the actual outward measurement boxes used by the provider.
+                # A tighter rational box can produce a different, non-nested ball
+                # enclosure after midpoint/radius rounding. Check coverage separately.
+                measured_position = inflate(
+                    q, errors.position_measurement, precision_bits=checker.precision_bits
+                )
+                measured_velocity = inflate(
+                    v, errors.velocity_measurement, precision_bits=checker.precision_bits
+                )
+                _require(
+                    measured_position.contains(_expanded(q, errors.position_measurement)),
+                    "measurement position coverage",
+                )
+                _require(
+                    measured_velocity.contains(_expanded(v, errors.velocity_measurement)),
+                    "measurement velocity coverage",
+                )
                 sent = checker.region.torque(
                     context,
-                    _expanded(q, errors.position_measurement),
-                    _expanded(v, errors.velocity_measurement),
+                    measured_position,
+                    measured_velocity,
                     errors.command_error,
                 )
                 _require(record.sent.contains(sent), "feedback enclosure missing")
