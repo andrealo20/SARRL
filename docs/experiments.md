@@ -14,6 +14,12 @@ The subsequent [necessary-capacity screen](panda-envelope-capacity-methods.md)
 is complete. All 26 retained policies fail all five lag calculations under
 the optimistic assumptions in its [results](panda-envelope-capacity-results.md).
 This formulation stops before integration or a fresh comparison.
+The [structured replacement kernel](panda-structured-backup-design.md) is
+tested at synthetic and static Panda points. It changes the proposed law
+and preserves the full physical parameter box. Pointwise containment cannot
+advance it to a campaign. A held-interval enclosure, causal FIFO witness,
+sensor/horizon contract and compatible terminal proof must be established
+and frozen before a used-task integration protocol is declared.
 
 ## Seed populations
 
