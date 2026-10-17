@@ -21,6 +21,9 @@ h(q,v,m,b) = h0(q,v) + m hp(q,v) + diag(v) b.
 
 The nominal term includes the packaged passive forces. The existing
 regressor supplies the payload column and the seven viscous coefficients.
+This acceleration model assumes no active contact or joint-limit force.
+Constraint responses would add a generalized-force term and are outside
+the present point enclosure.
 Freeze the anchor `q_a` and estimate `(m_hat,b_hat)` at policy acquisition;
 evaluate the coefficients at every new measured state. The proposed law is
 
@@ -103,7 +106,8 @@ cannot certify a lagged backup.
    through direct static forward dynamics. Retain raw torque violations.
 2. Derive a state/parameter/input enclosure over each held interval, with the
    sent-command FIFO and numerical propagation defects. Establish a compatible
-   sensor/horizon contract; the present Gaussian interface remains unchanged.
+   sensor/horizon contract and exclude or enclose constraint forces; the
+   present Gaussian interface remains unchanged.
 3. Define a terminal condition for this nonlinear delayed feedback and an
    independent verifier. Reusing the frozen double-integrator maps would
    certify different dynamics. Check startup recoverability and causal
