@@ -63,6 +63,12 @@ Its pointwise enclosure retains continuous payload uncertainty, viscous
 parameters and an explicit delivered-command difference. Synthetic and static
 Panda tests pass. It has no interval/queue witness, sensor guarantee or new
 terminal proof; those gates precede any production integration or comparison.
+The [held-input prefix engine](panda-structured-prefix-design.md) now
+propagates state/command boxes for every constant lag under explicit regional
+derivative, sensor and propagation contracts. Synthetic nonlinear trajectory
+checks pass. Panda-specific regional enclosures and a compatible terminal
+argument are still missing; finite-prefix containment cannot advance the
+candidate or replace the failed evidence.
 Any resulting candidate requires a new protocol and untouched
 confirmation seeds. Current held-out data may support diagnosis but cannot
 confirm a design tuned on those same results.

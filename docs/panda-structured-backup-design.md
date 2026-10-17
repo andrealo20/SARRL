@@ -4,6 +4,9 @@ Status: pointwise algebra and continuous-parameter enclosure prototype. This
 defines a different feedback law from the rejected frozen-coefficient backup.
 No existing witness or terminal metric certifies it. No production controller
 uses it and no task comparison starts here.
+The subsequent [finite-prefix engine](panda-structured-prefix-design.md)
+implements conditional interval and FIFO propagation. It still requires a
+Panda-specific region provider and a new terminal argument before integration.
 
 The [previous screen](panda-envelope-capacity-results.md) rejected one
 global torque-box/error-box/scalar-radius sufficient criterion. This design
