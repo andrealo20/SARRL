@@ -3,6 +3,26 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Validated Panda solves and causal prefixes
+
+The [combined numerical increment](panda-validated-prefix-methods.md) uses
+ball linear solves over continuous payload cells and outward raw-feedback,
+error-inflation and full-interval propagation arithmetic. Thirty new tests
+cover exact rational cell boundaries and solutions, subnormal operations,
+invalid precision, singular systems, three manufactured parameter fixtures
+with dense independent trajectories for all five lags, and higher-precision
+Panda point solves. State-domain, raw torque and coefficient-domain failures
+reject the query.
+
+The structural auditor independently replays queues and checks propagation
+inequalities with exact rationals. It rejects missing lags, changed first
+sends or deliveries, acceleration/endpoint alterations and false completion
+flags. It shares the trusted dynamics evaluator for coefficient/torque bounds;
+it is not a separate physical-model implementation. CLI checks preserve an
+existing report and reject changed source fingerprints. Tests exercise no
+production handoff. The [static Panda results](panda-validated-prefix-results.md)
+remain separate from manufactured trajectory tests and physical task evidence.
+
 ## Outward Panda regional coefficients
 
 The [regional arithmetic evaluator](panda-regional-arithmetic-design.md)

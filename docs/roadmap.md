@@ -19,6 +19,16 @@ release. The Panda position/velocity/torque filter completed its frozen
 comparison before the separate planar adaptive-residual study began. Each
 study retains its own seed blocks, metrics, decision rule and every outcome.
 
+The next implementation work is consolidated in one
+[validated-prefix increment](panda-validated-prefix-methods.md), rather than
+four prerequisite pull requests. It combines continuous parameter solves,
+outward raw torque and interval propagation, structural auditing and a frozen
+static admission screen. Its [decision](panda-validated-prefix-results.md)
+determines whether integration can start. A numerical implementation alone
+does not establish nonlinear terminal invariance or physical/runtime bounds.
+If that screen is inconclusive, stop this integration sequence and reconsider
+the enclosure representation before assigning a new campaign or release.
+
 The [Panda filter](panda-joint-filter-results.md) reduces fast-move unsafe
 episodes but fails success and physical-violation criteria. The
 [planar residual](adaptive-residual-results.md) loses 24.6 percentage points

@@ -48,6 +48,16 @@ explicit center-reference errors. It performs no inverse calculation and
 does not supersede any failed capacity/integration result. The inverse,
 prefix, physical and terminal gates remain ahead of a used-task protocol.
 
+The [combined validated-prefix protocol](panda-validated-prefix-methods.md)
+now consolidates continuous payload solves, outward torque/propagation,
+causal queue records and an independently coded structural audit. It freezes
+three existing static domains and one two-interval fixture for all five lags,
+with no task seeds or physical steps. Its
+[resulting decision](panda-validated-prefix-results.md) preserves every failure
+and cannot authorize a comparison without physical/runtime and nonlinear
+terminal evidence. No integration or release follows merely from passing
+the implementation tests.
+
 ## Seed populations
 
 Three seed populations have different roles and must remain disjoint:
