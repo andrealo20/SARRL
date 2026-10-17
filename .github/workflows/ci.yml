@@ -139,3 +139,11 @@ jobs:
             cd "$RUNNER_TEMP/panda-position-gap-audit"
             python -m tools.diagnose_panda_prediction_gap --audit --output "$GITHUB_WORKSPACE/results/panda_prediction_gap_position_v26"
           fi
+      - name: Audit retained Panda envelope capacity
+        shell: bash
+        run: |
+          if [ -f results/panda_envelope_capacity_v26/complete.json ]; then
+            git worktree add --detach "$RUNNER_TEMP/panda-capacity-audit" 0cc0e7e299e2c3798772d11177d78a52ce962934
+            cd "$RUNNER_TEMP/panda-capacity-audit"
+            python -m tools.assess_panda_envelope_capacity --audit --output "$GITHUB_WORKSPACE/results/panda_envelope_capacity_v26"
+          fi

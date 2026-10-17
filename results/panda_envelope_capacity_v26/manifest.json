@@ -1,0 +1,26 @@
+{
+  "analysis_commit": "0cc0e7e299e2c3798772d11177d78a52ce962934",
+  "input_completion_sha256": "351674a90849d64e7359fa101f72aee86ea1536ff2713b1b79d558b1d2f9831a",
+  "new_task_seeds": [],
+  "physical_steps": 0,
+  "runtime": {
+    "mujoco": "3.13.0",
+    "numpy": "2.5.2",
+    "scipy": "1.18.1"
+  },
+  "selection": "All 26 final retained backup contexts from aborted integration episodes",
+  "source_sha256": {
+    "docs/panda-envelope-capacity-methods.md": "fe5b03027c7620f5091e5deecca9304c9fd2e5be9f4fcd9f7086e420f122fe9e",
+    "sarrl/evaluation/panda_adaptation.py": "2dc7ed45f6857e7d762151c0030ea8d14d175a0fbb80aa834fb5cf4935c65e3c",
+    "sarrl/evaluation/panda_envelope_capacity.py": "cdb91be657d0f00992e61512a759113a9b05f9573269b58a4ae7d8d410a704b1",
+    "sarrl/evaluation/panda_prediction_gap.py": "c0508264bfe676ffbdc385b265b5b489d871881fd62d98b52f5564067295b600",
+    "sarrl/robots/panda.py": "0512126c7f1c233877a2edae04b84c6f366fa180965d872d22c38a125e9df2ad",
+    "sarrl/safety/panda_backup.py": "f967f12eb44764d1c083cc652a9c379a1e5f87d3268409de849099c6dd7dabc1",
+    "sarrl/safety/panda_backup_tube.py": "47dd2d19d8605d8717aacc75934bc8bd80ad539130cf2e25d6596c19bf9153ce",
+    "sarrl/safety/panda_joint_filter.py": "8f9f9c2a2dc645b5a26eb9a7ef40da763cae6bd6cf25f49e285341ac2e4bf5b7",
+    "tests/test_panda_envelope_capacity.py": "e6922987c6401a42b12e8a1b70a560e9ad5bbbc6274ef7a8dcb99a7ceddffa09",
+    "tools/assess_panda_envelope_capacity.py": "bac0f97f6a4096f6b4368806fe436a3df9a33da86e924ca43a9b93db84d4c1fd",
+    "tools/campaign_guards.py": "0a63e2fcf54bcbcbf899361bbc228b7a6a0f47526cda63535b90acd53888f7c4",
+    "tools/recover_panda_failures.py": "4889cc45f2963c1734a2dc5fc51f79e0382c95dd325b21617fbdaeda5a28dfbf"
+  }
+}

@@ -10,6 +10,10 @@ parameter and propagation domain, resolve the sensor/horizon contract, and
 independently verify finite-prefix tubes and robust terminal entry. The
 existing Gaussian-noise benchmark is unchanged. No new seed block, training
 run or comparison budget is assigned to this prototype.
+The subsequent [necessary-capacity screen](panda-envelope-capacity-methods.md)
+is complete. All 26 retained policies fail all five lag calculations under
+the optimistic assumptions in its [results](panda-envelope-capacity-results.md).
+This formulation stops before integration or a fresh comparison.
 
 ## Seed populations
 
