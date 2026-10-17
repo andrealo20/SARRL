@@ -3,6 +3,23 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Analytic Panda coefficient regions
+
+The [geometry-derived provider](panda-analytic-region-design.md) is checked
+against closed-form two-link and rotor derivative amplitudes, independent
+Panda finite differences at three static states, coefficient variation and
+direct acceleration solves. Tests also reject unsupported model changes and
+invalid inputs. All 72 focused analytic-region, prefix, point-model and
+release tests pass, including 17 new cases. No physical integration or task
+seed is used. Derivative
+bounds follow the analytic product-rule derivation, not sampled extrema.
+
+The reproducible static diagnostic finds inverse-comparison norms of 0.14726
+and 1.4726 at position radii of 0.0001 and 0.001 rad around HOME, respectively.
+The latter is inconclusive. These global derivative bounds need regional
+tightening. The provider establishes no contact/limit-force exclusion,
+sensor/runtime contract, validated floating-point enclosure or terminal set.
+
 ## Conditional structured held-input prefixes
 
 The [prefix engine](panda-structured-prefix-design.md) passed 55 focused
@@ -14,9 +31,10 @@ the exact sent-command FIFO are checked. Failure cases cover intersample
 violations, pending commands, startup drift, remainders, bad regions, torque
 limits, singular mass and search budgets. No Panda trajectory is integrated.
 
-This verifies a conditional floating-point enclosure engine. The Panda
-regional derivative provider, validated numerical enclosures, sensor/runtime
-contract, terminal proof and supervisor handoff remain unimplemented. A
+This verifies a conditional floating-point enclosure engine. The later
+analytic regional provider is described above. Validated numerical enclosures,
+sensor/runtime/force contracts, terminal proof and supervisor handoff remain
+unimplemented. A
 contained finite prefix has `terminal_verified = false` and cannot advance
 the candidate to robot integration.
 

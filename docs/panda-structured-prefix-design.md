@@ -1,7 +1,9 @@
 # Conditional held-input prefixes
 
 Status: a finite-prefix engine under supplied state-region and error
-contracts. No Panda state-derivative provider has been established. This
+contracts. A subsequent [analytic provider](panda-analytic-region-design.md)
+derives Panda coefficient bounds from link geometry, with substantial
+conservatism. Force, sensor and runtime contracts remain open. This
 increment does not verify a terminal set or authorize a production command.
 The [point model](panda-structured-backup-design.md) and every earlier
 negative result remain available.
@@ -32,7 +34,8 @@ Controller arithmetic has a separate torque-error allowance. Physical model
 remainders do not alter the declared nominal feedback function. A production
 provider would need to bind coefficient/derivative accuracy, parameter range,
 force scope and runtime to the retained policy before these assumptions could
-support a robot witness. No such provider or binding is implemented here.
+support a robot witness. The analytic provider supplies derivative bounds
+for the ideal unconstrained model; a physical/runtime binding remains open.
 
 ## Enclose acceleration over a state and held-command box
 
@@ -144,8 +147,8 @@ in every successful lag record for a later independent auditor.
 `prefix_contained` describes only the requested finite prefix under its
 contracts. `terminal_verified` is always false. No supervisor uses this
 result, and a finite prefix cannot authorize an indefinitely latched backup.
-Before robot integration, establish the Panda regional coefficient and
-derivative enclosures, a compatible sensor/runtime/force contract, and a
-terminal argument for the nonlinear delayed law. Freeze and independently
+Before robot integration, tighten the conservative analytic Panda regional
+enclosures, establish a compatible sensor/runtime/force contract, and develop
+a terminal argument for the nonlinear delayed law. Freeze and independently
 audit the resulting witness and causal handoff before a used-task protocol.
 No new comparison, parameter narrowing, seed block or release is introduced.

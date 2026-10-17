@@ -25,6 +25,12 @@ now tests whole held intervals and the causal FIFO on manufactured nonlinear
 systems with analytic region contracts. It supplies no new robot episode,
 Panda derivative enclosure, terminal witness or fresh task seed. Its finite
 containment flag is not a campaign advancement rule.
+The subsequent [analytic Panda bounds](panda-analytic-region-design.md)
+derive mass and bias derivatives from packaged link geometry. A static
+conservatism diagnostic introduces no integration or task seeds. Its
+inverse comparison fails on the larger declared boxes, so tighter regional
+bounds remain a prerequisite. Physical forces, sensor/runtime assumptions,
+terminal verification and the independent causal audit remain separate gates.
 
 ## Seed populations
 
