@@ -5,6 +5,8 @@ contracts. A subsequent [analytic provider](panda-analytic-region-design.md)
 derives Panda coefficient bounds from link geometry, with substantial
 conservatism. Force, sensor and runtime contracts remain open. This
 increment does not verify a terminal set or authorize a production command.
+The subsequent [center/Hessian refinement](panda-regional-derivatives-design.md)
+tightens ideal-model coefficient bounds but supplies no physical prefix witness.
 The [point model](panda-structured-backup-design.md) and every earlier
 negative result remain available.
 

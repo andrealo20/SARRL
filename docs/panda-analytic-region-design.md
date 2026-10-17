@@ -4,6 +4,10 @@ Status: analytic derivative bounds for the packaged unconstrained rigid-body
 model, with a conditional [state-region provider](../sarrl/safety/panda_analytic_region.py).
 The sensor, physical-force and discrete-runtime contracts remain open. The
 structured backup has no nonlinear terminal argument or production handoff.
+The later [regional refinement](panda-regional-derivatives-design.md) combines
+analytic center derivatives with these global Hessian bounds. It preserves
+the global diagnostic below and improves its sufficient inverse comparison
+at a position radius of 0.001 rad.
 
 The bounds use link geometry and inertias, rather than maxima of sampled
 derivatives. The packaged model is hash-checked before loading. Its seven

@@ -3,6 +3,27 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Regional Panda derivative refinement
+
+The [center/Hessian provider](panda-regional-derivatives-design.md) computes
+mass derivatives through second-order kinematics and bounds their regional
+variation using global analytic mass Hessians. Independent MuJoCo mass,
+gravity and velocity-bias values and finite-difference derivative checks
+agree at three static configurations. The analytic evaluator uses no
+dynamics or integration entry point. Eight deterministic corner patterns
+check derivative and coefficient bounds and independent acceleration solves.
+Closed-form tests cover an entire sine-derivative interval and repeated-angle
+transform derivatives, input rejection and immutable arrays.
+All 84 focused regional, global, prefix, point-model and release tests pass,
+including 12 new cases. The supported-model check also rejects a detached
+base chain and prevents unrepresented bodies from entering the derivation.
+
+On the same five ideal-model boxes as the global diagnostic, the inverse
+comparison norm at a 0.001 rad radius falls from 1.4726 to 0.070362. The
+0.01 rad box remains inconclusive at 1.9277. No physical integration, seed,
+sensor/runtime or terminal claim is introduced. Validated center-derivative
+arithmetic and physical-force contracts remain prerequisites.
+
 ## Analytic Panda coefficient regions
 
 The [geometry-derived provider](panda-analytic-region-design.md) is checked

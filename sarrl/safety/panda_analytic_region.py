@@ -112,13 +112,20 @@ def serial_coefficient_bounds(lengths, masses, inertias, gravity, last_joints):
     return SerialCoefficientBounds(d1, d2, g1)
 
 
-def packaged_coefficient_bounds():
-    """Read a fresh hash-checked packaged model; perform no physical integration."""
+def _checked_packaged_model():
+    """Load the packaged model and check the supported serial-chain assumptions."""
     model = load_panda_model()
     bodies = model.jnt_bodyid
     attachment = model.body("attachment").id
+    base = model.body("link0").id
     if (
-        np.any(model.jnt_type != 3)
+        model.nbody != 10
+        or len(set([0, base, *bodies, attachment])) != 10
+        or model.body_parentid[base] != 0
+        or model.body_jntnum[base] != 0
+        or model.body_parentid[bodies[0]] != base
+        or model.body_jntnum[attachment] != 0
+        or np.any(model.jnt_type != 3)
         or np.any(model.jnt_pos != 0)
         or not np.allclose(np.linalg.norm(model.jnt_axis, axis=1), 1, atol=1e-14, rtol=0)
         or np.any(model.body_parentid[bodies[1:]] != bodies[:-1])
@@ -128,6 +135,7 @@ def packaged_coefficient_bounds():
         or np.any(model.body_inertia[attachment] != 0)
         or np.any(model.jnt_stiffness != 0)
         or np.any(model.dof_frictionloss != 0)
+        or np.any(getattr(model, "dof_dampingpoly", 0) != 0)
         or np.any(model.body_gravcomp != 0)
         or model.opt.density != 0
         or model.opt.viscosity != 0
@@ -135,6 +143,14 @@ def packaged_coefficient_bounds():
         or model.nplugin != 0
     ):
         raise ValueError("packaged model does not match the serial hinge-chain derivation")
+    return model
+
+
+def packaged_coefficient_bounds():
+    """Read a fresh hash-checked packaged model; perform no physical integration."""
+    model = _checked_packaged_model()
+    bodies = model.jnt_bodyid
+    attachment = model.body("attachment").id
     lengths = np.zeros((7, 7))
     for b, body in enumerate(bodies):
         for i in range(b + 1):

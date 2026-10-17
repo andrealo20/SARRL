@@ -31,6 +31,12 @@ conservatism diagnostic introduces no integration or task seeds. Its
 inverse comparison fails on the larger declared boxes, so tighter regional
 bounds remain a prerequisite. Physical forces, sensor/runtime assumptions,
 terminal verification and the independent causal audit remain separate gates.
+The [regional derivative refinement](panda-regional-derivatives-design.md)
+now passes the sufficient inverse condition on the same 0.001 rad static
+box through analytic center derivatives and Hessian remainders. The 0.01 rad
+box remains inconclusive. This retains the original physical parameter box,
+controller, evidence and lack of physical-force/sensor/runtime guarantees.
+No task comparison or fresh seed block starts from this diagnostic.
 
 ## Seed populations
 
