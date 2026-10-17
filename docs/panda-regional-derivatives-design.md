@@ -8,6 +8,9 @@ supervisor uses these calculations.
 The later [center arithmetic audit](panda-center-arithmetic-design.md)
 encloses point coefficients and reference discrepancies for an explicitly
 normalized model. It does not yet validate this entire regional calculation.
+The subsequent [outward regional evaluator](panda-regional-arithmetic-design.md)
+recomputes the majorants under that model and covers whole-box coefficients;
+it supplies no inverse or physical prefix witness.
 
 ## Differentiate the center kinematics
 

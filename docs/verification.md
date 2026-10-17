@@ -3,6 +3,19 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Outward Panda regional coefficients
+
+The [regional arithmetic evaluator](panda-regional-arithmetic-design.md)
+recomputes global derivative majorants under the normalized compiled-constant
+model and combines them with center intervals using outward arithmetic.
+Exact-rational midpoint/radius tests cover adjacent endpoints and subnormal
+singletons. Exact two-link calculations, eight higher-precision corner
+enclosures, zero-radius reduction, uniform reference errors and source/model
+mismatch rejection are checked. Precision is restored after injected errors.
+All 120 focused regional-arithmetic, center, regional-derivative, global,
+prefix, point-model and release tests pass, including 13 new cases.
+No inverse, physical integration, task seed or production handoff is added.
+
 ## Panda center arithmetic enclosures
 
 The optional [ball-arithmetic audit](panda-center-arithmetic-design.md)
@@ -19,8 +32,9 @@ optional numerical backend; base installations retain no new requirement.
 The declared model normalizes compiled frame/axis constants and interprets
 other binary64 constants exactly. The largest reported nominal mass/bias
 errors against MuJoCo are bounded by 3.11e-15 and 2.85e-14, respectively,
-at those centers only. Regional Hessians, inverse solves and prefix arithmetic
-remain unvalidated; no physical controller or task seed is introduced.
+at those centers only. The later regional evaluator is described above.
+Inverse solves and prefix arithmetic remain unvalidated; no physical
+controller or task seed is introduced.
 
 ## Regional Panda derivative refinement
 

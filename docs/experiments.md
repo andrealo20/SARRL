@@ -42,6 +42,11 @@ adds explicit arithmetic enclosures at three already used static centers.
 Its reference errors concern a normalized compiled-constant model and cannot
 set a global safety reserve. The regional/inverse/prefix arithmetic and
 physical contracts remain open. No controller or task protocol changes.
+The later [regional arithmetic audit](panda-regional-arithmetic-design.md)
+encloses full-box coefficient variation at three existing domain sizes, with
+explicit center-reference errors. It performs no inverse calculation and
+does not supersede any failed capacity/integration result. The inverse,
+prefix, physical and terminal gates remain ahead of a used-task protocol.
 
 ## Seed populations
 
