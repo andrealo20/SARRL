@@ -57,6 +57,12 @@ propagation defects. The full-torque-box scalar tube therefore stops before
 integration. A separate design must retain state, parameter and input
 dependencies, with justified uncertainty sets and a compatible terminal
 argument; reducing a bound on these selected cases cannot establish it.
+The [structured backup kernel](panda-structured-backup-design.md) now keeps
+a parameter estimate fixed while evaluating current-state dynamics.
+Its pointwise enclosure retains continuous payload uncertainty, viscous
+parameters and an explicit delivered-command difference. Synthetic and static
+Panda tests pass. It has no interval/queue witness, sensor guarantee or new
+terminal proof; those gates precede any production integration or comparison.
 Any resulting candidate requires a new protocol and untouched
 confirmation seeds. Current held-out data may support diagnosis but cannot
 confirm a design tuned on those same results.

@@ -3,6 +3,23 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Structured Panda backup point model
+
+The [structured formulation](panda-structured-backup-design.md) passed 55
+focused structured-model, tube and release checks. Of 26 new cases, 24 use
+coupled synthetic models and two use static Panda fixtures. Independent
+parameter grids exercise all 128 friction corners, varying mass and input
+differences; singleton, invalid-family, refinement and clipping cases check
+the calculation's scope. Twelve direct Panda forward checks reproduce the
+affine-parameter identity and fall within the derived point intervals without
+advancing time or invoking an integration entry point. No robot episode or
+new task seed is used.
+
+This is a new pointwise law and parameter calculation. The existing
+supervisor is unchanged. Delayed interval propagation, measurement
+uncertainty, invariant terminal conditions and retained-policy handoff are
+not verified by these tests.
+
 ## Static Panda envelope-capacity screen
 
 The [necessary-error screen](panda-envelope-capacity-results.md) checks 26
