@@ -73,6 +73,10 @@ the later [center/Hessian refinement](panda-regional-derivatives-design.md)
 reduces that comparison norm from 1.4726 to 0.070362. At 0.01 rad the result
 remains inconclusive. Force, sensor/runtime and validated-arithmetic contracts
 and a compatible terminal argument remain open before a robot prefix campaign.
+The [center arithmetic audit](panda-center-arithmetic-design.md) now provides
+point coefficient and derivative enclosures for a declared normalized model.
+Validated regional remainder, inverse and prefix arithmetic remain next
+numerical prerequisites; center errors alone cannot authorize a witness.
 Finite-prefix containment cannot advance the candidate or replace the
 failed evidence.
 Any resulting candidate requires a new protocol and untouched
