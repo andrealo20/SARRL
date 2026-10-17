@@ -37,6 +37,11 @@ box through analytic center derivatives and Hessian remainders. The 0.01 rad
 box remains inconclusive. This retains the original physical parameter box,
 controller, evidence and lack of physical-force/sensor/runtime guarantees.
 No task comparison or fresh seed block starts from this diagnostic.
+The optional [center coefficient audit](panda-center-arithmetic-design.md)
+adds explicit arithmetic enclosures at three already used static centers.
+Its reference errors concern a normalized compiled-constant model and cannot
+set a global safety reserve. The regional/inverse/prefix arithmetic and
+physical contracts remain open. No controller or task protocol changes.
 
 ## Seed populations
 

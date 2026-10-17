@@ -3,6 +3,25 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Panda center arithmetic enclosures
+
+The optional [ball-arithmetic audit](panda-center-arithmetic-design.md)
+encloses nominal/unit-payload mass, mass derivatives, gravity and bias at
+three existing static centers. Exact-rational endpoint checks verify outward
+binary64 export and reference-error bounds. Tests cover subnormals, overflow,
+invalid input, optional-backend failures, immutable snapshots, nonfinite
+balls and precision restoration. Independent reference values are read
+before dynamics/integration calls are prohibited during enclosure evaluation.
+All 107 focused center, regional, global, prefix, point-model and release
+tests pass, including 23 new cases. The MuJoCo CI job installs the pinned
+optional numerical backend; base installations retain no new requirement.
+
+The declared model normalizes compiled frame/axis constants and interprets
+other binary64 constants exactly. The largest reported nominal mass/bias
+errors against MuJoCo are bounded by 3.11e-15 and 2.85e-14, respectively,
+at those centers only. Regional Hessians, inverse solves and prefix arithmetic
+remain unvalidated; no physical controller or task seed is introduced.
+
 ## Regional Panda derivative refinement
 
 The [center/Hessian provider](panda-regional-derivatives-design.md) computes

@@ -19,6 +19,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = ["pytest>=7.4", "ruff>=0.6"]
 mujoco = ["mujoco>=3.1"]
+numerics = ["python-flint==0.9.0"]
 figures = ["matplotlib>=3.7"]
 demo = ["mujoco>=3.1", "matplotlib>=3.7", "pillow>=10", "imageio-ffmpeg>=0.6"]
 

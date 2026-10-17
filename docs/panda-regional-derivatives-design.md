@@ -5,6 +5,9 @@ model. This extends the [global geometry bounds](panda-analytic-region-design.md
 Physical-force, sensor/runtime and validated-arithmetic contracts remain
 open, as does the nonlinear delayed terminal argument. No production
 supervisor uses these calculations.
+The later [center arithmetic audit](panda-center-arithmetic-design.md)
+encloses point coefficients and reference discrepancies for an explicitly
+normalized model. It does not yet validate this entire regional calculation.
 
 ## Differentiate the center kinematics
 
