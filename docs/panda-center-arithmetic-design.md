@@ -2,10 +2,13 @@
 
 Status: an optional, offline enclosure of coefficients at one declared
 position/velocity center. It addresses center evaluation error for the
-[regional derivative design](panda-regional-derivatives-design.md). Regional
-Hessians, inverse comparisons and prefix propagation still use ordinary
-floating point. This increment supplies no complete numerical or physical
+[regional derivative design](panda-regional-derivatives-design.md). The point
+evaluator does not enclose regional Hessians, inverse comparisons or prefix
+propagation. This increment supplies no complete numerical or physical
 backup certificate and changes no controller.
+The subsequent [regional arithmetic implementation](panda-regional-arithmetic-design.md)
+now encloses derivative majorants and coefficient variation over full boxes.
+Inverse and prefix arithmetic remain separate requirements.
 
 ## Define the enclosed model
 
@@ -113,11 +116,10 @@ evaluation. Context restoration is checked after an injected failure.
 The higher-precision overlap is a regression check; the enclosure guarantee
 comes from the arithmetic and declared equations.
 
-Before using this result in a regional witness, enclose the global Hessian
-and gravity-bound calculations with the same model semantics and directed
-arithmetic. Combine center derivative enclosures and Hessian remainders
-outward, including the difference from any numerical coefficient reference.
-The generalized eigensolve, inverse comparison, linear solve, torque boxes
+The regional companion described above encloses global Hessian/gravity
+bounds, combines center derivative intervals and remainders outward, and
+bounds differences from numerical center references. The generalized
+eigensolve, inverse comparison, linear solve, torque boxes
 and Picard images also need validated treatment. Inserting the reported
 point errors into the existing floating-point engine would not complete
 that work. Physical-force, sensor/runtime, terminal and independent-audit
