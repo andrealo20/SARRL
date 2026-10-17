@@ -140,8 +140,8 @@ def _compiled_signature(model):
     return digest.hexdigest()
 
 
-def _evaluate(model, q, velocity, arb, fmpq):
-    """Evaluate exact-input normalized geometry using only ball scalar operations."""
+def _evaluate(model, q, velocity, arb, fmpq, *, state_arrays=None):
+    """Evaluate normalized geometry; optional state arrays already contain input balls."""
 
     def exact(value):
         numerator, denominator = float(value).as_integer_ratio()
@@ -178,7 +178,7 @@ def _evaluate(model, q, velocity, arb, fmpq):
             dtype=object,
         )
 
-    q, velocity = array(q), array(velocity)
+    q, velocity = (array(q), array(velocity)) if state_arrays is None else state_arrays
     transforms = np.repeat(eye(4)[None, :, :], model.nbody, axis=0)
     first, second = zeros((model.nbody, 7, 4, 4)), zeros((model.nbody, 7, 7, 4, 4))
     ancestors = np.zeros((model.nbody, 7), dtype=bool)
