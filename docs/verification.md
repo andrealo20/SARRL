@@ -3,6 +3,23 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Conditional structured held-input prefixes
+
+The [prefix engine](panda-structured-prefix-design.md) passed 55 focused
+prefix, structured-point and release tests. Twenty-six new cases include
+independent dense trajectories of manufactured nonlinear coupled models for
+three parameter fixtures, all five constant lags and eight intervals. Analytic
+regional derivative contracts, fresh bounded noise, command uncertainty and
+the exact sent-command FIFO are checked. Failure cases cover intersample
+violations, pending commands, startup drift, remainders, bad regions, torque
+limits, singular mass and search budgets. No Panda trajectory is integrated.
+
+This verifies a conditional floating-point enclosure engine. The Panda
+regional derivative provider, validated numerical enclosures, sensor/runtime
+contract, terminal proof and supervisor handoff remain unimplemented. A
+contained finite prefix has `terminal_verified = false` and cannot advance
+the candidate to robot integration.
+
 ## Structured Panda backup point model
 
 The [structured formulation](panda-structured-backup-design.md) passed 55

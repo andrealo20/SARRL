@@ -20,6 +20,11 @@ and preserves the full physical parameter box. Pointwise containment cannot
 advance it to a campaign. A held-interval enclosure, causal FIFO witness,
 sensor/horizon contract and compatible terminal proof must be established
 and frozen before a used-task integration protocol is declared.
+The [conditional prefix implementation](panda-structured-prefix-design.md)
+now tests whole held intervals and the causal FIFO on manufactured nonlinear
+systems with analytic region contracts. It supplies no new robot episode,
+Panda derivative enclosure, terminal witness or fresh task seed. Its finite
+containment flag is not a campaign advancement rule.
 
 ## Seed populations
 
