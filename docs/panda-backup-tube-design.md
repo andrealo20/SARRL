@@ -4,6 +4,10 @@ Status: conditional mathematical prototype. No Panda model-error envelope has
 been established, no supervisor uses this calculation and no new episode is
 authorized by its output. The [failed integration](panda-backup-integration-results.md)
 and [prediction discrepancy](panda-prediction-gap-results.md) remain unchanged.
+The subsequent [necessary-capacity screen](panda-envelope-capacity-results.md)
+rejects this full-torque-box scalar formulation for all 26 retained policies.
+It stops before integration; the generic conditional calculation remains
+available for inspection and synthetic tests.
 
 The prototype is [panda_backup_tube.py](../sarrl/safety/panda_backup_tube.py).
 It retains the existing anchor, estimated coefficients, feedback gains, period

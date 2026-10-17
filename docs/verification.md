@@ -3,6 +3,18 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Static Panda envelope-capacity screen
+
+The [necessary-error screen](panda-envelope-capacity-results.md) checks 26
+retained policies at 52 static parameter points, including 416 direct forward
+checks and 130 conditional terminal calculations. All fail capacity without
+any new physical integration. Nine new synthetic tests verify exact
+torque-box extrema against all 128 vertices, attained values, input rejection
+and monotonicity. The capacity, existing tube and release files pass 38 tests.
+The frozen source, runtime and input/output hashes are retained for audit.
+The result stops this sufficient formulation; it does not establish that no
+other invariant set or controller can work.
+
 ## Conditional bounded-error backup
 
 The [tube prototype](panda-backup-tube-design.md) passed 56 focused tube,

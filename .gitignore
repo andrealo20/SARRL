@@ -262,3 +262,7 @@ results/panda_prediction_gap_v26/*
 results/panda_prediction_gap_position_v26/*
 !results/panda_prediction_gap_position_v26/*.json
 !results/panda_prediction_gap_position_v26/curves.json.gz
+
+!results/panda_envelope_capacity_v26/
+results/panda_envelope_capacity_v26/*
+!results/panda_envelope_capacity_v26/*.json

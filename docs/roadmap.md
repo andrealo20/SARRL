@@ -51,6 +51,12 @@ dynamics/propagation envelope and a compatible sensor guarantee remain
 prerequisites. The current Gaussian-noise interface has no finite deterministic
 sensor bound. Finite-prefix tube verification and supervisor integration are
 still pending; no fresh seed block is opened.
+The [necessary-capacity screen](panda-envelope-capacity-results.md) rejects
+all 26 retained policies at all five lags, even with exact sensors and zero
+propagation defects. The full-torque-box scalar tube therefore stops before
+integration. A separate design must retain state, parameter and input
+dependencies, with justified uncertainty sets and a compatible terminal
+argument; reducing a bound on these selected cases cannot establish it.
 Any resulting candidate requires a new protocol and untouched
 confirmation seeds. Current held-out data may support diagnosis but cannot
 confirm a design tuned on those same results.
