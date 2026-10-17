@@ -70,7 +70,8 @@ class PandaStateRegion:
     """Supplied derivative/remainder assumptions over a convex q/v domain.
 
     This class never derives these assumptions from samples or validates
-    their physical provenance. For Panda, such a provider is still missing.
+    their physical provenance. The separate analytic Panda provider derives
+    coefficient bounds; physical force and runtime contracts remain inputs.
     Mass derivative arrays have shape (7,7,7); bias derivatives (7,14).
     Remainders cover physical model/force errors, not controller arithmetic.
     """

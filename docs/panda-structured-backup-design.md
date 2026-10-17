@@ -5,8 +5,9 @@ defines a different feedback law from the rejected frozen-coefficient backup.
 No existing witness or terminal metric certifies it. No production controller
 uses it and no task comparison starts here.
 The subsequent [finite-prefix engine](panda-structured-prefix-design.md)
-implements conditional interval and FIFO propagation. It still requires a
-Panda-specific region provider and a new terminal argument before integration.
+implements conditional interval and FIFO propagation. The later
+[analytic regional bounds](panda-analytic-region-design.md) remain conservative;
+force, sensor/runtime contracts and a new terminal argument precede integration.
 
 The [previous screen](panda-envelope-capacity-results.md) rejected one
 global torque-box/error-box/scalar-radius sufficient criterion. This design

@@ -66,9 +66,13 @@ terminal proof; those gates precede any production integration or comparison.
 The [held-input prefix engine](panda-structured-prefix-design.md) now
 propagates state/command boxes for every constant lag under explicit regional
 derivative, sensor and propagation contracts. Synthetic nonlinear trajectory
-checks pass. Panda-specific regional enclosures and a compatible terminal
-argument are still missing; finite-prefix containment cannot advance the
-candidate or replace the failed evidence.
+checks pass. The [analytic Panda provider](panda-analytic-region-design.md)
+now derives coefficient variation from link lengths and inertias. Its static
+inverse comparison fails for joint position radii of 0.001 rad around HOME;
+regional bounds need tightening before a robot prefix campaign. Force,
+sensor/runtime contracts and a compatible terminal argument remain open.
+Finite-prefix containment cannot advance the candidate or replace the
+failed evidence.
 Any resulting candidate requires a new protocol and untouched
 confirmation seeds. Current held-out data may support diagnosis but cannot
 confirm a design tuned on those same results.
