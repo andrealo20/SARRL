@@ -31,6 +31,17 @@ a compatible nonlinear terminal set, physical-force and sensor/runtime bounds,
 and an independently audited causal production handoff. Passing a finite
 numerical prefix alone cannot authorize a release.
 
+The [terminal admission screen](panda-terminal-admission-results.md) finds
+certified local sampled instability in the retained structured backup at an
+admissible rest equilibrium for all five lags. A separately declared friction
+compensation cap passes that pointwise test, but neither arm verifies the
+six-interval universal prefix. The cap remains unpromoted. The next design
+must preserve state/parameter dependencies over the longer horizon and
+establish a nonlinear delayed terminal region before integration. It also
+needs an explicit sensor/horizon contract and bounded discrepancy between
+the declared continuous model and the simulator. These requirements cannot
+be replaced by point stability or another task campaign on the failed design.
+
 The [Panda filter](panda-joint-filter-results.md) reduces fast-move unsafe
 episodes but fails success and physical-violation criteria. The
 [planar residual](adaptive-residual-results.md) loses 24.6 percentage points

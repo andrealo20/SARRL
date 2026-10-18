@@ -6,6 +6,9 @@ structural audit checks 160 intervals. The preceding method verified no first
 interval on the same fixture. This is a finite 20 ms result for the declared
 normalized continuous model, with zero ideal-model error assumptions.
 It does not authorize production integration or release.
+The subsequent [terminal admission screen](panda-terminal-admission-results.md)
+checks pointwise stability and requests six intervals, retaining both its
+instability finding and inconclusive longer-prefix outcome.
 
 The corrected implementation and protocol are frozen in
 `0601f7242fd076a423f085b2aeeaa3133b8e2881`. The earlier frozen run stopped on

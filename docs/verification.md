@@ -3,6 +3,26 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Sampled stability and terminal admission
+
+The [admission checks](panda-terminal-admission-methods.md) use an augmented
+matrix exponential for exact held linear flow and validated Rump eigenvalue
+isolation, with pending torques retained for each constant lag. Tests compare
+the map with an exact rational double integrator and an independent ordinary
+kinematic/matrix-exponential reference. They check the original admissible
+unstable point, the separate bounded-friction point at lag four, precision
+refinement and restoration after injected failures. A pointwise pass does not
+establish nonlinear terminal invariance or full-parameter stability.
+
+Thirty-four new tests also cover unchanged estimates, gains and physical
+uncertainty, malformed contracts, bounded cache eviction and disabled caching,
+compiled mutation on cache hits, state coverage, exact snapshot/fresh
+coefficient equality, immutable outputs and report/source guards. All 158
+focused tests pass across the new modules and existing center, regional,
+structured and validated prefix modules. The full six-interval assessment and
+its replay are reported separately in the
+[retained results](panda-terminal-admission-results.md).
+
 ## Local coefficients and persistent payload branches
 
 The [local evaluator](panda-parameter-prefix-methods.md) evaluates normalized

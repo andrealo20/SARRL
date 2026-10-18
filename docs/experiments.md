@@ -67,6 +67,18 @@ numerical outcome. This diagnostic opens no physical campaign or task seed;
 the force/runtime, sensor, nonlinear terminal and production-handoff gates
 still precede integration and release.
 
+The [sampled stability and terminal admission protocol](panda-terminal-admission-methods.md)
+adds an exact held-flow equilibrium linearization with validated eigenvalue
+isolation for all five constant lags. It separately declares a backup whose
+viscous feedforward is capped by the full physical lower bound, keeping the
+estimator, payload estimate, gains and physical uncertainty unchanged. Both
+arms request six intervals in all eighty payload/lag branches, so a complete
+pass must include newly computed feedback delivered after lag four. The
+protocol records development exposures and is frozen before the full screen.
+Pointwise stability and a finite prefix remain necessary, insufficient checks;
+the [retained decision](panda-terminal-admission-results.md) cannot bypass the
+nonlinear terminal, force, sensor, runtime or causal handoff gates.
+
 ## Seed populations
 
 Three seed populations have different roles and must remain disjoint:
