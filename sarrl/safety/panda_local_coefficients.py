@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+from collections import OrderedDict
 from dataclasses import dataclass
+from threading import RLock
 
 from sarrl.robots.panda import model_provenance
 from sarrl.safety.panda_analytic_region import _checked_packaged_model
@@ -69,3 +71,61 @@ class PandaLocalDynamics(PandaValidatedDynamics):
         if not self.q_domain.contains(q) or not self.v_domain.contains(v):
             raise EnclosureUnavailable("state_region_not_covered")
         return enclose_local_coefficients(q, v, precision_bits=self.precision_bits)
+
+
+class PandaSnapshotDynamics(PandaValidatedDynamics):
+    """Offline compiled snapshot with bounded memoization of identical coefficient boxes.
+
+    The snapshot stays bound to its captured model/source identity. It does not
+    reload assets on every query or follow later disk changes. Campaign callers
+    must check source/asset provenance before and after their run. Used compiled
+    constants are checked on every query, including cache hits. No real-time
+    execution claim is made.
+    """
+
+    def __init__(self, *args, cache_size=128, **kwargs):
+        super().__init__(*args, **kwargs)
+        if type(cache_size) is not int or not 0 <= cache_size <= 512:
+            raise ValueError("cache_size must be an integer from zero through 512")
+        self._source_hash = model_provenance()["files"]["panda.xml"]
+        self._snapshot = _checked_packaged_model()
+        self._signature = _compiled_signature(self._snapshot)
+        self._cache_size, self._cache = cache_size, OrderedDict()
+        self._cache_lock = RLock()
+
+    def coefficients(self, q, v):
+        if not self.q_domain.contains(q) or not self.v_domain.contains(v):
+            raise EnclosureUnavailable("state_region_not_covered")
+        key = (
+            self.precision_bits,
+            *(array.tobytes() for array in (q.lower, q.upper, v.lower, v.upper)),
+        )
+        with self._cache_lock, arithmetic(self.precision_bits) as backend:
+            if _compiled_signature(self._snapshot) != self._signature:
+                raise ValueError("compiled snapshot changed after capture")
+            if key in self._cache:
+                self._cache.move_to_end(key)
+                return self._cache[key]
+            nominal, payload = _evaluate(
+                self._snapshot,
+                None,
+                None,
+                backend.arb,
+                backend.fmpq,
+                state_arrays=(balls(q, backend), balls(v, backend)),
+            )
+            result = PandaLocalCoefficients(
+                nominal,
+                payload,
+                q,
+                v,
+                self.precision_bits,
+                backend.__version__,
+                self._source_hash,
+                self._signature,
+            )
+            if self._cache_size:
+                self._cache[key] = result
+                if len(self._cache) > self._cache_size:
+                    self._cache.popitem(last=False)
+            return result

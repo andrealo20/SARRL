@@ -140,7 +140,7 @@ def _compiled_signature(model):
     return digest.hexdigest()
 
 
-def _evaluate(model, q, velocity, arb, fmpq, *, state_arrays=None):
+def _evaluate(model, q, velocity, arb, fmpq, *, state_arrays=None, include_gravity_q=False):
     """Evaluate normalized geometry; optional state arrays already contain input balls."""
 
     def exact(value):
@@ -218,6 +218,7 @@ def _evaluate(model, q, velocity, arb, fmpq, *, state_arrays=None):
 
     def accumulate(bodies, masses, inertias, armature, damping):
         mass, derivative, gravity = np.diag(armature), zeros((7, 7, 7)), zeros((7,))
+        gravity_q = zeros((7, 7)) if include_gravity_q else None
         for body, body_mass, inertia in zip(bodies, masses, inertias, strict=True):
             com = np.array([*array(model.body_ipos[body]), arb(1)], dtype=object)
             linear = (first[body] @ com)[:, :3].T
@@ -229,6 +230,8 @@ def _evaluate(model, q, velocity, arb, fmpq, *, state_arrays=None):
             mass += body_mass * (linear.T @ linear) + angular.T @ inertia @ angular
             gravity -= body_mass * (gravity_acceleration @ linear)
             for k in range(7):
+                if include_gravity_q:
+                    gravity_q[:, k] -= body_mass * (gravity_acceleration @ linear_q[:, :, k])
                 term = (
                     body_mass * (linear_q[:, :, k].T @ linear) + angular_q[k].T @ inertia @ angular
                 )
@@ -237,7 +240,8 @@ def _evaluate(model, q, velocity, arb, fmpq, *, state_arrays=None):
         for i, j, k in np.ndindex((7, 7, 7)):
             gamma = (derivative[i, j, k] + derivative[i, k, j] - derivative[j, k, i]) / 2
             bias[i] += gamma * velocity[j] * velocity[k]
-        return CenterCoefficientEnclosure(*map(_export, (mass, derivative, gravity, bias)))
+        result = CenterCoefficientEnclosure(*map(_export, (mass, derivative, gravity, bias)))
+        return (result, _export(gravity_q)) if include_gravity_q else result
 
     bodies, inertias = model.jnt_bodyid, []
     for body in bodies:
