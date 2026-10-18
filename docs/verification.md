@@ -3,6 +3,27 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Local coefficients and persistent payload branches
+
+The [local evaluator](panda-parameter-prefix-methods.md) evaluates normalized
+rigid-body coefficients directly over continuous state boxes. Six deterministic
+corner patterns are covered by the box enclosures for mass, mass derivatives,
+gravity and bias. Zero-width boxes reproduce the existing center results
+exactly with dynamics and integration callbacks prohibited. Source changes
+and injected failures reject the calculation and restore precision.
+
+Twenty new tests also check outward rational payload coverage at ordinary,
+adjacent and subnormal endpoints, all seven unchanged friction ranges, thirty
+manufactured cell/lag intervals, and rejection of missing cells, parameter
+gaps, changed friction, missing lags and false completion flags. A single
+failed branch or an empty result cannot pass. Report overwrite/source guards
+and the original baseline hash are checked. The
+[frozen Panda comparison](panda-parameter-prefix-results.md) separately records
+the complete numerical result and its physical/terminal limitations.
+An actual Panda two-interval subcell case checks feedback replay on the same
+outward measurement boxes and rejects an injected loss of exact sensor-box
+coverage. No overlap or inclusion tolerance is used.
+
 ## Validated Panda solves and causal prefixes
 
 The [combined numerical increment](panda-validated-prefix-methods.md) uses

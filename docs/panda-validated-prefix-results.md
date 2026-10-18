@@ -58,3 +58,8 @@ partial-runtime errors and an audited causal production handoff remain
 prerequisites. No task seed, training, gain adjustment, parameter narrowing,
 candidate promotion or new release follows this diagnostic. Version 2.6.0
 remains the reference.
+
+The separately frozen [parameter-preserving follow-up](panda-parameter-prefix-results.md)
+uses direct local coefficients and retains the same continuous payload cells
+throughout the prefix. Its finite numerical result does not alter the report
+or the physical/terminal limitations recorded here.

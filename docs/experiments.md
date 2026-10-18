@@ -58,6 +58,15 @@ and cannot authorize a comparison without physical/runtime and nonlinear
 terminal evidence. No integration or release follows merely from passing
 the implementation tests.
 
+The [parameter-preserving follow-up](panda-parameter-prefix-methods.md) evaluates
+coefficients locally and keeps each of the same sixteen continuous payload
+cells through the entire prefix. It reuses the preceding report's exact
+fixtures, constraints, gains, iteration budget and full uncertainty. Every
+cell and constant lag is retained and audited before interpreting the finite
+numerical outcome. This diagnostic opens no physical campaign or task seed;
+the force/runtime, sensor, nonlinear terminal and production-handoff gates
+still precede integration and release.
+
 ## Seed populations
 
 Three seed populations have different roles and must remain disjoint:

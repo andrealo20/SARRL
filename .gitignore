@@ -270,3 +270,7 @@ results/panda_envelope_capacity_v26/*
 !results/panda_validated_prefix/
 results/panda_validated_prefix/*
 !results/panda_validated_prefix/assessment.json
+
+!results/panda_parameter_prefix/
+results/panda_parameter_prefix/*
+!results/panda_parameter_prefix/assessment.json.gz
