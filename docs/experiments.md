@@ -89,6 +89,14 @@ before the corrected complete run. Its
 [decision](panda-mean-value-results.md) retains every failure and cannot
 advance a candidate without the outstanding physical and terminal contracts.
 
+A [remainder split](panda-remainder-split-methods.md) reads that retained
+report, rebuilds every accepted interval with the frozen maps and attributes
+the residual radii to Jacobian variation, the held-flow Taylor remainder and
+rounding. Its decision rule was committed before computation. The
+[result](panda-remainder-split-results.md) attributes a median 0.656 of the
+last velocity residual to the Taylor remainder, so one final phase on that
+remainder is justified.
+
 ## Seed populations
 
 Three seed populations have different roles and must remain disjoint:

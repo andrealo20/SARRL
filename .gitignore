@@ -282,3 +282,7 @@ results/panda_terminal_admission/*
 !results/panda_mean_value_prefix/
 results/panda_mean_value_prefix/*
 !results/panda_mean_value_prefix/assessment.json.gz
+
+!results/panda_remainder_split/
+results/panda_remainder_split/*
+!results/panda_remainder_split/split.json.gz

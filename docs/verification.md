@@ -25,6 +25,16 @@ sampled, snapshot, local and validated-prefix modules. The
 [complete numerical outcome](panda-mean-value-results.md) remains separate
 from these implementation checks and from physical safety evidence.
 
+## Remainder split
+
+The [split](panda-remainder-split-methods.md) recomputes all 281 accelerations
+and 201 feedback sends of the retained shared-parameter report and matches
+them exactly before attributing any radius. Three tests cover the bookkeeping:
+a Taylor-only branch, a variation term carried through propagation, and the
+rejection of a reconstruction wider than the record. The
+[result](panda-remainder-split-results.md) is a description of retained
+enclosures, not a new bound.
+
 ## Sampled stability and terminal admission
 
 The [admission checks](panda-terminal-admission-methods.md) use an augmented

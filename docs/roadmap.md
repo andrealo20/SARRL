@@ -48,9 +48,11 @@ with explicit mean-value and held-flow Taylor remainders. Its complete
 [numerical result](panda-mean-value-results.md) admits 281 intervals against
 229 previously: fifty-two branches gain one interval and none regresses.
 All eighty branches still fail the complete six-interval request. Residual
-enclosures dominate the last successful velocity representations. Isolate
-derivative-variation, residual-propagation and Taylor contributions before
-choosing another numerical design. This result cannot authorize integration.
+enclosures dominate the last successful velocity representations. A
+[remainder split](panda-remainder-split-results.md) attributes a median 0.656
+of the last velocity residual to the held-flow Taylor remainder and 0.344 to
+Jacobian variation. Under the rule fixed before that split, one final phase on
+the Taylor remainder is justified. This result cannot authorize integration.
 
 The [Panda filter](panda-joint-filter-results.md) reduces fast-move unsafe
 episodes but fails success and physical-violation criteria. The
