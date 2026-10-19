@@ -519,3 +519,104 @@ def test_signed_ball_magnitude_record_uses_zero_lower_and_unchanged_upper(
         )["checked_intervals"]
         == 30
     )
+
+
+def test_held_substeps_cover_exact_trajectories_and_pass_the_audit(manufactured):
+    from sarrl.safety.panda_mean_value_audit import audit_mean_value_prefix
+
+    checker, context, history, _ = manufactured
+    result = checker.verify_prefix(
+        context, np.zeros(7), np.zeros(7), np.zeros(7), history, intervals=6, substeps=4
+    )
+    assert result.prefix_contained and all(len(c.intervals) == 24 for c in result.cases)
+    h = Fraction(checker.config.control_dt) / 4
+    with arithmetic(128) as backend:
+        for case in result.cases:
+            for epsilon in (-1, 0, 1):
+                mass = Fraction(0.5625) + Fraction(0.0625) * Fraction(epsilon)
+                q, v, queue = Fraction(0), Fraction(0), [Fraction(0)] * 4
+                eps = np.array([epsilon, *[0] * 7])
+                for step, record in enumerate(case.intervals):
+                    if step % 4 == 0:
+                        sent = Fraction(0) if step == 0 else -q - v
+                        delivered = queue[-case.lag] if case.lag else sent
+                    acceleration = delivered + mass
+                    q, v = q + h * v + h * h / 2 * acceleration, v + h * acceleration
+                    for form, actual in ((record.q_end, q), (record.v_end, v)):
+                        enclosed = fiber(form, eps, backend)
+                        assert (
+                            Fraction(float(enclosed.lower[0]))
+                            <= actual
+                            <= Fraction(float(enclosed.upper[0]))
+                        )
+                    if step % 4 == 3:
+                        queue = [*queue[1:], sent]
+    checked = audit_mean_value_prefix(
+        checker,
+        context,
+        np.zeros(7),
+        np.zeros(7),
+        np.zeros(7),
+        history,
+        result,
+        intervals=6,
+        substeps=4,
+    )
+    assert checked["checked_intervals"] == 120
+    case = result.cases[2]
+    record = replace(case.intervals[5], sent=AffineState.constant(np.ones(7)))
+    case = replace(case, intervals=(*case.intervals[:5], record, *case.intervals[6:]))
+    with pytest.raises(ValueError, match="prefix audit"):
+        audit_mean_value_prefix(
+            checker,
+            context,
+            np.zeros(7),
+            np.zeros(7),
+            np.zeros(7),
+            history,
+            replace(result, cases=(*result.cases[:2], case, *result.cases[3:])),
+            intervals=6,
+            substeps=4,
+        )
+
+
+def test_substeps_must_partition_the_held_period_exactly(manufactured):
+    checker = manufactured[0]
+    assert checker.substep_period(4) * 4 == checker.config.control_dt
+    for count in (0, 3, 1.0):
+        with pytest.raises(ValueError, match="substep"):
+            checker.substep_period(count)
+
+
+def test_substep_phase_continues_only_when_every_branch_completes():
+    from tools.assess_panda_substep_prefix import decide
+
+    case = {"prefix_contained": True, "intervals": [None] * 24}
+    cells = [{"result": {"cases": [case] * 5}} for _ in range(16)]
+    assert decide(cells)["outcome"] == "line_continues"
+    partial = {"prefix_contained": False, "intervals": [None] * 23}
+    cells[3] = {"result": {"cases": [case] * 4 + [partial]}}
+    decision = decide(cells)
+    assert (decision["outcome"], decision["complete_branches"]) == ("line_stops", 79)
+    assert decision["held_intervals"] == 79 * 6 + 5
+    assert not decision["integration_allowed"] and not decision["release_allowed"]
+
+
+def test_substep_phase_preserves_reports_and_rejects_source_changes(tmp_path, monkeypatch):
+    import gzip
+    import json
+    import sys
+
+    from tools import assess_panda_substep_prefix as tool
+
+    path = tmp_path / "assessment.json.gz"
+    path.write_bytes(gzip.compress(json.dumps({"source_sha256": {"wrong": "source"}}).encode()))
+    kept = path.read_bytes()
+    monkeypatch.setattr(tool, "assessment", lambda: pytest.fail("unexpected numerical run"))
+    monkeypatch.setattr(sys, "argv", ["screen", "--output", str(path)])
+    with pytest.raises(FileExistsError):
+        tool.main()
+    monkeypatch.setattr(sys, "argv", ["screen", "--audit", "--output", str(path)])
+    with pytest.raises(ValueError, match="fingerprints differ"):
+        tool.main()
+    assert path.read_bytes() == kept

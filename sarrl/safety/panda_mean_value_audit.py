@@ -64,9 +64,10 @@ def endpoint_inclusion(output, terms, error):
 
 
 def audit_mean_value_prefix(
-    checker, context, measured_q, measured_v, candidate, history, result, *, intervals
+    checker, context, measured_q, measured_v, candidate, history, result, *, intervals, substeps=1
 ):
     _require(type(intervals) is int and 1 <= intervals <= 200, "invalid interval count")
+    period = checker.substep_period(substeps)
     _require(len(history) == 4 and checker.config.max_delay_steps == 4, "known queue history")
     _require(
         all(checker.torques.contains(VectorBox.point(x)) for x in (candidate, *history)),
@@ -77,11 +78,12 @@ def audit_mean_value_prefix(
         same_form(result.parameters, physical_coordinates(checker.parameters)), "parameter identity"
     )
     _require([c.lag for c in result.cases] == list(range(5)), "missing delay case")
-    t, checked = Fraction(float(checker.config.control_dt)), 0
+    t, checked = Fraction(float(period)), 0
     with arithmetic(checker.precision_bits) as backend:
         for case in result.cases:
-            _require(len(case.intervals) <= intervals, "too many intervals")
-            _require(case.prefix_contained == (len(case.intervals) == intervals), "completion flag")
+            required = intervals * substeps
+            _require(len(case.intervals) <= required, "too many intervals")
+            _require(case.prefix_contained == (len(case.intervals) == required), "completion flag")
             q = add_error(
                 AffineState.constant(measured_q), checker.errors.position_measurement, backend
             )
@@ -93,20 +95,22 @@ def audit_mean_value_prefix(
                 _require(
                     same_form(q, record.q_start) and same_form(v, record.v_start), "start identity"
                 )
-                sent = (
-                    AffineState.constant(candidate)
-                    if step == 0
-                    else add_error(
-                        checker.region.feedback_affine(
-                            context,
-                            add_error(q, checker.errors.position_measurement, backend),
-                            add_error(v, checker.errors.velocity_measurement, backend),
+                held, part = divmod(step, substeps)
+                if part == 0:  # one send per held period, shared by its substeps
+                    sent = (
+                        AffineState.constant(candidate)
+                        if held == 0
+                        else add_error(
+                            checker.region.feedback_affine(
+                                context,
+                                add_error(q, checker.errors.position_measurement, backend),
+                                add_error(v, checker.errors.velocity_measurement, backend),
+                                backend,
+                            ),
+                            checker.errors.command_error,
                             backend,
-                        ),
-                        checker.errors.command_error,
-                        backend,
+                        )
                     )
-                )
                 _require(same_form(sent, record.sent), "feedback shared coordinates")
                 delivered = queue[-case.lag] if case.lag else sent
                 _require(same_form(delivered, record.delivered), "causal FIFO shared coordinates")
@@ -143,7 +147,7 @@ def audit_mean_value_prefix(
                         q_end=record.q_endpoint_bound,
                         v_end=record.v_endpoint_bound,
                     ),
-                    checker.config.control_dt,
+                    period,
                     checker.errors,
                 )
                 start = checker.region.acceleration_affine(
@@ -183,7 +187,9 @@ def audit_mean_value_prefix(
                     and 1 <= record.picard_iterations <= checker.config.picard_iterations,
                     "iteration metadata",
                 )
-                q, v, queue = record.q_end, record.v_end, [*queue[1:], record.sent]
+                q, v = record.q_end, record.v_end
+                if part == substeps - 1:
+                    queue = [*queue[1:], record.sent]
                 checked += 1
     return {
         "checked_intervals": checked,

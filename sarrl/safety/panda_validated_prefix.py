@@ -60,7 +60,8 @@ class PandaValidatedPrefix(PandaStructuredPrefix):
             np.minimum(np.minimum(trial.upper, physical.upper), domain.upper),
         )
 
-    def _interval(self, q0, v0, sent, delivered):
+    def _interval(self, q0, v0, sent, delivered, period=None):
+        period = self.config.control_dt if period is None else period
         minimum = np.full(7, self.config.minimum_inflation)
         q_tube, v_tube = self._inflate(q0, minimum), self._inflate(v0, minimum)
         for iteration in range(1, self.config.picard_iterations + 1):
@@ -71,7 +72,7 @@ class PandaValidatedPrefix(PandaStructuredPrefix):
                 q0,
                 v0,
                 acceleration,
-                self.config.control_dt,
+                period,
                 self.errors,
                 precision_bits=self.precision_bits,
             )

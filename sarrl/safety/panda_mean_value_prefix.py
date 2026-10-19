@@ -93,9 +93,21 @@ class PandaMeanValuePrefix(PandaValidatedPrefix):
         if np.any(self.errors.position_defect) or np.any(self.errors.velocity_defect):
             raise ValueError("Taylor endpoints require zero partial-runtime defects")
 
-    def verify_prefix(self, context, measured_q, measured_v, candidate, history, *, intervals):
+    def substep_period(self, substeps):
+        """Split one held command period into equal binary64 substeps that sum exactly."""
+        if type(substeps) is not int or not 1 <= substeps <= 64:
+            raise ValueError("substep count must be an integer from one through 64")
+        period = self.config.control_dt / substeps
+        if Fraction(period) * substeps != Fraction(self.config.control_dt):
+            raise ValueError("substeps must partition the held period exactly")
+        return period
+
+    def verify_prefix(
+        self, context, measured_q, measured_v, candidate, history, *, intervals, substeps=1
+    ):
         if type(intervals) is not int or not 1 <= intervals <= 200:
             raise ValueError("prefix interval count must be an integer from one through 200")
+        period = self.substep_period(substeps)
         if len(history) != 4 or self.config.max_delay_steps != 4:
             raise ValueError("the shared-coordinate screen requires four known prior sends")
         if any(not self.torques.contains(VectorBox.point(x)) for x in (candidate, *history)):
@@ -131,53 +143,52 @@ class PandaMeanValuePrefix(PandaValidatedPrefix):
                         if not self.torques.contains(as_box(sent, backend)):
                             raise EnclosureUnavailable("raw_feedback_torque_bounds_not_established")
                         delivered = queue[-lag] if lag else sent
-                        tube = super()._interval(
-                            as_box(q, backend),
-                            as_box(v, backend),
-                            as_box(sent, backend),
-                            as_box(delivered, backend),
-                        )
-                        start = self.region.acceleration_affine(
-                            parameters, q, v, delivered, backend
-                        )
-                        jerk = self.region.jerk(
-                            self.parameters,
-                            tube.q_tube,
-                            tube.v_tube,
-                            as_box(delivered, backend),
-                            tube.acceleration,
-                            backend,
-                        )
-                        magnitude = _export(abs(jerk))
-                        jerk_bound = ArrayEnclosure(np.zeros(7), magnitude.upper)
-                        qnext, vnext = taylor_endpoint(
-                            q,
-                            v,
-                            start,
-                            point(jerk_bound.upper, backend),
-                            self.config.control_dt,
-                            backend,
-                        )
-                        records.append(
-                            MeanValueInterval(
-                                q,
-                                v,
-                                sent,
-                                delivered,
+                        for _ in range(substeps):
+                            tube = super()._interval(
+                                as_box(q, backend),
+                                as_box(v, backend),
+                                as_box(sent, backend),
+                                as_box(delivered, backend),
+                                period,
+                            )
+                            start = self.region.acceleration_affine(
+                                parameters, q, v, delivered, backend
+                            )
+                            jerk = self.region.jerk(
+                                self.parameters,
                                 tube.q_tube,
                                 tube.v_tube,
+                                as_box(delivered, backend),
                                 tube.acceleration,
-                                start,
-                                jerk_bound,
-                                qnext,
-                                vnext,
-                                tube.q_end,
-                                tube.v_end,
-                                tube.picard_iterations,
+                                backend,
                             )
-                        )
-                        q, v, queue = qnext, vnext, [*queue[1:], sent]
+                            magnitude = _export(abs(jerk))
+                            jerk_bound = ArrayEnclosure(np.zeros(7), magnitude.upper)
+                            qnext, vnext = taylor_endpoint(
+                                q, v, start, point(jerk_bound.upper, backend), period, backend
+                            )
+                            records.append(
+                                MeanValueInterval(
+                                    q,
+                                    v,
+                                    sent,
+                                    delivered,
+                                    tube.q_tube,
+                                    tube.v_tube,
+                                    tube.acceleration,
+                                    start,
+                                    jerk_bound,
+                                    qnext,
+                                    vnext,
+                                    tube.q_end,
+                                    tube.v_end,
+                                    tube.picard_iterations,
+                                )
+                            )
+                            q, v = qnext, vnext
+                        queue = [*queue[1:], sent]
                 except EnclosureUnavailable as failure:
                     reason = str(failure)
-                cases.append(MeanValueCase(lag, len(records) == intervals, reason, tuple(records)))
+                complete = len(records) == intervals * substeps
+                cases.append(MeanValueCase(lag, complete, reason, tuple(records)))
         return MeanValueResult(parameters, tuple(cases))
