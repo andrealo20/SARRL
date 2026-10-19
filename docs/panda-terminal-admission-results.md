@@ -5,6 +5,9 @@ equilibrium for every constant lag zero through four. Limiting its viscous
 compensation removes this point instability, but neither arm establishes the
 requested six-interval prefix over the full physical parameter box. Neither
 candidate advances to integration, a task comparison or release.
+The subsequent [shared-parameter propagation study](panda-mean-value-results.md)
+keeps the bounded context and physical uncertainty, changing only its offline
+enclosure representation.
 
 The [protocol and implementation](panda-terminal-admission-methods.md) were
 frozen in `ba62a182321687bbefd0b5194d9d93f41075edff` before the complete run.

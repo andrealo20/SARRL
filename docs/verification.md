@@ -3,6 +3,28 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Shared-parameter held-flow propagation
+
+The [shared-coordinate implementation](panda-mean-value-methods.md) carries
+eight persistent physical-parameter generators in states and queued torques.
+Thirty-one new tests cover exact rational mean-value/rounding inclusions,
+second-order integral remainders, independent ordinary Panda coefficients,
+all 29 acceleration derivative columns at nonzero velocity, parameter-corner
+fibers and model/cache/precision failures. Ordinary differences cross-check
+formulas and never supply an acceptance bound.
+
+A manufactured held-acceleration model has exact trajectories for five
+parameter fibers, all five lags and six intervals. Dense partial-time points
+and queued command generators are checked. Its thirty intervals pass an
+auditor that never calls the search and verifies Taylor endpoint inequalities
+with exact Fractions. Changed generators, states, queues, parameters,
+derivative bounds, input histories and terminal flags are rejected. Nonzero
+unstructured physical remainders and partial-runtime defects fail closed.
+All 115 distinct focused tests pass across this increment and the preceding
+sampled, snapshot, local and validated-prefix modules. The
+[complete numerical outcome](panda-mean-value-results.md) remains separate
+from these implementation checks and from physical safety evidence.
+
 ## Sampled stability and terminal admission
 
 The [admission checks](panda-terminal-admission-methods.md) use an augmented

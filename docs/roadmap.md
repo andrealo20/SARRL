@@ -42,6 +42,16 @@ needs an explicit sensor/horizon contract and bounded discrepancy between
 the declared continuous model and the simulator. These requirements cannot
 be replaced by point stability or another task campaign on the failed design.
 
+A separately frozen [shared-parameter propagation method](panda-mean-value-methods.md)
+now retains the same eight physical coordinates in states and queued sends,
+with explicit mean-value and held-flow Taylor remainders. Its complete
+[numerical result](panda-mean-value-results.md) admits 281 intervals against
+229 previously: fifty-two branches gain one interval and none regresses.
+All eighty branches still fail the complete six-interval request. Residual
+enclosures dominate the last successful velocity representations. Isolate
+derivative-variation, residual-propagation and Taylor contributions before
+choosing another numerical design. This result cannot authorize integration.
+
 The [Panda filter](panda-joint-filter-results.md) reduces fast-move unsafe
 episodes but fails success and physical-violation criteria. The
 [planar residual](adaptive-residual-results.md) loses 24.6 percentage points

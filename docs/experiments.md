@@ -79,6 +79,16 @@ Pointwise stability and a finite prefix remain necessary, insufficient checks;
 the [retained decision](panda-terminal-admission-results.md) cannot bypass the
 nonlinear terminal, force, sensor, runtime or causal handoff gates.
 
+The [shared-parameter propagation protocol](panda-mean-value-methods.md)
+retains the bounded-friction context and all earlier inputs while changing
+the offline numerical representation. Persistent affine generators and
+validated differential/Taylor remainders are tested on the same sixteen
+continuous payload cells and all five constant lags for six intervals.
+The method records its development exposure and initial audit-format error
+before the corrected complete run. Its
+[decision](panda-mean-value-results.md) retains every failure and cannot
+advance a candidate without the outstanding physical and terminal contracts.
+
 ## Seed populations
 
 Three seed populations have different roles and must remain disjoint:

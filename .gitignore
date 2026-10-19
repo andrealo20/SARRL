@@ -278,3 +278,7 @@ results/panda_parameter_prefix/*
 !results/panda_terminal_admission/
 results/panda_terminal_admission/*
 !results/panda_terminal_admission/assessment.json.gz
+
+!results/panda_mean_value_prefix/
+results/panda_mean_value_prefix/*
+!results/panda_mean_value_prefix/assessment.json.gz
