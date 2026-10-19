@@ -35,6 +35,17 @@ rejection of a reconstruction wider than the record. The
 [result](panda-remainder-split-results.md) is a description of retained
 enclosures, not a new bound.
 
+## Held substeps
+
+The prefix and its auditor take a substep count whose binary64 lengths must
+sum exactly to the held period; with one substep both equal the retained
+code path, and the [substep run](panda-substep-prefix-methods.md) reproduces
+the retained report field for field in all sixteen cells before computing
+four substeps. On the manufactured model, four substeps enclose the exact
+trajectories of three parameter fibers at every substep for all five lags and
+pass the auditor on 120 records; a send changed inside a held period is
+rejected. Two further tests cover the decision rule and report preservation.
+
 ## Sampled stability and terminal admission
 
 The [admission checks](panda-terminal-admission-methods.md) use an augmented

@@ -97,6 +97,13 @@ rounding. Its decision rule was committed before computation. The
 last velocity residual to the Taylor remainder, so one final phase on that
 remainder is justified.
 
+That [final phase](panda-substep-prefix-methods.md) splits each 10 ms held
+period into four 2.5 ms substeps for the tube, acceleration, jerk and Taylor
+endpoint, after reproducing the retained screen with one substep. Its rule,
+fixed before the run, continues the line only if all eighty branches complete
+six periods. The [result](panda-substep-prefix-results.md) completes none, so
+the line stops.
+
 ## Seed populations
 
 Three seed populations have different roles and must remain disjoint:
