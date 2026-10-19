@@ -148,7 +148,8 @@ class PandaMeanValuePrefix(PandaValidatedPrefix):
                             tube.acceleration,
                             backend,
                         )
-                        jerk_bound = _export(abs(jerk))
+                        magnitude = _export(abs(jerk))
+                        jerk_bound = ArrayEnclosure(np.zeros(7), magnitude.upper)
                         qnext, vnext = taylor_endpoint(
                             q,
                             v,

@@ -494,3 +494,28 @@ def test_auditor_rejects_out_of_range_known_sends_even_before_replaying(manufact
         audit_mean_value_prefix(
             checker, context, np.zeros(7), np.zeros(7), np.zeros(7), history, result, intervals=6
         )
+
+
+def test_signed_ball_magnitude_record_uses_zero_lower_and_unchanged_upper(
+    manufactured, monkeypatch
+):
+    from sarrl.safety.panda_mean_value_audit import audit_mean_value_prefix
+
+    checker, context, history, _ = manufactured
+
+    def crossing_zero(*args):
+        backend = args[-1]
+        return np.full(7, interval(-1, 1, backend), dtype=object)
+
+    monkeypatch.setattr(checker.region, "jerk", crossing_zero)
+    result = checker.verify_prefix(
+        context, np.zeros(7), np.zeros(7), np.zeros(7), history, intervals=6
+    )
+    first = result.cases[0].intervals[0]
+    assert np.all(first.jerk_bound.lower == 0) and np.all(first.jerk_bound.upper >= 1)
+    assert (
+        audit_mean_value_prefix(
+            checker, context, np.zeros(7), np.zeros(7), np.zeros(7), history, result, intervals=6
+        )["checked_intervals"]
+        == 30
+    )

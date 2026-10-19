@@ -130,6 +130,16 @@ inconclusive, matching the prior first-cell counts. These are exposed method
 diagnostics, not confirmation data. No gains, boxes, horizon, cell count or
 iteration budget are changed in response.
 
+The first complete attempt, frozen in
+`20eeae546ea15da9b14fbec26fb6373af9976866`, stopped before writing a report:
+the auditor required a nonnegative lower endpoint for a magnitude record,
+whereas Arb's ball enclosure of an absolute value could retain a negative
+lower endpoint. Recalculation confirmed identical upper endpoints. Store the
+magnitude as `[0, exported_upper]`; the upper bound used by Taylor propagation
+is unchanged. Add a crossing-zero regression test, refreeze the implementation
+and protocol, and repeat the complete run. No numerical tolerance or physical
+acceptance criterion is relaxed.
+
 ## Frozen complete comparison
 
 Freeze implementation and this protocol before the full run. Read the exact
