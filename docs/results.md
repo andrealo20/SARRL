@@ -1,5 +1,17 @@
 # Retained results
 
+## v2.7 validated Panda prefixes
+
+Five offline phases enclose the normalized seven-joint model with a delayed
+backup on one fixture of sixteen mass cells, five constant lags and six held
+periods. The best, with [four held substeps](panda-substep-prefix-results.md),
+verifies 317 of 480 periods and completes none of the eighty branches. A
+[remainder split](panda-remainder-split-results.md) before it attributed a
+median 0.656 of the last velocity residual to the held-flow Taylor remainder.
+Under the rule fixed before the substep run, the line is closed. No task seed
+or physical step is used; see the [release guide](v2.7.md) for the phases and
+their audits.
+
 ## Accepted Panda prediction discrepancy
 
 The [saved-state follow-up](panda-prediction-gap-results.md) locates both

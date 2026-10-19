@@ -2,6 +2,36 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v2.7.0: Panda backup diagnostics and validated prefixes
+
+- Diagnosed the v2.6 failures from saved records: 284 of the 298 lost planar
+  successes are timeouts, and all 107 Panda filter aborts come from torques
+  already queued before the projection. Replayed the 20 known unsafe filter
+  episodes and timed first violations against braking arrival.
+- Added a causal backup supervisor with a witness over every lag and the
+  retained FIFO. On 32 already-observed tasks it removed four unsafe episodes
+  and added two position violations at zero delay, caused by the frozen model
+  drifting from the plant; a terminal-capacity screen then rejected all 130
+  tube cases.
+- Added a structured backup on current-state coefficients, a held-command
+  prefix with whole-interval Picard bounds, analytic and regional coefficient
+  enclosures and 128-bit validated arithmetic on the normalized model.
+- Checked validated solves, persistent mass cells, terminal admission and
+  shared-parameter mean-value propagation on one fixture of sixteen mass cells,
+  five constant lags and six 10 ms periods: 0, 160 of 160 over the first two
+  periods, 229 and 281 of 480 periods. The retained structured law is locally
+  unstable at an admissible rest point (spectral radii 1.008 to 1.009); a
+  bounded friction compensation brings them below one.
+- Attributed the remaining residual by origin: the held-flow Taylor remainder
+  carries a median 0.656 of the last velocity residual. A final phase with four
+  held substeps verified 317 of 480 periods and completed none of the eighty
+  branches, so the shared-parameter prefix line closes under its frozen rule.
+- No task seed was opened after v2.6: the failure replay and the backup
+  integration rerun already-observed tasks, and the numerical phases use no
+  physical step. Every phase reproduces its predecessor before new numbers and
+  keeps its own freeze and audit. Controllers, estimators and published
+  references are unchanged.
+
 ## v2.6.0: joint filtering and residual evaluation
 
 - Added a seven-variable weighted torque projection with primal/dual checks,

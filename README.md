@@ -8,7 +8,7 @@
 
 ![SARRL banner](assets/banner.svg)
 
-**SARRL** (Safe Adaptive Residual Reinforcement Learning) is a research stack for robotic control under model mismatch. It combines model-based control with bounded residual reinforcement learning, learned dynamics context, uncertainty-aware policy authority and HOCBF safety filtering.
+**SARRL** (Safe Adaptive Residual Reinforcement Learning) is a research stack for robotic control under model mismatch. It started from model-based control with a bounded SAC residual behind an HOCBF safety filter, and keeps every component and every result. The evidence moved the weight of the project: on the planar benchmark, identifying the controller's model online, with the certificate and an uncertainty margin on the same estimate, carries success and safety without learning. A residual trained on top of that controller lost 24.6 points of success, and the calibrated uncertainty gate reduced success in its frozen screen. Negative results are published with their protocols.
 
 Version 2.3 adds a **seven-joint Panda in MuJoCo** with torque control,
 online payload/friction identification and command-delay alignment. The
@@ -22,7 +22,10 @@ scoring comparison fails its frozen screen, so cumulative alignment remains
 the reference. Version 2.6 completes separate Panda joint-filter and planar
 adaptive-residual comparisons. Both candidates fail their frozen screens:
 the filter reduces fast-move violations but aborts most tasks, and the
-residual loses success against adaptive control. See the
+residual loses success against adaptive control. Version 2.7 diagnoses those
+failures and tests a delayed Panda backup with validated interval arithmetic on
+the normalized model; no branch of the six-period prefix verifies, so that line
+is closed. See the [v2.7 guide](docs/v2.7.md) for the backup study, the
 [v2.6 guide](docs/v2.6.md) for results and audits, the
 [v2.5 guide](docs/v2.5.md) for reference validation, and the
 [v2.3 guide](docs/v2.3.md) for the Panda platform.
@@ -69,6 +72,7 @@ simulation steps. Full-resolution MP4 files are linked from the GIFs.
 | Does Panda adaptation handle added payload and friction? | Adaptive 20/20 successful; fixed 0/20 | Descriptive seven-joint pilot, noise-free and without delay |
 | Does the joint filter pass the Panda fast-move screen? | Unsafe episodes: 104/120 to 20/120; filtered aborts: 107/120 | v2.6 paired pilot; failed screen |
 | Does a residual help the adaptive planar reference? | Primary success: 90.5% adaptive, 65.9% residual mean; difference -24.6 pp | v2.6, five final policies and 100 paired tasks across three scenarios; failed screen |
+| Can a delayed Panda backup be verified offline? | 317 of 480 held periods; 0 of 80 branches complete six | v2.7 validated-arithmetic screen on the normalized model, one fixture; line closed |
 
 These are separate comparisons, with different protocols and seed blocks.
 The [complete results](docs/results.md) include OOD/fault tests, failed
@@ -192,7 +196,7 @@ python examples/panda_reach.py
 ```
 
 The example prints a JSON result and writes no files. It is an installation
-check using an existing engineering-test seed. See the [release guide](docs/v2.6.md)
+check using an existing engineering-test seed. See the [release guide](docs/v2.7.md)
 for the controller scope, complete evidence and source/runtime requirements
 for audits.
 
@@ -218,8 +222,11 @@ unresolved. Score-only memory worsened noisy tracking in its retained pilot;
 joint score/parameter memory failed its changing-age and per-joint tracking
 screen. The experimental joint filter reduces fast-move violations but retains
 unsafe episodes and frequent aborts. The planar adaptive-residual candidate
-fails its success and safety screen. Panda residual learning, an accepted
-seven-joint safety filter, hardware and sim-to-real remain future work.
+fails its success and safety screen. The delayed Panda backup has no verified
+prefix, terminal set or simulator binding; its shared-parameter enclosure line
+closed after four held substeps completed none of eighty branches. Panda
+residual learning, an accepted seven-joint safety filter, hardware and
+sim-to-real remain future work.
 
 HOCBF guarantees are relative to the controller model; physical violations
 remain possible with model mismatch and delayed actuation. Ensemble
@@ -235,7 +242,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {2.6.0},
+  version = {2.7.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```
