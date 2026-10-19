@@ -19,6 +19,44 @@ release. The Panda position/velocity/torque filter completed its frozen
 comparison before the separate planar adaptive-residual study began. Each
 study retains its own seed blocks, metrics, decision rule and every outcome.
 
+The numerical work remains consolidated in one pull request. The initial
+[validated-prefix screen](panda-validated-prefix-results.md) cannot establish
+its first Panda interval. The separately frozen
+[local-coefficient follow-up](panda-parameter-prefix-methods.md) replaces
+global absolute derivative inflation with direct local coefficients and
+retains each continuous payload branch throughout the prefix. Its
+[complete results](panda-parameter-prefix-results.md) remain a diagnostic of
+the declared normalized model. Before a new integration campaign, establish
+a compatible nonlinear terminal set, physical-force and sensor/runtime bounds,
+and an independently audited causal production handoff. Passing a finite
+numerical prefix alone cannot authorize a release.
+
+The [terminal admission screen](panda-terminal-admission-results.md) finds
+certified local sampled instability in the retained structured backup at an
+admissible rest equilibrium for all five lags. A separately declared friction
+compensation cap passes that pointwise test, but neither arm verifies the
+six-interval universal prefix. The cap remains unpromoted. The next design
+must preserve state/parameter dependencies over the longer horizon and
+establish a nonlinear delayed terminal region before integration. It also
+needs an explicit sensor/horizon contract and bounded discrepancy between
+the declared continuous model and the simulator. These requirements cannot
+be replaced by point stability or another task campaign on the failed design.
+
+A separately frozen [shared-parameter propagation method](panda-mean-value-methods.md)
+now retains the same eight physical coordinates in states and queued sends,
+with explicit mean-value and held-flow Taylor remainders. Its complete
+[numerical result](panda-mean-value-results.md) admits 281 intervals against
+229 previously: fifty-two branches gain one interval and none regresses.
+All eighty branches still fail the complete six-interval request. Residual
+enclosures dominate the last successful velocity representations. A
+[remainder split](panda-remainder-split-results.md) attributes a median 0.656
+of the last velocity residual to the held-flow Taylor remainder and 0.344 to
+Jacobian variation. The final phase it justified splits each held period into
+[four substeps](panda-substep-prefix-results.md): 317 periods verify against
+281, but none of the eighty branches completes six. Under the rule fixed
+before that run, the shared-parameter prefix line stops here, and its chain of
+numerical changes is to be released as methods and negative results.
+
 The [Panda filter](panda-joint-filter-results.md) reduces fast-move unsafe
 episodes but fails success and physical-violation criteria. The
 [planar residual](adaptive-residual-results.md) loses 24.6 percentage points

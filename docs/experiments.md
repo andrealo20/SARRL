@@ -48,6 +48,62 @@ explicit center-reference errors. It performs no inverse calculation and
 does not supersede any failed capacity/integration result. The inverse,
 prefix, physical and terminal gates remain ahead of a used-task protocol.
 
+The [combined validated-prefix protocol](panda-validated-prefix-methods.md)
+now consolidates continuous payload solves, outward torque/propagation,
+causal queue records and an independently coded structural audit. It freezes
+three existing static domains and one two-interval fixture for all five lags,
+with no task seeds or physical steps. Its
+[resulting decision](panda-validated-prefix-results.md) preserves every failure
+and cannot authorize a comparison without physical/runtime and nonlinear
+terminal evidence. No integration or release follows merely from passing
+the implementation tests.
+
+The [parameter-preserving follow-up](panda-parameter-prefix-methods.md) evaluates
+coefficients locally and keeps each of the same sixteen continuous payload
+cells through the entire prefix. It reuses the preceding report's exact
+fixtures, constraints, gains, iteration budget and full uncertainty. Every
+cell and constant lag is retained and audited before interpreting the finite
+numerical outcome. This diagnostic opens no physical campaign or task seed;
+the force/runtime, sensor, nonlinear terminal and production-handoff gates
+still precede integration and release.
+
+The [sampled stability and terminal admission protocol](panda-terminal-admission-methods.md)
+adds an exact held-flow equilibrium linearization with validated eigenvalue
+isolation for all five constant lags. It separately declares a backup whose
+viscous feedforward is capped by the full physical lower bound, keeping the
+estimator, payload estimate, gains and physical uncertainty unchanged. Both
+arms request six intervals in all eighty payload/lag branches, so a complete
+pass must include newly computed feedback delivered after lag four. The
+protocol records development exposures and is frozen before the full screen.
+Pointwise stability and a finite prefix remain necessary, insufficient checks;
+the [retained decision](panda-terminal-admission-results.md) cannot bypass the
+nonlinear terminal, force, sensor, runtime or causal handoff gates.
+
+The [shared-parameter propagation protocol](panda-mean-value-methods.md)
+retains the bounded-friction context and all earlier inputs while changing
+the offline numerical representation. Persistent affine generators and
+validated differential/Taylor remainders are tested on the same sixteen
+continuous payload cells and all five constant lags for six intervals.
+The method records its development exposure and initial audit-format error
+before the corrected complete run. Its
+[decision](panda-mean-value-results.md) retains every failure and cannot
+advance a candidate without the outstanding physical and terminal contracts.
+
+A [remainder split](panda-remainder-split-methods.md) reads that retained
+report, rebuilds every accepted interval with the frozen maps and attributes
+the residual radii to Jacobian variation, the held-flow Taylor remainder and
+rounding. Its decision rule was committed before computation. The
+[result](panda-remainder-split-results.md) attributes a median 0.656 of the
+last velocity residual to the Taylor remainder, so one final phase on that
+remainder is justified.
+
+That [final phase](panda-substep-prefix-methods.md) splits each 10 ms held
+period into four 2.5 ms substeps for the tube, acceleration, jerk and Taylor
+endpoint, after reproducing the retained screen with one substep. Its rule,
+fixed before the run, continues the line only if all eighty branches complete
+six periods. The [result](panda-substep-prefix-results.md) completes none, so
+the line stops.
+
 ## Seed populations
 
 Three seed populations have different roles and must remain disjoint:

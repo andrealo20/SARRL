@@ -1,0 +1,567 @@
+{
+  "schema": 1,
+  "scope": "Static normalized-model numerics, not a task comparison",
+  "source_sha256": {
+    "sarrl/__init__.py": "921f64c84f76f492962af735c20ea003ffb04648643ba9ceb4cbdc1651928991",
+    "sarrl/adaptation/__init__.py": "66fc36cae9f8bf5ea72eb23b84e57c76e3760814d366a1cb4777ae86c610c453",
+    "sarrl/adaptation/context.py": "7fe8105001c2eb5cfa07b661cd5ee40cbc98fb9f00f0e27dab43dc0d03eb20d9",
+    "sarrl/controllers/__init__.py": "765e9d1052ce58d7beea6d0f681ee87b4e88198ac9a22a43fe086208c5211bc6",
+    "sarrl/controllers/adaptive_nominal.py": "aa392a4bc5796558205e582cdf2d5fe2f062fa12e25594f216c7a7eab08a69e7",
+    "sarrl/controllers/computed_torque.py": "8b135135c07762db1676b201133fb2918b151856e506a89cf478531b95f79269",
+    "sarrl/controllers/integral_nominal.py": "328404153b6cb4a855f014936c5deb1fbc052ef51ac40d411384f5d038600802",
+    "sarrl/controllers/mpc.py": "af6103828a848ff44662b8bf5f3271cb9baf4480466ead66e60aad8a0e672d7b",
+    "sarrl/controllers/panda_adaptive.py": "b6e045dce1ab7c61ebde2a5c85ba860ca67ae10cacab1aadb12b344fee4acca9",
+    "sarrl/controllers/panda_backup.py": "6fb354bd37595a39a5608bf4abaeab0b2af230502e8564dc33c030b00f6ad440",
+    "sarrl/controllers/panda_delay.py": "cc31cbd439f3635a05f5c04f7bafc5b5bf96213b5ce8e625c33b68aca1bf1682",
+    "sarrl/controllers/panda_estimator_memory.py": "a0fe9e01cb1f0a019563cc22adda548fb8a6f757163bfa7089ee9cf8baa4bb81",
+    "sarrl/controllers/panda_filtered.py": "bca194b717c918b06431a00edb27c10d5559e07a4a4f6caf3e7cf215894acdac",
+    "sarrl/controllers/panda_nominal.py": "1341c02ca257dd6314d3d116a11cbf07e15e4653e8425a252441a47f009e0a98",
+    "sarrl/controllers/panda_score_memory.py": "5a4d3873b7a831926a01f22e66460ee53db32e157a86820dca8092e820791a55",
+    "sarrl/controllers/panda_shared_scoring.py": "0ea514a9fca033e7fd777bf15ba41dd6a60afae758f402aead378b65a671910f",
+    "sarrl/dynamics/__init__.py": "cf2d12f8f178d8329e23bf14ad63ceeb4803485345b4b33c84c8531f815e0ec6",
+    "sarrl/dynamics/planar_arm.py": "96c848ef142bed931b69d2a97daaf4e1834a6cf838c75e509585a2fb45528f92",
+    "sarrl/envs/__init__.py": "842e3dc7f663ec9d842ac41b778b9cc9337468f5b31fccdca3734e6c9691770e",
+    "sarrl/envs/adaptive_margin_residual.py": "ca1fd9ef431dfb0f167602fd114fab9967685794f9e2d67d3e78913e74b794bd",
+    "sarrl/envs/adaptive_projected.py": "d701fbca446ef2136996f34997d3dd37fa0467324bc0a741758b9ec3741dd41d",
+    "sarrl/envs/mujoco_planar.py": "b44a91a4c8e64bac4b315b2b44a80b86296954c7f2849906f1d73e9e992957c5",
+    "sarrl/envs/panda_interface.py": "d871aed19784e2b2b58132066cc345c7a589f47c2c5aeb97dd29bf8294b397a2",
+    "sarrl/envs/panda_joint_reach.py": "313c54d08c0ecb43e7aa2afc9ed6687d69b6dfcc200ed9cc8f215710df6849fe",
+    "sarrl/envs/panda_packet_delay.py": "c4377cfb1814901172c5b457cfb22dc1d5af5454693502877bd507b4e1f7bb05",
+    "sarrl/envs/panda_reach.py": "29b3ffb49a1aedfd8e9e2acc1c11954f4dea84c57b60f260f743b57c66b85e2a",
+    "sarrl/envs/planar_reach.py": "07415ca98cd474004d72d9fefaee324cea486c5e75698a89ee05c654e522c139",
+    "sarrl/envs/safety_projected.py": "ca3b067134c8c9543985c17e661fb8c39bff89164e8114f55dcc47814391e5dc",
+    "sarrl/evaluation/__init__.py": "64a88bfcdc20eed48352f8bf0f85c9d3c83377c1c5d7e5d679ce8ee95d7450b2",
+    "sarrl/evaluation/adaptive_campaign.py": "4445c3f92ff89889a82ad3e8488b8c87a58178ff88a37e5bfff1475a03aaf35c",
+    "sarrl/evaluation/adaptive_pilot.py": "15b153ae0e9c08ac6748445e49681645b74a2c3ae2dad3ca6deccb6787a48ddf",
+    "sarrl/evaluation/calibration_artifact.py": "ac77678b6a1a8a1df27769745ad163240309107eabb25c34a6e58f7e1daabacf",
+    "sarrl/evaluation/control_diagnosis.py": "b955210d5e3fac3471c422453eece795f94f48d513f01e75d5e9375937f3ef1d",
+    "sarrl/evaluation/factorial_campaign.py": "dd527035fe35138526b81c3b1320fcb1234884e59d99fc58aa7ac1993a7464e3",
+    "sarrl/evaluation/gate_calibration.py": "dbdb1dcb979f4dea0fd108a988da703cd77b85e429b1305a41f29e017e29d17e",
+    "sarrl/evaluation/gated.py": "73a38a30ec57750a1984b6940d913935bda22dea04485b223d5451efa4774ee3",
+    "sarrl/evaluation/margin_campaign.py": "c6dcbf67075c87a52858d950a772fc732df4c4eed87e5704c6c74f190fdb84a2",
+    "sarrl/evaluation/mujoco_campaign.py": "8885126c5eb5e44de28fa2f783e810f1aa203034fe9d8bde7010f590642d69e7",
+    "sarrl/evaluation/nominal_integral.py": "0b8daaf1c52f4d3183b423eee33a37964efc109978c85f7c8aed1192d4bcff72",
+    "sarrl/evaluation/panda_adaptation.py": "2dc7ed45f6857e7d762151c0030ea8d14d175a0fbb80aa834fb5cf4935c65e3c",
+    "sarrl/evaluation/panda_backup_audit.py": "7576f71c5b3153474595507c8b75a7e7327af877232df6b2309aff2182570328",
+    "sarrl/evaluation/panda_backup_integration.py": "044a09f622b61a5d5ead6000b841a77e620507c6dc4db9721cf3da16c63c7767",
+    "sarrl/evaluation/panda_delay.py": "d886f51ea6bc8405a6ff132c66aedfcb65e030ca077befb543cd3f7f109ceae2",
+    "sarrl/evaluation/panda_envelope_capacity.py": "cdb91be657d0f00992e61512a759113a9b05f9573269b58a4ae7d8d410a704b1",
+    "sarrl/evaluation/panda_estimator_memory.py": "53540f3eab7eb3b7b2e341a4a16aecb26661bfcb7418ff061ab4c4db0f671890",
+    "sarrl/evaluation/panda_failure_timing.py": "d100891e350859d4128d20b3bf3367aafe55a9b61635a54c2a27805d6b68762c",
+    "sarrl/evaluation/panda_joint_filter.py": "686ae31748bbc02bea379be5441208735dbb451133e202020a187c49438766d6",
+    "sarrl/evaluation/panda_latency_diagnosis.py": "2b80d92a035839d921b9d62589cc29a49e2aff809bc0bc625eb86da32d282fd5",
+    "sarrl/evaluation/panda_nominal.py": "f2cba368abdbdb0048ec41da5fdc00d21717a4529096fd52b62dabda79a9dcc1",
+    "sarrl/evaluation/panda_posture_delay.py": "dce436da740ea88b68509b3e8f9785d9544d160b63db910a98d5350839c7e6ee",
+    "sarrl/evaluation/panda_prediction_gap.py": "c0508264bfe676ffbdc385b265b5b489d871881fd62d98b52f5564067295b600",
+    "sarrl/evaluation/panda_reference_validation.py": "70c483f1d51ff6154f65ee673be53dde2a8d6b2f4cd66aa8e4d50dc104338fcc",
+    "sarrl/evaluation/panda_robustness.py": "29cbf0724087f2439d4d6bbd2e32c2d54403824721f6da343f0fd49e9b353710",
+    "sarrl/evaluation/panda_score_memory.py": "86c936ae76b6c503a5748992b90f5cc71ca906af7b63249fd272240b45bfca79",
+    "sarrl/evaluation/panda_shared_scoring.py": "73116e7588e59741cb9243fab3ee7ba799710a38213014056062aed0fc42e849",
+    "sarrl/evaluation/panda_supervisor_audit.py": "0e2dc3105433d4cdbea0b5ec639e5d7f8cbda1512f739fd39cbc0fcb08cb3f29",
+    "sarrl/evaluation/panda_variable_delay.py": "dc6ac806ed2fd8131638a62845253e2cc0979d5333ec44535066f14bcb9c8059",
+    "sarrl/evaluation/planar_residual.py": "43c646b117e61935f5a3555bbdbcb608a947ef00cc80bc214d6f71b30ed04a01",
+    "sarrl/evaluation/planar_v12.py": "f20040e6d5a2b5ff80d1cf619bd82db197210eb5136e2c7e65e4c3ee2f6a6636",
+    "sarrl/evaluation/planar_v13.py": "fd4073b948618fc928aa088b50ce336517543c65e48a6fbd6910fdf1a99d06a1",
+    "sarrl/evaluation/planar_v14.py": "8fff84d4603322b51cc96fbb631bd9754e0ce0e387790b98389ea55e02417636",
+    "sarrl/evaluation/planar_v15.py": "4cad1ae6a4b5b611a0a31a842f4166a07cf74df6dd5ba87256cf37e3a20ae27b",
+    "sarrl/evaluation/planar_v17.py": "42c898eadc1571898a4e28ab224e86f428aaf3f6325f42176abf5bef85d0aabe",
+    "sarrl/evaluation/planar_v18.py": "740233a8f525cda4ad12302717270556b6f8099f7bb9853a0328f4a8bb4a06e9",
+    "sarrl/evaluation/policy.py": "78a0ffec03230069d8bc968f65f36d2f4f1535db9513f2e370767ab8fe97ca06",
+    "sarrl/evaluation/protocol.py": "4713df4246fb709823f0ca6c6ddc23b90f503544799fc01503f71db934974190",
+    "sarrl/evaluation/provenance.py": "e86fa4677276b035f0de0e75faf7e5e563ea129340c454667bbeea0edd3723c4",
+    "sarrl/evaluation/residual_diagnosis.py": "9c556a7e4fb60fe2722bcdc4240c53f0cd1f3c925f212b87c21431cd31f8d771",
+    "sarrl/evaluation/safety_audit.py": "d9dccf1af7c0e966624a2b9cf57ae3c4dbd02ed2ce31d071a3850ec0dbde9e82",
+    "sarrl/evaluation/stacked.py": "281fe5f6ce0142e41634c5ecc2c7c956e96bbf8121722fa8fe70a96c257f27d5",
+    "sarrl/models/__init__.py": "b4430cd8f82c18bd667b87e59e6843d9af17ae58ac0ea843485294040bef8943",
+    "sarrl/models/residual_dynamics.py": "4058c887a3833eecc73cb4598f281b194ac14851bd2b32f7153a5fcb4c0c5ab3",
+    "sarrl/rl/__init__.py": "a62befed89ffa1990993a38fcd9465496cb9560fbf2d3481f86822adb0f872f3",
+    "sarrl/rl/adaptive_residual_training.py": "f7c8231f31845349c3b99c7449f12a33d988fdcdae5dd462a9d2096cc0a461df",
+    "sarrl/rl/networks.py": "cf3bd42541919b9c792258a82a02c86d9e74bf0eae36d43964b858fa2ba0dc5b",
+    "sarrl/rl/replay_buffer.py": "87b066c849ca825315c9c91d467cd190823cf7aa088993dc0a52ce3fdfad215f",
+    "sarrl/rl/sac.py": "1eeeab5bc401340e022a85a7039508e4900e89c9ab6416148f6d13138a2053bd",
+    "sarrl/rl/training_checkpoint.py": "8f25b97e5e32de4ea3b15764d2ffb2b1f62b7d462d09a6e90cf01e718d5554c8",
+    "sarrl/robots/__init__.py": "2ae69eecdabac32c0511423f5af30494dced1bb0a624380ddc7e7b05cc827d0f",
+    "sarrl/robots/panda.py": "0512126c7f1c233877a2edae04b84c6f366fa180965d872d22c38a125e9df2ad",
+    "sarrl/runtime/__init__.py": "02d39a8c00d27444a49ddfba9a0c1624020bde21dc00e40c64ee416d5c9d97a5",
+    "sarrl/runtime/control_stack.py": "99527023d7f882c26361e9ce238ea371f8423b5314a910a43b5c3a0b22188b15",
+    "sarrl/safety/__init__.py": "1b017b4f99fbb2ed764375cd15197f237ba7465f2a9fdaf8d2dfe821907218a1",
+    "sarrl/safety/filter.py": "1163d37eed99cffbc509c7ca0389704e02ca7a8671d6495dbbf01cbb35e73293",
+    "sarrl/safety/panda_analytic_region.py": "c7b6e060a69bb4643576f09608a35164a29e62ea771bc25433305f6037cd8aa0",
+    "sarrl/safety/panda_backup.py": "f967f12eb44764d1c083cc652a9c379a1e5f87d3268409de849099c6dd7dabc1",
+    "sarrl/safety/panda_backup_tube.py": "47dd2d19d8605d8717aacc75934bc8bd80ad539130cf2e25d6596c19bf9153ce",
+    "sarrl/safety/panda_center_arithmetic.py": "9ec37a7ec65d4f7d164da4d553ae8c117de770bd6dae73463f5a5e0bfccbe5f2",
+    "sarrl/safety/panda_joint_filter.py": "8f9f9c2a2dc645b5a26eb9a7ef40da763cae6bd6cf25f49e285341ac2e4bf5b7",
+    "sarrl/safety/panda_kinematic_coefficients.py": "a3884f23370406c825c06233277d47b331d628c1223a5df8eca86a22e6557886",
+    "sarrl/safety/panda_prefix_audit.py": "7452d6f9bde114e1816441bae35f134f94857a69e0b61f126cb48dd77751c088",
+    "sarrl/safety/panda_regional_arithmetic.py": "4f4ab47aa03cb60660fd931fe05a8e6c72ceeed60fc539924e8e55756aa5f38a",
+    "sarrl/safety/panda_regional_bounds.py": "4dfdbbe3a48d665ed59429bca773a0bb7947c219e25b4242f705dafd85e44568",
+    "sarrl/safety/panda_state_region.py": "572b38cd500451773a504ab4a0bef207b9d611a73e4bffc190a50e19d4646980",
+    "sarrl/safety/panda_structured_backup.py": "8bcbca6fbfcb8fe603dde375cacdd3adb7642066c40299610752af285d9067af",
+    "sarrl/safety/panda_structured_prefix.py": "9bb11589c0ad62715d47a333933bd4ae6f7bce312fdb1ee3b60be8390f718743",
+    "sarrl/safety/panda_supervisor.py": "f85fc291d53e000e84534c05ee32f7072bb8df9e5cbf65cc1edf30fab44702d4",
+    "sarrl/safety/panda_validated_dynamics.py": "ab18a312cf8eae2e6875e8bc95c2ae364f5f4f8e7ea34e50dbbb5bc5b36fb1c3",
+    "sarrl/safety/panda_validated_prefix.py": "e92df744fa13e9573c9177bcb8978ff34f55a9def2e5a080ed346023ab6b5ee5",
+    "sarrl/utils/__init__.py": "7259dfc0370c3789c7fb621677b13d963e63606c1525ad90eac5643128844468",
+    "sarrl/utils/seeding.py": "87abee3c285a131eb8f433d3772c2ca7e6985ec57d2f6d6b545a8dd9778dbf24",
+    "sarrl/utils/spaces.py": "cb01aa2330a60d11dc4b06cbb73972bd02e4d8893aa340d883a7522b05aa694a",
+    "tools/assess_panda_validated_prefix.py": "8547a88dfdea08a26b70799dcadbaa530ef550ba8a55e763c371979cd108545a",
+    "docs/panda-validated-prefix-methods.md": "a0f8e3583513907baebb7ca02d552cc2a2c2544e927ee2191532431f41767a36"
+  },
+  "source_hash_normalization": "CRLF to LF",
+  "model_xml_sha256": "46742fcf851c1a1a09327415bb4b3bc8d788800460acf2050af54ba4c096b9be",
+  "compiled_constants_sha256": "12c77623cacb1eb8cc9b5d8af82941f6817e164b91b3d1e21b0d420aeaf7a624",
+  "runtime": {
+    "python": "3.12.3",
+    "numpy": "2.5.2",
+    "scipy": "1.18.1",
+    "mujoco": "3.13.0",
+    "python_flint": "0.9.0"
+  },
+  "inputs": {
+    "parameters": {
+      "lower": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "upper": [
+        2.5,
+        3.0,
+        3.0,
+        3.0,
+        3.0,
+        3.0,
+        3.0,
+        3.0
+      ]
+    },
+    "context": {
+      "anchor": [
+        0.0,
+        -0.35,
+        0.0,
+        -1.8,
+        0.0,
+        1.5,
+        0.6
+      ],
+      "parameters": [
+        1.5,
+        1.75,
+        1.75,
+        1.75,
+        1.75,
+        1.75,
+        1.75,
+        1.75
+      ],
+      "kp": 25.0,
+      "kd": 10.0
+    },
+    "candidate": [
+      0.0,
+      -20.193359960175297,
+      -0.3172463725878828,
+      24.803933053132962,
+      0.6435603326660478,
+      3.1805982591378243,
+      -0.0008759602838856416
+    ],
+    "history": [
+      [
+        0.0,
+        -20.193359960175297,
+        -0.3172463725878828,
+        24.803933053132962,
+        0.6435603326660478,
+        3.1805982591378243,
+        -0.0008759602838856416
+      ],
+      [
+        0.0,
+        -20.193359960175297,
+        -0.3172463725878828,
+        24.803933053132962,
+        0.6435603326660478,
+        3.1805982591378243,
+        -0.0008759602838856416
+      ],
+      [
+        0.0,
+        -20.193359960175297,
+        -0.3172463725878828,
+        24.803933053132962,
+        0.6435603326660478,
+        3.1805982591378243,
+        -0.0008759602838856416
+      ],
+      [
+        0.0,
+        -20.193359960175297,
+        -0.3172463725878828,
+        24.803933053132962,
+        0.6435603326660478,
+        3.1805982591378243,
+        -0.0008759602838856416
+      ]
+    ],
+    "measured_q": [
+      0.0,
+      -0.35,
+      0.0,
+      -1.8,
+      0.0,
+      1.5,
+      0.6
+    ],
+    "measured_v": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "errors": {
+      "position_measurement": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "velocity_measurement": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "position_defect": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "velocity_defect": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "command_error": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    "config": {
+      "control_dt": 0.01,
+      "max_delay_steps": 4,
+      "picard_iterations": 20,
+      "inflation_fraction": 0.1,
+      "minimum_inflation": 1e-09
+    },
+    "requested_intervals": 2,
+    "mass_cells": 16,
+    "precision_bits": 128,
+    "q_domain": {
+      "lower": [
+        -0.5,
+        -0.85,
+        -0.5,
+        -2.3,
+        -0.5,
+        1.0,
+        0.09999999999999998
+      ],
+      "upper": [
+        0.5,
+        0.15000000000000002,
+        0.5,
+        -1.3,
+        0.5,
+        2.0,
+        1.1
+      ]
+    },
+    "v_domain": {
+      "lower": [
+        -1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "upper": [
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "torque_limit": [
+      87.0,
+      87.0,
+      87.0,
+      87.0,
+      12.0,
+      12.0,
+      12.0
+    ],
+    "assumption": "Normalized ideal unconstrained model; no sensor or discrete runtime binding"
+  },
+  "static_cases": [
+    {
+      "requested_radius": 0.0001,
+      "q_domain": {
+        "lower": [
+          -0.0001,
+          -0.35009999999999997,
+          -0.0001,
+          -1.8001,
+          -0.0001,
+          1.4999,
+          0.5999
+        ],
+        "upper": [
+          0.0001,
+          -0.3499,
+          0.0001,
+          -1.7999,
+          0.0001,
+          1.5001,
+          0.6001
+        ]
+      },
+      "v_domain": {
+        "lower": [
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01
+        ],
+        "upper": [
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01
+        ]
+      },
+      "available": true,
+      "acceleration": {
+        "lower": [
+          -0.706521394662559,
+          -0.7561358558014035,
+          -0.5611013201996684,
+          -4.188443947583437,
+          -1.2083780197426677,
+          -2.325654398649931,
+          -0.47729665553197265
+        ],
+        "upper": [
+          0.7129141939803958,
+          0.9709066776558757,
+          0.5407288074493408,
+          5.661375176161528,
+          0.8635211950168014,
+          4.114914048463106,
+          0.4904455572832376
+        ]
+      }
+    },
+    {
+      "requested_radius": 0.001,
+      "q_domain": {
+        "lower": [
+          -0.001,
+          -0.351,
+          -0.001,
+          -1.801,
+          -0.001,
+          1.499,
+          0.599
+        ],
+        "upper": [
+          0.001,
+          -0.349,
+          0.001,
+          -1.7990000000000002,
+          0.001,
+          1.501,
+          0.601
+        ]
+      },
+      "v_domain": {
+        "lower": [
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01
+        ],
+        "upper": [
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01
+        ]
+      },
+      "available": true,
+      "acceleration": {
+        "lower": [
+          -2.9437067676335573,
+          -1.1977235600352287,
+          -2.199708992615342,
+          -4.9049485437572,
+          -1.7314498396590352,
+          -3.170131552964449,
+          -0.8695089719258249
+        ],
+        "upper": [
+          2.9502440374344587,
+          1.260754537768662,
+          2.053922673687339,
+          6.141165312379599,
+          1.791072554886341,
+          4.555282209068537,
+          0.783070380333811
+        ]
+      }
+    },
+    {
+      "requested_radius": 0.01,
+      "q_domain": {
+        "lower": [
+          -0.01,
+          -0.36,
+          -0.01,
+          -1.81,
+          -0.01,
+          1.49,
+          0.59
+        ],
+        "upper": [
+          0.01,
+          -0.33999999999999997,
+          0.01,
+          -1.79,
+          0.01,
+          1.51,
+          0.61
+        ]
+      },
+      "v_domain": {
+        "lower": [
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01,
+          -0.01
+        ],
+        "upper": [
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01,
+          0.01
+        ]
+      },
+      "available": false,
+      "reason": "validated_mass_solve_unavailable"
+    }
+  ],
+  "prefix": {
+    "cases": [
+      {
+        "lag": 0,
+        "prefix_contained": false,
+        "reason": "whole_interval_bounds_not_established",
+        "intervals": []
+      },
+      {
+        "lag": 1,
+        "prefix_contained": false,
+        "reason": "whole_interval_bounds_not_established",
+        "intervals": []
+      },
+      {
+        "lag": 2,
+        "prefix_contained": false,
+        "reason": "whole_interval_bounds_not_established",
+        "intervals": []
+      },
+      {
+        "lag": 3,
+        "prefix_contained": false,
+        "reason": "whole_interval_bounds_not_established",
+        "intervals": []
+      },
+      {
+        "lag": 4,
+        "prefix_contained": false,
+        "reason": "whole_interval_bounds_not_established",
+        "intervals": []
+      }
+    ]
+  },
+  "structural_audit": {
+    "checked_intervals": 0,
+    "prefix_contained": false,
+    "terminal_verified": false,
+    "physical_binding_verified": false
+  },
+  "decision": {
+    "numerical_prefix_contained": false,
+    "terminal_verified": false,
+    "physical_force_binding_verified": false,
+    "sensor_runtime_binding_verified": false,
+    "causal_production_handoff_verified": false,
+    "integration_allowed": false,
+    "task_comparison_allowed": false,
+    "candidate_promoted": false,
+    "release_allowed": false,
+    "physical_step_calls": 0,
+    "task_seeds_opened": 0
+  }
+}

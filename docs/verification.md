@@ -3,6 +3,110 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Shared-parameter held-flow propagation
+
+The [shared-coordinate implementation](panda-mean-value-methods.md) carries
+eight persistent physical-parameter generators in states and queued torques.
+Thirty-one new tests cover exact rational mean-value/rounding inclusions,
+second-order integral remainders, independent ordinary Panda coefficients,
+all 29 acceleration derivative columns at nonzero velocity, parameter-corner
+fibers and model/cache/precision failures. Ordinary differences cross-check
+formulas and never supply an acceptance bound.
+
+A manufactured held-acceleration model has exact trajectories for five
+parameter fibers, all five lags and six intervals. Dense partial-time points
+and queued command generators are checked. Its thirty intervals pass an
+auditor that never calls the search and verifies Taylor endpoint inequalities
+with exact Fractions. Changed generators, states, queues, parameters,
+derivative bounds, input histories and terminal flags are rejected. Nonzero
+unstructured physical remainders and partial-runtime defects fail closed.
+All 115 distinct focused tests pass across this increment and the preceding
+sampled, snapshot, local and validated-prefix modules. The
+[complete numerical outcome](panda-mean-value-results.md) remains separate
+from these implementation checks and from physical safety evidence.
+
+## Remainder split
+
+The [split](panda-remainder-split-methods.md) recomputes all 281 accelerations
+and 201 feedback sends of the retained shared-parameter report and matches
+them exactly before attributing any radius. Three tests cover the bookkeeping:
+a Taylor-only branch, a variation term carried through propagation, and the
+rejection of a reconstruction wider than the record. The
+[result](panda-remainder-split-results.md) is a description of retained
+enclosures, not a new bound.
+
+## Held substeps
+
+The prefix and its auditor take a substep count whose binary64 lengths must
+sum exactly to the held period; with one substep both equal the retained
+code path, and the [substep run](panda-substep-prefix-methods.md) reproduces
+the retained report field for field in all sixteen cells before computing
+four substeps. On the manufactured model, four substeps enclose the exact
+trajectories of three parameter fibers at every substep for all five lags and
+pass the auditor on 120 records; a send changed inside a held period is
+rejected. Two further tests cover the decision rule and report preservation.
+
+## Sampled stability and terminal admission
+
+The [admission checks](panda-terminal-admission-methods.md) use an augmented
+matrix exponential for exact held linear flow and validated Rump eigenvalue
+isolation, with pending torques retained for each constant lag. Tests compare
+the map with an exact rational double integrator and an independent ordinary
+kinematic/matrix-exponential reference. They check the original admissible
+unstable point, the separate bounded-friction point at lag four, precision
+refinement and restoration after injected failures. A pointwise pass does not
+establish nonlinear terminal invariance or full-parameter stability.
+
+Thirty-four new tests also cover unchanged estimates, gains and physical
+uncertainty, malformed contracts, bounded cache eviction and disabled caching,
+compiled mutation on cache hits, state coverage, exact snapshot/fresh
+coefficient equality, immutable outputs and report/source guards. All 158
+focused tests pass across the new modules and existing center, regional,
+structured and validated prefix modules. The full six-interval assessment and
+its replay are reported separately in the
+[retained results](panda-terminal-admission-results.md).
+
+## Local coefficients and persistent payload branches
+
+The [local evaluator](panda-parameter-prefix-methods.md) evaluates normalized
+rigid-body coefficients directly over continuous state boxes. Six deterministic
+corner patterns are covered by the box enclosures for mass, mass derivatives,
+gravity and bias. Zero-width boxes reproduce the existing center results
+exactly with dynamics and integration callbacks prohibited. Source changes
+and injected failures reject the calculation and restore precision.
+
+Twenty new tests also check outward rational payload coverage at ordinary,
+adjacent and subnormal endpoints, all seven unchanged friction ranges, thirty
+manufactured cell/lag intervals, and rejection of missing cells, parameter
+gaps, changed friction, missing lags and false completion flags. A single
+failed branch or an empty result cannot pass. Report overwrite/source guards
+and the original baseline hash are checked. The
+[frozen Panda comparison](panda-parameter-prefix-results.md) separately records
+the complete numerical result and its physical/terminal limitations.
+An actual Panda two-interval subcell case checks feedback replay on the same
+outward measurement boxes and rejects an injected loss of exact sensor-box
+coverage. No overlap or inclusion tolerance is used.
+
+## Validated Panda solves and causal prefixes
+
+The [combined numerical increment](panda-validated-prefix-methods.md) uses
+ball linear solves over continuous payload cells and outward raw-feedback,
+error-inflation and full-interval propagation arithmetic. Thirty new tests
+cover exact rational cell boundaries and solutions, subnormal operations,
+invalid precision, singular systems, three manufactured parameter fixtures
+with dense independent trajectories for all five lags, and higher-precision
+Panda point solves. State-domain, raw torque and coefficient-domain failures
+reject the query.
+
+The structural auditor independently replays queues and checks propagation
+inequalities with exact rationals. It rejects missing lags, changed first
+sends or deliveries, acceleration/endpoint alterations and false completion
+flags. It shares the trusted dynamics evaluator for coefficient/torque bounds;
+it is not a separate physical-model implementation. CLI checks preserve an
+existing report and reject changed source fingerprints. Tests exercise no
+production handoff. The [static Panda results](panda-validated-prefix-results.md)
+remain separate from manufactured trajectory tests and physical task evidence.
+
 ## Outward Panda regional coefficients
 
 The [regional arithmetic evaluator](panda-regional-arithmetic-design.md)
