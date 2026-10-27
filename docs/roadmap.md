@@ -13,6 +13,7 @@ are retained and can change the scope of subsequent releases.
 | v2.5 | Completed Panda reference validation and shared scoring | Reference criteria passed on 4,000 fresh episodes; 30,000 saved-input timing cycles retained; separate 1,920-episode shared-scoring candidate failed its screen |
 | v2.6 | Completed joint filtering and residual-learning evaluation | 480 Panda episodes and 2,100 planar held-out episodes after five complete training runs; both candidates fail their frozen screens |
 | v2.7 | Completed backup diagnosis and validated-prefix study | Saved-record diagnoses, a 32-task integration replay and five offline numerical phases on the normalized model; no prefix branch completes and the line is closed |
+| v2.8 | Completed selected-delay filter mechanism test | 480 v2.6 records reproduced and 720 fresh paired episodes; fewer 20 ms aborts, unchanged 40 ms failure and seven new velocity violations, so the candidate does not advance |
 | v3.0, conditional | Integrated Panda stack | Residual learning justified by preceding results, seven-joint filter integration, component ablations and consolidated APIs |
 
 Version 2.6 combines the previously separate v2.6 and v2.7 increments in one

@@ -1,0 +1,104 @@
+{
+ "advancement": {
+  "baseline_fast_unsafe_fraction": 0.7666666666666667,
+  "failures": [
+   {
+    "condition": "fast_clean_d00",
+    "criterion": "success_count"
+   },
+   {
+    "condition": "fast_clean_d20",
+    "criterion": "filtered_unsafe"
+   },
+   {
+    "condition": "fast_clean_d40",
+    "criterion": "filtered_unsafe"
+   },
+   {
+    "condition": "fast_noise_d00",
+    "criterion": "filtered_unsafe"
+   },
+   {
+    "condition": "fast_noise_d00",
+    "criterion": "success_count"
+   },
+   {
+    "condition": "fast_noise_d20",
+    "criterion": "filtered_unsafe"
+   },
+   {
+    "condition": "fast_noise_d40",
+    "criterion": "filtered_unsafe"
+   }
+  ],
+  "fast_unsafe_fraction_reduction": 0.575,
+  "filter_advances": false,
+  "meaning": "engineering screen; no general safety certificate",
+  "reference_controller": "bank_align"
+ },
+ "meaning": "mechanism test on twenty paired tasks per cell; no safety certificate",
+ "mechanism": {
+  "aborts_per_cell": {
+   "fast_clean_d00": {
+    "robust_filter": 16,
+    "selected_filter": 12
+   },
+   "fast_clean_d20": {
+    "robust_filter": 16,
+    "selected_filter": 14
+   },
+   "fast_clean_d40": {
+    "robust_filter": 16,
+    "selected_filter": 16
+   },
+   "fast_noise_d00": {
+    "robust_filter": 16,
+    "selected_filter": 12
+   },
+   "fast_noise_d20": {
+    "robust_filter": 16,
+    "selected_filter": 14
+   },
+   "fast_noise_d40": {
+    "robust_filter": 16,
+    "selected_filter": 16
+   },
+   "slow_clean_d00": {
+    "robust_filter": 0,
+    "selected_filter": 0
+   },
+   "slow_clean_d20": {
+    "robust_filter": 0,
+    "selected_filter": 0
+   },
+   "slow_clean_d40": {
+    "robust_filter": 0,
+    "selected_filter": 0
+   },
+   "slow_noise_d00": {
+    "robust_filter": 0,
+    "selected_filter": 0
+   },
+   "slow_noise_d20": {
+    "robust_filter": 0,
+    "selected_filter": 0
+   },
+   "slow_noise_d40": {
+    "robust_filter": 0,
+    "selected_filter": 0
+   }
+  },
+  "aborts_reduced": true,
+  "no_new_violations": false,
+  "no_success_loss": true,
+  "paired_robust_success_selected_failure": 0,
+  "paired_robust_unsafe_selected_safe": 0,
+  "paired_selected_success_robust_failure": 12,
+  "paired_selected_unsafe_robust_safe": 7,
+  "prediction_A": true,
+  "prediction_B": true,
+  "risk_C_materialised": true,
+  "selected_episodes_excluding_true_age": 0,
+  "zero_ms_abort_reduction": "structural; reported, not evidence"
+ }
+}

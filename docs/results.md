@@ -1,5 +1,16 @@
 # Retained results
 
+## v2.8 Panda filter on the selected delay
+
+The v2.6 joint filter rebuilt over the delay ages the bank cannot yet exclude
+was compared with the v2.6 filter and the cumulative reference on 720 fresh
+paired episodes, after reproducing all 480 v2.6 records. On fast moves it
+aborts 84 of 120 tasks against 96 and succeeds on 36 against 24, but has 23
+unsafe episodes against 16: seven tasks the v2.6 filter kept safe exceed the
+velocity limit after a later abort, one of them at zero delay. The 40 ms
+failure is unchanged. The candidate does not advance; see the
+[results](panda-selected-filter-results.md) and the [release guide](v2.8.md).
+
 ## v2.7 validated Panda prefixes
 
 Five offline phases enclose the normalized seven-joint model with a delayed

@@ -3,6 +3,19 @@
 This file distinguishes checks that were actually executed from features that are only implemented or
 planned.
 
+## Selected-delay joint filter
+
+Eleven tests cover the tied-age rule with non-finite and misshaped scores, the
+equality of the explicit all-age set with the default filter, the subset
+property for unchanged commands, a manufactured case where all ages abort and
+the selected age reaches the QP, invalid age arguments, the latched
+`invalid_age_set` braking path, the paired decision rules and the runner's
+output and worker guards. Before any new seed the runner reproduced all 480
+v2.6 records through the new entry point with no mismatch, 720,000 physical
+substeps. The [auditor](panda-selected-filter-results.md) then verified 720
+records, 36 causal replays that recompute the age set from recorded scores,
+54,000 substeps and 4,902 feasible projections on the production host.
+
 ## Shared-parameter held-flow propagation
 
 The [shared-coordinate implementation](panda-mean-value-methods.md) carries

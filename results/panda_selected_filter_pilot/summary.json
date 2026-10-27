@@ -1,0 +1,1106 @@
+{
+ "cells": {
+  "fast_clean_d00/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0018027046662235744,
+    0.005213346463457488,
+    0.0018383531504131433,
+    0.008359050821506913,
+    0.00728163260556217,
+    0.005064317514699065,
+    0.0022673367540683507
+   ],
+   "successes": 9,
+   "unsafe_episodes": 11
+  },
+  "fast_clean_d00/robust_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    5,
+    5,
+    6,
+    6,
+    6,
+    6,
+    7,
+    7,
+    7,
+    8,
+    8,
+    12,
+    12,
+    12,
+    12,
+    13
+   ],
+   "aborts": 16,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.08288156238012703,
+    0.056288718668017115,
+    0.08141110790694639,
+    0.08981750772592609,
+    0.12451029509432647,
+    0.08163551436627545,
+    0.09633726477094448
+   ],
+   "successes": 4,
+   "unsafe_episodes": 0
+  },
+  "fast_clean_d00/selected_filter": {
+   "abort_reasons": [
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain"
+   ],
+   "abort_steps": [
+    8,
+    8,
+    8,
+    9,
+    9,
+    10,
+    11,
+    11,
+    11,
+    11,
+    12,
+    13
+   ],
+   "aborts": 12,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.05113678125209111,
+    0.02715806292487703,
+    0.03533229441915457,
+    0.05074523749136698,
+    0.07325625069013957,
+    0.06315654116651284,
+    0.05734649770873531
+   ],
+   "successes": 8,
+   "unsafe_episodes": 0
+  },
+  "fast_clean_d20/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.008334066796410985,
+    0.014458256806657802,
+    0.008714777216109661,
+    0.019652642532197766,
+    0.017190765940480232,
+    0.012723221676769949,
+    0.00989834267856933
+   ],
+   "successes": 3,
+   "unsafe_episodes": 17
+  },
+  "fast_clean_d20/robust_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    5,
+    6,
+    6,
+    6,
+    7,
+    7,
+    7,
+    7,
+    7,
+    8,
+    9,
+    9,
+    11,
+    13,
+    13,
+    13
+   ],
+   "aborts": 16,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0918294865259435,
+    0.0646774141062731,
+    0.08455234487148469,
+    0.10161787784037854,
+    0.12515301480685997,
+    0.09552595217793367,
+    0.10799141395556681
+   ],
+   "successes": 4,
+   "unsafe_episodes": 0
+  },
+  "fast_clean_d20/selected_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    8,
+    9,
+    9,
+    9,
+    9,
+    10,
+    11,
+    11,
+    11,
+    12,
+    12,
+    12,
+    12,
+    15
+   ],
+   "aborts": 14,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.05890402611980263,
+    0.0376731380059501,
+    0.05252408034138599,
+    0.07266640852141663,
+    0.09399514127752996,
+    0.07662589183180435,
+    0.06110883039882492
+   ],
+   "successes": 6,
+   "unsafe_episodes": 3
+  },
+  "fast_clean_d40/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.02381998264782352,
+    0.03375004473761636,
+    0.02496848536598335,
+    0.03846331152357951,
+    0.029717735097647035,
+    0.022716810472981845,
+    0.01768527944479971
+   ],
+   "successes": 2,
+   "unsafe_episodes": 18
+  },
+  "fast_clean_d40/robust_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    9,
+    9,
+    9,
+    10,
+    10,
+    11,
+    11,
+    11,
+    11,
+    12,
+    13,
+    13,
+    13,
+    14,
+    16,
+    17
+   ],
+   "aborts": 16,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0900800141549579,
+    0.06050544879263816,
+    0.07400686180990172,
+    0.09257926584783051,
+    0.11415728585072475,
+    0.08486897577706816,
+    0.0749495030742913
+   ],
+   "successes": 4,
+   "unsafe_episodes": 8
+  },
+  "fast_clean_d40/selected_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    9,
+    9,
+    9,
+    10,
+    11,
+    11,
+    11,
+    11,
+    12,
+    12,
+    12,
+    13,
+    13,
+    13,
+    14,
+    16
+   ],
+   "aborts": 16,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.08956474168136844,
+    0.059981134111476334,
+    0.07350162875445683,
+    0.09379228873949519,
+    0.11892232174166566,
+    0.08842973113563722,
+    0.07327650693427416
+   ],
+   "successes": 4,
+   "unsafe_episodes": 9
+  },
+  "fast_noise_d00/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0017986004088065837,
+    0.00525687928379276,
+    0.0018639875445555533,
+    0.008405974698632275,
+    0.007375500505153327,
+    0.005091852110732286,
+    0.002267635904785734
+   ],
+   "successes": 9,
+   "unsafe_episodes": 11
+  },
+  "fast_noise_d00/robust_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    5,
+    5,
+    6,
+    6,
+    6,
+    6,
+    7,
+    7,
+    7,
+    8,
+    8,
+    12,
+    12,
+    12,
+    12,
+    13
+   ],
+   "aborts": 16,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.08292205920001505,
+    0.05628797754580507,
+    0.08138894893740731,
+    0.08959378856835634,
+    0.12477926823026246,
+    0.0819037712044071,
+    0.09631532384021776
+   ],
+   "successes": 4,
+   "unsafe_episodes": 0
+  },
+  "fast_noise_d00/selected_filter": {
+   "abort_reasons": [
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain",
+    "outside_prediction_domain"
+   ],
+   "abort_steps": [
+    7,
+    8,
+    8,
+    9,
+    9,
+    11,
+    11,
+    11,
+    11,
+    12,
+    13,
+    13
+   ],
+   "aborts": 12,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.05375049654217081,
+    0.027573482741530802,
+    0.0338750746945118,
+    0.051400548709652535,
+    0.06986996953370753,
+    0.06693266850937293,
+    0.057621481349185
+   ],
+   "successes": 8,
+   "unsafe_episodes": 1
+  },
+  "fast_noise_d20/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.008382508980931163,
+    0.01455346913563843,
+    0.008793767612330037,
+    0.019958641936710608,
+    0.01732448358631122,
+    0.012916015766963749,
+    0.009892658966382861
+   ],
+   "successes": 3,
+   "unsafe_episodes": 17
+  },
+  "fast_noise_d20/robust_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    5,
+    6,
+    6,
+    6,
+    7,
+    7,
+    7,
+    7,
+    7,
+    8,
+    9,
+    9,
+    12,
+    13,
+    13,
+    13
+   ],
+   "aborts": 16,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.09197138609202975,
+    0.06571309764871056,
+    0.08526037377901582,
+    0.10085634821990028,
+    0.12514818295073077,
+    0.09621529042996632,
+    0.10743629933508356
+   ],
+   "successes": 4,
+   "unsafe_episodes": 0
+  },
+  "fast_noise_d20/selected_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    8,
+    9,
+    9,
+    9,
+    9,
+    9,
+    11,
+    11,
+    11,
+    12,
+    12,
+    12,
+    13,
+    15
+   ],
+   "aborts": 14,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.05612926258944913,
+    0.038019697846660316,
+    0.05164722465539083,
+    0.07308046518990545,
+    0.09450583289126553,
+    0.07757875932868682,
+    0.06222662726129029
+   ],
+   "successes": 6,
+   "unsafe_episodes": 2
+  },
+  "fast_noise_d40/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.02386650952950156,
+    0.0338437322360404,
+    0.024944925203984426,
+    0.038425428919031085,
+    0.030050772670115265,
+    0.022866596884864428,
+    0.017672575798057272
+   ],
+   "successes": 2,
+   "unsafe_episodes": 18
+  },
+  "fast_noise_d40/robust_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    9,
+    9,
+    9,
+    10,
+    10,
+    11,
+    11,
+    11,
+    11,
+    12,
+    12,
+    13,
+    14,
+    14,
+    16,
+    17
+   ],
+   "aborts": 16,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.08880372721067352,
+    0.062000673665738026,
+    0.07755988290804318,
+    0.09249191947505633,
+    0.11609634817258482,
+    0.08608065305247965,
+    0.07588116589335306
+   ],
+   "successes": 4,
+   "unsafe_episodes": 8
+  },
+  "fast_noise_d40/selected_filter": {
+   "abort_reasons": [
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation",
+    "pending_command_violation"
+   ],
+   "abort_steps": [
+    9,
+    9,
+    9,
+    10,
+    10,
+    11,
+    11,
+    11,
+    12,
+    12,
+    12,
+    12,
+    13,
+    14,
+    14,
+    16
+   ],
+   "aborts": 16,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.08938581404773371,
+    0.06177446795485673,
+    0.07625090220325643,
+    0.09376760075100424,
+    0.12187894259666494,
+    0.09009618966996183,
+    0.07467849597967667
+   ],
+   "successes": 4,
+   "unsafe_episodes": 8
+  },
+  "slow_clean_d00/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0006695951196735145,
+    0.0002525485309538213,
+    0.0006355705125908785,
+    0.0005890773583362098,
+    0.0012519602613461436,
+    0.0010699074789112491,
+    0.001841546537807068
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d00/robust_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0006695951196735145,
+    0.0002525485309538213,
+    0.0006355705125908785,
+    0.0005890773583362098,
+    0.0012519602613461436,
+    0.0010699074789112491,
+    0.001841546537807068
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d00/selected_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0006695951196735145,
+    0.0002525485309538213,
+    0.0006355705125908785,
+    0.0005890773583362098,
+    0.0012519602613461436,
+    0.0010699074789112491,
+    0.001841546537807068
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d20/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0012473821711677991,
+    0.001675601489445162,
+    0.0012845527040369104,
+    0.004837613474950308,
+    0.0021460149285938866,
+    0.0020950240478135903,
+    0.0026724769877042413
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d20/robust_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0012473821711677991,
+    0.001675601489445162,
+    0.0012845527040369104,
+    0.004837613474950308,
+    0.0021460149285938866,
+    0.0020950240478135903,
+    0.0026724769877042413
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d20/selected_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0012473821711677991,
+    0.001675601489445162,
+    0.0012845527040369104,
+    0.004837613474950308,
+    0.0021460149285938866,
+    0.0020950240478135903,
+    0.0026724769877042413
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d40/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.002158771693589427,
+    0.003931051989158139,
+    0.002365880456498996,
+    0.010202111816668512,
+    0.0031414046863943697,
+    0.003643509335248104,
+    0.003655007036228905
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d40/robust_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.002158771693589427,
+    0.003931051989158139,
+    0.002365880456498996,
+    0.010202111816668512,
+    0.0031414046863943697,
+    0.003643509335248104,
+    0.003655007036228905
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_clean_d40/selected_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.002158771693589427,
+    0.003931051989158139,
+    0.002365880456498996,
+    0.010202111816668512,
+    0.0031414046863943697,
+    0.003643509335248104,
+    0.003655007036228905
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d00/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0006888412681219188,
+    0.0003240625232720211,
+    0.0006563224085672498,
+    0.0006330590469323908,
+    0.001312723477477815,
+    0.0011077402178926703,
+    0.0018533246069615834
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d00/robust_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0006888412681219188,
+    0.0003240625232720211,
+    0.0006563224085672498,
+    0.0006330590469323908,
+    0.001312723477477815,
+    0.0011077402178926703,
+    0.0018533246069615834
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d00/selected_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0006888412681219188,
+    0.0003240625232720211,
+    0.0006563224085672498,
+    0.0006330590469323908,
+    0.001312723477477815,
+    0.0011077402178926703,
+    0.0018533246069615834
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d20/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0012531216196748783,
+    0.0016884466169274747,
+    0.0012776600110184883,
+    0.004936210466836032,
+    0.002240423195065737,
+    0.0021718842477714217,
+    0.002683660982679717
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d20/robust_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0012531216196748783,
+    0.0016884466169274747,
+    0.0012776600110184883,
+    0.004936210466836032,
+    0.002240423195065737,
+    0.0021718842477714217,
+    0.002683660982679717
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d20/selected_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.0012531216196748783,
+    0.0016884466169274747,
+    0.0012776600110184883,
+    0.004936210466836032,
+    0.002240423195065737,
+    0.0021718842477714217,
+    0.002683660982679717
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d40/cumulative": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.002177322695707482,
+    0.0039379348819147085,
+    0.002363163386242205,
+    0.010511275304877462,
+    0.003332082853453342,
+    0.0037535038198288407,
+    0.003667240786921388
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d40/robust_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.002177322695707482,
+    0.0039379348819147085,
+    0.002363163386242205,
+    0.010511275304877462,
+    0.003332082853453342,
+    0.0037535038198288407,
+    0.003667240786921388
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  },
+  "slow_noise_d40/selected_filter": {
+   "abort_reasons": [],
+   "abort_steps": [],
+   "aborts": 0,
+   "episodes": 20,
+   "mean_tracking_rms_rad": [
+    0.002177322695707482,
+    0.0039379348819147085,
+    0.002363163386242205,
+    0.010511275304877462,
+    0.003332082853453342,
+    0.0037535038198288407,
+    0.003667240786921388
+   ],
+   "successes": 20,
+   "unsafe_episodes": 0
+  }
+ },
+ "decision": {
+  "advancement": {
+   "baseline_fast_unsafe_fraction": 0.7666666666666667,
+   "failures": [
+    {
+     "condition": "fast_clean_d00",
+     "criterion": "success_count"
+    },
+    {
+     "condition": "fast_clean_d20",
+     "criterion": "filtered_unsafe"
+    },
+    {
+     "condition": "fast_clean_d40",
+     "criterion": "filtered_unsafe"
+    },
+    {
+     "condition": "fast_noise_d00",
+     "criterion": "filtered_unsafe"
+    },
+    {
+     "condition": "fast_noise_d00",
+     "criterion": "success_count"
+    },
+    {
+     "condition": "fast_noise_d20",
+     "criterion": "filtered_unsafe"
+    },
+    {
+     "condition": "fast_noise_d40",
+     "criterion": "filtered_unsafe"
+    }
+   ],
+   "fast_unsafe_fraction_reduction": 0.575,
+   "filter_advances": false,
+   "meaning": "engineering screen; no general safety certificate",
+   "reference_controller": "bank_align"
+  },
+  "meaning": "mechanism test on twenty paired tasks per cell; no safety certificate",
+  "mechanism": {
+   "aborts_per_cell": {
+    "fast_clean_d00": {
+     "robust_filter": 16,
+     "selected_filter": 12
+    },
+    "fast_clean_d20": {
+     "robust_filter": 16,
+     "selected_filter": 14
+    },
+    "fast_clean_d40": {
+     "robust_filter": 16,
+     "selected_filter": 16
+    },
+    "fast_noise_d00": {
+     "robust_filter": 16,
+     "selected_filter": 12
+    },
+    "fast_noise_d20": {
+     "robust_filter": 16,
+     "selected_filter": 14
+    },
+    "fast_noise_d40": {
+     "robust_filter": 16,
+     "selected_filter": 16
+    },
+    "slow_clean_d00": {
+     "robust_filter": 0,
+     "selected_filter": 0
+    },
+    "slow_clean_d20": {
+     "robust_filter": 0,
+     "selected_filter": 0
+    },
+    "slow_clean_d40": {
+     "robust_filter": 0,
+     "selected_filter": 0
+    },
+    "slow_noise_d00": {
+     "robust_filter": 0,
+     "selected_filter": 0
+    },
+    "slow_noise_d20": {
+     "robust_filter": 0,
+     "selected_filter": 0
+    },
+    "slow_noise_d40": {
+     "robust_filter": 0,
+     "selected_filter": 0
+    }
+   },
+   "aborts_reduced": true,
+   "no_new_violations": false,
+   "no_success_loss": true,
+   "paired_robust_success_selected_failure": 0,
+   "paired_robust_unsafe_selected_safe": 0,
+   "paired_selected_success_robust_failure": 12,
+   "paired_selected_unsafe_robust_safe": 7,
+   "prediction_A": true,
+   "prediction_B": true,
+   "risk_C_materialised": true,
+   "selected_episodes_excluding_true_age": 0,
+   "zero_ms_abort_reduction": "structural; reported, not evidence"
+  }
+ },
+ "episodes": 720,
+ "physical_steps": 1080000
+}

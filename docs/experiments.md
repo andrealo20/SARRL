@@ -2117,6 +2117,14 @@ and three fewer task successes. Ordinary tasks retained 120/120 successes
 without measured violations or aborts. The candidate fails its frozen screen
 and does not advance to confirmation.
 
+The v2.8 [selected-delay protocol](panda-selected-filter.md) keeps that filter
+and builds its constraints only over the delay ages whose bank score equals
+the minimum. It reproduced all 480 v2.6 records before twenty new paired seeds.
+The [results](panda-selected-filter-results.md) confirm the three fixed
+predictions: 20 ms aborts fall from 16 to 14 per fast cell, 40 ms aborts and
+violations remain, and one zero-delay episode becomes unsafe. Seven tasks are
+unsafe only under the narrowed filter, so it does not advance.
+
 ## Planar residual on the covariance-margin reference
 
 The [separate planar protocol](adaptive-residual-comparison.md) reproduces 300 v2.2 reference
