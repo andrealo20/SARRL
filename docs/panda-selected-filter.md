@@ -13,7 +13,8 @@ rejects.
 This mechanism test changes one thing: the filter is built only over the ages
 the cumulative delay bank cannot yet tell apart. Everything else is the v2.6
 filter. The draft protocol went through three rounds of independent
-adversarial review before the freeze.
+adversarial review before the freeze. Source, predictions and decision rules
+were frozen at commit `1812d9d7958e02c468409826cb0976e497b430fa`.
 
 ## The change
 
