@@ -216,6 +216,11 @@ results/panda_joint_filter_pilot/*
 !results/panda_joint_filter_pilot/*.json
 !results/panda_joint_filter_pilot/traces.json.gz
 
+!results/panda_selected_filter_pilot/
+results/panda_selected_filter_pilot/*
+!results/panda_selected_filter_pilot/*.json
+!results/panda_selected_filter_pilot/traces.json.gz
+
 !results/planar_residual_v26/
 results/planar_residual_v26/*
 !results/planar_residual_v26/*.json

@@ -38,7 +38,7 @@ from tools.run_panda_joint_filter import OUTPUT_FILES
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def independent_projection_check(controller, q, v, sent, candidate):
+def independent_projection_check(controller, q, v, sent, candidate, ages=None):
     """Rebuild every inequality and dual check from the recorded causal inputs."""
     cfg = controller.joint_filter.config
     theta = controller.estimator.parameters
@@ -66,7 +66,7 @@ def independent_projection_check(controller, q, v, sent, candidate):
                 "polynomial velocity check failed",
             )
 
-    for lag in range(cfg.max_delay_steps + 1):
+    for lag in range(cfg.max_delay_steps + 1) if ages is None else ages:
         pq, pv = np.array(q).copy(), np.array(v).copy()
         for index in range(len(history) - lag, len(history)):
             prior = history[index] if index >= 0 else np.zeros(7)

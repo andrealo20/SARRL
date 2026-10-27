@@ -69,17 +69,24 @@ def joint_filter_protocol():
 def run_episode(seed, scenario, arm, *, retain_trace=False):
     if arm not in ARMS:
         raise ValueError("unknown Panda filter arm")
+    filtered = arm == "bank_filtered"
+    factory = (
+        (lambda: PandaFilteredController(CONFIG))
+        if filtered
+        else (lambda: PandaDelayController(predict=False))
+    )
+    return episode(seed, scenario, arm, factory, filtered=filtered, retain_trace=retain_trace)
+
+
+def episode(seed, scenario, arm, make_controller, *, filtered, retain_trace=False):
+    """One paired episode; the controller is built where the v2.6 runner built it."""
     task_cfg, interface_cfg = configurations(scenario)
     parameters = sample_parameters(seed, "payload_friction")
     task = sample_task(seed, "wide")
     env = PandaJointReachEnv(task_cfg, parameters=parameters)
     env.reset(seed=seed, start=task.start, goal=task.goal)
     interface = PandaControlInterface(interface_cfg, seed)
-    controller = (
-        PandaFilteredController(CONFIG)
-        if arm == "bank_filtered"
-        else PandaDelayController(predict=False)
-    )
+    controller = make_controller()
     squared, trace, changes = np.zeros(7), [], 0
     for step in range(env.horizon):
         q, v = env.data.qpos.copy(), env.data.qvel.copy()
@@ -102,7 +109,7 @@ def run_episode(seed, scenario, arm, *, retain_trace=False):
                 "estimated_parameters": controller.estimator.parameters.tolist(),
                 "delay_scores": controller.scores.tolist(),
             }
-            if arm == "bank_filtered":
+            if filtered:
                 sample.update(
                     filter=controller.last_filter,
                     nominal_command_nm=controller.last_nominal_command.tolist(),
@@ -148,7 +155,7 @@ def run_episode(seed, scenario, arm, *, retain_trace=False):
     row["delay_estimator"]["final_delay_correct"] = (
         controller.selected_delay_steps == interface_cfg.command_delay_steps
     )
-    if arm == "bank_filtered":
+    if filtered:
         row["filter"] = controller.filter_diagnostics()
         row["success"] = bool(row["success"] and not controller.aborted)
     return row, trace

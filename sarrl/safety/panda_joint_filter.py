@@ -182,7 +182,7 @@ class PandaJointFilter:
             and np.all(np.maximum(np.abs(v), np.abs(v + dt * a)) <= self.velocity + tol)
         )
 
-    def constraints(self, q, v, matrix, drift, history):
+    def constraints(self, q, v, matrix, drift, history, ages=None):
         q, v, drift = vector7(q, "q"), vector7(v, "v"), vector7(drift, "drift")
         matrix = np.asarray(matrix, dtype=float)
         if matrix.shape != (7, 7) or not np.all(np.isfinite(matrix)):
@@ -192,7 +192,13 @@ class PandaJointFilter:
             raise ValueError("history must contain sent bounded commands")
         dt, gamma, tol = self.config.control_dt, self.config.gamma, self.config.feasibility_tol
         rows, rhs, arrivals = [], [], []
-        for lag in range(self.config.max_delay_steps + 1):
+        if ages is None:
+            ages = range(self.config.max_delay_steps + 1)
+        elif not ages or any(
+            type(a) is not int or not 0 <= a <= self.config.max_delay_steps for a in ages
+        ):
+            raise ValueError("ages must be a nonempty subset of the admissible delays")
+        for lag in ages:
             position, velocity = q.copy(), v.copy()
             for step in range(lag):
                 index = len(sent) - lag + step
@@ -229,10 +235,10 @@ class PandaJointFilter:
                 )
         return np.array(rows), np.array(rhs), "ready", arrivals
 
-    def filter(self, q, v, candidate, matrix, drift, history):
+    def filter(self, q, v, candidate, matrix, drift, history, ages=None):
         candidate = vector7(candidate, "candidate")
         matrix, drift = np.asarray(matrix, dtype=float), vector7(drift, "drift")
-        A, b, reason, arrivals = self.constraints(q, v, matrix, drift, history)
+        A, b, reason, arrivals = self.constraints(q, v, matrix, drift, history, ages)
         if A is None:
             return PandaProjectionResult(
                 np.clip(candidate, -self.limit, self.limit), False, reason, 0.0, None, None
