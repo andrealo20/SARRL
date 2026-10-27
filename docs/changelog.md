@@ -2,6 +2,24 @@
 
 This file records implemented release increments. Performance evidence is kept separately in `docs/verification.md` and requires retained raw artifacts.
 
+## v2.8.0: Panda filter on the selected delay
+
+- Added an `ages` argument to the Panda joint filter and a selected-age mode
+  to the filtered controller: constraints over the delay ages whose bank score
+  equals the minimum, with a latched `invalid_age_set` abort for non-finite
+  scores. The default keeps the v2.6 construction.
+- Reproduced all 480 v2.6 joint-filter records through the new entry point
+  with no mismatch before opening seeds `9806200..9806219`.
+- Compared cumulative alignment, the v2.6 filter and the narrowed filter on
+  720 paired episodes. On fast moves the narrowed filter aborts 84 of 120
+  tasks against 96 and succeeds on 36 against 24, but has 23 unsafe episodes
+  against 16. The three predictions fixed before the run hold; seven new
+  velocity violations fail `no_new_violations` and the candidate does not
+  advance.
+- Retained the reproduction report, records, 36 traces and an audit of 720
+  records, 36 causal replays and 4,902 feasible projections. Controllers,
+  estimators and published references are unchanged.
+
 ## v2.7.0: Panda backup diagnostics and validated prefixes
 
 - Diagnosed the v2.6 failures from saved records: 284 of the 298 lost planar

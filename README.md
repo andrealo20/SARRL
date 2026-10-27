@@ -25,7 +25,11 @@ the filter reduces fast-move violations but aborts most tasks, and the
 residual loses success against adaptive control. Version 2.7 diagnoses those
 failures and tests a delayed Panda backup with validated interval arithmetic on
 the normalized model; no branch of the six-period prefix verifies, so that line
-is closed. See the [v2.7 guide](docs/v2.7.md) for the backup study, the
+is closed. Version 2.8 rebuilds the filter over only the delay ages the bank
+cannot yet exclude: fewer aborts at 20 ms, the 40 ms failure unchanged and
+seven new velocity violations, so it does not advance. See the
+[v2.8 guide](docs/v2.8.md) for that test, the
+[v2.7 guide](docs/v2.7.md) for the backup study, the
 [v2.6 guide](docs/v2.6.md) for results and audits, the
 [v2.5 guide](docs/v2.5.md) for reference validation, and the
 [v2.3 guide](docs/v2.3.md) for the Panda platform.
@@ -73,6 +77,7 @@ simulation steps. Full-resolution MP4 files are linked from the GIFs.
 | Does the joint filter pass the Panda fast-move screen? | Unsafe episodes: 104/120 to 20/120; filtered aborts: 107/120 | v2.6 paired pilot; failed screen |
 | Does a residual help the adaptive planar reference? | Primary success: 90.5% adaptive, 65.9% residual mean; difference -24.6 pp | v2.6, five final policies and 100 paired tasks across three scenarios; failed screen |
 | Can a delayed Panda backup be verified offline? | 317 of 480 held periods; 0 of 80 branches complete six | v2.7 validated-arithmetic screen on the normalized model, one fixture; line closed |
+| Does narrowing the filter to the selected delay fix the aborts? | Fast aborts 96/120 to 84/120; unsafe 16/120 to 23/120 | v2.8 paired mechanism test against the v2.6 filter; does not advance |
 
 These are separate comparisons, with different protocols and seed blocks.
 The [complete results](docs/results.md) include OOD/fault tests, failed
@@ -196,7 +201,7 @@ python examples/panda_reach.py
 ```
 
 The example prints a JSON result and writes no files. It is an installation
-check using an existing engineering-test seed. See the [release guide](docs/v2.7.md)
+check using an existing engineering-test seed. See the [release guide](docs/v2.8.md)
 for the controller scope, complete evidence and source/runtime requirements
 for audits.
 
@@ -221,7 +226,8 @@ constant on-grid delay alignment is the reference. Changing latency remains
 unresolved. Score-only memory worsened noisy tracking in its retained pilot;
 joint score/parameter memory failed its changing-age and per-joint tracking
 screen. The experimental joint filter reduces fast-move violations but retains
-unsafe episodes and frequent aborts. The planar adaptive-residual candidate
+unsafe episodes and frequent aborts; restricting it to the selected delay
+trades some aborts for new velocity violations. The planar adaptive-residual candidate
 fails its success and safety screen. The delayed Panda backup has no verified
 prefix, terminal set or simulator binding; its shared-parameter enclosure line
 closed after four held substeps completed none of eighty branches. Panda
@@ -242,7 +248,7 @@ Released under the [MIT License](LICENSE) by [Andrea Loroni](https://github.com/
   author  = {Andrea Loroni},
   title   = {SARRL: Safe Adaptive Residual Reinforcement Learning for Robotic Manipulation},
   year    = {2026},
-  version = {2.7.0},
+  version = {2.8.0},
   url     = {https://github.com/andrealo20/SARRL}
 }
 ```
