@@ -149,12 +149,20 @@ def test_paired_rules_catch_a_new_violation_and_a_lost_success():
 
 
 def test_v28_entry_point_reproduces_a_retained_v26_filtered_episode():
-    pytest.importorskip("mujoco")
-    pytest.importorskip("scipy")
+    mujoco = pytest.importorskip("mujoco")
+    scipy = pytest.importorskip("scipy")
     from sarrl.evaluation.panda_adaptation import reproduction_mismatches
     from sarrl.evaluation.panda_selected_filter import run_episode
 
-    path = Path(__file__).resolve().parents[1] / "results/panda_joint_filter_pilot/episodes.json"
+    root = Path(__file__).resolve().parents[1] / "results/panda_joint_filter_pilot"
+    runtime = json.loads((root / "manifest.json").read_text())["runtime"]
+    if (mujoco.__version__, np.__version__, scipy.__version__) != (
+        runtime["mujoco"],
+        runtime["numpy"],
+        runtime["scipy"],
+    ):
+        pytest.skip("retained v2.6 records reproduce on the recorded runtime")
+    path = root / "episodes.json"
     retained = next(
         row
         for row in json.loads(path.read_text())

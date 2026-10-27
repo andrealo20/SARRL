@@ -5,7 +5,7 @@ planned.
 
 ## Selected-delay joint filter
 
-Eleven tests cover the tied-age rule with non-finite and misshaped scores, the
+Ten tests cover the tied-age rule with non-finite and misshaped scores, the
 equality of the explicit all-age set with the default filter, the subset
 property for unchanged commands, a manufactured case where all ages abort and
 the selected age reaches the QP, invalid age arguments, the latched
